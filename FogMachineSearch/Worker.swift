@@ -34,11 +34,11 @@ struct Worker: Hashable, Equatable, MPCSerializable {
         name = peer.displayName
     }
     
+    
+    // MARK: Methods
     static func getMe() -> Worker {
         return Worker(name: myName)
     }
-    
-    // MARK: Methods
 }
 
 

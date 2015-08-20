@@ -15,6 +15,9 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var statusField: UILabel!
     @IBOutlet weak var logArea: UITextView!
     
+    var searchResultTotal = 0
+    var responsesRecieved = Dictionary<String, Bool>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.statusField.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
@@ -26,37 +29,45 @@ class SecondViewController: UIViewController {
             let workArray = WorkArray(mpcSerialized: dict["workArray"]!)
             var totalCount = 0
             var searchTerm = ""
+            var returnTo = ""
             
             for work:Work in workArray.array {
-                if work.assignedTo == Worker.getMe().displayName{
+                returnTo = work.searchInitiator
+                if work.assignedTo == Worker.getMe().name {
                     
-                    self.logArea.text = ("Beginning search for \(work.searchTerm) from indecies \(work.lowerBound) to \(work.upperBound)\n\n\(self.logArea.text)")
-                    searchTerm = work.searchTerm
-                    
-                    var countedSet = NSCountedSet()
-                    
-                    for (chapterKey, chapterText) in MonteCristo.paragraphs {
-                        if (chapterKey >= work.lowerBound.toInt() && chapterKey <= work.upperBound.toInt()) {
-                            var convertedText:NSString = chapterText as NSString
-                            convertedText.enumerateSubstringsInRange(NSMakeRange(0, convertedText.length), options: NSStringEnumerationOptions.ByWords) { (substring, substringRange, enclosingRange, stop) -> Void in
-                                countedSet.addObject(substring)
-                            }
-                        }
-                    }
-                    
-                    totalCount += countedSet.countForObject(work.searchTerm)
-                    break
+                    self.logArea.text = ("Beginning search for \"\(work.searchTerm)\" from indecies \(work.lowerBound) to \(work.upperBound)\n\n\(self.logArea.text)")
+                    totalCount += self.performSearch(work)
                 }
             }
             
             self.logArea.text = ("Found \(searchTerm) \(totalCount) times. Sending results back.\n\n\(self.logArea.text)")
-            var result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().displayName, searchResults: "\(totalCount)")
+            var result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
             ConnectionManager.sendEvent(Event.SendResult, object: ["searchResult": result])
         }
         
         
         ConnectionManager.onEvent(Event.SendResult) { peerID, object in
+            var dict = object as! [NSString: NSData]
+            var result = Work(mpcSerialized: dict["searchResult"]!)
             
+            if (result.searchInitiator == Worker.getMe().name) {
+                self.responsesRecieved[peerID.displayName] = true
+                self.searchResultTotal += result.searchResults.toInt()!
+                self.logArea.text = ("Result recieved from \(peerID.displayName): \(result.searchResults) found. \n\n\(self.logArea.text)")
+                
+                // check to see if all responses have been recieved
+                var allRecieved = true
+                for (peer, didRespond) in self.responsesRecieved {
+                    if didRespond == false {
+                        allRecieved = false
+                        break
+                    }
+                }
+                
+                if allRecieved {
+                    self.logArea.text = ("Search complete \(self.searchResultTotal)\n\n\(self.logArea.text)")
+                }
+            }
         }
     }
     
@@ -66,23 +77,33 @@ class SecondViewController: UIViewController {
     }
     
     
-    func performSearch(work:Work, searchTerm:String) -> Int {
-        var totalCount = 0
-        var countedSet = NSCountedSet()
+    func performSearch(work:Work) -> Int {
+        var numberFound = 0
+        let lowerBound:Int = work.lowerBound.toInt()!
+        let upperBound:Int = work.upperBound.toInt()!
         
-        var convertedText:NSString = "\(MonteCristo.paragraphs[work.lowerBound.toInt()!])" as NSString
-        convertedText.enumerateSubstringsInRange(NSMakeRange(0, convertedText.length), options: NSStringEnumerationOptions.ByWords) { (substring, substringRange, enclosingRange, stop) -> Void in
-            countedSet.addObject(substring)
+        self.logArea.text = "Initiating search on \(work.assignedTo) from \(lowerBound) to \(upperBound)"
+        
+        for index in lowerBound...upperBound {
+            var countedSet = NSCountedSet()
+            var convertedText:NSString = "\(MonteCristo.paragraphs[index])" as NSString
+            convertedText.enumerateSubstringsInRange(NSMakeRange(0, convertedText.length), options: NSStringEnumerationOptions.ByWords) { (substring, substringRange, enclosingRange, stop) -> Void in
+                countedSet.addObject(substring)
+            }
+            
+            numberFound += countedSet.countForObject(work.searchTerm)
+
         }
         
-        return totalCount
+        return numberFound
     }
     
     
     @IBAction func searchButtonTapped(sender: AnyObject) {
         var searchTerm = searchField.text
+        self.searchResultTotal = 0
         self.searchField.resignFirstResponder()
-        self.logArea.text = "Beginning search for \(searchTerm)..."
+        self.logArea.text = "Beginning search for \"\(searchTerm)...\""
         
         var numberOfPeers = ConnectionManager.allWorkers.count
         var totalWorkUnits = MonteCristo.paragraphs.keys.array.count
@@ -95,12 +116,21 @@ class SecondViewController: UIViewController {
         
         
         for peer in ConnectionManager.allWorkers {
-            var lower = startBound == 0 ? 1 : startBound
-            var upper = startBound + workDivision == totalWorkUnits ? totalWorkUnits : startBound + workDivision - 1
+            self.responsesRecieved[peer.name] = false
             
-            var work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.displayName, searchResults: "")
+            var lower = startBound == 0 ? 1 : startBound
+            var upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
+            
+            var work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
             tempArray.append(work)
-            startBound += workDivision
+            startBound += workDivision + 1
+            
+            if peer.name == Worker.getMe().name {
+                var initiatingNodeResults = self.performSearch(work)
+                self.responsesRecieved[Worker.getMe().name] = true
+                self.searchResultTotal += initiatingNodeResults
+                self.logArea.text = "Found \(initiatingNodeResults) results locally.\n\n\(self.logArea.text)"
+            }
         }
         
         var workArray = WorkArray(array: tempArray)

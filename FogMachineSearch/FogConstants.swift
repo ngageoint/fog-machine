@@ -14,4 +14,5 @@ struct FogConstants {
     static let SearchTermKey = "SearchTerm"
     static let AssignedToKey = "AssignedTo"
     static let SearchResultsKey = "SearchResults"
+    static let SearchInitiatorKey = "SearchInitiator"
 }

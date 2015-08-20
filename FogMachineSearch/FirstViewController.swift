@@ -7,11 +7,19 @@
 //
 
 import UIKit
+import PeerKit
 
 class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var connectionTableView: UITableView!
     @IBOutlet weak var statusLabel: UILabel!
+
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "findPeers:", forControlEvents: UIControlEvents.ValueChanged)
+        
+        return refreshControl
+        }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +36,13 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         ConnectionManager.onDisconnect { _ in
             self.updateWorkers()
         }
-        /*ConnectionManager.onEvent(.StartGame) { _, object in
-            let dict = object as [String: NSData]
-            let blackCard = Card(mpcSerialized: dict["blackCard"]!)
-            let whiteCards = CardArray(mpcSerialized: dict["whiteCards"]!).array
-            self.startGame(blackCard: blackCard, whiteCards: whiteCards)
-        }*/
     }
 
+    
+    func findPeers(refreshControl: UIRefreshControl) {
+        PeerKit.transceive("fogsearch")
+        refreshControl.endRefreshing()
+    }
 
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,6 +65,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func setupTableView() {
         connectionTableView.delegate = self
         connectionTableView.dataSource = self
+        connectionTableView.addSubview(self.refreshControl)
     }
     
     func updateWorkers() {

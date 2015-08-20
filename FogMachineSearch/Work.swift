@@ -14,17 +14,19 @@ struct Work: MPCSerializable {
     let searchTerm: String
     let assignedTo: String
     let searchResults: String
+    let searchInitiator: String
     
     var mpcSerialized : NSData {
-        return NSKeyedArchiver.archivedDataWithRootObject([FogConstants.LowerBoundKey: lowerBound, FogConstants.UpperBoundKey: upperBound, FogConstants.SearchTermKey: searchTerm, FogConstants.AssignedToKey: assignedTo, FogConstants.SearchResultsKey: searchResults])
+        return NSKeyedArchiver.archivedDataWithRootObject([FogConstants.LowerBoundKey: lowerBound, FogConstants.UpperBoundKey: upperBound, FogConstants.SearchTermKey: searchTerm, FogConstants.AssignedToKey: assignedTo, FogConstants.SearchResultsKey: searchResults, FogConstants.SearchInitiatorKey: searchInitiator])
     }
     
-    init (lowerBound: String, upperBound: String, searchTerm: String, assignedTo: String, searchResults: String) {
+    init (lowerBound: String, upperBound: String, searchTerm: String, assignedTo: String, searchResults: String, searchInitiator: String) {
         self.lowerBound = lowerBound
         self.upperBound = upperBound
         self.searchTerm = searchTerm
         self.assignedTo = assignedTo
         self.searchResults = searchResults
+        self.searchInitiator = searchInitiator
     }
     
     init (mpcSerialized: NSData) {
@@ -34,6 +36,7 @@ struct Work: MPCSerializable {
         searchTerm = dict[FogConstants.SearchTermKey]!
         assignedTo = dict[FogConstants.AssignedToKey]!
         searchResults = dict[FogConstants.SearchResultsKey]!
+        searchInitiator = dict[FogConstants.SearchInitiatorKey]!
     }
 }
 
