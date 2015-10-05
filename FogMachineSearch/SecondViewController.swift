@@ -28,7 +28,7 @@ class SecondViewController: UIViewController {
             let dict = object as! [String: NSData]
             let workArray = WorkArray(mpcSerialized: dict["workArray"]!)
             var totalCount = 0
-            var searchTerm = ""
+            let searchTerm = ""
             var returnTo = ""
             
             for work:Work in workArray.array {
@@ -41,23 +41,23 @@ class SecondViewController: UIViewController {
             }
             
             self.logArea.text = ("Found \(searchTerm) \(totalCount) times. Sending results back.\n\n\(self.logArea.text)")
-            var result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
+            let result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
             ConnectionManager.sendEvent(Event.SendResult, object: ["searchResult": result])
         }
         
         
         ConnectionManager.onEvent(Event.SendResult) { peerID, object in
             var dict = object as! [NSString: NSData]
-            var result = Work(mpcSerialized: dict["searchResult"]!)
+            let result = Work(mpcSerialized: dict["searchResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
                 self.responsesRecieved[peerID.displayName] = true
-                self.searchResultTotal += result.searchResults.toInt()!
+                self.searchResultTotal += Int(result.searchResults) ?? 0
                 self.logArea.text = ("Result recieved from \(peerID.displayName): \(result.searchResults) found. \n\n\(self.logArea.text)")
                 
                 // check to see if all responses have been recieved
                 var allRecieved = true
-                for (peer, didRespond) in self.responsesRecieved {
+                for (_, didRespond) in self.responsesRecieved {
                     if didRespond == false {
                         allRecieved = false
                         break
@@ -79,16 +79,16 @@ class SecondViewController: UIViewController {
     
     func performSearch(work:Work) -> Int {
         var numberFound = 0
-        let lowerBound:Int = work.lowerBound.toInt()!
-        let upperBound:Int = work.upperBound.toInt()!
+        let lowerBound:Int = Int(work.lowerBound)!
+        let upperBound:Int = Int(work.upperBound)!
         
         self.logArea.text = "Initiating search on \(work.assignedTo) from \(lowerBound) to \(upperBound)"
         
         for index in lowerBound...upperBound {
-            var countedSet = NSCountedSet()
-            var convertedText:NSString = "\(MonteCristo.paragraphs[index])" as NSString
+            let countedSet = NSCountedSet()
+            let convertedText:NSString = "\(MonteCristo.paragraphs[index])" as NSString
             convertedText.enumerateSubstringsInRange(NSMakeRange(0, convertedText.length), options: NSStringEnumerationOptions.ByWords) { (substring, substringRange, enclosingRange, stop) -> Void in
-                countedSet.addObject(substring)
+                countedSet.addObject(substring!)
             }
             
             numberFound += countedSet.countForObject(work.searchTerm)
@@ -100,16 +100,14 @@ class SecondViewController: UIViewController {
     
     
     @IBAction func searchButtonTapped(sender: AnyObject) {
-        var searchTerm = searchField.text
+        let searchTerm = searchField.text
         self.searchResultTotal = 0
         self.searchField.resignFirstResponder()
         self.logArea.text = "Beginning search for \"\(searchTerm)...\""
         
-        var numberOfPeers = ConnectionManager.allWorkers.count
-        var totalWorkUnits = MonteCristo.paragraphs.keys.array.count
-        var workDivision = totalWorkUnits / numberOfPeers
-        
-        var separationOfWork: Dictionary<NSString, Work> = [:]
+        let numberOfPeers = ConnectionManager.allWorkers.count
+        let totalWorkUnits = MonteCristo.paragraphs.count
+        let workDivision = totalWorkUnits / numberOfPeers
         
         var startBound:Int = 0
         var tempArray = [Work]()
@@ -118,22 +116,22 @@ class SecondViewController: UIViewController {
         for peer in ConnectionManager.allWorkers {
             self.responsesRecieved[peer.name] = false
             
-            var lower = startBound == 0 ? 1 : startBound
-            var upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
+            let lower = startBound == 0 ? 1 : startBound
+            let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
             
-            var work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
+            let work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm!, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
             tempArray.append(work)
             startBound += workDivision + 1
             
             if peer.name == Worker.getMe().name {
-                var initiatingNodeResults = self.performSearch(work)
+                let initiatingNodeResults = self.performSearch(work)
                 self.responsesRecieved[Worker.getMe().name] = true
                 self.searchResultTotal += initiatingNodeResults
                 self.logArea.text = "Found \(initiatingNodeResults) results locally.\n\n\(self.logArea.text)"
             }
         }
         
-        var workArray = WorkArray(array: tempArray)
+        let workArray = WorkArray(array: tempArray)
         
         ConnectionManager.sendEvent(Event.StartSearch, object: ["workArray": workArray])
     }

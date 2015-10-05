@@ -7,312 +7,311 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B668460724623C46F3334AC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 875197010021DC1A1960D56B /* Foundation.framework */; };
-		10BD10B9136A9ACCA7AC2472 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DC6469F1B6506464D2AB14 /* Advertiser.swift */; };
-		174389D14BF53FACE1E1334B /* Transceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA26F833F892FD0384E7F64 /* Transceiver.swift */; };
-		1A7126E848B4D4B9D04CF56B /* Pods-FogMachineSearch-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 35C7FD12E5AB9701CBC39946 /* Pods-FogMachineSearch-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2CBA29919D41B3DB270ED9BE /* Pods-FogMachineSearch-PeerKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7199F51F45C43C9729DE4777 /* Pods-FogMachineSearch-PeerKit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6465A37EA72C262B4177A7E6 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BBD55C0F7B43905019EA34 /* Session.swift */; };
-		7B8DB65AE3A88A99A7B59661 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 875197010021DC1A1960D56B /* Foundation.framework */; };
-		81D539B0D922283B0A006467 /* Pods-FogMachineSearch-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 507F4652A68E934F482C7E37 /* Pods-FogMachineSearch-dummy.m */; };
-		A92097CE836C4389249D623A /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AFBF93223FE382DAF23767 /* Browser.swift */; };
-		A9522D586D065377A4DB3828 /* Pods-FogMachineSearch-PeerKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A462AF639210B16EA949DA9 /* Pods-FogMachineSearch-PeerKit-dummy.m */; };
-		C7D36EE506F2A3285669778A /* PeerKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875D3BD319229269E447C58D /* PeerKit.swift */; };
+		1E0AEEC953905BA830133028905E2BD8 /* PeerKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 98CDD92482B0D2F8AEF333DF71F8C26E /* PeerKit-dummy.m */; };
+		7E5477F75640CF483EA0DDA9AB6218AD /* Pods-FogMachineSearch-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 81C503A485710DADFFF5DCA3B08509B3 /* Pods-FogMachineSearch-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B82C53E78A0F3D6FB1483BB5288B2F4 /* PeerKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD59CB0DCB96AD1DCF7423704CEE55 /* PeerKit.swift */; };
+		959E9E7F39C725FFF90DE8143C739BFD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382908CA2D760B66656A5B13286C277C /* Foundation.framework */; };
+		A5845EDE1DA6B5499D57974D36849E45 /* Pods-FogMachineSearch-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DA78E5551A4AF3F1542955631AD5BF44 /* Pods-FogMachineSearch-dummy.m */; };
+		C05012864DC6BC89057888E7E36018E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 382908CA2D760B66656A5B13286C277C /* Foundation.framework */; };
+		C38AB5F0B84022A9550CE9195CDAD1ED /* PeerKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 83698AF5C380F390D186D0AAFC447387 /* PeerKit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D530C2B7A58BA08114279EDF0D4F25EB /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF779528883231D7EA6137540394CEDC /* Advertiser.swift */; };
+		DDF6C1E332E30ACF8414BB74CDE919CE /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6F9492850C0F77AB015B0EF5D2ACC4 /* Browser.swift */; };
+		EDE0295D8C8432DDBDBF1AE6095E06F2 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3FEFFFD7A36F771343CC0A63E67ED8 /* Session.swift */; };
+		F4AE757B12847E4562A6B57E618C7D8E /* Transceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC05D8F78BB615E36D9B13F90980D58B /* Transceiver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C193F14FB55F53B3F37A07F3 /* PBXContainerItemProxy */ = {
+		D9FC7A7BD8FD41DE6785B4DD07F78B75 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 711D729E6EBC85A2ADF55BA9 /* Project object */;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = C638D45A0E6B7CF8DC38A5E8;
-			remoteInfo = "Pods-FogMachineSearch-PeerKit";
+			remoteGlobalIDString = 7CEDE7254EFDE0467EACA4AB524E4D8F;
+			remoteInfo = PeerKit;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		06F34A8D3507DD9D5959E000 /* Pods-FogMachineSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FogMachineSearch.debug.xcconfig"; sourceTree = "<group>"; };
-		14DDE8442F154C5A056B2706 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		204C824692C4699A6C48C316 /* Pods_FogMachineSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachineSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2401EFFFD444200457523C92 /* Pods-FogMachineSearch-PeerKit-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FogMachineSearch-PeerKit-Private.xcconfig"; sourceTree = "<group>"; };
-		28B28863F4A2D749C4A2FDAE /* Pods-FogMachineSearch-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FogMachineSearch-acknowledgements.plist"; sourceTree = "<group>"; };
-		306B3DF69BE5B1852E983D53 /* Pods-FogMachineSearch.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-FogMachineSearch.modulemap"; sourceTree = "<group>"; };
-		3510C0E083D71B120E03BAEE /* Pods-FogMachineSearch-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-FogMachineSearch-environment.h"; sourceTree = "<group>"; };
-		35C7FD12E5AB9701CBC39946 /* Pods-FogMachineSearch-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-FogMachineSearch-umbrella.h"; sourceTree = "<group>"; };
-		41B8DB0E5673F1E256B2B8A0 /* Pods-FogMachineSearch-PeerKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-FogMachineSearch-PeerKit-prefix.pch"; sourceTree = "<group>"; };
-		4A462AF639210B16EA949DA9 /* Pods-FogMachineSearch-PeerKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-FogMachineSearch-PeerKit-dummy.m"; sourceTree = "<group>"; };
-		507F4652A68E934F482C7E37 /* Pods-FogMachineSearch-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-FogMachineSearch-dummy.m"; sourceTree = "<group>"; };
-		55BBD55C0F7B43905019EA34 /* Session.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Session.swift; path = PeerKit/Session.swift; sourceTree = "<group>"; };
-		5E08DD8F7063F0F0EA7D4443 /* PeerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeerKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5EA26F833F892FD0384E7F64 /* Transceiver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Transceiver.swift; path = PeerKit/Transceiver.swift; sourceTree = "<group>"; };
-		66AFBF93223FE382DAF23767 /* Browser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Browser.swift; path = PeerKit/Browser.swift; sourceTree = "<group>"; };
-		7199F51F45C43C9729DE4777 /* Pods-FogMachineSearch-PeerKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-FogMachineSearch-PeerKit-umbrella.h"; sourceTree = "<group>"; };
-		7F1B936FC03028D2536DAE7E /* Pods-FogMachineSearch-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-FogMachineSearch-frameworks.sh"; sourceTree = "<group>"; };
-		875197010021DC1A1960D56B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		875D3BD319229269E447C58D /* PeerKit.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PeerKit.swift; path = PeerKit/PeerKit.swift; sourceTree = "<group>"; };
-		8AAB0456DA987DDB8B69B49D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ABBED8F7587F71099F327131 /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		B1A5E1D907DBCD8EF86E5979 /* Pods-FogMachineSearch-PeerKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FogMachineSearch-PeerKit.xcconfig"; sourceTree = "<group>"; };
-		B6DC6469F1B6506464D2AB14 /* Advertiser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Advertiser.swift; path = PeerKit/Advertiser.swift; sourceTree = "<group>"; };
-		D22F9630EA9FFC5466C1CECD /* Pods-FogMachineSearch-PeerKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-FogMachineSearch-PeerKit.modulemap"; sourceTree = "<group>"; };
-		D31464A2B8914D25A1EC88A3 /* Pods-FogMachineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FogMachineSearch.release.xcconfig"; sourceTree = "<group>"; };
-		DF7631337B8E927DDEBFEA60 /* Pods-FogMachineSearch-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-FogMachineSearch-resources.sh"; sourceTree = "<group>"; };
-		FADF2D7947DF237F2D0228F6 /* Pods-FogMachineSearch-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-FogMachineSearch-acknowledgements.markdown"; sourceTree = "<group>"; };
+		0FBF2E1F9ADAAD6CBE6CE6B29B98D31D /* PeerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeerKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24152862A6204D4E584712C8F79C1632 /* Pods-FogMachineSearch-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-FogMachineSearch-acknowledgements.markdown"; sourceTree = "<group>"; };
+		313AEEED959DFC30726B22D584175EB8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		382908CA2D760B66656A5B13286C277C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		3941568366D1A10CB105D59257287FC8 /* Pods-FogMachineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FogMachineSearch.release.xcconfig"; sourceTree = "<group>"; };
+		3EDDA50BB275FA07DCC48B741CD9464B /* PeerKit-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "PeerKit-Private.xcconfig"; sourceTree = "<group>"; };
+		3FED80C4B5AC952285C7AEB40172B9A8 /* Pods-FogMachineSearch-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-FogMachineSearch-frameworks.sh"; sourceTree = "<group>"; };
+		4773DBA5EB94D007963FB63FA495A4CC /* Pods-FogMachineSearch-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-FogMachineSearch-resources.sh"; sourceTree = "<group>"; };
+		48536D68464A4A295A6EC6D26C5B3491 /* Pods-FogMachineSearch-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FogMachineSearch-acknowledgements.plist"; sourceTree = "<group>"; };
+		489969989992CE2C737F7CF6BA271989 /* PeerKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PeerKit.xcconfig; sourceTree = "<group>"; };
+		4B6F9492850C0F77AB015B0EF5D2ACC4 /* Browser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Browser.swift; path = PeerKit/Browser.swift; sourceTree = "<group>"; };
+		5B3FEFFFD7A36F771343CC0A63E67ED8 /* Session.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Session.swift; path = PeerKit/Session.swift; sourceTree = "<group>"; };
+		6133F42C77FBF25409E3A102F8AEC5C4 /* PeerKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PeerKit-prefix.pch"; sourceTree = "<group>"; };
+		7A8CA5963F2C1D0547E30F81C8DE6B70 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AFD59CB0DCB96AD1DCF7423704CEE55 /* PeerKit.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PeerKit.swift; path = PeerKit/PeerKit.swift; sourceTree = "<group>"; };
+		7D2DC512B4DE25C3B1399EEB33EE839A /* Pods-FogMachineSearch.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-FogMachineSearch.modulemap"; sourceTree = "<group>"; };
+		81C503A485710DADFFF5DCA3B08509B3 /* Pods-FogMachineSearch-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-FogMachineSearch-umbrella.h"; sourceTree = "<group>"; };
+		83698AF5C380F390D186D0AAFC447387 /* PeerKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PeerKit-umbrella.h"; sourceTree = "<group>"; };
+		98CDD92482B0D2F8AEF333DF71F8C26E /* PeerKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PeerKit-dummy.m"; sourceTree = "<group>"; };
+		B45F13EFAB249E2B306A9C732FAA2A4C /* PeerKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = PeerKit.modulemap; sourceTree = "<group>"; };
+		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BC05D8F78BB615E36D9B13F90980D58B /* Transceiver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Transceiver.swift; path = PeerKit/Transceiver.swift; sourceTree = "<group>"; };
+		C61D881040B02D06A6B8513F17CDE128 /* Pods_FogMachineSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachineSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA78E5551A4AF3F1542955631AD5BF44 /* Pods-FogMachineSearch-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-FogMachineSearch-dummy.m"; sourceTree = "<group>"; };
+		E4507F1037B9F804CF23CF750E176D39 /* Pods-FogMachineSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FogMachineSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		EF779528883231D7EA6137540394CEDC /* Advertiser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Advertiser.swift; path = PeerKit/Advertiser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		02856A51AD0A3AAA1AD8FD72 /* Frameworks */ = {
+		77168F17B8CC0E3634B8332C1646B98F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B668460724623C46F3334AC /* Foundation.framework in Frameworks */,
+				959E9E7F39C725FFF90DE8143C739BFD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6E7EE27662A2D1792AE2CF36 /* Frameworks */ = {
+		8046DA48C56900BBF7D3D9F5803E76A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B8DB65AE3A88A99A7B59661 /* Foundation.framework in Frameworks */,
+				C05012864DC6BC89057888E7E36018E6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13129627C51CE2BF8820F3D8 /* Targets Support Files */ = {
+		2624F958F78989E1EAB02C3AB330B5EB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BF1AEFA130004B6B7C93DDD1 /* Pods-FogMachineSearch */,
-			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		4207FF397416BF8CCB4BFF66 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5E08DD8F7063F0F0EA7D4443 /* PeerKit.framework */,
-				204C824692C4699A6C48C316 /* Pods_FogMachineSearch.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		51A7C4F42DA275EA4A87CA37 /* PeerKit */ = {
-			isa = PBXGroup;
-			children = (
-				B6DC6469F1B6506464D2AB14 /* Advertiser.swift */,
-				66AFBF93223FE382DAF23767 /* Browser.swift */,
-				875D3BD319229269E447C58D /* PeerKit.swift */,
-				55BBD55C0F7B43905019EA34 /* Session.swift */,
-				5EA26F833F892FD0384E7F64 /* Transceiver.swift */,
-				E863842C4998C08D24BDEFEE /* Support Files */,
-			);
-			path = PeerKit;
-			sourceTree = "<group>";
-		};
-		7F129F4796D224952DF0DEFD = {
-			isa = PBXGroup;
-			children = (
-				ABBED8F7587F71099F327131 /* Podfile */,
-				92B08C2ACEE072283DE310E4 /* Frameworks */,
-				A21E6C094B15021AEF9486A0 /* Pods */,
-				4207FF397416BF8CCB4BFF66 /* Products */,
-				13129627C51CE2BF8820F3D8 /* Targets Support Files */,
-			);
-			sourceTree = "<group>";
-		};
-		92B08C2ACEE072283DE310E4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				E3F2BB628F2C61CEEB0F1BC4 /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A21E6C094B15021AEF9486A0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				51A7C4F42DA275EA4A87CA37 /* PeerKit */,
+				BEFE4AB74CC4EB8B814C20F271B64EC4 /* PeerKit */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		BF1AEFA130004B6B7C93DDD1 /* Pods-FogMachineSearch */ = {
+		53F661C0CA7190D2CF05023FB33D61E4 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				14DDE8442F154C5A056B2706 /* Info.plist */,
-				306B3DF69BE5B1852E983D53 /* Pods-FogMachineSearch.modulemap */,
-				FADF2D7947DF237F2D0228F6 /* Pods-FogMachineSearch-acknowledgements.markdown */,
-				28B28863F4A2D749C4A2FDAE /* Pods-FogMachineSearch-acknowledgements.plist */,
-				507F4652A68E934F482C7E37 /* Pods-FogMachineSearch-dummy.m */,
-				3510C0E083D71B120E03BAEE /* Pods-FogMachineSearch-environment.h */,
-				7F1B936FC03028D2536DAE7E /* Pods-FogMachineSearch-frameworks.sh */,
-				DF7631337B8E927DDEBFEA60 /* Pods-FogMachineSearch-resources.sh */,
-				35C7FD12E5AB9701CBC39946 /* Pods-FogMachineSearch-umbrella.h */,
-				06F34A8D3507DD9D5959E000 /* Pods-FogMachineSearch.debug.xcconfig */,
-				D31464A2B8914D25A1EC88A3 /* Pods-FogMachineSearch.release.xcconfig */,
+				382908CA2D760B66656A5B13286C277C /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
+				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
+				2624F958F78989E1EAB02C3AB330B5EB /* Pods */,
+				CCA510CFBEA2D207524CDA0D73C3B561 /* Products */,
+				9A1260875140D411FEC97CEA222F38D9 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		9A1260875140D411FEC97CEA222F38D9 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				BABA9B27FC3A68E01DBC1EA5CB8C4976 /* Pods-FogMachineSearch */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		BABA9B27FC3A68E01DBC1EA5CB8C4976 /* Pods-FogMachineSearch */ = {
+			isa = PBXGroup;
+			children = (
+				7A8CA5963F2C1D0547E30F81C8DE6B70 /* Info.plist */,
+				7D2DC512B4DE25C3B1399EEB33EE839A /* Pods-FogMachineSearch.modulemap */,
+				24152862A6204D4E584712C8F79C1632 /* Pods-FogMachineSearch-acknowledgements.markdown */,
+				48536D68464A4A295A6EC6D26C5B3491 /* Pods-FogMachineSearch-acknowledgements.plist */,
+				DA78E5551A4AF3F1542955631AD5BF44 /* Pods-FogMachineSearch-dummy.m */,
+				3FED80C4B5AC952285C7AEB40172B9A8 /* Pods-FogMachineSearch-frameworks.sh */,
+				4773DBA5EB94D007963FB63FA495A4CC /* Pods-FogMachineSearch-resources.sh */,
+				81C503A485710DADFFF5DCA3B08509B3 /* Pods-FogMachineSearch-umbrella.h */,
+				E4507F1037B9F804CF23CF750E176D39 /* Pods-FogMachineSearch.debug.xcconfig */,
+				3941568366D1A10CB105D59257287FC8 /* Pods-FogMachineSearch.release.xcconfig */,
 			);
 			name = "Pods-FogMachineSearch";
 			path = "Target Support Files/Pods-FogMachineSearch";
 			sourceTree = "<group>";
 		};
-		E3F2BB628F2C61CEEB0F1BC4 /* iOS */ = {
+		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				875197010021DC1A1960D56B /* Foundation.framework */,
+				53F661C0CA7190D2CF05023FB33D61E4 /* iOS */,
 			);
-			name = iOS;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E863842C4998C08D24BDEFEE /* Support Files */ = {
+		BEFE4AB74CC4EB8B814C20F271B64EC4 /* PeerKit */ = {
 			isa = PBXGroup;
 			children = (
-				8AAB0456DA987DDB8B69B49D /* Info.plist */,
-				D22F9630EA9FFC5466C1CECD /* Pods-FogMachineSearch-PeerKit.modulemap */,
-				B1A5E1D907DBCD8EF86E5979 /* Pods-FogMachineSearch-PeerKit.xcconfig */,
-				2401EFFFD444200457523C92 /* Pods-FogMachineSearch-PeerKit-Private.xcconfig */,
-				4A462AF639210B16EA949DA9 /* Pods-FogMachineSearch-PeerKit-dummy.m */,
-				41B8DB0E5673F1E256B2B8A0 /* Pods-FogMachineSearch-PeerKit-prefix.pch */,
-				7199F51F45C43C9729DE4777 /* Pods-FogMachineSearch-PeerKit-umbrella.h */,
+				EF779528883231D7EA6137540394CEDC /* Advertiser.swift */,
+				4B6F9492850C0F77AB015B0EF5D2ACC4 /* Browser.swift */,
+				7AFD59CB0DCB96AD1DCF7423704CEE55 /* PeerKit.swift */,
+				5B3FEFFFD7A36F771343CC0A63E67ED8 /* Session.swift */,
+				BC05D8F78BB615E36D9B13F90980D58B /* Transceiver.swift */,
+				F5BBA78566B643F32399357FFFBD64B9 /* Support Files */,
+			);
+			path = PeerKit;
+			sourceTree = "<group>";
+		};
+		CCA510CFBEA2D207524CDA0D73C3B561 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0FBF2E1F9ADAAD6CBE6CE6B29B98D31D /* PeerKit.framework */,
+				C61D881040B02D06A6B8513F17CDE128 /* Pods_FogMachineSearch.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F5BBA78566B643F32399357FFFBD64B9 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				313AEEED959DFC30726B22D584175EB8 /* Info.plist */,
+				B45F13EFAB249E2B306A9C732FAA2A4C /* PeerKit.modulemap */,
+				489969989992CE2C737F7CF6BA271989 /* PeerKit.xcconfig */,
+				3EDDA50BB275FA07DCC48B741CD9464B /* PeerKit-Private.xcconfig */,
+				98CDD92482B0D2F8AEF333DF71F8C26E /* PeerKit-dummy.m */,
+				6133F42C77FBF25409E3A102F8AEC5C4 /* PeerKit-prefix.pch */,
+				83698AF5C380F390D186D0AAFC447387 /* PeerKit-umbrella.h */,
 			);
 			name = "Support Files";
-			path = "../Target Support Files/Pods-FogMachineSearch-PeerKit";
+			path = "../Target Support Files/PeerKit";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		24BBD93DFE543768C0E299F1 /* Headers */ = {
+		06641718F5B45C673AD2AB1AC5926CA1 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A7126E848B4D4B9D04CF56B /* Pods-FogMachineSearch-umbrella.h in Headers */,
+				C38AB5F0B84022A9550CE9195CDAD1ED /* PeerKit-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F450561D7C602A9FD21B9EAE /* Headers */ = {
+		51BFB16499C2B1A5A5DA4F260F249198 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CBA29919D41B3DB270ED9BE /* Pods-FogMachineSearch-PeerKit-umbrella.h in Headers */,
+				7E5477F75640CF483EA0DDA9AB6218AD /* Pods-FogMachineSearch-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		9EF63FC42B828908AB71DD6B /* Pods-FogMachineSearch */ = {
+		7CEDE7254EFDE0467EACA4AB524E4D8F /* PeerKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1633C41F4EC9F2979C0DE132 /* Build configuration list for PBXNativeTarget "Pods-FogMachineSearch" */;
+			buildConfigurationList = 1FA4EDBDB354C648744BF906D685391E /* Build configuration list for PBXNativeTarget "PeerKit" */;
 			buildPhases = (
-				83341618BC7AD8DA81643201 /* Sources */,
-				02856A51AD0A3AAA1AD8FD72 /* Frameworks */,
-				24BBD93DFE543768C0E299F1 /* Headers */,
+				D4125FD38C5E8DDB608CECD8EECA18BB /* Sources */,
+				8046DA48C56900BBF7D3D9F5803E76A6 /* Frameworks */,
+				06641718F5B45C673AD2AB1AC5926CA1 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FA1B598B83F340A8222ED74F /* PBXTargetDependency */,
+			);
+			name = PeerKit;
+			productName = PeerKit;
+			productReference = 0FBF2E1F9ADAAD6CBE6CE6B29B98D31D /* PeerKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		FD24C002F3A5D941B411C472074BEF43 /* Pods-FogMachineSearch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9376200B76C1526A630E4A48EE2589C /* Build configuration list for PBXNativeTarget "Pods-FogMachineSearch" */;
+			buildPhases = (
+				5E9ED0ACEA0B24E5A082F219EAE5EAE8 /* Sources */,
+				77168F17B8CC0E3634B8332C1646B98F /* Frameworks */,
+				51BFB16499C2B1A5A5DA4F260F249198 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8A3FCA81B8FCEFA360745AF7E7655176 /* PBXTargetDependency */,
 			);
 			name = "Pods-FogMachineSearch";
 			productName = "Pods-FogMachineSearch";
-			productReference = 204C824692C4699A6C48C316 /* Pods_FogMachineSearch.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		C638D45A0E6B7CF8DC38A5E8 /* Pods-FogMachineSearch-PeerKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 79420A98DCA0FBDD4C1E1E88 /* Build configuration list for PBXNativeTarget "Pods-FogMachineSearch-PeerKit" */;
-			buildPhases = (
-				847E4C332D437D858CB02620 /* Sources */,
-				6E7EE27662A2D1792AE2CF36 /* Frameworks */,
-				F450561D7C602A9FD21B9EAE /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Pods-FogMachineSearch-PeerKit";
-			productName = "Pods-FogMachineSearch-PeerKit";
-			productReference = 5E08DD8F7063F0F0EA7D4443 /* PeerKit.framework */;
+			productReference = C61D881040B02D06A6B8513F17CDE128 /* Pods_FogMachineSearch.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		711D729E6EBC85A2ADF55BA9 /* Project object */ = {
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 			};
-			buildConfigurationList = D730A890A159E5E732F569BD /* Build configuration list for PBXProject "Pods" */;
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 7F129F4796D224952DF0DEFD;
-			productRefGroup = 4207FF397416BF8CCB4BFF66 /* Products */;
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = CCA510CFBEA2D207524CDA0D73C3B561 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9EF63FC42B828908AB71DD6B /* Pods-FogMachineSearch */,
-				C638D45A0E6B7CF8DC38A5E8 /* Pods-FogMachineSearch-PeerKit */,
+				7CEDE7254EFDE0467EACA4AB524E4D8F /* PeerKit */,
+				FD24C002F3A5D941B411C472074BEF43 /* Pods-FogMachineSearch */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		83341618BC7AD8DA81643201 /* Sources */ = {
+		5E9ED0ACEA0B24E5A082F219EAE5EAE8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81D539B0D922283B0A006467 /* Pods-FogMachineSearch-dummy.m in Sources */,
+				A5845EDE1DA6B5499D57974D36849E45 /* Pods-FogMachineSearch-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		847E4C332D437D858CB02620 /* Sources */ = {
+		D4125FD38C5E8DDB608CECD8EECA18BB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10BD10B9136A9ACCA7AC2472 /* Advertiser.swift in Sources */,
-				A92097CE836C4389249D623A /* Browser.swift in Sources */,
-				C7D36EE506F2A3285669778A /* PeerKit.swift in Sources */,
-				A9522D586D065377A4DB3828 /* Pods-FogMachineSearch-PeerKit-dummy.m in Sources */,
-				6465A37EA72C262B4177A7E6 /* Session.swift in Sources */,
-				174389D14BF53FACE1E1334B /* Transceiver.swift in Sources */,
+				D530C2B7A58BA08114279EDF0D4F25EB /* Advertiser.swift in Sources */,
+				DDF6C1E332E30ACF8414BB74CDE919CE /* Browser.swift in Sources */,
+				1E0AEEC953905BA830133028905E2BD8 /* PeerKit-dummy.m in Sources */,
+				8B82C53E78A0F3D6FB1483BB5288B2F4 /* PeerKit.swift in Sources */,
+				EDE0295D8C8432DDBDBF1AE6095E06F2 /* Session.swift in Sources */,
+				F4AE757B12847E4562A6B57E618C7D8E /* Transceiver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FA1B598B83F340A8222ED74F /* PBXTargetDependency */ = {
+		8A3FCA81B8FCEFA360745AF7E7655176 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "Pods-FogMachineSearch-PeerKit";
-			target = C638D45A0E6B7CF8DC38A5E8 /* Pods-FogMachineSearch-PeerKit */;
-			targetProxy = C193F14FB55F53B3F37A07F3 /* PBXContainerItemProxy */;
+			name = PeerKit;
+			target = 7CEDE7254EFDE0467EACA4AB524E4D8F /* PeerKit */;
+			targetProxy = D9FC7A7BD8FD41DE6785B4DD07F78B75 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0E6DA1C4C86A4CB1CD2C1191 /* Release */ = {
+		244D8896EEED1539CD814B0C169CE80B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2401EFFFD444200457523C92 /* Pods-FogMachineSearch-PeerKit-Private.xcconfig */;
+			baseConfigurationReference = 3EDDA50BB275FA07DCC48B741CD9464B /* PeerKit-Private.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.1.0;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-FogMachineSearch-PeerKit/Pods-FogMachineSearch-PeerKit-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-FogMachineSearch-PeerKit/Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/PeerKit/PeerKit-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PeerKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-FogMachineSearch-PeerKit/Pods-FogMachineSearch-PeerKit.modulemap";
+				MODULEMAP_FILE = "Target Support Files/PeerKit/PeerKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = PeerKit;
 				SDKROOT = iphoneos;
@@ -323,9 +322,9 @@
 			};
 			name = Release;
 		};
-		9892C27A01D1C2D51E995EB0 /* Release */ = {
+		3CD323911277AF4126673FDC1C020466 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D31464A2B8914D25A1EC88A3 /* Pods-FogMachineSearch.release.xcconfig */;
+			baseConfigurationReference = E4507F1037B9F804CF23CF750E176D39 /* Pods-FogMachineSearch.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -339,20 +338,21 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Pods-FogMachineSearch/Pods-FogMachineSearch.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = Pods_FogMachineSearch;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		A9EC108EE93D4160E8223F75 /* Release */ = {
+		511103F7F15A7E8F83B268EA03462CAB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -386,9 +386,37 @@
 			};
 			name = Release;
 		};
-		CA12B9BE974246498D13283B /* Debug */ = {
+		5C1AEAE131EDC9D53E1EC44FA41F7C0F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 06F34A8D3507DD9D5959E000 /* Pods-FogMachineSearch.debug.xcconfig */;
+			baseConfigurationReference = 3EDDA50BB275FA07DCC48B741CD9464B /* PeerKit-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1.1.0;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/PeerKit/PeerKit-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PeerKit/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/PeerKit/PeerKit.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = PeerKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6DF66581084F3660462E05C7D550A097 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3941568366D1A10CB105D59257287FC8 /* Pods-FogMachineSearch.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -402,49 +430,20 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Pods-FogMachineSearch/Pods-FogMachineSearch.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_NAME = Pods_FogMachineSearch;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
-		EF60FD962A5B701803081B52 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2401EFFFD444200457523C92 /* Pods-FogMachineSearch-PeerKit-Private.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-FogMachineSearch-PeerKit/Pods-FogMachineSearch-PeerKit-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-FogMachineSearch-PeerKit/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-FogMachineSearch-PeerKit/Pods-FogMachineSearch-PeerKit.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = PeerKit;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		FB7355C19C98A0AF6F5D1158 /* Debug */ = {
+		AA05AF9C3A14EE0E32F42C6E6D42D34F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -486,34 +485,34 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1633C41F4EC9F2979C0DE132 /* Build configuration list for PBXNativeTarget "Pods-FogMachineSearch" */ = {
+		1FA4EDBDB354C648744BF906D685391E /* Build configuration list for PBXNativeTarget "PeerKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CA12B9BE974246498D13283B /* Debug */,
-				9892C27A01D1C2D51E995EB0 /* Release */,
+				5C1AEAE131EDC9D53E1EC44FA41F7C0F /* Debug */,
+				244D8896EEED1539CD814B0C169CE80B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79420A98DCA0FBDD4C1E1E88 /* Build configuration list for PBXNativeTarget "Pods-FogMachineSearch-PeerKit" */ = {
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EF60FD962A5B701803081B52 /* Debug */,
-				0E6DA1C4C86A4CB1CD2C1191 /* Release */,
+				AA05AF9C3A14EE0E32F42C6E6D42D34F /* Debug */,
+				511103F7F15A7E8F83B268EA03462CAB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D730A890A159E5E732F569BD /* Build configuration list for PBXProject "Pods" */ = {
+		B9376200B76C1526A630E4A48EE2589C /* Build configuration list for PBXNativeTarget "Pods-FogMachineSearch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FB7355C19C98A0AF6F5D1158 /* Debug */,
-				A9EC108EE93D4160E8223F75 /* Release */,
+				3CD323911277AF4126673FDC1C020466 /* Debug */,
+				6DF66581084F3660462E05C7D550A097 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 711D729E6EBC85A2ADF55BA9 /* Project object */;
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 }

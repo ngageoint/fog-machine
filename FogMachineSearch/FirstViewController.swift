@@ -51,7 +51,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:ConnectionCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell") as! ConnectionCell
+        let cell:ConnectionCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell") as! ConnectionCell
         // set cell label
         cell.label.text = ConnectionManager.allWorkers[indexPath.row].displayName
         return cell

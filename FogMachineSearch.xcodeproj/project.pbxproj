@@ -240,7 +240,9 @@
 		E314F6B31B79023D005B75C6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = NGA;
 				TargetAttributes = {
 					E314F6BA1B79023D005B75C6 = {
@@ -416,6 +418,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -487,6 +490,7 @@
 				INFOPLIST_FILE = FogMachineSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FogMachineSearch;
 			};
 			name = Debug;
@@ -500,6 +504,7 @@
 				INFOPLIST_FILE = FogMachineSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FogMachineSearch;
 			};
 			name = Release;
@@ -518,6 +523,7 @@
 				);
 				INFOPLIST_FILE = FogMachineSearchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FogMachineSearch.app/FogMachineSearch";
 			};
@@ -533,6 +539,7 @@
 				);
 				INFOPLIST_FILE = FogMachineSearchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FogMachineSearch.app/FogMachineSearch";
 			};

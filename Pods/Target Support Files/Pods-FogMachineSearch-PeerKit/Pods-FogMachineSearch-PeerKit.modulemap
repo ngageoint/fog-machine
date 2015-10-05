@@ -1,6 +1,0 @@
-framework module PeerKit {
-  umbrella header "Pods-FogMachineSearch-PeerKit-umbrella.h"
-
-  export *
-  module * { export * }
-}

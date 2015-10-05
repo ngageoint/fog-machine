@@ -27,7 +27,7 @@ struct ConnectionManager {
     
     // MARK: Properties
     private static var peers: [MCPeerID] {
-        return PeerKit.session?.connectedPeers as! [MCPeerID]? ?? []
+        return PeerKit.session?.connectedPeers ?? []
     }
     
     static var otherWorkers: [Worker] {
@@ -66,7 +66,7 @@ struct ConnectionManager {
     
     
     // MARK: Sending
-    static func sendEvent(event: Event, object: [String: MPCSerializable]? = nil, toPeers peers: [MCPeerID]? = PeerKit.session?.connectedPeers as! [MCPeerID]?) {
+    static func sendEvent(event: Event, object: [String: MPCSerializable]? = nil, toPeers peers: [MCPeerID]? = PeerKit.session?.connectedPeers ) {
         var anyObject: [String: NSData]?
         if let object = object {
             anyObject = [String: NSData]()
