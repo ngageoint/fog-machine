@@ -9,7 +9,7 @@
 import Foundation
 import MultipeerConnectivity
 
-private let myName = UIDevice.currentDevice().name
+private let myName = String(UIDevice.currentDevice().hash)
 
 struct Worker: Hashable, Equatable, MPCSerializable {
     // MARK: Properties
@@ -17,7 +17,7 @@ struct Worker: Hashable, Equatable, MPCSerializable {
     
     // MARK: Computed Properties
     var me: Bool { return name == myName }
-    var displayName: String { return me ? String(Int(arc4random_uniform(99) + 1)) : name }
+    var displayName: String { return name }
     var hashValue: Int { return name.hash }
     var mpcSerialized: NSData { return name.dataUsingEncoding(NSUTF8StringEncoding)! }
     

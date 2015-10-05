@@ -23,24 +23,24 @@ class SecondViewController: UIViewController {
         self.statusField.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         
         ConnectionManager.onEvent(Event.StartSearch){ peerID, object in
-            self.logArea.text = ("Recieved request to initiate a search from \(peerID.displayName)\n\(self.logArea.text)")
+            self.logArea.text = ("Recieved request to initiate a search from \(peerID.displayName)")
             
             let dict = object as! [String: NSData]
             let workArray = WorkArray(mpcSerialized: dict["workArray"]!)
             var totalCount = 0
-            let searchTerm = ""
+            var searchTerm = ""
             var returnTo = ""
             
             for work:Work in workArray.array {
                 returnTo = work.searchInitiator
                 if work.assignedTo == Worker.getMe().name {
-                    
+                    searchTerm = work.searchTerm
                     self.logArea.text = ("Beginning search for \"\(work.searchTerm)\" from indecies \(work.lowerBound) to \(work.upperBound)\n\n\(self.logArea.text)")
                     totalCount += self.performSearch(work)
                 }
             }
             
-            self.logArea.text = ("Found \(searchTerm) \(totalCount) times. Sending results back.\n\n\(self.logArea.text)")
+            self.logArea.text = ("Found '\(searchTerm)' \(totalCount) times. Sending results back.\n\n\(self.logArea.text)")
             let result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
             ConnectionManager.sendEvent(Event.SendResult, object: ["searchResult": result])
         }
@@ -82,7 +82,7 @@ class SecondViewController: UIViewController {
         let lowerBound:Int = Int(work.lowerBound)!
         let upperBound:Int = Int(work.upperBound)!
         
-        self.logArea.text = "Initiating search on \(work.assignedTo) from \(lowerBound) to \(upperBound)"
+        self.logArea.text = "Initiating search on \(work.assignedTo) from \(lowerBound) to \(upperBound)\n\n\(self.logArea.text)"
         
         for index in lowerBound...upperBound {
             let countedSet = NSCountedSet()
@@ -100,10 +100,10 @@ class SecondViewController: UIViewController {
     
     
     @IBAction func searchButtonTapped(sender: AnyObject) {
-        let searchTerm = searchField.text
+        let searchTerm = searchField.text ?? "Enter a Search Term"
         self.searchResultTotal = 0
         self.searchField.resignFirstResponder()
-        self.logArea.text = "Beginning search for \"\(searchTerm)...\""
+        self.logArea.text = "Beginning search for \"\(searchTerm)\""
         
         let numberOfPeers = ConnectionManager.allWorkers.count
         let totalWorkUnits = MonteCristo.paragraphs.count
@@ -119,7 +119,7 @@ class SecondViewController: UIViewController {
             let lower = startBound == 0 ? 1 : startBound
             let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
             
-            let work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm!, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
+            let work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
             tempArray.append(work)
             startBound += workDivision + 1
             
