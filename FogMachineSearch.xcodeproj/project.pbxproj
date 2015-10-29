@@ -247,7 +247,7 @@
 				TargetAttributes = {
 					E314F6BA1B79023D005B75C6 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = KBKX8X5SZ7;
+						DevelopmentTeam = A8EK924J35;
 					};
 					E314F6D11B79023D005B75C6 = {
 						CreatedOnToolsVersion = 6.4;
@@ -487,11 +487,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FogMachineSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FogMachineSearch;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -501,11 +503,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FogMachineSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = FogMachineSearch;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
