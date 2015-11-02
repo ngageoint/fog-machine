@@ -2,7 +2,7 @@ PODS:
   - PeerKit (1.1.0)
 
 DEPENDENCIES:
-  - PeerKit (>= 1.1)
+  - PeerKit (~> 1.1)
 
 SPEC CHECKSUMS:
   PeerKit: 7ab365c98a6b72211f280bfd51bae898b1f50f6f

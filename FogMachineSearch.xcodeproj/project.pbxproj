@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		753D3D571BE7A031004E3589 /* Viewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D561BE7A031004E3589 /* Viewshed.swift */; };
+		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
 		B4D468E8AD4BB93521EAC726 /* Pods_FogMachineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
@@ -38,6 +40,8 @@
 		00EB0A1C8F35650FCD4CCEB8 /* Pods-FogMachineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachineSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-FogMachineSearch/Pods-FogMachineSearch.release.xcconfig"; sourceTree = "<group>"; };
 		0C56367AAEF93226AFA4B7F7 /* Pods-FogMachineSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachineSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FogMachineSearch/Pods-FogMachineSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachineSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		753D3D561BE7A031004E3589 /* Viewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewshed.swift; sourceTree = "<group>"; };
+		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -181,6 +185,8 @@
 			isa = PBXGroup;
 			children = (
 				E314F6E41B790275005B75C6 /* ConnectionManager.swift */,
+				753D3D561BE7A031004E3589 /* Viewshed.swift */,
+				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -348,11 +354,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B933DE1B7BA1A9007B9444 /* FogConstants.swift in Sources */,
+				753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */,
 				E3CB97F91B7975EA006D6961 /* Worker.swift in Sources */,
 				E386DD511B7C34DB00FA8827 /* Work.swift in Sources */,
 				E314F6C51B79023D005B75C6 /* SecondViewController.swift in Sources */,
 				E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */,
 				E314F6E51B790275005B75C6 /* ConnectionManager.swift in Sources */,
+				753D3D571BE7A031004E3589 /* Viewshed.swift in Sources */,
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
 				E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
