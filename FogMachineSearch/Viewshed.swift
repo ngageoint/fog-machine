@@ -11,12 +11,14 @@ import UIKit
 public class Viewshed: NSObject {
     
     public func testIt() {
-        let elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
+        var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
         let obsX = 3
         let obsY = 3
         let obsHeight = 3
         let viewRadius = 2
         print("Elevation Matrix")
+        elevationMatrix[4][4] = 10 //causes top right of printed viewshed to be 0
+        elevationMatrix[3][4] = 10 //causes 2nd, 3rd and 4th from top right to be 0
         displayMatrix(elevationMatrix)
         viewshed(elevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
     }
@@ -48,37 +50,43 @@ public class Viewshed: NSObject {
 //          will have coordinates (xi, yi, zi + h).
         
             let bresenham = Bresenham()
-            let bresResults:[(x:Int, y:Int)] = bresenham.line(obsX, y1: obsY, x2: x, y2: y)
+            let bresResults:[(x:Int, y:Int)] = bresenham.findLine(obsX, y1: obsY, x2: x, y2: y)
    
             
 //          (c) Let mi be the slope of the line from O to Di, that is,
-//          mi = ( zk − zi + p ) / sqrt( (xi − xp)2 + (yi − yp)^2 )
+//              mi = ( zk − zi + p ) / sqrt( (xi − xp)2 + (yi − yp)^2 )
 
 //          (d) Let µ be the greatest slope seen so far along this line. Initialize µ = −∞.
             var greatestSlope = -Double.infinity
 
 //          (e) Iterate along the line from p to c.
             for (x2, y2) in bresResults {
-
+                print("Finding angle to: x, y: \(x2),   \(y2)")
 //              i. For each point qi, compute mi.
-                let zk:Double = elevation[obsX-1][obsY-1] //used -1 for zero based indexing
-                let zi:Double = elevation[x2-1][y2-1] //used -1 for zero based indexing
-                let slope: Double = ( zi - (zk + Double(obsHeight)) ) / sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
-                print("\t\tSlope: \(slope)")
+                let zk:Double = elevation[obsX][obsY]
+                let zi:Double = elevation[x2][y2]
                 
-                //FOR 2D = x2 == obsX ? Double.infinity : Double(y2 - obsY) / Double(x2 - obsX)
+                // angle = arctan(opposite/adjacent)
+                let opposite = ( zi - (zk + Double(obsHeight)) )
+                let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
+                let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
+                
+                //print("\t\tzk: \(zk) zi: \(zi)   x2: \(x2)  y2: \(y2)    obsX: \(obsX)  obsY:  \(obsY)")
+                //print("\t\t\topposite / adjacent: \(opposite)  \(adjacent)")
+                //print("angle: \(angle) ")
+                
                 
 //              ii. If mi < µ, then mark qi as hidden from O, that is, as not in the viewshed (which is simply a 2r × 2r bitmap).
 //              iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
-                if (slope < greatestSlope) {
+                if (angle < greatestSlope) {
                     //hidden
-                    viewshedMatrix[x-1][y-1] = 0 //used -1 for zero based indexing
+                    viewshedMatrix[x2-1][y2-1] = 0 //used -1 for zero based indexing
                 } else {
-                    greatestSlope = slope
+                    greatestSlope = angle
                     //visible
-                    viewshedMatrix[x-1][y-1] = 1 //used -1 for zero based indexing
+                    viewshedMatrix[x2-1][y2-1] = 1 //used -1 for zero based indexing
                 }
-                
+
             }
 
         }
@@ -123,7 +131,7 @@ public class Viewshed: NSObject {
     }
     
     private func displayMatrix(matrix: [[Double]]) {
-        for x in matrix {
+        for x in matrix.reverse() {
             print("\(x)")
         }
     }
