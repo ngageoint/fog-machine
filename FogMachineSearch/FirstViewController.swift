@@ -24,10 +24,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Testing purposes
-        let view = Viewshed()
-        view.testIt()
-        
         setupTableView()
     }
     

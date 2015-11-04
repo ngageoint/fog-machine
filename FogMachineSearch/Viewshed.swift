@@ -10,7 +10,7 @@ import UIKit
 
 public class Viewshed: NSObject {
     
-    public func testIt() {
+    public func testIt() -> [[Double]] {
         var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
         let obsX = 3
         let obsY = 3
@@ -20,14 +20,15 @@ public class Viewshed: NSObject {
         elevationMatrix[4][4] = 10 //causes top right of printed viewshed to be 0
         elevationMatrix[3][4] = 10 //causes 2nd, 3rd and 4th from top right to be 0
         displayMatrix(elevationMatrix)
-        viewshed(elevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
+        let resultMatrix = viewshed(elevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
+        return resultMatrix
     }
     
     //Adopted from section 5.1 http://www.cs.rpi.edu/~cutler/publications/andrade_geoinformatica.pdf
     //        Given a terrain T represented by an n × n elevation matrix M, a point p on T , a radius
     //        of interest r, and a height h above the local terrain for the observer and target, this
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
-    private func viewshed(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int) {
+    public func viewshed(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int) -> [[Double]] {
         //initialize results array as all un-viewable
         let size = (viewRadius * 2) + 1
         var viewshedMatrix = [[Double]](count:size, repeatedValue:[Double](count:size, repeatedValue:0))
@@ -90,9 +91,13 @@ public class Viewshed: NSObject {
             }
 
         }
+        
+        viewshedMatrix[obsX-1][obsY-1] = -1 // mark observer cell as unique
+        
         print("\nResultant Viewshed Matrix")
         displayMatrix(viewshedMatrix)
         //Viewshed complete?
+        return viewshedMatrix
         
     }
     
