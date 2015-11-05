@@ -41,7 +41,7 @@ public class Viewshed: NSObject {
 //        3. Iterate through the cells c of the square’s perimeter. Each c has coordinates
 //        (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
         for (x, y) in perimeter {
-            print("\nCalling Bresenham on x, y: \(x), \(y)")
+           // print("\nCalling Bresenham on x, y: \(x), \(y)")
 
 //          (a) For each c, run a straight line in M from (xp, yp, 0) to (xc, yc, 0).
 
@@ -62,7 +62,7 @@ public class Viewshed: NSObject {
 
 //          (e) Iterate along the line from p to c.
             for (x2, y2) in bresResults {
-                print("Finding angle to: x, y: \(x2),   \(y2)")
+               // print("Finding angle to: x, y: \(x2),   \(y2)")
 //              i. For each point qi, compute mi.
                 let zk:Double = elevation[obsX][obsY]
                 let zi:Double = elevation[x2][y2]
@@ -94,8 +94,8 @@ public class Viewshed: NSObject {
         
         viewshedMatrix[obsX-1][obsY-1] = -1 // mark observer cell as unique
         
-        print("\nResultant Viewshed Matrix")
-        displayMatrix(viewshedMatrix)
+       // print("\nResultant Viewshed Matrix")
+        //displayMatrix(viewshedMatrix)
         //Viewshed complete?
         return viewshedMatrix
         

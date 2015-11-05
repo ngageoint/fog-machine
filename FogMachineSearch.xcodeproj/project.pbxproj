@@ -11,6 +11,9 @@
 		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
 		753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* MapViewController.swift */; };
 		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
+		753D3D6A1BEBA59E004E3589 /* HGT in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D691BEBA59E004E3589 /* HGT */; };
+		753D3D6C1BEBA5D7004E3589 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */; };
+		753D3D6E1BEBC243004E3589 /* N38W077_matrix.txt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */; };
 		B4D468E8AD4BB93521EAC726 /* Pods_FogMachineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
@@ -46,6 +49,9 @@
 		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
 		753D3D5E1BEA33CF004E3589 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		753D3D621BEA7900004E3589 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		753D3D691BEBA59E004E3589 /* HGT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HGT; sourceTree = "<group>"; };
+		753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
+		753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = N38W077_matrix.txt; path = HGT/N38W077_matrix.txt; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +125,7 @@
 		E314F6BD1B79023D005B75C6 /* FogMachineSearch */ = {
 			isa = PBXGroup;
 			children = (
+				753D3D691BEBA59E004E3589 /* HGT */,
 				E3B933E21B7BD0F9007B9444 /* Data */,
 				E3B933DF1B7BAE32007B9444 /* Views */,
 				E3CB97F71B7975C8006D6961 /* Controllers */,
@@ -171,6 +178,8 @@
 		E3B933E21B7BD0F9007B9444 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */,
+				753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */,
 				E3B933E31B7BD106007B9444 /* MonteCristo.swift */,
 			);
 			name = Data;
@@ -291,8 +300,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				753D3D6C1BEBA5D7004E3589 /* N38W077.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
+				753D3D6A1BEBA59E004E3589 /* HGT in Resources */,
+				753D3D6E1BEBC243004E3589 /* N38W077_matrix.txt in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
