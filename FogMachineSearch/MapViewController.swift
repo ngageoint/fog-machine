@@ -27,11 +27,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
       
         print("Starting Viewshed...please wait patiently.")
         
-        var testElevationMatrix:[[Double]] = readHgt()
+        let hgtElevationMatrix:[[Double]] = readHgt()
         
-        ////////////
+        
+
         //Testing purposes
-        var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
+        //var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
         let obsX = 600
         let obsY = 600
         let obsHeight = 3
@@ -41,8 +42,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         //elevationMatrix[3][4] = 10 //causes 2nd, 3rd and 4th from top right to be 0
         
         let view = Viewshed()
-        var viewshed:[[Double]] = view.viewshed(testElevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
-        ////////////
+        var viewshed:[[Double]] = view.viewshed(hgtElevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
+
         
         print("Finished Viewshed calculation...rendering a bunch of squares")
   
@@ -57,12 +58,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var count = 0 //hardcoded for testing
         var iterator = 0 //hardcoded for testing
 //        for row in viewshed.reverse() {
-        while ( iterator < 100) {
+        while ( iterator < 20) {
             currLon = startLon
             countCol = 0
             //for _ in row { //column
             count = 0
-            while ( count < 100) {
+            while ( count < 20) {
                 if viewshed[countRow][countCol] == -1 {
                     makeCell(UIColor.purpleColor(), lat: currLat, lon: currLon, size: size)
                 } else if viewshed[countRow][countCol] == 1 {
@@ -85,20 +86,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         print("Bunch of squares renderation complete!")
-//        makeGridSquare(38.97898180980364, lon: -77.44147717649722, size: 0.001)
-//        
-//        var workSquare = [
-//            CLLocationCoordinate2DMake(38.98459735040207, -77.44143600776995),
-//            CLLocationCoordinate2DMake(38.97898180980364, -77.44147717649722),
-//            CLLocationCoordinate2DMake(38.97887860210396, -77.43464032292945),
-//            CLLocationCoordinate2DMake(38.9844280125545, -77.43440222562209),
-//            CLLocationCoordinate2DMake(38.98459735040207, -77.44143600776995)
-//        ]
-//        
-//        let workSquarePolygon: MKPolygon = MKPolygon(coordinates: &workSquare, count: workSquare.count)
-//        mapView.addOverlay(workSquarePolygon)
         
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -117,33 +105,22 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
 //        
 //        //let randomData = generateRandomData(256 * 1024)
-//        
 //        let stream = NSInputStream(data: data)
 //        stream.open() // IMPORTANT
-//        
 //        var readBuffer = Array<UInt8>(count: 1200 * 1200, repeatedValue: 0)
-//        
 //        var totalBytesRead = 0
-//        
 //        while (totalBytesRead < data.length)
 //        {
 //            let numberOfBytesRead = stream.read(&readBuffer, maxLength: readBuffer.count)
-//            
 //            // Do something with the data
-//            
 //            totalBytesRead += numberOfBytesRead
 //        }
         
 
         var elevationMatrix = [[Double]](count:1200, repeatedValue:[Double](count:1200, repeatedValue:0))
-        
-        
-//        let pathT = NSBundle.mainBundle().pathForResource("N38W077_matrix", ofType: "txt")
-//        let urlT = NSURL(fileURLWithPath: pathT!)
-//        let dataT = NSData(contentsOfURL: urlT)!
 
         
-        var dataRange = NSRange(location: 0, length: 2884802)//1200 * 1200)
+        let dataRange = NSRange(location: 0, length: 2884802)//1200 * 1200)
         var handNumbers = [Int8](count: 2884802, repeatedValue: 0)
         data.getBytes(&handNumbers, range: dataRange)
         
