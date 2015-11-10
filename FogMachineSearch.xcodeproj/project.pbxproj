@@ -14,6 +14,8 @@
 		753D3D6A1BEBA59E004E3589 /* HGT in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D691BEBA59E004E3589 /* HGT */; };
 		753D3D6C1BEBA5D7004E3589 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */; };
 		753D3D6E1BEBC243004E3589 /* N38W077_matrix.txt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */; };
+		753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */; };
+		753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */; };
 		B4D468E8AD4BB93521EAC726 /* Pods_FogMachineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
@@ -52,6 +54,8 @@
 		753D3D691BEBA59E004E3589 /* HGT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HGT; sourceTree = "<group>"; };
 		753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
 		753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = N38W077_matrix.txt; path = HGT/N38W077_matrix.txt; sourceTree = "<group>"; };
+		753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
+		753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -171,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */,
+				753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 				E3CB97F81B7975EA006D6961 /* Worker.swift */,
 				E386DD501B7C34DB00FA8827 /* Work.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
+				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -372,10 +378,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B933DE1B7BA1A9007B9444 /* FogConstants.swift in Sources */,
+				753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */,
 				753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */,
 				E3CB97F91B7975EA006D6961 /* Worker.swift in Sources */,
 				E386DD511B7C34DB00FA8827 /* Work.swift in Sources */,
 				E314F6C51B79023D005B75C6 /* SecondViewController.swift in Sources */,
+				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
 				E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */,
 				E314F6E51B790275005B75C6 /* ConnectionManager.swift in Sources */,

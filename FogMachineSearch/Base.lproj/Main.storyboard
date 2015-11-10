@@ -521,6 +521,9 @@
                                     <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
                                 </connections>
                             </mapView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X84-cz-90A">
+                                <rect key="frame" x="36" y="20" width="518" height="128"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -529,6 +532,10 @@
                             <constraint firstItem="UrZ-Fz-RFo" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="55" id="4o4-o6-SiZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UrZ-Fz-RFo" secondAttribute="trailing" constant="13" id="H7u-eX-VpM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" id="MBh-Yb-WDT"/>
+                            <constraint firstItem="X84-cz-90A" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" id="OJn-ud-pnc"/>
+                            <constraint firstItem="X84-cz-90A" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="16" id="XHH-bd-AF6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="X84-cz-90A" secondAttribute="trailing" constant="26" id="bay-uM-ZgK"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="top" secondItem="X84-cz-90A" secondAttribute="bottom" constant="13" id="clU-dE-EbB"/>
                             <constraint firstItem="UrZ-Fz-RFo" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="8" id="eYc-38-yeE"/>
                             <constraint firstAttribute="centerX" secondItem="UrZ-Fz-RFo" secondAttribute="centerX" constant="6.5" id="gqB-Rh-w6e"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UrZ-Fz-RFo" secondAttribute="trailing" id="k9I-dB-nW1"/>
@@ -574,6 +581,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Viewshed" image="Viewshed" id="sFM-Ol-itb"/>
                     <connections>
+                        <outlet property="imageView" destination="X84-cz-90A" id="sVW-9O-Tqj"/>
                         <outlet property="mapView" destination="skG-eX-ae4" id="fWJ-nl-x23"/>
                     </connections>
                 </viewController>
