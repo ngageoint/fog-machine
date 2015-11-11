@@ -30,34 +30,64 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         mapView.delegate = self
         
-        let initialLocation = CLLocation(latitude:  38.0, longitude: -77.0)
+        let initialLocation = CLLocation(latitude:  38.5, longitude: -76.5)
         centerMapOnLocation(initialLocation)
       
         print("Starting Viewshed...please wait patiently.")
         
         
-        researchForImageOverlay()
+        //researchForImageOverlay()
         
         
-        
-        //let hgtElevationMatrix:[[Double]] = readHgt()
-        
+        let hgtElevation:[[Double]] = readHgt()
         
 
-        //Testing purposes
         //var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
-        //let obsX = 600
-        //let obsY = 600
-        //let obsHeight = 3
-        //let viewRadius = 599
+        let obsX = 800
+        let obsY = 800
+        let obsHeight = 3
+        let viewRadius = 599 //problem in viewshed algorithm, this needs to be 599 for now
         //print("Elevation Matrix")
         //elevationMatrix[4][4] = 10 //causes top right of printed viewshed to be 0
         //elevationMatrix[3][4] = 10 //causes 2nd, 3rd and 4th from top right to be 0
         
-       // let view = Viewshed()
-       // var viewshed:[[Double]] = view.viewshed(hgtElevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
+        let view = Viewshed()
+        var viewshed:[[Double]] = view.viewshed(hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
         
-        //var pixelViewshed = convertDoubleToPixel(viewshed)
+        print("Preparing PixelData.")
+        
+        let width = viewshed[0].count
+        let height = viewshed.count
+        var data: [PixelData] = []
+
+        // CoreGraphics expects pixel data as rows, not columns.
+        for(var y = 0; y < width; y++) {
+            for(var x = 0; x < height; x++) {
+                if(viewshed[y][x] == 0) {
+                    data.append(PixelData(a: 75, r: 255, g: 0, b: 0))
+                } else {
+                    data.append(PixelData(a: 75, r: 0, g: 255, b: 0))
+                }
+            }
+        }
+        
+        
+        print("Rendering image.")
+        
+        let image = imageFromArgb32Bitmap(data, width: width, height: height)
+        imageView.image = image
+        addOverlay(image)
+        
+        
+        let observerLocation = CLLocationCoordinate2DMake(39.0 - (0.00083 * Double(obsX)), -77.0 + (0.00083 * Double(obsY)))
+        // Drop a pin
+        let dropPin = MKPointAnnotation()
+        dropPin.coordinate = observerLocation
+        dropPin.title = "Observer 1"
+        mapView.addAnnotation(dropPin)
+        
+        
+        
 //
 //        
 //        print("Finished Viewshed calculation...rendering a bunch of squares")
@@ -187,18 +217,52 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func researchForImageOverlay() {
+        
 
         let red = PixelData(a: 100, r: 255, g: 0, b: 0)
         let green = PixelData(a: 100, r: 0, g: 255, b: 0)
         let blue = PixelData(a: 100, r: 0, g: 0, b: 255)
         
         
-        let width = 30
-        let height = 10
+        let width = 12
+        let height = 12
         var pixels=[PixelData]()
         //var pixels:[[PixelData]] = Array(count: height, repeatedValue: Array(count: width, repeatedValue: green))
-        
 
+        
+        
+        
+        var data: [PixelData] = []
+        
+//        for(var i = 0; i < Int(100); i++) {
+//            for(var j = 0; j < Int(100); j++) {
+//                if(j < Int(100/2)) {
+//                    data.append(PixelData(a: 255, r: 255, g: 0, b: 0))
+//                } else {
+//                    data.append(PixelData(a: 255, r: 0, g: 0, b: 0))
+//                }
+//                
+//            }
+//        }
+        
+        
+        for(var y = 0; y < Int(1200); y++) {
+            for(var x = 0; x < Int(1200); x++) {
+                if(Int(arc4random_uniform(3)) > 1) { //(y < Int(300/2)) {
+                    data.append(PixelData(a: 100, r: 255, g: 0, b: 0))
+                } else {
+                    data.append(PixelData(a: 100, r: 0, g: 0, b: 0))
+                }
+            }
+        }
+
+        
+        
+        let image = imageFromArgb32Bitmap(data, width: width, height: height)
+        
+        
+        
+    
         
 //        for i in 0...299 {
 //            for j in 0...299 {
@@ -213,7 +277,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
-        let image = imageFromArgb32Bitmap(pixels, width: width, height: height)
+        //let image = imageFromArgb32Bitmap(pixels, width: width, height: height)
+        
+        
+        
         
 //        var data = pixels // Copy to mutable []
 //        let length = data.count * data.count * sizeof(PixelData) //data.count * sizeof(PixelData)
@@ -225,16 +292,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         
         
-        var pixels2=[PixelData]()
-        for i in 1...100 {
-            pixels2.append(PixelData(a: 100, r: UInt8(i/2), g: 0, b: 0))
-        }
-        let image2 = imageFromArgb32Bitmap(pixels2, width: width, height: height)
+//        var pixels2=[PixelData]()
+//        for i in 1...100 {
+//            pixels2.append(PixelData(a: 100, r: UInt8(i/2), g: 0, b: 0))
+//        }
+//        let image2 = imageFromArgb32Bitmap(pixels2, width: width, height: height)
+//        
+//        let image3 = mergeTwoImages(image, image2: image2, currentHeight: 5)
+//        
         
-        let image3 = mergeTwoImages(image, image2: image2, currentHeight: 5)
-        
-        
-//        let image3 = image
+        let image3 = image
         
         
         imageView.image = image3
@@ -304,10 +371,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func addOverlay(image: UIImage) {
-        
-        var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: 38.0, longitude: -77.0)
-        var overlayTopRightCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 38.0, longitude: -76.5)
-        var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 37.5, longitude: -77.0)
+        //N38077W
+        var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: 39.0, longitude: -77.0)
+        var overlayTopRightCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 39.0, longitude: -76.0)
+        var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 38.0, longitude: -77.0)
 
         var overlayBottomRightCoordinate: CLLocationCoordinate2D {
             get {
@@ -508,6 +575,23 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+
+        var view:MKPinAnnotationView? = nil
+        let identifier = "pin"
+        if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+            dequeuedView.annotation = annotation
+            view = dequeuedView
+        } else {
+            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view!.canShowCallout = true
+            view!.calloutOffset = CGPoint(x: -5, y: 5)
+            view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIView
+            view?.pinColor = MKPinAnnotationColor.Purple
+        }
+        
+        return view
+    }
     
     /*
     // MARK: - Navigation

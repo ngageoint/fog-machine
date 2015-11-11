@@ -30,7 +30,7 @@ public class Viewshed: NSObject {
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
     public func viewshed(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int) -> [[Double]] {
         //initialize results array as all un-viewable
-        let size = (viewRadius * 2) + 1
+        let size = (viewRadius * 2) + 1 + 1 // adding 1 to account for middle row, and another one to make it 1200 (aka this wont work without  1200x1200
         var viewshedMatrix = [[Double]](count:size, repeatedValue:[Double](count:size, repeatedValue:0))
         
 //        1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
@@ -59,37 +59,40 @@ public class Viewshed: NSObject {
 
 //          (d) Let µ be the greatest slope seen so far along this line. Initialize µ = −∞.
             var greatestSlope = -Double.infinity
-
-//          (e) Iterate along the line from p to c.
+            
+            //          (e) Iterate along the line from p to c.
             for (x2, y2) in bresResults {
-               // print("Finding angle to: x, y: \(x2),   \(y2)")
-//              i. For each point qi, compute mi.
-                let zk:Double = elevation[obsX][obsY]
-                let zi:Double = elevation[x2][y2]
-                
-                // angle = arctan(opposite/adjacent)
-                let opposite = ( zi - (zk + Double(obsHeight)) )
-                let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
-                let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
-                
-                //print("\t\tzk: \(zk) zi: \(zi)   x2: \(x2)  y2: \(y2)    obsX: \(obsX)  obsY:  \(obsY)")
-                //print("\t\t\topposite / adjacent: \(opposite)  \(adjacent)")
-                //print("angle: \(angle) ")
-                
-                
-//              ii. If mi < µ, then mark qi as hidden from O, that is, as not in the viewshed (which is simply a 2r × 2r bitmap).
-//              iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
-                if (angle < greatestSlope) {
-                    //hidden
-                    viewshedMatrix[x2-1][y2-1] = 0 //used -1 for zero based indexing
-                } else {
-                    greatestSlope = angle
-                    //visible
-                    viewshedMatrix[x2-1][y2-1] = 1 //used -1 for zero based indexing
+                //hgt elevation is 1200 x 1200, so skip anything outside those bounds
+                if (x2 > 0 && y2 > 0) && (x2 < 1200 && y2 < 1200) {
+                    // print("Finding angle to: x, y: \(x2),   \(y2)")
+                    //              i. For each point qi, compute mi.
+                    let zk:Double = elevation[obsX][obsY]
+                    let zi:Double = elevation[x2][y2]
+                    
+                    // angle = arctan(opposite/adjacent)
+                    let opposite = ( zi - (zk + Double(obsHeight)) )
+                    let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
+                    let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
+                    
+                    //print("\t\tzk: \(zk) zi: \(zi)   x2: \(x2)  y2: \(y2)    obsX: \(obsX)  obsY:  \(obsY)")
+                    //print("\t\t\topposite / adjacent: \(opposite)  \(adjacent)")
+                    //print("angle: \(angle) ")
+                    
+                    
+                    //              ii. If mi < µ, then mark qi as hidden from O, that is, as not in the viewshed (which is simply a 2r × 2r bitmap).
+                    //              iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
+                    if (angle < greatestSlope) {
+                        //hidden
+                        viewshedMatrix[x2-1][y2-1] = 0 //used -1 for zero based indexing
+                    } else {
+                        greatestSlope = angle
+                        //visible
+                        viewshedMatrix[x2-1][y2-1] = 1 //used -1 for zero based indexing
+                    }
                 }
-
+                
             }
-
+            
         }
         
         viewshedMatrix[obsX-1][obsY-1] = -1 // mark observer cell as unique
