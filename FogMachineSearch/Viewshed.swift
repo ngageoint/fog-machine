@@ -30,43 +30,47 @@ public class Viewshed: NSObject {
     //        of interest r, and a height h above the local terrain for the observer and target, this
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
     public func viewshed(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int) -> [[Double]] {
-        //initialize results array as all un-viewable
+        
         let size = (viewRadius * 2) + 1 // adding 1 to account for middle row (also this wont work without 1201x1201)
+        
+        // Initialize results array as all un-viewable
         var viewshedMatrix = [[Double]](count:size, repeatedValue:[Double](count:size, repeatedValue:0))
         
-//        1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
+        // 1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
         
-//        2. Imagine a square in the plane z = 0 of side 2r × 2r centered on (xp, yp, 0).
+        // 2. Imagine a square in the plane z = 0 of side 2r × 2r centered on (xp, yp, 0).
         let perimeter:[(x:Int, y:Int)] = getPerimeter(obsX, inY: obsY, radius: viewRadius)
-
-//        3. Iterate through the cells c of the square’s perimeter. Each c has coordinates
-//        (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
-        for (x, y) in perimeter {
-           // print("\nCalling Bresenham on x, y: \(x), \(y)")
-
-//          (a) For each c, run a straight line in M from (xp, yp, 0) to (xc, yc, 0).
-
-            
-//          (b) Find the points on that line, perhaps using Bresenham’s algorithm. In order
-//          from p to c, let them be q1 = p, q2, ··· qk−1, qk = c. A potential target Di at qi
-//          will have coordinates (xi, yi, zi + h).
         
+        // 3. Iterate through the cells c of the square’s perimeter. Each c has coordinates
+        //  (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
+        for (x, y) in perimeter {
+            // print("\nCalling Bresenham on x, y: \(x), \(y)")
+            
+            // (a) For each c, run a straight line in M from (xp, yp, 0) to (xc, yc, 0).
+            
+            
+            // (b) Find the points on that line, perhaps using Bresenham’s algorithm. In order
+            //  from p to c, let them be q1 = p, q2, ··· qk−1, qk = c. A potential target Di at qi
+            //  will have coordinates (xi, yi, zi + h).
+            
             let bresenham = Bresenham()
             let bresResults:[(x:Int, y:Int)] = bresenham.findLine(obsX, y1: obsY, x2: x, y2: y)
-   
             
-//          (c) Let mi be the slope of the line from O to Di, that is,
-//              mi = ( zk − zi + p ) / sqrt( (xi − xp)2 + (yi − yp)^2 )
-
-//          (d) Let µ be the greatest slope seen so far along this line. Initialize µ = −∞.
+            
+            //  (c) Let mi be the slope of the line from O to Di, that is,
+            //   mi = ( zk − zi + p ) / sqrt( (xi − xp)2 + (yi − yp)^2 )
+            
+            // (d) Let µ be the greatest slope seen so far along this line. Initialize µ = −∞.
             var greatestSlope = -Double.infinity
             
-            //          (e) Iterate along the line from p to c.
+            // e) Iterate along the line from p to c.
             for (x2, y2) in bresResults {
+                
                 //hgt elevation is 1201 x 1201, so skip anything outside those bounds
                 if (x2 > 0 && y2 > 0) && (x2 < Hgt.MAX_SIZE && y2 < Hgt.MAX_SIZE) {
                     // print("Finding angle to: x, y: \(x2),   \(y2)")
-                    //              i. For each point qi, compute mi.
+                    
+                    // i. For each point qi, compute mi.
                     let zk:Double = elevation[obsX][obsY]
                     let zi:Double = elevation[x2][y2]
                     
@@ -80,8 +84,8 @@ public class Viewshed: NSObject {
                     //print("angle: \(angle) ")
                     
                     
-                    //              ii. If mi < µ, then mark qi as hidden from O, that is, as not in the viewshed (which is simply a 2r × 2r bitmap).
-                    //              iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
+                    // ii. If mi < µ, then mark qi as hidden from O, that is, as not in the viewshed (which is simply a 2r × 2r bitmap).
+                    // iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
                     if (angle < greatestSlope) {
                         //hidden
                         viewshedMatrix[x2 - 1][y2 - 1] = 0 //used -1 for zero based indexing
@@ -98,9 +102,6 @@ public class Viewshed: NSObject {
         
         viewshedMatrix[obsX - 1][obsY - 1] = -1 // mark observer cell as unique
         
-       // print("\nResultant Viewshed Matrix")
-        //displayMatrix(viewshedMatrix)
-        //Viewshed complete?
         return viewshedMatrix
         
     }

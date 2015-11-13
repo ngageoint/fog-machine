@@ -9,20 +9,12 @@
 import UIKit
 import MapKit
 
-struct PixelData {
-    var a: UInt8
-    var r: UInt8
-    var g: UInt8
-    var b: UInt8
-}
 
 class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
 
     @IBOutlet weak var imageView: UIImageView!
-    
-    let regionRadius: CLLocationDistance = 100000
 
     
     
@@ -31,123 +23,77 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         mapView.delegate = self
         
+    
+        print("Starting Viewshed Processing...please wait patiently.")
+        
         
         let filename = "N39W075"//"N39W075"//"N38W077"
         
         let hgtElevation:[[Double]] = readHgt(filename)
-        
         let fileLocation = getCoordinateFromFilename(filename)
 
         centerMapOnLocation(CLLocationCoordinate2DMake(fileLocation.latitude + Hgt.CENTER_OFFSET,
             fileLocation.longitude + Hgt.CENTER_OFFSET))
-      
-        
-        print("Starting Viewshed...please wait patiently.")
+       
     
-        
-        //var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
-        
         // 0,0 is top left
         let obsX = 600
         let obsY = 200
         let obsHeight = 30
         let viewRadius = 600 //problem in viewshed algorithm, this needs to be 600 for now
         
+        let observerLocation = CLLocationCoordinate2DMake(
+            fileLocation.latitude + 1 - (Hgt.CELL_SIZE * Double(obsX - 1)) + Hgt.LATITUDE_CELL_CENTER,
+            fileLocation.longitude + (Hgt.CELL_SIZE * Double(obsY - 1) + Hgt.LONGITUDE_CELL_CENTER)
+        )
+        let observerName = "Observer 1"
+        pinObserverLocation(observerLocation, name: observerName)
+        
         let view = Viewshed()
-        var viewshed:[[Double]] = view.viewshed(hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
+        let viewshed:[[Double]] = view.viewshed(hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
+        
+        displayViewshed(viewshed, hgtLocation: fileLocation)
+        
+        print("Pixel renderation complete!")
+        
+    }
+    
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    func displayViewshed(viewshed: [[Double]], hgtLocation: CLLocationCoordinate2D) {
         
         print("Preparing PixelData.")
         
         let width = viewshed[0].count
         let height = viewshed.count
-        var data: [PixelData] = []
-
+        var data: [Pixel] = []
+        
         // CoreGraphics expects pixel data as rows, not columns.
         for(var y = 0; y < width; y++) {
             for(var x = 0; x < height; x++) {
                 
                 let cell = viewshed[y][x]
                 if(cell == 0) {
-                    data.append(PixelData(a: 75, r: 0, g: 0, b: 0))
+                    data.append(Pixel(alpha: 75, red: 0, green: 0, blue: 0))
                 } else if (cell == -1){
-                    data.append(PixelData(a: 75, r: 0, g: 0, b: 255))
+                    data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
-                    data.append(PixelData(a: 75, r: 0, g: 255, b: 0))
+                    data.append(Pixel(alpha: 75, red: 0, green: 255, blue: 0))
                 }
             }
         }
-        
         
         print("Rendering image.")
         
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
         imageView.image = image
-        addOverlay(image, imageLocation: fileLocation)
+        addOverlay(image, imageLocation: hgtLocation)
         
-
-
-        let observerLocation = CLLocationCoordinate2DMake(
-            fileLocation.latitude + 1 - (Hgt.CELL_SIZE * Double(obsX - 1)) + Hgt.LATITUDE_CELL_CENTER,
-            fileLocation.longitude + (Hgt.CELL_SIZE * Double(obsY - 1) + Hgt.LONGITUDE_CELL_CENTER)
-        )
-
-        // Drop a pin
-        let dropPin = MKPointAnnotation()
-        dropPin.coordinate = observerLocation
-        dropPin.title = "Observer 1"
-        mapView.addAnnotation(dropPin)
-        
-        
-        
-//
-//        
-//        print("Finished Viewshed calculation...rendering a bunch of squares")
-//  
-//        
-//        let startLat = 38.0//.97898180980364
-//        let startLon = -77.0//.44147717649722
-//        var currLat = startLat
-//        var currLon = startLon
-//        let size = 0.00083
-//        var countRow = 0
-//        var countCol = 0
-//        var count = 0 //hardcoded for testing
-//        var iterator = 0 //hardcoded for testing
-////        for row in viewshed.reverse() {
-//        while ( iterator < 20) {
-//            currLon = startLon
-//            countCol = 0
-//            //for _ in row { //column
-//            count = 0
-//            while ( count < 20) {
-//                if viewshed[countRow][countCol] == -1 {
-//                    makeCell(UIColor.purpleColor(), lat: currLat, lon: currLon, size: size)
-//                } else if viewshed[countRow][countCol] == 1 {
-//                    makeCell(UIColor.greenColor(), lat: currLat, lon: currLon, size: size)
-//                } else if viewshed[countRow][countCol] == 0 {
-//                    makeCell(UIColor.redColor(), lat: currLat, lon: currLon, size: size)
-//                }
-//                
-//                //makeGridSquare(currLat, lon: currLon, size: size)
-//
-//                currLon = currLon + size
-//                countCol++
-//                count++
-//            }
-//           // }
-//            currLat = currLat + size
-//            countRow++
-//            iterator++
-//            print("Rendered row \(countRow)")
-//        }
-        
-        print("Pixel renderation complete!")
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     
@@ -214,19 +160,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
 
     
-    
-    func imageFromArgb32Bitmap(pixels:[PixelData], width: Int, height: Int)-> UIImage {
+    func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
         
         let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo:CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
         let bitsPerComponent:Int = 8
         let bitsPerPixel:Int = 32
-        let bytesPerRow = width * Int(sizeof(PixelData))
+        let bytesPerRow = width * Int(sizeof(Pixel))
         
         // assert(pixels.count == Int(width * height))
         
         var data = pixels // Copy to mutable []
-        let length = data.count * sizeof(PixelData)
+        let length = data.count * sizeof(Pixel)
         let providerRef = CGDataProviderCreateWithCFData(NSData(bytes: &data, length: length))
         
         let cgImage = CGImageCreate(
@@ -243,32 +188,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             CGColorRenderingIntent.RenderingIntentDefault
         )
         return UIImage(CGImage: cgImage!)
-    }
-    
-    
-    func mergeTwoImages(image1: UIImage, image2: UIImage, currentHeight: Int) -> UIImage {
-        let topImage = image1
-        let bottomImage = image2
-        let newHeight = 50
-        let size = CGSize(width: 300, height: currentHeight + newHeight)
-        UIGraphicsBeginImageContext(size)
-        
-        let areaSize = CGRect(x: 0, y: 0, width: size.width, height: CGFloat(currentHeight))
-        topImage.drawInRect(areaSize)
-        let areaSize2 = CGRect(x: 0, y: CGFloat(currentHeight), width: size.width, height: CGFloat(newHeight))
-        bottomImage.drawInRect(areaSize2)//, blendMode: CGBlendMode.Normal, alpha: 1.0)
-
-//        let areaSize = CGRect(x: 0, y: 0, width: size.width/2, height: size.height)
-//        bottomImage.drawInRect(areaSize)
-//        let areaSize2 = CGRect(x: 150, y: 0, width: size.width/2, height: size.height)
-//        topImage.drawInRect(areaSize2, blendMode: CGBlendMode.Normal, alpha: 0.8)
-        
-        
-        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage
-        
     }
     
     
@@ -311,126 +230,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
  
-    
-//    func imageManipulation() {
-//        
-//        var imageRep: NSBitmapImageRep = self.screenShot()
-//        var data: UInt8 = imageRep.bitmapData()
-//
-//        var width: Int = imageRep.pixelsWide()
-//        var height: Int = imageRep.pixelsHight()
-//        var rowBytes: Int = imageRep.bytesPerRow()
-//        var pixels: Character = imageRep.bitmapData()
-//        var row: Int
-//        var col: Int
-//        for (row = 0; row < height; row++) {
-//            var rowStart: UInt8 = (pixels + (row * rowBytes))
-//            var nextChannel: UInt8 = rowStart
-//            for (col = 0; col < width; col++) {
-//                var red: UInt8
-//                var green: UInt8
-//                var blue: UInt8
-//                var alpha: UInt8
-//                red = nextChannel
-//                nextChannel++
-//                green = nextChannel
-//                nextChannel++
-//                blue = nextChannel
-//                nextChannel++
-//                alpha = nextChannel
-//
-//            }
-//        }
-//        
-//        let image = CII
-//        
-//        
-//        //////////
-//        //////////
-//
-//        
-////        var rgba: Character = malloc(width * height * 4)
-////        for var i = 0; i < width * height; ++i {
-////            rgba[4 * i] = myBuffer[3 * i]
-////            rgba[4 * i + 1] = myBuffer[3 * i + 1]
-////            rgba[4 * i + 2] = myBuffer[3 * i + 2]
-////            rgba[4 * i + 3] = 0
-////        }
-////        var colorSpace: CGColorSpaceRef = CGColorSpaceCreateDeviceRGB()
-////        var bitmapContext: CGContextRef = CGBitmapContextCreate(rgba, width, height, 8, 4 * width, colorSpace, kCGImageAlphaNoneSkipLast)
-////        CFRelease(colorSpace)
-////        var cgImage: CGImageRef = CGBitmapContextCreateImage(bitmapContext)
-////        var url: CFURLRef = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFSTR(image.png), kCFURLPOSIXPathStyle, false)
-////        var type: CFString = kUTTypePNG
-////        var dest: CGImageDestinationRef = CGImageDestinationCreateWithURL(url, type, 1, 0)
-////        CGImageDestinationAddImage(dest, cgImage, 0)
-////        CFRelease(cgImage)
-////        CFRelease(bitmapContext)
-////        CGImageDestinationFinalize(dest)
-////        free(rgba)
-//
-//        
-//        
-//        
-//    }
-    
-    
-    func makeCell(color: UIColor, lat: Double, lon: Double, size: Double) {
-        let lowerLeftLat = lat
-        let lowerRightLat = lat
-        let upperRightLat = lat + size
-        let upperLeftLat = lat + size
-        
-        let lowerLeftLon = lon
-        let lowerRightLon = lon + size
-        let upperRightLon = lon  + size
-        let upperLeftLon = lon
-        
-        
-        var square = [
-            CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon),
-            CLLocationCoordinate2DMake(lowerRightLat, lowerRightLon),
-            CLLocationCoordinate2DMake(upperRightLat, upperRightLon),
-            CLLocationCoordinate2DMake(upperLeftLat, upperLeftLon),
-            CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon)
-        ]
-        let squarePolygon = Cell(coordinates: &square, count: square.count)
-        squarePolygon.color = color
-        //let squarePolygon: MKPolygon = MKPolygon(coordinates: &square, count: square.count)
-        mapView.addOverlay(squarePolygon)
-
-    }
-    
-    
-    func makeGridSquare(lat: Double, lon: Double, size: Double) {
-        
-        let lowerLeftLat = lat
-        let lowerRightLat = lat
-        let upperRightLat = lat + size
-        let upperLeftLat = lat + size
-        
-        let lowerLeftLon = lon
-        let lowerRightLon = lon + size
-        let upperRightLon = lon  + size
-        let upperLeftLon = lon
-        
-        
-        var square = [
-            CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon),
-            CLLocationCoordinate2DMake(lowerRightLat, lowerRightLon),
-            CLLocationCoordinate2DMake(upperRightLat, upperRightLon),
-            CLLocationCoordinate2DMake(upperLeftLat, upperLeftLon),
-            CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon)
-        ]
-        
-        let squarePolygon: MKPolygon = MKPolygon(coordinates: &square, count: square.count)
-        mapView.addOverlay(squarePolygon)
-    }
-    
-    
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, regionRadius * 2.0, regionRadius * 2.0)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Hgt.DISPLAY_DIAMETER, Hgt.DISPLAY_DIAMETER)
         mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
+    
+    func pinObserverLocation(location: CLLocationCoordinate2D, name: String) {
+        
+        let dropPin = MKPointAnnotation()
+        dropPin.coordinate = location
+        dropPin.title = name
+        mapView.addAnnotation(dropPin)
+        
     }
     
     

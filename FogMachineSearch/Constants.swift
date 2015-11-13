@@ -25,5 +25,6 @@ struct Hgt {
     static let CELL_SIZE = 1.0 / 1201.0
     static let LATITUDE_CELL_CENTER = 3.0 * (Hgt.CELL_SIZE * Hgt.CENTER_OFFSET)
     static let LONGITUDE_CELL_CENTER = Hgt.CELL_SIZE * Hgt.CENTER_OFFSET
+    static let DISPLAY_DIAMETER = 100000.0 * 2.0
 
 }
