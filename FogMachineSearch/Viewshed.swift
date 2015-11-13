@@ -7,34 +7,62 @@
 //
 
 import UIKit
+import MapKit
 
 public class Viewshed: NSObject {
     
+    var hgtFilename: String
+    //var hgtFileLocation: CLLocationCoordinate2D
+    var elevation: [[Double]]
+    var obsX: Int
+    var obsY: Int
+    var obsHeight: Int
+    var viewRadius: Int
     
-    public func testIt() -> [[Double]] {
-        var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
-        let obsX = 3
-        let obsY = 3
-        let obsHeight = 3
-        let viewRadius = 2
-        print("Elevation Matrix")
-        elevationMatrix[4][4] = 10 //causes top right of printed viewshed to be 0
-        elevationMatrix[3][4] = 10 //causes 2nd, 3rd and 4th from top right to be 0
-        displayMatrix(elevationMatrix)
-        let resultMatrix = viewshed(elevationMatrix, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
-        return resultMatrix
+    
+    init(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int, hgtFilename: String) {
+        self.elevation = elevation
+        self.obsX = obsX
+        self.obsY = obsY
+        self.obsHeight = obsHeight
+        self.viewRadius = viewRadius
+        self.hgtFilename = hgtFilename
     }
     
+    
+    // File names refer to the latitude and longitude of the lower left corner of
+    // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
+    // latitude and 105 degrees west longitude
+    func getHgtCoordinate() -> CLLocationCoordinate2D {
+        
+        let northSouth = hgtFilename.substringWithRange(Range<String.Index>(start: hgtFilename.startIndex,end: hgtFilename.startIndex.advancedBy(1)))
+        let latitudeValue = hgtFilename.substringWithRange(Range<String.Index>(start: hgtFilename.startIndex.advancedBy(1),end: hgtFilename.startIndex.advancedBy(3)))
+        let westEast = hgtFilename.substringWithRange(Range<String.Index>(start: hgtFilename.startIndex.advancedBy(3),end: hgtFilename.startIndex.advancedBy(4)))
+        let longitudeValue = hgtFilename.substringWithRange(Range<String.Index>(start: hgtFilename.startIndex.advancedBy(4),end: hgtFilename.endIndex))
+        
+        var latitude:Double = Double(latitudeValue)!
+        var longitude:Double = Double(longitudeValue)!
+        
+        if (northSouth.uppercaseString == "S") {
+            latitude = latitude * -1.0
+        }
+        
+        if (westEast.uppercaseString == "W") {
+            longitude = longitude * -1.0
+        }
+        
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+   
     //Adopted from section 5.1 http://www.cs.rpi.edu/~cutler/publications/andrade_geoinformatica.pdf
     //        Given a terrain T represented by an n × n elevation matrix M, a point p on T , a radius
     //        of interest r, and a height h above the local terrain for the observer and target, this
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
-    public func viewshed(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int) -> [[Double]] {
-        
-        let size = (viewRadius * 2) + 1 // adding 1 to account for middle row (also this wont work without 1201x1201)
+    public func viewshed() -> [[Double]] {
         
         // Initialize results array as all un-viewable
-        var viewshedMatrix = [[Double]](count:size, repeatedValue:[Double](count:size, repeatedValue:0))
+        var viewshedMatrix = [[Double]](count:Hgt.MAX_SIZE, repeatedValue:[Double](count:Hgt.MAX_SIZE, repeatedValue:0))
         
         // 1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
         
@@ -105,6 +133,23 @@ public class Viewshed: NSObject {
         return viewshedMatrix
         
     }
+    
+    
+    func getHgtCenterLocation() -> CLLocationCoordinate2D {
+        let hgtFileLocation = getHgtCoordinate()
+        return CLLocationCoordinate2DMake(hgtFileLocation.latitude + Hgt.CENTER_OFFSET,
+            hgtFileLocation.longitude + Hgt.CENTER_OFFSET)
+    }
+    
+    
+    func getObserverLocation() -> CLLocationCoordinate2D {
+        let hgtFileLocation = getHgtCoordinate()
+        return CLLocationCoordinate2DMake(
+            hgtFileLocation.latitude + 1 - (Hgt.CELL_SIZE * Double(obsX - 1)) + Hgt.LATITUDE_CELL_CENTER,
+            hgtFileLocation.longitude + (Hgt.CELL_SIZE * Double(obsY - 1) + Hgt.LONGITUDE_CELL_CENTER)
+        )
+    }
+
     
     // Returns an array of tuple (x,y) for the perimeter of the region based on the observer point
     // and the radius

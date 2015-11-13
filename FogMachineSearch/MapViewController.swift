@@ -30,29 +30,50 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let filename = "N39W075"//"N39W075"//"N38W077"
         
         let hgtElevation:[[Double]] = readHgt(filename)
-        let fileLocation = getCoordinateFromFilename(filename)
+        //let fileLocation = getCoordinateFromFilename(filename)
 
-        centerMapOnLocation(CLLocationCoordinate2DMake(fileLocation.latitude + Hgt.CENTER_OFFSET,
-            fileLocation.longitude + Hgt.CENTER_OFFSET))
+
        
     
+        let observerOne = "Observer One"
         // 0,0 is top left
         let obsX = 600
         let obsY = 200
         let obsHeight = 30
-        let viewRadius = 600 //problem in viewshed algorithm, this needs to be 600 for now
+        let viewRadius = 200
+
+        let obsOneViewshed = Viewshed(elevation: hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius, hgtFilename: filename)
+
+        let obsOneResults:[[Double]] = obsOneViewshed.viewshed()
         
-        let observerLocation = CLLocationCoordinate2DMake(
-            fileLocation.latitude + 1 - (Hgt.CELL_SIZE * Double(obsX - 1)) + Hgt.LATITUDE_CELL_CENTER,
-            fileLocation.longitude + (Hgt.CELL_SIZE * Double(obsY - 1) + Hgt.LONGITUDE_CELL_CENTER)
-        )
-        let observerName = "Observer 1"
-        pinObserverLocation(observerLocation, name: observerName)
+        displayViewshed(obsOneResults, hgtLocation: obsOneViewshed.getHgtCoordinate())
+        centerMapOnLocation(obsOneViewshed.getHgtCenterLocation())
+        pinObserverLocation(obsOneViewshed.getObserverLocation(), name: observerOne)
         
-        let view = Viewshed()
-        let viewshed:[[Double]] = view.viewshed(hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
         
-        displayViewshed(viewshed, hgtLocation: fileLocation)
+        
+        
+        let observerTwo = "Observer Two"
+        // 0,0 is top left
+        let obs2X = 1000
+        let obs2Y = 1000
+        let obs2Height = 30
+        let view2Radius = 200
+        
+        let obsTwoViewshed = Viewshed(elevation: hgtElevation, obsX: obs2X, obsY: obs2Y, obsHeight: obs2Height, viewRadius: view2Radius, hgtFilename: filename)
+        
+        let obsTwoResults:[[Double]] = obsTwoViewshed.viewshed()
+        
+        displayViewshed(obsTwoResults, hgtLocation: obsTwoViewshed.getHgtCoordinate())
+        centerMapOnLocation(obsTwoViewshed.getHgtCenterLocation())
+        pinObserverLocation(obsTwoViewshed.getObserverLocation(), name: observerTwo)
+        
+        
+        
+        
+        
+        
+        
         
         print("Pixel renderation complete!")
         
@@ -96,30 +117,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
     }
     
-    
-    // File names refer to the latitude and longitude of the lower left corner of
-    // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
-    // latitude and 105 degrees west longitude
-    func getCoordinateFromFilename(filename: String) -> CLLocationCoordinate2D {
-        
-        let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
-        let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
-        let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
-        let longitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(4),end: filename.endIndex))
-        
-        var latitude:Double = Double(latitudeValue)!
-        var longitude:Double = Double(longitudeValue)!
-        
-        if (northSouth.uppercaseString == "S") {
-            latitude = latitude * -1.0
-        }
-        
-        if (westEast.uppercaseString == "W") {
-            longitude = longitude * -1.0
-        }
-    
-        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-    }
+
     
     
     // Height files have the extension .HGT and are signed two byte integers. The
