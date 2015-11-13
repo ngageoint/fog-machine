@@ -21,6 +21,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
 
     @IBOutlet weak var imageView: UIImageView!
+    
     let regionRadius: CLLocationDistance = 100000
 
     
@@ -30,26 +31,27 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         mapView.delegate = self
         
-        let initialLocation = CLLocation(latitude:  38.5, longitude: -76.5)
-        centerMapOnLocation(initialLocation)
-      
-        print("Starting Viewshed...please wait patiently.")
         
+        let filename = "N39W075"//"N39W075"//"N38W077"
         
-        //researchForImageOverlay()
+        let hgtElevation:[[Double]] = readHgt(filename)
         
-        
-        let hgtElevation:[[Double]] = readHgt()
-        
+        let fileLocation = getCoordinateFromFilename(filename)
 
+        centerMapOnLocation(CLLocationCoordinate2DMake(fileLocation.latitude + Hgt.CENTER_OFFSET,
+            fileLocation.longitude + Hgt.CENTER_OFFSET))
+      
+        
+        print("Starting Viewshed...please wait patiently.")
+    
+        
         //var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
-        let obsX = 800
-        let obsY = 800
-        let obsHeight = 3
-        let viewRadius = 599 //problem in viewshed algorithm, this needs to be 599 for now
-        //print("Elevation Matrix")
-        //elevationMatrix[4][4] = 10 //causes top right of printed viewshed to be 0
-        //elevationMatrix[3][4] = 10 //causes 2nd, 3rd and 4th from top right to be 0
+        
+        // 0,0 is top left
+        let obsX = 600
+        let obsY = 200
+        let obsHeight = 30
+        let viewRadius = 600 //problem in viewshed algorithm, this needs to be 600 for now
         
         let view = Viewshed()
         var viewshed:[[Double]] = view.viewshed(hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius)
@@ -63,8 +65,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // CoreGraphics expects pixel data as rows, not columns.
         for(var y = 0; y < width; y++) {
             for(var x = 0; x < height; x++) {
-                if(viewshed[y][x] == 0) {
-                    data.append(PixelData(a: 75, r: 255, g: 0, b: 0))
+                
+                let cell = viewshed[y][x]
+                if(cell == 0) {
+                    data.append(PixelData(a: 75, r: 0, g: 0, b: 0))
+                } else if (cell == -1){
+                    data.append(PixelData(a: 75, r: 0, g: 0, b: 255))
                 } else {
                     data.append(PixelData(a: 75, r: 0, g: 255, b: 0))
                 }
@@ -76,10 +82,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
         imageView.image = image
-        addOverlay(image)
+        addOverlay(image, imageLocation: fileLocation)
         
-        
-        let observerLocation = CLLocationCoordinate2DMake(39.0 - (0.00083 * Double(obsX)), -77.0 + (0.00083 * Double(obsY)))
+
+
+        let observerLocation = CLLocationCoordinate2DMake(
+            fileLocation.latitude + 1 - (Hgt.CELL_SIZE * Double(obsX - 1)) + Hgt.LATITUDE_CELL_CENTER,
+            fileLocation.longitude + (Hgt.CELL_SIZE * Double(obsY - 1) + Hgt.LONGITUDE_CELL_CENTER)
+        )
+
         // Drop a pin
         let dropPin = MKPointAnnotation()
         dropPin.coordinate = observerLocation
@@ -130,7 +141,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 //            print("Rendered row \(countRow)")
 //        }
         
-        print("Bunch of squares renderation complete!")
+        print("Pixel renderation complete!")
         
     }
 
@@ -140,176 +151,68 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    
-    func readHgt() -> [[Double]] {
+    // File names refer to the latitude and longitude of the lower left corner of
+    // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
+    // latitude and 105 degrees west longitude
+    func getCoordinateFromFilename(filename: String) -> CLLocationCoordinate2D {
         
-        let path = NSBundle.mainBundle().pathForResource("N38W077", ofType: "hgt")
+        let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
+        let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
+        let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
+        let longitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(4),end: filename.endIndex))
+        
+        var latitude:Double = Double(latitudeValue)!
+        var longitude:Double = Double(longitudeValue)!
+        
+        if (northSouth.uppercaseString == "S") {
+            latitude = latitude * -1.0
+        }
+        
+        if (westEast.uppercaseString == "W") {
+            longitude = longitude * -1.0
+        }
+    
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+    
+    // Height files have the extension .HGT and are signed two byte integers. The
+    // bytes are in Motorola "big-endian" order with the most significant byte first
+    // Data voids are assigned the value -32768 and are ignored (no special processing is done)
+    // SRTM3 files contain 1201 lines and 1201 samples
+    func readHgt(filename: String) -> [[Double]] {
+        
+        let path = NSBundle.mainBundle().pathForResource(filename, ofType: "hgt")
         let url = NSURL(fileURLWithPath: path!)
         let data = NSData(contentsOfURL: url)!
         
+        var elevationMatrix = [[Double]](count:Hgt.MAX_SIZE, repeatedValue:[Double](count:Hgt.MAX_SIZE, repeatedValue:0))
         
-//        
-//        //let randomData = generateRandomData(256 * 1024)
-//        let stream = NSInputStream(data: data)
-//        stream.open() // IMPORTANT
-//        var readBuffer = Array<UInt8>(count: 1200 * 1200, repeatedValue: 0)
-//        var totalBytesRead = 0
-//        while (totalBytesRead < data.length)
-//        {
-//            let numberOfBytesRead = stream.read(&readBuffer, maxLength: readBuffer.count)
-//            // Do something with the data
-//            totalBytesRead += numberOfBytesRead
-//        }
-        
-
-        var elevationMatrix = [[Double]](count:1200, repeatedValue:[Double](count:1200, repeatedValue:0))
-
-        
-        let dataRange = NSRange(location: 0, length: 2884802)//1200 * 1200)
-        var handNumbers = [Int8](count: 2884802, repeatedValue: 0)
-        data.getBytes(&handNumbers, range: dataRange)
+        let dataRange = NSRange(location: 0, length: data.length)
+        var elevation = [Int16](count: data.length, repeatedValue: 0)
+        data.getBytes(&elevation, range: dataRange)
         
         
         var row = 0
         var column = 0
-        for (var cell = 1; cell < 2884802; cell+=2) {
-            elevationMatrix[row][column] = Double(handNumbers[cell])
+        for (var cell = 0; cell < data.length; cell+=1) {
+            elevationMatrix[row][column] = Double(elevation[cell].bigEndian)//Double(bigEndianOrder)
             
             column++
             
-            if column >= 1200 {
+            if column >= Hgt.MAX_SIZE {
                 column = 0
                 row++
             }
             
-            if row >= 1200 {
+            if row >= Hgt.MAX_SIZE {
                 break
             }
         }
         
         return elevationMatrix
     }
-    
-    
-    func generateRandomData(count:Int) -> NSData
-    {
-        var array = Array<UInt8>(count: count, repeatedValue: 0)
-        
-        arc4random_buf(&array, count)
-        return NSData(bytes: array, length: count)
-    }
-    
-    
-//    func convertDoubleToPixel(toConvert: [[Double]]) -> [[PixelData]] {
-//        var returnImage:[[PixelData]] = [[]]
-//        
-//        for (var row = 0; row < toConvert.count; row++) {
-//            
-//            for (var column = 0; column < 1200; column++) {
-//                
-//                
-//            }
-//            
-//        }
-//        
-//        return returnImage
-//    }
-    
-    
-    func researchForImageOverlay() {
-        
 
-        let red = PixelData(a: 100, r: 255, g: 0, b: 0)
-        let green = PixelData(a: 100, r: 0, g: 255, b: 0)
-        let blue = PixelData(a: 100, r: 0, g: 0, b: 255)
-        
-        
-        let width = 12
-        let height = 12
-        var pixels=[PixelData]()
-        //var pixels:[[PixelData]] = Array(count: height, repeatedValue: Array(count: width, repeatedValue: green))
-
-        
-        
-        
-        var data: [PixelData] = []
-        
-//        for(var i = 0; i < Int(100); i++) {
-//            for(var j = 0; j < Int(100); j++) {
-//                if(j < Int(100/2)) {
-//                    data.append(PixelData(a: 255, r: 255, g: 0, b: 0))
-//                } else {
-//                    data.append(PixelData(a: 255, r: 0, g: 0, b: 0))
-//                }
-//                
-//            }
-//        }
-        
-        
-        for(var y = 0; y < Int(1200); y++) {
-            for(var x = 0; x < Int(1200); x++) {
-                if(Int(arc4random_uniform(3)) > 1) { //(y < Int(300/2)) {
-                    data.append(PixelData(a: 100, r: 255, g: 0, b: 0))
-                } else {
-                    data.append(PixelData(a: 100, r: 0, g: 0, b: 0))
-                }
-            }
-        }
-
-        
-        
-        let image = imageFromArgb32Bitmap(data, width: width, height: height)
-        
-        
-        
-    
-        
-//        for i in 0...299 {
-//            for j in 0...299 {
-//                pixels[i][j] = red
-//            }
-//        }
-        for i in 1...100 {
-            if (i%2 == 0) {
-                pixels.append(green)
-            } else {
-                pixels.append(blue)
-            }
-        }
-        
-        //let image = imageFromArgb32Bitmap(pixels, width: width, height: height)
-        
-        
-        
-        
-//        var data = pixels // Copy to mutable []
-//        let length = data.count * data.count * sizeof(PixelData) //data.count * sizeof(PixelData)
-//        let theData = NSData(bytes: &data, length: length)
-//        let image = getUIImageForRGBAData(width, height: height, data: theData)!
-        
-        
-        
-        
-        
-        
-//        var pixels2=[PixelData]()
-//        for i in 1...100 {
-//            pixels2.append(PixelData(a: 100, r: UInt8(i/2), g: 0, b: 0))
-//        }
-//        let image2 = imageFromArgb32Bitmap(pixels2, width: width, height: height)
-//        
-//        let image3 = mergeTwoImages(image, image2: image2, currentHeight: 5)
-//        
-        
-        let image3 = image
-        
-        
-        imageView.image = image3
-        
-        addOverlay(image3)
-        
-    }
-    
     
     
     func imageFromArgb32Bitmap(pixels:[PixelData], width: Int, height: Int)-> UIImage {
@@ -323,10 +226,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // assert(pixels.count == Int(width * height))
         
         var data = pixels // Copy to mutable []
-        let length = data.count * sizeof(PixelData) //data.count * sizeof(PixelData)
+        let length = data.count * sizeof(PixelData)
         let providerRef = CGDataProviderCreateWithCFData(NSData(bytes: &data, length: length))
         
-        let cgim = CGImageCreate(
+        let cgImage = CGImageCreate(
             width,
             height,
             bitsPerComponent,
@@ -339,9 +242,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             true,
             CGColorRenderingIntent.RenderingIntentDefault
         )
-        return UIImage(CGImage: cgim!)
+        return UIImage(CGImage: cgImage!)
     }
-    
     
     
     func mergeTwoImages(image1: UIImage, image2: UIImage, currentHeight: Int) -> UIImage {
@@ -370,11 +272,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func addOverlay(image: UIImage) {
-        //N38077W
-        var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(latitude: 39.0, longitude: -77.0)
-        var overlayTopRightCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 39.0, longitude: -76.0)
-        var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 38.0, longitude: -77.0)
+    func addOverlay(image: UIImage, imageLocation: CLLocationCoordinate2D) {
+
+        var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(
+            latitude: imageLocation.latitude + 1.0,
+            longitude: imageLocation.longitude)
+        var overlayTopRightCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
+            latitude: imageLocation.latitude + 1.0,
+            longitude: imageLocation.longitude + 1.0)
+        var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
+            latitude: imageLocation.latitude,
+            longitude: imageLocation.longitude)
 
         var overlayBottomRightCoordinate: CLLocationCoordinate2D {
             get {
@@ -396,39 +304,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
-        
-        
-        let imageLocation = CLLocationCoordinate2D(latitude: 38.0, longitude: -77.0)
         let imageMapRect = overlayBoundingMapRect
-        
         let overlay = ViewshedOverlay(midCoordinate: imageLocation, overlayBoundingMapRect: imageMapRect, viewshedImage: image)
+        
         mapView.addOverlay(overlay)
     }
     
-    
-
  
-    
-    
-    
-//    func getUIImageForRGBAData(width: Int, height: Int, data: NSData) -> UIImage? {
-//        let pixelData = data.bytes
-//        let bytesPerPixel:UInt = 4
-//        let scanWidth = bytesPerPixel * UInt(width)
-//        
-//        let provider = CGDataProviderCreateWithData(nil, pixelData, Int(height) * Int(scanWidth), nil)
-//        
-//        let colorSpaceRef = CGColorSpaceCreateDeviceRGB()
-//        let bitmapInfo:CGBitmapInfo = [.ByteOrderDefault, CGBitmapInfo(rawValue: CGImageAlphaInfo.Last.rawValue)];
-//        let renderingIntent = CGColorRenderingIntent.RenderingIntentDefault;
-//        
-//        let imageRef = CGImageCreate(Int(width), Int(height), 8, Int(bytesPerPixel) * 8, Int(scanWidth), colorSpaceRef,
-//            bitmapInfo, provider, nil, false, renderingIntent);
-//        
-//        return UIImage(CGImage: imageRef!)
-//    }
-    
-    
     
 //    func imageManipulation() {
 //        
@@ -519,6 +401,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     }
     
+    
     func makeGridSquare(lat: Double, lon: Double, size: Double) {
         
         let lowerLeftLat = lat
@@ -544,8 +427,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.addOverlay(squarePolygon)
     }
     
-    func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+    
+    func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     

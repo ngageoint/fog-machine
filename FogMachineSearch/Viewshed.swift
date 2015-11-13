@@ -10,6 +10,7 @@ import UIKit
 
 public class Viewshed: NSObject {
     
+    
     public func testIt() -> [[Double]] {
         var elevationMatrix = [[Double]](count:10, repeatedValue:[Double](count:10, repeatedValue:1))
         let obsX = 3
@@ -30,7 +31,7 @@ public class Viewshed: NSObject {
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
     public func viewshed(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int) -> [[Double]] {
         //initialize results array as all un-viewable
-        let size = (viewRadius * 2) + 1 + 1 // adding 1 to account for middle row, and another one to make it 1200 (aka this wont work without  1200x1200
+        let size = (viewRadius * 2) + 1 // adding 1 to account for middle row (also this wont work without 1201x1201)
         var viewshedMatrix = [[Double]](count:size, repeatedValue:[Double](count:size, repeatedValue:0))
         
 //        1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
@@ -62,8 +63,8 @@ public class Viewshed: NSObject {
             
             //          (e) Iterate along the line from p to c.
             for (x2, y2) in bresResults {
-                //hgt elevation is 1200 x 1200, so skip anything outside those bounds
-                if (x2 > 0 && y2 > 0) && (x2 < 1200 && y2 < 1200) {
+                //hgt elevation is 1201 x 1201, so skip anything outside those bounds
+                if (x2 > 0 && y2 > 0) && (x2 < Hgt.MAX_SIZE && y2 < Hgt.MAX_SIZE) {
                     // print("Finding angle to: x, y: \(x2),   \(y2)")
                     //              i. For each point qi, compute mi.
                     let zk:Double = elevation[obsX][obsY]
@@ -83,11 +84,11 @@ public class Viewshed: NSObject {
                     //              iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
                     if (angle < greatestSlope) {
                         //hidden
-                        viewshedMatrix[x2-1][y2-1] = 0 //used -1 for zero based indexing
+                        viewshedMatrix[x2 - 1][y2 - 1] = 0 //used -1 for zero based indexing
                     } else {
                         greatestSlope = angle
                         //visible
-                        viewshedMatrix[x2-1][y2-1] = 1 //used -1 for zero based indexing
+                        viewshedMatrix[x2 - 1][y2 - 1] = 1 //used -1 for zero based indexing
                     }
                 }
                 
@@ -95,7 +96,7 @@ public class Viewshed: NSObject {
             
         }
         
-        viewshedMatrix[obsX-1][obsY-1] = -1 // mark observer cell as unique
+        viewshedMatrix[obsX - 1][obsY - 1] = -1 // mark observer cell as unique
         
        // print("\nResultant Viewshed Matrix")
         //displayMatrix(viewshedMatrix)
@@ -137,6 +138,7 @@ public class Viewshed: NSObject {
         //dump(perimeter)
         return perimeter
     }
+    
     
     private func displayMatrix(matrix: [[Double]]) {
         for x in matrix.reverse() {

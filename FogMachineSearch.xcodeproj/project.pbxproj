@@ -16,6 +16,8 @@
 		753D3D6E1BEBC243004E3589 /* N38W077_matrix.txt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */; };
 		753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */; };
 		753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */; };
+		753D3D741BF6374E004E3589 /* N39W075.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D731BF6374E004E3589 /* N39W075.hgt */; };
+		753D3D761BF65A60004E3589 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D751BF65A60004E3589 /* Constants.swift */; };
 		B4D468E8AD4BB93521EAC726 /* Pods_FogMachineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
@@ -27,7 +29,6 @@
 		E314F6E51B790275005B75C6 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6E41B790275005B75C6 /* ConnectionManager.swift */; };
 		E314F6E71B79028F005B75C6 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E314F6E61B79028F005B75C6 /* MultipeerConnectivity.framework */; };
 		E386DD511B7C34DB00FA8827 /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = E386DD501B7C34DB00FA8827 /* Work.swift */; };
-		E3B933DE1B7BA1A9007B9444 /* FogConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933DD1B7BA1A9007B9444 /* FogConstants.swift */; };
 		E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */; };
 		E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933E31B7BD106007B9444 /* MonteCristo.swift */; };
 		E3CB97F91B7975EA006D6961 /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CB97F81B7975EA006D6961 /* Worker.swift */; };
@@ -56,6 +57,8 @@
 		753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = N38W077_matrix.txt; path = HGT/N38W077_matrix.txt; sourceTree = "<group>"; };
 		753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
 		753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
+		753D3D731BF6374E004E3589 /* N39W075.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W075.hgt; path = HGT/N39W075.hgt; sourceTree = "<group>"; };
+		753D3D751BF65A60004E3589 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,7 +73,6 @@
 		E314F6E41B790275005B75C6 /* ConnectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		E314F6E61B79028F005B75C6 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		E386DD501B7C34DB00FA8827 /* Work.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
-		E3B933DD1B7BA1A9007B9444 /* FogConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogConstants.swift; sourceTree = "<group>"; };
 		E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
 		E3B933E31B7BD106007B9444 /* MonteCristo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonteCristo.swift; sourceTree = "<group>"; };
 		E3CB97F81B7975EA006D6961 /* Worker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Worker.swift; sourceTree = "<group>"; };
@@ -141,7 +143,7 @@
 				E314F6C91B79023D005B75C6 /* Images.xcassets */,
 				E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */,
 				E314F6BE1B79023D005B75C6 /* Supporting Files */,
-				E3B933DD1B7BA1A9007B9444 /* FogConstants.swift */,
+				753D3D751BF65A60004E3589 /* Constants.swift */,
 			);
 			path = FogMachineSearch;
 			sourceTree = "<group>";
@@ -183,6 +185,7 @@
 		E3B933E21B7BD0F9007B9444 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				753D3D731BF6374E004E3589 /* N39W075.hgt */,
 				753D3D6D1BEBC243004E3589 /* N38W077_matrix.txt */,
 				753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */,
 				E3B933E31B7BD106007B9444 /* MonteCristo.swift */,
@@ -309,6 +312,7 @@
 				753D3D6C1BEBA5D7004E3589 /* N38W077.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
+				753D3D741BF6374E004E3589 /* N39W075.hgt in Resources */,
 				753D3D6A1BEBA59E004E3589 /* HGT in Resources */,
 				753D3D6E1BEBC243004E3589 /* N38W077_matrix.txt in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
@@ -377,13 +381,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3B933DE1B7BA1A9007B9444 /* FogConstants.swift in Sources */,
 				753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */,
 				753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */,
 				E3CB97F91B7975EA006D6961 /* Worker.swift in Sources */,
 				E386DD511B7C34DB00FA8827 /* Work.swift in Sources */,
 				E314F6C51B79023D005B75C6 /* SecondViewController.swift in Sources */,
 				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
+				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
 				E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */,
 				E314F6E51B790275005B75C6 /* ConnectionManager.swift in Sources */,
