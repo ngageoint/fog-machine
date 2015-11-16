@@ -28,3 +28,9 @@ struct Hgt {
     static let DISPLAY_DIAMETER = 100000.0 * 2.0
 
 }
+
+enum MapType: Int {
+    case Standard = 0
+    case Hybrid
+    case Satellite
+}

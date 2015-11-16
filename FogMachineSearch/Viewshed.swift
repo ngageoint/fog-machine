@@ -20,12 +20,12 @@ public class Viewshed: NSObject {
     var viewRadius: Int
     
     
-    init(elevation: [[Double]], obsX: Int, obsY: Int, obsHeight: Int, viewRadius: Int, hgtFilename: String) {
+    init(elevation: [[Double]], observer: Observer, hgtFilename: String) {
         self.elevation = elevation
-        self.obsX = obsX
-        self.obsY = obsY
-        self.obsHeight = obsHeight
-        self.viewRadius = viewRadius
+        self.obsX = observer.x
+        self.obsY = observer.y
+        self.obsHeight = observer.height
+        self.viewRadius = observer.radius
         self.hgtFilename = hgtFilename
     }
     

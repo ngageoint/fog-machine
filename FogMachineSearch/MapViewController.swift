@@ -14,69 +14,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
 
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var timerLabel: UILabel!
+    @IBOutlet weak var timerStart: UIButton!
 
+    @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     
+    
+    var startTimer: CFAbsoluteTime!
+    var hgtElevation:[[Double]]!
+    var filename:String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         mapView.delegate = self
         
-    
-        print("Starting Viewshed Processing...please wait patiently.")
-        
-        
-        let filename = "N39W075"//"N39W075"//"N38W077"
-        
-        let hgtElevation:[[Double]] = readHgt(filename)
-        //let fileLocation = getCoordinateFromFilename(filename)
+        filename = "N39W075"//"N39W075"//"N38W077"
 
-
+        hgtElevation = readHgt(filename)
        
-    
-        let observerOne = "Observer One"
-        // 0,0 is top left
-        let obsX = 600
-        let obsY = 200
-        let obsHeight = 30
-        let viewRadius = 200
-
-        let obsOneViewshed = Viewshed(elevation: hgtElevation, obsX: obsX, obsY: obsY, obsHeight: obsHeight, viewRadius: viewRadius, hgtFilename: filename)
-
-        let obsOneResults:[[Double]] = obsOneViewshed.viewshed()
-        
-        displayViewshed(obsOneResults, hgtLocation: obsOneViewshed.getHgtCoordinate())
-        centerMapOnLocation(obsOneViewshed.getHgtCenterLocation())
-        pinObserverLocation(obsOneViewshed.getObserverLocation(), name: observerOne)
-        
-        
-        
-        
-        let observerTwo = "Observer Two"
-        // 0,0 is top left
-        let obs2X = 1000
-        let obs2Y = 1000
-        let obs2Height = 30
-        let view2Radius = 200
-        
-        let obsTwoViewshed = Viewshed(elevation: hgtElevation, obsX: obs2X, obsY: obs2Y, obsHeight: obs2Height, viewRadius: view2Radius, hgtFilename: filename)
-        
-        let obsTwoResults:[[Double]] = obsTwoViewshed.viewshed()
-        
-        displayViewshed(obsTwoResults, hgtLocation: obsTwoViewshed.getHgtCoordinate())
-        centerMapOnLocation(obsTwoViewshed.getHgtCenterLocation())
-        pinObserverLocation(obsTwoViewshed.getObserverLocation(), name: observerTwo)
-        
-        
-        
-        
-        
-        
-        
-        
-        print("Pixel renderation complete!")
-        
     }
     
 
@@ -84,40 +40,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    func displayViewshed(viewshed: [[Double]], hgtLocation: CLLocationCoordinate2D) {
-        
-        print("Preparing PixelData.")
-        
-        let width = viewshed[0].count
-        let height = viewshed.count
-        var data: [Pixel] = []
-        
-        // CoreGraphics expects pixel data as rows, not columns.
-        for(var y = 0; y < width; y++) {
-            for(var x = 0; x < height; x++) {
-                
-                let cell = viewshed[y][x]
-                if(cell == 0) {
-                    data.append(Pixel(alpha: 75, red: 0, green: 0, blue: 0))
-                } else if (cell == -1){
-                    data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
-                } else {
-                    data.append(Pixel(alpha: 75, red: 0, green: 255, blue: 0))
-                }
-            }
-        }
-        
-        print("Rendering image.")
-        
-        let image = imageFromArgb32Bitmap(data, width: width, height: height)
-        imageView.image = image
-        addOverlay(image, imageLocation: hgtLocation)
-        
-    }
-    
-
     
     
     // Height files have the extension .HGT and are signed two byte integers. The
@@ -140,7 +62,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var row = 0
         var column = 0
         for (var cell = 0; cell < data.length; cell+=1) {
-            elevationMatrix[row][column] = Double(elevation[cell].bigEndian)//Double(bigEndianOrder)
+            elevationMatrix[row][column] = Double(elevation[cell].bigEndian)
             
             column++
             
@@ -157,6 +79,85 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return elevationMatrix
     }
 
+    
+    func performParallelViewshed(observer: Observer) {//-> [[Double]] {
+        
+        
+        
+        
+        
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            
+            print("Starting Viewshed Processing on \(observer.name)...please wait patiently.")
+            
+            
+            let initialTime = CFAbsoluteTimeGetCurrent()
+            
+            let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer, hgtFilename: self.filename)
+            
+            let obsResults:[[Double]] = obsViewshed.viewshed()
+            print("\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
+            
+            
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                self.displayResults(obsResults, hgtCoordinate: obsViewshed.getHgtCoordinate(), hgtCenterCoordinate: obsViewshed.getHgtCenterLocation(), observerCoordinate: obsViewshed.getObserverLocation(), name: observer.name
+                )
+                print("Finished Viewshed Processing on \(observer.name).")
+                
+                
+                
+                
+            }
+        }
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+        // return obsResults
+        
+    }
+    
+    
+    
+    func performSerialViewshed(observer: Observer) {
+        
+        print("Starting Viewshed Processing on \(observer.name)...")
+        
+        let initialTime = CFAbsoluteTimeGetCurrent()
+        
+        let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer, hgtFilename: self.filename)
+        
+        let obsResults:[[Double]] = obsViewshed.viewshed()
+        print("\t\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
+        
+        self.displayResults(obsResults, hgtCoordinate: obsViewshed.getHgtCoordinate(), hgtCenterCoordinate: obsViewshed.getHgtCenterLocation(), observerCoordinate: obsViewshed.getObserverLocation(), name: observer.name
+        )
+        print("Finished Viewshed Processing on \(observer.name).")
+        
+    }
+    
+    
+    func displayResults(viewshedResult: [[Double]], hgtCoordinate: CLLocationCoordinate2D, hgtCenterCoordinate: CLLocationCoordinate2D, observerCoordinate: CLLocationCoordinate2D, name: String) {
+        
+        let initialTime = CFAbsoluteTimeGetCurrent()
+        //Potentially combine multiple results
+        displayViewshed(viewshedResult, hgtLocation: hgtCoordinate)
+        print("\t\(name) Display Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
+        
+        centerMapOnLocation(hgtCenterCoordinate)
+        pinObserverLocation(observerCoordinate, name: name)
+
+    }
     
     func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
         
@@ -227,6 +228,34 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.addOverlay(overlay)
     }
     
+    
+    func displayViewshed(viewshed: [[Double]], hgtLocation: CLLocationCoordinate2D) {
+
+        let width = viewshed[0].count
+        let height = viewshed.count
+        var data: [Pixel] = []
+        
+        // CoreGraphics expects pixel data as rows, not columns.
+        for(var y = 0; y < width; y++) {
+            for(var x = 0; x < height; x++) {
+                
+                let cell = viewshed[y][x]
+                if(cell == 0) {
+                    data.append(Pixel(alpha: 75, red: 0, green: 0, blue: 0))
+                } else if (cell == -1){
+                    data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
+                } else {
+                    data.append(Pixel(alpha: 75, red: 0, green: 255, blue: 0))
+                }
+            }
+        }
+        
+        let image = imageFromArgb32Bitmap(data, width: width, height: height)
+        //imageView.image = image
+        addOverlay(image, imageLocation: hgtLocation)
+        
+    }
+    
  
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Hgt.DISPLAY_DIAMETER, Hgt.DISPLAY_DIAMETER)
@@ -287,14 +316,84 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return view
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    func removeAllAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
     }
-    */
+    
+    
+    func removeAllOverlays() {
+        mapView.removeOverlays(mapView.overlays)
+    }
+    
+    
+    func startTime() {
+        startTimer = CFAbsoluteTimeGetCurrent()
+    }
+
+    
+    func stopTime() {
+        let elapsedTime = CFAbsoluteTimeGetCurrent() - startTimer
+        timerLabel.text = String(format: "%.6f", elapsedTime)
+    }
+    
+    
+    func clearTime() {
+        timerLabel.text = "0"
+    }
+    
+    @IBAction func mapTypeChanged(sender: AnyObject) {
+        let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
+        switch (mapType!) {
+        case .Standard:
+            mapView.mapType = MKMapType.Standard
+        case .Hybrid:
+            mapView.mapType = MKMapType.Hybrid
+        case .Satellite:
+            mapView.mapType = MKMapType.Satellite
+        }
+    }
+    
+    @IBAction func startTimer(sender: AnyObject) {
+        startTime()
+        
+        
+        
+        let newObs = Observer(name: "Observer 1", x: 600, y: 200, height: 30, radius: 200)
+        performParallelViewshed(newObs)
+
+        let newObs2 = Observer(name: "Observer 2", x: 1000, y: 700, height: 30, radius: 200)
+        performParallelViewshed(newObs2)
+
+        let newObs3 = Observer(name: "Observer 3", x: 200, y: 700, height: 30, radius: 200)
+        performParallelViewshed(newObs3)
+        
+        let newObs4 = Observer(name: "Observer 4", x: 200, y: 200, height: 30, radius: 200)
+        performParallelViewshed(newObs4)
+
+        
+        
+//        let newObs = Observer(name: "Observer 1", x: 600, y: 200, height: 30, radius: 200)
+//        performSerialViewshed(newObs)
+//        
+//        let newObs2 = Observer(name: "Observer 2", x: 1000, y: 700, height: 30, radius: 200)
+//        performSerialViewshed(newObs2)
+//        
+//        let newObs3 = Observer(name: "Observer 3", x: 200, y: 700, height: 30, radius: 200)
+//        performSerialViewshed(newObs3)
+//        
+//        let newObs4 = Observer(name: "Observer 4", x: 200, y: 200, height: 30, radius: 200)
+//        performSerialViewshed(newObs4)
+        
+        
+        stopTime()
+    }
+    
+    @IBAction func clearTimer(sender: AnyObject) {
+        clearTime()
+        removeAllAnnotations()
+        removeAllOverlays()
+    }
+    
 
 }
