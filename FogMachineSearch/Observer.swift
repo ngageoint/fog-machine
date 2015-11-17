@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 class Observer: NSObject {
     var name: String
@@ -16,13 +17,25 @@ class Observer: NSObject {
     var y:Int
     var height:Int
     var radius:Int
+    var coordinate: CLLocationCoordinate2D
     
-    init(name: String, x: Int, y: Int, height: Int, radius: Int) {
+    
+    init(name: String, x: Int, y: Int, height: Int, radius: Int, coordinate: CLLocationCoordinate2D) {
         self.name = name
         self.x = x
         self.y = y
         self.height = height
         self.radius = radius
+        self.coordinate = coordinate
+    }
+    
+    
+    func getObserverLocation() -> CLLocationCoordinate2D {
+        
+        return CLLocationCoordinate2DMake(
+            coordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(x - 1)) + Srtm3.LATITUDE_CELL_CENTER,
+            coordinate.longitude + (Srtm3.CELL_SIZE * Double(y - 1) + Srtm3.LONGITUDE_CELL_CENTER)
+        )
     }
 
 }

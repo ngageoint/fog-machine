@@ -14,24 +14,30 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
 
-    @IBOutlet weak var timerLabel: UILabel!
-    @IBOutlet weak var timerStart: UIButton!
-
+    @IBOutlet weak var serialLabel: UILabel!
+    @IBOutlet weak var parallelLabel: UILabel!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     
     
-    var startTimer: CFAbsoluteTime!
+    var startParallelTimer: CFAbsoluteTime!
+    var startSerialTimer: CFAbsoluteTime!
+    var hgt: Hgt!
+    var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Double]]!
-    var filename:String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         mapView.delegate = self
-        
-        filename = "N39W075"//"N39W075"//"N38W077"
 
-        hgtElevation = readHgt(filename)
+        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
+
+        hgt = Hgt(filename: hgtFilename)
+        
+        hgtCoordinate = hgt.getCoordinate()
+        hgtElevation = hgt.getElevation()
+        
+        self.centerMapOnLocation(self.hgt.getCenterLocation())
        
     }
     
@@ -42,122 +48,75 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    // Height files have the extension .HGT and are signed two byte integers. The
-    // bytes are in Motorola "big-endian" order with the most significant byte first
-    // Data voids are assigned the value -32768 and are ignored (no special processing is done)
-    // SRTM3 files contain 1201 lines and 1201 samples
-    func readHgt(filename: String) -> [[Double]] {
-        
-        let path = NSBundle.mainBundle().pathForResource(filename, ofType: "hgt")
-        let url = NSURL(fileURLWithPath: path!)
-        let data = NSData(contentsOfURL: url)!
-        
-        var elevationMatrix = [[Double]](count:Hgt.MAX_SIZE, repeatedValue:[Double](count:Hgt.MAX_SIZE, repeatedValue:0))
-        
-        let dataRange = NSRange(location: 0, length: data.length)
-        var elevation = [Int16](count: data.length, repeatedValue: 0)
-        data.getBytes(&elevation, range: dataRange)
-        
-        
-        var row = 0
-        var column = 0
-        for (var cell = 0; cell < data.length; cell+=1) {
-            elevationMatrix[row][column] = Double(elevation[cell].bigEndian)
-            
-            column++
-            
-            if column >= Hgt.MAX_SIZE {
-                column = 0
-                row++
-            }
-            
-            if row >= Hgt.MAX_SIZE {
-                break
-            }
-        }
-        
-        return elevationMatrix
-    }
-
     
-    func performParallelViewshed(observer: Observer) {//-> [[Double]] {
+    func performParallelViewshed(observer: Observer, viewshedGroup: dispatch_group_t) {//-> [[Double]] {
         
         
+        dispatch_group_enter(viewshedGroup)
         
-        
-        
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
-            print("Starting Viewshed Processing on \(observer.name)...please wait patiently.")
+            print("Starting Parallel Viewshed Processing on \(observer.name)...")
             
             
-            let initialTime = CFAbsoluteTimeGetCurrent()
+            //let initialTime = CFAbsoluteTimeGetCurrent()
             
-            let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer, hgtFilename: self.filename)
+            let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
             
             let obsResults:[[Double]] = obsViewshed.viewshed()
-            print("\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
+            //print("\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
             
             
             
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                self.displayResults(obsResults, hgtCoordinate: obsViewshed.getHgtCoordinate(), hgtCenterCoordinate: obsViewshed.getHgtCenterLocation(), observerCoordinate: obsViewshed.getObserverLocation(), name: observer.name
-                )
-                print("Finished Viewshed Processing on \(observer.name).")
-                
-                
-                
-                
-            }
-        }
-        
-        
-        
-        
-        
-        
 
-        
-        
-        
-        
+            dispatch_async(dispatch_get_main_queue()) {
+                let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
+                
+                self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                
+                print("\tFinished Viewshed Processing on \(observer.name).")
+                
+                dispatch_group_leave(viewshedGroup)
+                  
+           }
+        }
         
         // return obsResults
         
     }
     
     
-    
     func performSerialViewshed(observer: Observer) {
         
-        print("Starting Viewshed Processing on \(observer.name)...")
+        print("Starting Serial Viewshed Processing on \(observer.name)...")
         
-        let initialTime = CFAbsoluteTimeGetCurrent()
+        //et initialTime = CFAbsoluteTimeGetCurrent()
         
-        let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer, hgtFilename: self.filename)
+        let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
         
         let obsResults:[[Double]] = obsViewshed.viewshed()
-        print("\t\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
         
-        self.displayResults(obsResults, hgtCoordinate: obsViewshed.getHgtCoordinate(), hgtCenterCoordinate: obsViewshed.getHgtCenterLocation(), observerCoordinate: obsViewshed.getObserverLocation(), name: observer.name
-        )
-        print("Finished Viewshed Processing on \(observer.name).")
+        //print("\t\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
         
+        
+        let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
+        
+        print("\tFinished Viewshed Processing on \(observer.name).")
+        self.addOverlay(image, imageLocation: self.hgtCoordinate)
     }
     
     
-    func displayResults(viewshedResult: [[Double]], hgtCoordinate: CLLocationCoordinate2D, hgtCenterCoordinate: CLLocationCoordinate2D, observerCoordinate: CLLocationCoordinate2D, name: String) {
+    func displaySingleResult(viewshedResult: [[Double]], hgtCoordinate: CLLocationCoordinate2D, observerCoordinate: CLLocationCoordinate2D, name: String) -> UIImage {
         
-        let initialTime = CFAbsoluteTimeGetCurrent()
-        //Potentially combine multiple results
-        displayViewshed(viewshedResult, hgtLocation: hgtCoordinate)
-        print("\t\(name) Display Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
+        //let initialTime = CFAbsoluteTimeGetCurrent()
+        let resultImage = displayViewshed(viewshedResult, hgtLocation: hgtCoordinate)
+        //print("\t\(name) Display Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
         
-        centerMapOnLocation(hgtCenterCoordinate)
         pinObserverLocation(observerCoordinate, name: name)
 
+        return resultImage
     }
+    
     
     func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
         
@@ -225,11 +184,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let imageMapRect = overlayBoundingMapRect
         let overlay = ViewshedOverlay(midCoordinate: imageLocation, overlayBoundingMapRect: imageMapRect, viewshedImage: image)
         
-        mapView.addOverlay(overlay)
+        //dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.addOverlay(overlay)
+        //}
     }
     
     
-    func displayViewshed(viewshed: [[Double]], hgtLocation: CLLocationCoordinate2D) {
+    func displayViewshed(viewshed: [[Double]], hgtLocation: CLLocationCoordinate2D) -> UIImage {
 
         let width = viewshed[0].count
         let height = viewshed.count
@@ -241,7 +202,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 let cell = viewshed[y][x]
                 if(cell == 0) {
-                    data.append(Pixel(alpha: 75, red: 0, green: 0, blue: 0))
+                    data.append(Pixel(alpha: 5, red: 0, green: 0, blue: 0))
                 } else if (cell == -1){
                     data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
@@ -252,13 +213,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
         //imageView.image = image
-        addOverlay(image, imageLocation: hgtLocation)
+        //addOverlay(image, imageLocation: hgtLocation)
+        return image
         
     }
     
  
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Hgt.DISPLAY_DIAMETER, Hgt.DISPLAY_DIAMETER)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
@@ -317,30 +279,39 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func removeAllAnnotations() {
+    func removeAllFromMap() {
         mapView.removeAnnotations(mapView.annotations)
-    }
-    
-    
-    func removeAllOverlays() {
         mapView.removeOverlays(mapView.overlays)
     }
     
     
-    func startTime() {
-        startTimer = CFAbsoluteTimeGetCurrent()
+    func startParallelTime() {
+        startParallelTimer = CFAbsoluteTimeGetCurrent()
+    }
+    
+    
+    func stopParallelTime() {
+        let elapsedTime = CFAbsoluteTimeGetCurrent() - startParallelTimer
+        parallelLabel.text = String(format: "%.6f", elapsedTime)
     }
 
     
-    func stopTime() {
-        let elapsedTime = CFAbsoluteTimeGetCurrent() - startTimer
-        timerLabel.text = String(format: "%.6f", elapsedTime)
+    func startSerialTime() {
+        startSerialTimer = CFAbsoluteTimeGetCurrent()
     }
     
+    
+    func stopSerialTime() {
+        let elapsedTime = CFAbsoluteTimeGetCurrent() - startSerialTimer
+        serialLabel.text = String(format: "%.6f", elapsedTime)
+    }
+
     
     func clearTime() {
-        timerLabel.text = "0"
+        parallelLabel.text = "0"
+        serialLabel.text = "0"
     }
+    
     
     @IBAction func mapTypeChanged(sender: AnyObject) {
         let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
@@ -354,45 +325,62 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    @IBAction func startTimer(sender: AnyObject) {
-        startTime()
-        
-        
-        
-        let newObs = Observer(name: "Observer 1", x: 600, y: 200, height: 30, radius: 200)
-        performParallelViewshed(newObs)
-
-        let newObs2 = Observer(name: "Observer 2", x: 1000, y: 700, height: 30, radius: 200)
-        performParallelViewshed(newObs2)
-
-        let newObs3 = Observer(name: "Observer 3", x: 200, y: 700, height: 30, radius: 200)
-        performParallelViewshed(newObs3)
-        
-        let newObs4 = Observer(name: "Observer 4", x: 200, y: 200, height: 30, radius: 200)
-        performParallelViewshed(newObs4)
-
-        
-        
-//        let newObs = Observer(name: "Observer 1", x: 600, y: 200, height: 30, radius: 200)
-//        performSerialViewshed(newObs)
-//        
-//        let newObs2 = Observer(name: "Observer 2", x: 1000, y: 700, height: 30, radius: 200)
-//        performSerialViewshed(newObs2)
-//        
-//        let newObs3 = Observer(name: "Observer 3", x: 200, y: 700, height: 30, radius: 200)
-//        performSerialViewshed(newObs3)
-//        
-//        let newObs4 = Observer(name: "Observer 4", x: 200, y: 200, height: 30, radius: 200)
-//        performSerialViewshed(newObs4)
-        
-        
-        stopTime()
+    
+    @IBAction func startParallel(sender: AnyObject) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+            
+            let viewshedGroup = dispatch_group_create()
+            self.startParallelTime()
+            //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
+            for count in 1...8 {
+                // let count = Int(index + 1)
+                let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+                
+                self.performParallelViewshed(observer, viewshedGroup: viewshedGroup)
+                
+                
+            }
+            
+//            dispatch_group_wait(viewshedGroup, DISPATCH_TIME_FOREVER)
+//            dispatch_async(dispatch_get_main_queue()) {
+            
+            dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+                self.stopParallelTime()
+            }
+            
+        }
     }
+    
+    
+    @IBAction func startSerial(sender: AnyObject) {
+        self.startSerialTime()
+        
+        for count in 1...8 {
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+            self.performSerialViewshed(observer)
+            
+        }
+        
+        
+        self.stopSerialTime()
+        
+    }
+    
+    
+    @IBAction func randomObserver(sender: AnyObject) {
+        let name = String(arc4random_uniform(10000) + 1)
+        let x = Int(arc4random_uniform(700) + 200)
+        let y = Int(arc4random_uniform(700) + 200)
+        let observer = Observer(name: name, x: x, y: y, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+        self.performSerialViewshed(observer)
+        
+        
+    }
+    
     
     @IBAction func clearTimer(sender: AnyObject) {
         clearTime()
-        removeAllAnnotations()
-        removeAllOverlays()
+        removeAllFromMap()
     }
     
 
