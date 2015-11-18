@@ -14,6 +14,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
 
+    @IBOutlet weak var peerStatusLabel: UILabel!
     @IBOutlet weak var serialLabel: UILabel!
     @IBOutlet weak var parallelLabel: UILabel!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
@@ -27,7 +28,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        peerStatusLabel.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         mapView.delegate = self
 
         let hgtFilename = "N38W077"//"N39W075"//"N38W077"
@@ -206,7 +208,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 } else if (cell == -1){
                     data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
-                    data.append(Pixel(alpha: 75, red: 0, green: 255, blue: 0))
+                    data.append(Pixel(alpha: 50, red: 30, green: 230, blue: 30))
                 }
             }
         }
