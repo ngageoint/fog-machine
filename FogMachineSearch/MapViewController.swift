@@ -30,7 +30,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         mapView.delegate = self
 
-        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
+        let hgtFilename = "N38W077"//"N39W075"//"N38W077"
 
         hgt = Hgt(filename: hgtFilename)
         
@@ -202,7 +202,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 let cell = viewshed[y][x]
                 if(cell == 0) {
-                    data.append(Pixel(alpha: 5, red: 0, green: 0, blue: 0))
+                    data.append(Pixel(alpha: 15, red: 0, green: 0, blue: 0))
                 } else if (cell == -1){
                     data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
@@ -361,9 +361,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
         }
         
-        
         self.stopSerialTime()
-        
     }
     
     
@@ -371,16 +369,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let name = String(arc4random_uniform(10000) + 1)
         let x = Int(arc4random_uniform(700) + 200)
         let y = Int(arc4random_uniform(700) + 200)
-        let observer = Observer(name: name, x: x, y: y, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+        let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
         self.performSerialViewshed(observer)
-        
-        
     }
     
     
     @IBAction func clearTimer(sender: AnyObject) {
         clearTime()
         removeAllFromMap()
+        self.centerMapOnLocation(self.hgt.getCenterLocation())
     }
     
 
