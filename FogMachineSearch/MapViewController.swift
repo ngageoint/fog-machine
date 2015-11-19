@@ -19,9 +19,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var parallelLabel: UILabel!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     
-    
-    var startParallelTimer: CFAbsoluteTime!
-    var startSerialTimer: CFAbsoluteTime!
+    var megaOutput:String!
+    var startParallelTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
+    var elapsedParallelTime: CFAbsoluteTime!
+    var startSerialTime: CFAbsoluteTime!
+    var elapsedSerialTime: CFAbsoluteTime!
     var hgt: Hgt!
     var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Double]]!
@@ -33,6 +35,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
 
         let hgtFilename = "N38W077"//"N39W075"//"N38W077"
+        megaOutput = ""
 
         hgt = Hgt(filename: hgtFilename)
         
@@ -58,7 +61,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
-            print("Starting Parallel Viewshed Processing on \(observer.name)...")
+            print("Starting Parallel Viewshed Processing on \(observer.name).")
             
             
             //let initialTime = CFAbsoluteTimeGetCurrent()
@@ -90,7 +93,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func performSerialViewshed(observer: Observer) {
         
-        print("Starting Serial Viewshed Processing on \(observer.name)...")
+        print("Starting Serial Viewshed Processing on \(observer.name).")
         
         //et initialTime = CFAbsoluteTimeGetCurrent()
         
@@ -186,9 +189,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let imageMapRect = overlayBoundingMapRect
         let overlay = ViewshedOverlay(midCoordinate: imageLocation, overlayBoundingMapRect: imageMapRect, viewshedImage: image)
         
-        //dispatch_async(dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_main_queue()) {
             self.mapView.addOverlay(overlay)
-        //}
+        }
     }
     
     
@@ -208,7 +211,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 } else if (cell == -1){
                     data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
-                    data.append(Pixel(alpha: 50, red: 30, green: 230, blue: 30))
+                    data.append(Pixel(alpha: 50, red: 0, green: 255, blue: 0))
                 }
             }
         }
@@ -287,31 +290,58 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func startParallelTime() {
-        startParallelTimer = CFAbsoluteTimeGetCurrent()
+    func startParallelTimer() {
+        startParallelTime = CFAbsoluteTimeGetCurrent()
+        //startParallelTimer = mach_absolute_time()
     }
     
     
-    func stopParallelTime() {
-        let elapsedTime = CFAbsoluteTimeGetCurrent() - startParallelTimer
-        parallelLabel.text = String(format: "%.6f", elapsedTime)
-    }
-
-    
-    func startSerialTime() {
-        startSerialTimer = CFAbsoluteTimeGetCurrent()
-    }
-    
-    
-    func stopSerialTime() {
-        let elapsedTime = CFAbsoluteTimeGetCurrent() - startSerialTimer
-        serialLabel.text = String(format: "%.6f", elapsedTime)
+    func stopParallelTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
+        elapsedParallelTime = CFAbsoluteTimeGetCurrent() - startParallelTime
+        parallelLabel.text = String(format: "%.6f", elapsedParallelTime)
+        //let elapsedTime = mach_absolute_time() - startParallelTimer
+        //parallelLabel.text = String(elapsedTime)
+        if toPrint {
+            log("Observer \(observer):\t\(elapsedParallelTime)")
+        }
+        return elapsedParallelTime
     }
 
     
-    func clearTime() {
+    func startSerialTimer() {
+        startSerialTime = CFAbsoluteTimeGetCurrent()
+    }
+    
+    
+    func stopSerialTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
+        elapsedSerialTime = CFAbsoluteTimeGetCurrent() - startSerialTime
+        serialLabel.text = String(format: "%.6f", elapsedSerialTime)
+        if toPrint {
+            log("Observer \(observer):\t\(elapsedSerialTime)")
+        }
+        return elapsedSerialTime
+    }
+
+    
+    func clearTimer() {
         parallelLabel.text = "0"
         serialLabel.text = "0"
+        startParallelTime = 0
+        startSerialTime = 0
+        elapsedParallelTime = 0
+        elapsedSerialTime = 0
+    }
+    
+    
+    func log(logMessage: String, functionName: String = __FUNCTION__) {
+        printOut("\(functionName): \(logMessage)")
+    }
+    
+
+    func printOut(output: String) {
+        //Can easily change this to print out to a file without modifying the rest of the code.
+        //print(output)
+        megaOutput = megaOutput + "\n" + output
     }
     
     
@@ -329,13 +359,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     @IBAction func startParallel(sender: AnyObject) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+    //dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
             let viewshedGroup = dispatch_group_create()
-            self.startParallelTime()
+            self.startParallelTimer()
             //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
-            for count in 1...8 {
                 // let count = Int(index + 1)
+            for count in 1...8 {
+
                 let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
                 
                 self.performParallelViewshed(observer, viewshedGroup: viewshedGroup)
@@ -347,15 +378,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 //            dispatch_async(dispatch_get_main_queue()) {
             
             dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
-                self.stopParallelTime()
+                self.stopParallelTimer()
             }
             
-        }
+        //}
     }
     
     
     @IBAction func startSerial(sender: AnyObject) {
-        self.startSerialTime()
+        self.startSerialTimer()
         
         for count in 1...8 {
             let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
@@ -363,11 +394,115 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
         }
         
-        self.stopSerialTime()
+        self.stopSerialTimer()
     }
     
     
-    @IBAction func randomObserver(sender: AnyObject) {
+    func gatherMetrics(randomData: Bool, metricGroup: dispatch_group_t) {
+        megaOutput = ""
+        
+        self.printOut("Metrics Report.")
+        var viewshedGroup = dispatch_group_create()
+        self.runComparison(2, viewshedGroup: viewshedGroup, randomData: randomData)
+        
+        dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+            viewshedGroup = dispatch_group_create()
+            self.runComparison(4, viewshedGroup: viewshedGroup, randomData: randomData)
+            
+            dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+                viewshedGroup = dispatch_group_create()
+                self.runComparison(8, viewshedGroup: viewshedGroup, randomData: randomData)
+                
+                dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+                    viewshedGroup = dispatch_group_create()
+                    self.runComparison(16, viewshedGroup: viewshedGroup, randomData: randomData)
+                    
+                    dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+                        print("\nmegaOutput\n\n\n\(self.megaOutput)")
+                        dispatch_group_leave(metricGroup)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
+    func runComparison(numObservers: Int, viewshedGroup: dispatch_group_t, randomData: Bool){
+        
+        var observers: [Observer] = []
+        var x:Int
+        var y:Int
+        var height:Int
+        var radius:Int
+        
+        self.printOut("Metrics Started for \(numObservers) observer(s).")
+        if randomData {
+            self.printOut("Using random data.")
+        } else {
+            self.printOut("Using pattern data from top left to bottom right.")
+        }
+        
+        for count in 1...numObservers {
+            let name = "Observer " + String(count)
+            
+            if randomData {
+                //Random Data
+                x = Int(arc4random_uniform(700) + 200)
+                y = Int(arc4random_uniform(700) + 200)
+                height = Int(arc4random_uniform(100) + 1)
+                radius = Int(arc4random_uniform(600) + 1)
+            } else {
+                //Pattern Data - Right Diagonal
+                x = count * 74
+                y = count * 74
+                height = count + 5
+                radius = count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
+            }
+            
+            
+            let observer = Observer(name: name, x: x, y: y, height: height, radius: radius, coordinate: self.hgtCoordinate)
+            self.printOut("\tObserver \(name): x: \(x)\ty: \(y)\theight: \(height)\tradius: \(radius)")
+            observers.append(observer)
+        }
+        
+        //Starting serial before the parallel so the parallel will not be running when the serial runs
+        self.printOut("\nStarting Serial Viewshed")
+        
+        self.startSerialTimer()
+        for obs in observers {
+            self.performSerialViewshed(obs)
+        }
+        self.stopSerialTimer()
+        
+        self.removeAllFromMap()
+        
+        self.printOut("Serial Viewshed Total Time: \(self.elapsedSerialTime)")
+        self.printOut("\nStarting Parallel Viewshed")
+        
+        
+
+        self.startParallelTimer()
+        
+        for obsP in observers {
+            self.performParallelViewshed(obsP, viewshedGroup: viewshedGroup)
+        }
+        
+        
+        //dispatch_group_wait(viewshedParallelGroup, DISPATCH_TIME_FOREVER)
+        //dispatch_async(dispatch_get_main_queue()) {
+        dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+            self.stopParallelTimer()
+            self.printOut("Parallel Viewshed Total Time: \(self.elapsedParallelTime)")
+            print("Parallel Viewshed Total Time: \(self.elapsedParallelTime)")
+            self.clearTimer()
+            self.printOut("Metrics Finished for \(numObservers) Observer(s).\n")
+        }
+        
+    }
+    
+    
+    func singleRandomObserver() {
         let name = String(arc4random_uniform(10000) + 1)
         let x = Int(arc4random_uniform(700) + 200)
         let y = Int(arc4random_uniform(700) + 200)
@@ -376,8 +511,181 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    @IBAction func randomObserver(sender: AnyObject) {
+        //singleRandomObserver()
+        
+        
+        var metricGroup = dispatch_group_create()
+        dispatch_group_enter(metricGroup)
+        self.gatherMetrics(false, metricGroup: metricGroup)
+        dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
+            metricGroup = dispatch_group_create()
+            dispatch_group_enter(metricGroup)
+            self.gatherMetrics(true, metricGroup: metricGroup)
+            dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
+                print("All Done!")
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        if (ConnectionManager.allWorkers.count != 1 ||
+//            ConnectionManager.allWorkers.count != 2 ||
+//            ConnectionManager.allWorkers.count != 4) {
+//                let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
+//                let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
+//                
+//                let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+//                    //print(action)
+//                }
+//                alertController.addAction(cancelAction)
+//                self.presentViewController(alertController, animated: true) {
+//                    // ...
+//                }
+//                
+//        } else {
+//
+//            
+//            //setupFogEvents()
+//            //startFogViewshed()
+//            
+//            
+//            let name = String(arc4random_uniform(10000) + 1)
+//            let x = Int(arc4random_uniform(700) + 200)
+//            let y = Int(arc4random_uniform(700) + 200)
+//            let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
+//            self.performFogViewshed(observer, numberOfQuadrants: ConnectionManager.allWorkers.count)
+//        }
+        
+        
+    }
+    
+    
+    
+    func performFogViewshed(observer: Observer, numberOfQuadrants: Int) {
+        
+        print("Starting Fog Viewshed Processing on \(observer.name)...")
+        
+        let quadrant = 1
+        
+        let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: quadrant)
+        
+        let obsResults:[[Double]] = obsViewshed.viewshedParallel()
+        
+        
+        
+        
+        let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
+        
+        print("\tFinished Viewshed Processing on \(observer.name).")
+        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+    }
+    
+    
+    
+    func setupFogEvents() {
+        
+        ConnectionManager.onEvent(Event.StartSearch){ peerID, object in
+            print("Recieved request to initiate a viewshed from \(peerID.displayName)")
+            
+            let dict = object as! [String: NSData]
+            let workArray = WorkArray(mpcSerialized: dict["workArray"]!)
+            var totalCount = 0
+            var searchTerm = ""
+            var returnTo = ""
+            
+            for work:Work in workArray.array {
+                returnTo = work.searchInitiator
+                if work.assignedTo == Worker.getMe().name {
+                    searchTerm = work.searchTerm
+                    print("Beginning viewshed for \"\(work.searchTerm)\" from indecies \(work.lowerBound) to \(work.upperBound)")
+                   // totalCount += self.performSearch(work)
+                }
+            }
+            
+            print("Found '\(searchTerm)' \(totalCount) times. Sending results back.")
+            let result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
+            ConnectionManager.sendEvent(Event.SendResult, object: ["searchResult": result])
+        }
+        
+        
+        ConnectionManager.onEvent(Event.SendResult) { peerID, object in
+            var dict = object as! [NSString: NSData]
+            let result = Work(mpcSerialized: dict["searchResult"]!)
+            
+            if (result.searchInitiator == Worker.getMe().name) {
+               // self.responsesRecieved[peerID.displayName] = true
+               // self.searchResultTotal += Int(result.searchResults) ?? 0
+                print("Result recieved from \(peerID.displayName): \(result.searchResults) found.")
+                
+                // check to see if all responses have been recieved
+                var allRecieved = true
+               // for (_, didRespond) in self.responsesRecieved {
+                 //   if didRespond == false {
+                 //       allRecieved = false
+                 //       break
+                 //   }
+               // }
+                
+                if allRecieved {
+                //    print("Search complete \(self.searchResultTotal)")
+                }
+            }
+        }
+    }
+    
+
+    
+//    func startFogViewshed() {
+//
+//        print("Beginning viewshed")
+//        
+//        let numberOfPeers = ConnectionManager.allWorkers.count
+//        //let totalWorkUnits = MonteCristo.paragraphs.count
+//        //let workDivision = totalWorkUnits / numberOfPeers
+//        
+//        //var startBound:Int = 0
+//        var tempArray = [Work]()
+//        
+//        
+//        for peer in ConnectionManager.allWorkers {
+//            self.responsesRecieved[peer.name] = false
+//            
+//            let lower = startBound == 0 ? 1 : startBound
+//            let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
+//            
+//            let work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
+//            tempArray.append(work)
+//            startBound += workDivision + 1
+//            
+//            if peer.name == Worker.getMe().name {
+//                let initiatingNodeResults = self.performSearch(work)
+//                self.responsesRecieved[Worker.getMe().name] = true
+//                self.searchResultTotal += initiatingNodeResults
+//                self.logArea.text = "Found \(initiatingNodeResults) results locally.\n\n\(self.logArea.text)"
+//            }
+//        }
+//        
+//        let workArray = WorkArray(array: tempArray)
+//        
+//        ConnectionManager.sendEvent(Event.StartSearch, object: ["workArray": workArray])
+//    }
+    
+    
     @IBAction func clearTimer(sender: AnyObject) {
-        clearTime()
+        clearTimer()
         removeAllFromMap()
         self.centerMapOnLocation(self.hgt.getCenterLocation())
     }

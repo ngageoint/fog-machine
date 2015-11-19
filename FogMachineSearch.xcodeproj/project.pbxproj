@@ -20,6 +20,7 @@
 		753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D771BF66EA0004E3589 /* Pixel.swift */; };
 		753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D791BFA3ABA004E3589 /* Observer.swift */; };
 		753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7B1BFBCF66004E3589 /* Hgt.swift */; };
+		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		B4D468E8AD4BB93521EAC726 /* Pods_FogMachineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
@@ -63,6 +64,7 @@
 		753D3D771BF66EA0004E3589 /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
 		753D3D791BFA3ABA004E3589 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		753D3D7B1BFBCF66004E3589 /* Hgt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hgt.swift; sourceTree = "<group>"; };
+		753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedFog.swift; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				753D3D561BE7A031004E3589 /* Viewshed.swift */,
 				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
 				753D3D5E1BEA33CF004E3589 /* MapViewController.swift */,
+				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				E386DD511B7C34DB00FA8827 /* Work.swift in Sources */,
 				E314F6C51B79023D005B75C6 /* SecondViewController.swift in Sources */,
 				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
+				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
