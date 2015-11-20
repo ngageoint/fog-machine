@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct FogConstants {
+struct FogSearch {
     static let LowerBoundKey = "LowerBound"
     static let UpperBoundKey = "UpperBound"
     static let SearchTermKey = "SearchTerm"
@@ -18,6 +18,14 @@ struct FogConstants {
     static let SearchInitiatorKey = "SearchInitiator"
 }
 
+
+struct FogViewshed {
+    static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
+    static let WHICH_QUADRANT = "whichQuadrant"
+    static let VIEWSHED_RESULT = "viewshedResult"
+    static let ASSIGNED_TO = "assignedTo"
+    static let SEARCH_INITIATOR = "searchInitiator"
+}
 
 //SRTM = Shuttle Radar Topography Mission
 struct Srtm3 {
@@ -34,4 +42,11 @@ enum MapType: Int {
     case Standard = 0
     case Hybrid
     case Satellite
+}
+
+enum Event: String {
+    case StartSearch = "StartSearch",
+    SendSearchResult = "SendSearchResult",
+    StartViewshed = "StartViewshed",
+    SendViewshedResult = "SendViewshedResult"
 }

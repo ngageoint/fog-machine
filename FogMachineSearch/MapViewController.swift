@@ -28,6 +28,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Double]]!
     
+    
+    var responsesRecieved = Dictionary<String, Bool>()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,7 +47,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         hgtElevation = hgt.getElevation()
         
         self.centerMapOnLocation(self.hgt.getCenterLocation())
-       
+     
+        
+        
+        
+        setupFogEvents()
+        
+        
+        
     }
     
 
@@ -398,6 +409,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    func initiateMetricsGathering() {
+        var metricGroup = dispatch_group_create()
+        dispatch_group_enter(metricGroup)
+        self.gatherMetrics(false, metricGroup: metricGroup)
+        dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
+            metricGroup = dispatch_group_create()
+            dispatch_group_enter(metricGroup)
+            self.gatherMetrics(true, metricGroup: metricGroup)
+            dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
+                print("All Done!")
+            }
+        }
+    }
+    
+    
     func gatherMetrics(randomData: Bool, metricGroup: dispatch_group_t) {
         megaOutput = ""
         
@@ -511,63 +537,47 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // Used to kick-off various test cases/processing
     @IBAction func randomObserver(sender: AnyObject) {
         //singleRandomObserver()
         
+        //initiateMetricsGathering()
         
-        var metricGroup = dispatch_group_create()
-        dispatch_group_enter(metricGroup)
-        self.gatherMetrics(false, metricGroup: metricGroup)
-        dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
-            metricGroup = dispatch_group_create()
-            dispatch_group_enter(metricGroup)
-            self.gatherMetrics(true, metricGroup: metricGroup)
-            dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
-                print("All Done!")
-            }
-        }
+        initiateFogViewshed()
         
+    }
+    
+    
+    
+    func initiateFogViewshed() {
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//        if (ConnectionManager.allWorkers.count != 1 ||
-//            ConnectionManager.allWorkers.count != 2 ||
-//            ConnectionManager.allWorkers.count != 4) {
-//                let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
-//                let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-//                
-//                let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-//                    //print(action)
-//                }
-//                alertController.addAction(cancelAction)
-//                self.presentViewController(alertController, animated: true) {
-//                    // ...
-//                }
-//                
-//        } else {
-//
-//            
-//            //setupFogEvents()
-//            //startFogViewshed()
-//            
-//            
+        if (ConnectionManager.allWorkers.count != 1 &&
+            ConnectionManager.allWorkers.count != 2 &&
+            ConnectionManager.allWorkers.count != 4) {
+                let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
+                let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
+                
+                let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+                    //print(action)
+                }
+                alertController.addAction(cancelAction)
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+                
+        } else {
+
+            
+            //setupFogEvents()
+            startFogViewshed()
+            
+            
 //            let name = String(arc4random_uniform(10000) + 1)
 //            let x = Int(arc4random_uniform(700) + 200)
 //            let y = Int(arc4random_uniform(700) + 200)
 //            let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
 //            self.performFogViewshed(observer, numberOfQuadrants: ConnectionManager.allWorkers.count)
-//        }
+        }
         
         
     }
@@ -584,9 +594,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let obsResults:[[Double]] = obsViewshed.viewshedParallel()
         
-        
-        
-        
         let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
         
         print("\tFinished Viewshed Processing on \(observer.name).")
@@ -597,50 +604,49 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func setupFogEvents() {
         
-        ConnectionManager.onEvent(Event.StartSearch){ peerID, object in
+        ConnectionManager.onEvent(Event.StartViewshed){ peerID, object in
             print("Recieved request to initiate a viewshed from \(peerID.displayName)")
             
             let dict = object as! [String: NSData]
-            let workArray = WorkArray(mpcSerialized: dict["workArray"]!)
-            var totalCount = 0
-            var searchTerm = ""
+            let workArray = ViewshedWorkArray(mpcSerialized: dict["workArray"]!)
             var returnTo = ""
+           // let returnMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
             
-            for work:Work in workArray.array {
+            for work:ViewshedWork in workArray.array {
                 returnTo = work.searchInitiator
+                
                 if work.assignedTo == Worker.getMe().name {
-                    searchTerm = work.searchTerm
-                    print("Beginning viewshed for \"\(work.searchTerm)\" from indecies \(work.lowerBound) to \(work.upperBound)")
-                   // totalCount += self.performSearch(work)
+                    print("Beginning viewshed for \"\(work.whichQuadrant)\" from indecies \(work.numberOfQuadrants)")
                 }
             }
             
-            print("Found '\(searchTerm)' \(totalCount) times. Sending results back.")
-            let result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
-            ConnectionManager.sendEvent(Event.SendResult, object: ["searchResult": result])
+            print("Sending results back.")
+            let result = ViewshedWork(numberOfQuadrants: "10", whichQuadrant: "10", viewshedResult: "returnMatrix", assignedTo: Worker.getMe().name, searchInitiator: returnTo)
+            
+            ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["searchResult": result])
         }
         
         
-        ConnectionManager.onEvent(Event.SendResult) { peerID, object in
+        ConnectionManager.onEvent(Event.SendViewshedResult) { peerID, object in
             var dict = object as! [NSString: NSData]
-            let result = Work(mpcSerialized: dict["searchResult"]!)
+            let result = ViewshedWork(mpcSerialized: dict["searchResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
-               // self.responsesRecieved[peerID.displayName] = true
+               self.responsesRecieved[peerID.displayName] = true
                // self.searchResultTotal += Int(result.searchResults) ?? 0
-                print("Result recieved from \(peerID.displayName): \(result.searchResults) found.")
+                print("Result recieved from \(peerID.displayName): \(result.whichQuadrant) quadrant.")
                 
                 // check to see if all responses have been recieved
                 var allRecieved = true
-               // for (_, didRespond) in self.responsesRecieved {
-                 //   if didRespond == false {
-                 //       allRecieved = false
-                 //       break
-                 //   }
-               // }
+                for (_, didRespond) in self.responsesRecieved {
+                    if didRespond == false {
+                        allRecieved = false
+                        break
+                    }
+                }
                 
                 if allRecieved {
-                //    print("Search complete \(self.searchResultTotal)")
+                    print("Viewshed complete.")
                 }
             }
         }
@@ -648,40 +654,43 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
 
     
-//    func startFogViewshed() {
-//
-//        print("Beginning viewshed")
-//        
-//        let numberOfPeers = ConnectionManager.allWorkers.count
-//        //let totalWorkUnits = MonteCristo.paragraphs.count
-//        //let workDivision = totalWorkUnits / numberOfPeers
-//        
-//        //var startBound:Int = 0
-//        var tempArray = [Work]()
-//        
-//        
-//        for peer in ConnectionManager.allWorkers {
-//            self.responsesRecieved[peer.name] = false
-//            
-//            let lower = startBound == 0 ? 1 : startBound
-//            let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
-//            
-//            let work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
-//            tempArray.append(work)
+    func startFogViewshed() {
+
+        print("Beginning viewshed")
+        
+        let numberOfPeers = ConnectionManager.allWorkers.count
+        //let totalWorkUnits = MonteCristo.paragraphs.count
+        //let workDivision = totalWorkUnits / numberOfPeers
+        
+        //var startBound:Int = 0
+        var tempArray = [ViewshedWork]()
+        
+        
+        for peer in ConnectionManager.allWorkers {
+            self.responsesRecieved[peer.name] = false
+            
+            //let lower = startBound == 0 ? 1 : startBound
+            //let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
+            
+            let emptyMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            
+            let work = ViewshedWork(numberOfQuadrants: "15", whichQuadrant: "15", viewshedResult: "emptyMatrix", assignedTo: peer.name, searchInitiator: Worker.getMe().name)
+            
+            tempArray.append(work)
 //            startBound += workDivision + 1
-//            
-//            if peer.name == Worker.getMe().name {
-//                let initiatingNodeResults = self.performSearch(work)
-//                self.responsesRecieved[Worker.getMe().name] = true
-//                self.searchResultTotal += initiatingNodeResults
-//                self.logArea.text = "Found \(initiatingNodeResults) results locally.\n\n\(self.logArea.text)"
-//            }
-//        }
-//        
-//        let workArray = WorkArray(array: tempArray)
-//        
-//        ConnectionManager.sendEvent(Event.StartSearch, object: ["workArray": workArray])
-//    }
+            
+            if peer.name == Worker.getMe().name {
+                //let initiatingNodeResults = self.performSearch(work)
+                self.responsesRecieved[Worker.getMe().name] = true
+                //self.searchResultTotal += initiatingNodeResults
+                print("Found results locally out of \(numberOfPeers).")
+            }
+        }
+        
+        let workArray = ViewshedWorkArray(array: tempArray)
+        
+        ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
+    }
     
     
     @IBAction func clearTimer(sender: AnyObject) {

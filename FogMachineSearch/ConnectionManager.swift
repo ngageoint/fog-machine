@@ -16,12 +16,6 @@ protocol MPCSerializable {
 }
 
 
-enum Event: String {
-    case StartSearch = "StartSearch",
-    SendResult = "SendResult"
-}
-
-
 struct ConnectionManager {
     
     
@@ -41,7 +35,7 @@ struct ConnectionManager {
     
     // MARK: Start
     static func start() {
-        NSLog("transceiving")
+        NSLog("Transceiving")
         PeerKit.transceive("fogsearch")
     }
     

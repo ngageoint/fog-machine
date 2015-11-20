@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Work: MPCSerializable {
+struct SearchWork: MPCSerializable {
     let lowerBound: String
     let upperBound: String
     let searchTerm: String
@@ -17,7 +17,7 @@ struct Work: MPCSerializable {
     let searchInitiator: String
     
     var mpcSerialized : NSData {
-        return NSKeyedArchiver.archivedDataWithRootObject([FogConstants.LowerBoundKey: lowerBound, FogConstants.UpperBoundKey: upperBound, FogConstants.SearchTermKey: searchTerm, FogConstants.AssignedToKey: assignedTo, FogConstants.SearchResultsKey: searchResults, FogConstants.SearchInitiatorKey: searchInitiator])
+        return NSKeyedArchiver.archivedDataWithRootObject([FogSearch.LowerBoundKey: lowerBound, FogSearch.UpperBoundKey: upperBound, FogSearch.SearchTermKey: searchTerm, FogSearch.AssignedToKey: assignedTo, FogSearch.SearchResultsKey: searchResults, FogSearch.SearchInitiatorKey: searchInitiator])
     }
     
     init (lowerBound: String, upperBound: String, searchTerm: String, assignedTo: String, searchResults: String, searchInitiator: String) {
@@ -31,29 +31,29 @@ struct Work: MPCSerializable {
     
     init (mpcSerialized: NSData) {
         let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: String]
-        lowerBound = dict[FogConstants.LowerBoundKey]!
-        upperBound = dict[FogConstants.UpperBoundKey]!
-        searchTerm = dict[FogConstants.SearchTermKey]!
-        assignedTo = dict[FogConstants.AssignedToKey]!
-        searchResults = dict[FogConstants.SearchResultsKey]!
-        searchInitiator = dict[FogConstants.SearchInitiatorKey]!
+        lowerBound = dict[FogSearch.LowerBoundKey]!
+        upperBound = dict[FogSearch.UpperBoundKey]!
+        searchTerm = dict[FogSearch.SearchTermKey]!
+        assignedTo = dict[FogSearch.AssignedToKey]!
+        searchResults = dict[FogSearch.SearchResultsKey]!
+        searchInitiator = dict[FogSearch.SearchInitiatorKey]!
     }
 }
 
 
-struct WorkArray: MPCSerializable {
-    let array: Array<Work>
+struct SearchWorkArray: MPCSerializable {
+    let array: Array<SearchWork>
     
     var mpcSerialized: NSData {
         return NSKeyedArchiver.archivedDataWithRootObject(array.map { $0.mpcSerialized })
     }
     
-    init(array: Array<Work>) {
+    init(array: Array<SearchWork>) {
         self.array = array
     }
     
     init(mpcSerialized: NSData) {
         let dataArray = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [NSData]
-        array = dataArray.map { return Work(mpcSerialized: $0) }
+        array = dataArray.map { return SearchWork(mpcSerialized: $0) }
     }
 }

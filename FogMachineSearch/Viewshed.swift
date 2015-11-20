@@ -147,5 +147,62 @@ public class Viewshed: NSObject {
             print("\(x)")
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    public func viewshedParallel() -> [[Double]] {
+        
+        var viewshedMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        
+        let perimeter:[(x:Int, y:Int)] = getPerimeter(obsX, inY: obsY, radius: viewRadius)
+        
+        for (x, y) in perimeter {
+            let bresenham = Bresenham()
+            let bresResults:[(x:Int, y:Int)] = bresenham.findLine(obsX, y1: obsY, x2: x, y2: y)
+            
+            
+            var greatestSlope = -Double.infinity
+            
+            for (x2, y2) in bresResults {
+                
+                if (x2 > 0 && y2 > 0) && (x2 < Srtm3.MAX_SIZE && y2 < Srtm3.MAX_SIZE) {
+                    let zk:Double = elevation[obsX][obsY]
+                    let zi:Double = elevation[x2][y2]
+                    
+                    let opposite = ( zi - (zk + Double(obsHeight)) )
+                    let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
+                    let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
+                    
+                    if (angle < greatestSlope) {
+                        //hidden
+                        viewshedMatrix[x2 - 1][y2 - 1] = 0
+                    } else {
+                        greatestSlope = angle
+                        //visible
+                        viewshedMatrix[x2 - 1][y2 - 1] = 1
+                    }
+                }
+                
+            }
+            
+        }
+        
+        viewshedMatrix[obsX - 1][obsY - 1] = -1 // mark observer cell as unique
+        
+        return viewshedMatrix
+        
+    }
+
+    
+    
+    
+    
+    
+    
 
 }

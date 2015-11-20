@@ -26,12 +26,12 @@ class SecondViewController: UIViewController {
             self.logArea.text = ("Recieved request to initiate a search from \(peerID.displayName)")
             
             let dict = object as! [String: NSData]
-            let workArray = WorkArray(mpcSerialized: dict["workArray"]!)
+            let workArray = SearchWorkArray(mpcSerialized: dict["workArray"]!)
             var totalCount = 0
             var searchTerm = ""
             var returnTo = ""
             
-            for work:Work in workArray.array {
+            for work:SearchWork in workArray.array {
                 returnTo = work.searchInitiator
                 if work.assignedTo == Worker.getMe().name {
                     searchTerm = work.searchTerm
@@ -41,14 +41,14 @@ class SecondViewController: UIViewController {
             }
             
             self.logArea.text = ("Found '\(searchTerm)' \(totalCount) times. Sending results back.\n\n\(self.logArea.text)")
-            let result = Work(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
-            ConnectionManager.sendEvent(Event.SendResult, object: ["searchResult": result])
+            let result = SearchWork(lowerBound: "", upperBound: "", searchTerm: searchTerm, assignedTo: Worker.getMe().name, searchResults: "\(totalCount)", searchInitiator: returnTo)
+            ConnectionManager.sendEvent(Event.SendSearchResult, object: ["searchResult": result])
         }
         
         
-        ConnectionManager.onEvent(Event.SendResult) { peerID, object in
+        ConnectionManager.onEvent(Event.SendSearchResult) { peerID, object in
             var dict = object as! [NSString: NSData]
-            let result = Work(mpcSerialized: dict["searchResult"]!)
+            let result = SearchWork(mpcSerialized: dict["searchResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
                 self.responsesRecieved[peerID.displayName] = true
@@ -77,7 +77,7 @@ class SecondViewController: UIViewController {
     }
     
     
-    func performSearch(work:Work) -> Int {
+    func performSearch(work:SearchWork) -> Int {
         var numberFound = 0
         let lowerBound:Int = Int(work.lowerBound)!
         let upperBound:Int = Int(work.upperBound)!
@@ -110,7 +110,7 @@ class SecondViewController: UIViewController {
         let workDivision = totalWorkUnits / numberOfPeers
         
         var startBound:Int = 0
-        var tempArray = [Work]()
+        var tempArray = [SearchWork]()
         
         
         for peer in ConnectionManager.allWorkers {
@@ -119,7 +119,7 @@ class SecondViewController: UIViewController {
             let lower = startBound == 0 ? 1 : startBound
             let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
             
-            let work = Work(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
+            let work = SearchWork(lowerBound: "\(lower)", upperBound: "\(upper)", searchTerm: searchTerm, assignedTo: peer.name, searchResults: "", searchInitiator: Worker.getMe().name)
             tempArray.append(work)
             startBound += workDivision + 1
             
@@ -131,7 +131,7 @@ class SecondViewController: UIViewController {
             }
         }
         
-        let workArray = WorkArray(array: tempArray)
+        let workArray = SearchWorkArray(array: tempArray)
         
         ConnectionManager.sendEvent(Event.StartSearch, object: ["workArray": workArray])
     }

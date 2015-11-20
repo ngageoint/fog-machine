@@ -126,7 +126,8 @@ public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [M
 
     do {
         try session?.sendData(data, toPeers: peers, withMode: .Reliable)
-    } catch _ {
+    } catch let errors as NSError{
+        print("\(errors)")
     }
 }
 
