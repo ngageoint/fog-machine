@@ -11,7 +11,7 @@ import MapKit
 
 public class ViewshedFog: NSObject {
     
-    var elevation: [[Double]]
+    var elevation: [[Int]]
     var obsX: Int
     var obsY: Int
     var obsHeight: Int
@@ -20,7 +20,7 @@ public class ViewshedFog: NSObject {
     var whichQuadrant: Int
     
     
-    init(elevation: [[Double]], observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
+    init(elevation: [[Int]], observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
         self.elevation = elevation
         self.obsX = observer.x
         self.obsY = observer.y
@@ -32,9 +32,9 @@ public class ViewshedFog: NSObject {
     
     
     
-    public func viewshedParallel() -> [[Double]] {
+    public func viewshedParallel() -> [[Int]] {
         
-        var viewshedMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
         
         let perimeter:[(x:Int, y:Int)] = getPerimeter(obsX, inY: obsY, radius: viewRadius,
             numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
@@ -49,10 +49,10 @@ public class ViewshedFog: NSObject {
             for (x2, y2) in bresResults {
                 
                 if (x2 > 0 && y2 > 0) && (x2 < Srtm3.MAX_SIZE && y2 < Srtm3.MAX_SIZE) {
-                    let zk:Double = elevation[obsX][obsY]
-                    let zi:Double = elevation[x2][y2]
+                    let zk:Int = elevation[obsX][obsY]
+                    let zi:Int = elevation[x2][y2]
                     
-                    let opposite = ( zi - (zk + Double(obsHeight)) )
+                    let opposite = ( zi - (zk + obsHeight) )
                     let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
                     let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
                     
@@ -176,7 +176,7 @@ public class ViewshedFog: NSObject {
     }
     
     
-    private func displayMatrix(matrix: [[Double]]) {
+    private func displayMatrix(matrix: [[Int]]) {
         for x in matrix.reverse() {
             print("\(x)")
         }

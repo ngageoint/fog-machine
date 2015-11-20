@@ -38,7 +38,7 @@ class ViewshedWork: MPCSerializable {
         let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: String]
 //        numberOfQuadrants = Int(dict[FogViewshed.NUMBER_OF_QUADRANTS]! as! String)!
 //        whichQuadrant = Int(dict[FogViewshed.WHICH_QUADRANT]! as! String)!
-//        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT]! as! [[Double]]
+//        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT]! as! [[Int]]
         numberOfQuadrants = dict[FogViewshed.NUMBER_OF_QUADRANTS]!
         whichQuadrant = dict[FogViewshed.WHICH_QUADRANT]!
         viewshedResult = dict[FogViewshed.VIEWSHED_RESULT]!

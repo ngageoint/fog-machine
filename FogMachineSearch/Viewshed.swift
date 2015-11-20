@@ -11,14 +11,14 @@ import MapKit
 
 public class Viewshed: NSObject {
     
-    var elevation: [[Double]]
+    var elevation: [[Int]]
     var obsX: Int
     var obsY: Int
     var obsHeight: Int
     var viewRadius: Int
     
     
-    init(elevation: [[Double]], observer: Observer) {
+    init(elevation: [[Int]], observer: Observer) {
         self.elevation = elevation
         self.obsX = observer.x
         self.obsY = observer.y
@@ -31,10 +31,10 @@ public class Viewshed: NSObject {
     //        Given a terrain T represented by an n × n elevation matrix M, a point p on T , a radius
     //        of interest r, and a height h above the local terrain for the observer and target, this
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
-    public func viewshed() -> [[Double]] {
+    public func viewshed() -> [[Int]] {
         
         // Initialize results array as all un-viewable
-        var viewshedMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
         
         // 1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
         
@@ -71,11 +71,11 @@ public class Viewshed: NSObject {
                     // print("Finding angle to: x, y: \(x2),   \(y2)")
                     
                     // i. For each point qi, compute mi.
-                    let zk:Double = elevation[obsX][obsY]
-                    let zi:Double = elevation[x2][y2]
+                    let zk:Int = elevation[obsX][obsY]
+                    let zi:Int = elevation[x2][y2]
                     
                     // angle = arctan(opposite/adjacent)
-                    let opposite = ( zi - (zk + Double(obsHeight)) )
+                    let opposite = ( zi - (zk + obsHeight) )
                     let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
                     let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
                     
@@ -142,67 +142,11 @@ public class Viewshed: NSObject {
     }
     
     
-    private func displayMatrix(matrix: [[Double]]) {
+    private func displayMatrix(matrix: [[Int]]) {
         for x in matrix.reverse() {
             print("\(x)")
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    public func viewshedParallel() -> [[Double]] {
-        
-        var viewshedMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
-        
-        let perimeter:[(x:Int, y:Int)] = getPerimeter(obsX, inY: obsY, radius: viewRadius)
-        
-        for (x, y) in perimeter {
-            let bresenham = Bresenham()
-            let bresResults:[(x:Int, y:Int)] = bresenham.findLine(obsX, y1: obsY, x2: x, y2: y)
-            
-            
-            var greatestSlope = -Double.infinity
-            
-            for (x2, y2) in bresResults {
-                
-                if (x2 > 0 && y2 > 0) && (x2 < Srtm3.MAX_SIZE && y2 < Srtm3.MAX_SIZE) {
-                    let zk:Double = elevation[obsX][obsY]
-                    let zi:Double = elevation[x2][y2]
-                    
-                    let opposite = ( zi - (zk + Double(obsHeight)) )
-                    let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
-                    let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
-                    
-                    if (angle < greatestSlope) {
-                        //hidden
-                        viewshedMatrix[x2 - 1][y2 - 1] = 0
-                    } else {
-                        greatestSlope = angle
-                        //visible
-                        viewshedMatrix[x2 - 1][y2 - 1] = 1
-                    }
-                }
-                
-            }
-            
-        }
-        
-        viewshedMatrix[obsX - 1][obsY - 1] = -1 // mark observer cell as unique
-        
-        return viewshedMatrix
-        
-    }
-
-    
-    
-    
-    
-    
     
 
 }

@@ -12,6 +12,10 @@ import MapKit
 
 class MapViewController: UIViewController, MKMapViewDelegate {
 
+    
+    // MARK: IBOutlets
+    
+    
     @IBOutlet weak var mapView: MKMapView!
 
     @IBOutlet weak var peerStatusLabel: UILabel!
@@ -19,15 +23,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var parallelLabel: UILabel!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     
-    var megaOutput:String!
+    
+    // MARK: Class Variables
+    
+    
+    var metricsOutput:String!
     var startParallelTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
     var elapsedParallelTime: CFAbsoluteTime!
     var startSerialTime: CFAbsoluteTime!
     var elapsedSerialTime: CFAbsoluteTime!
     var hgt: Hgt!
     var hgtCoordinate:CLLocationCoordinate2D!
-    var hgtElevation:[[Double]]!
-    
+    var hgtElevation:[[Int]]!
     
     var responsesRecieved = Dictionary<String, Bool>()
     
@@ -39,22 +46,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
 
         let hgtFilename = "N38W077"//"N39W075"//"N38W077"
-        megaOutput = ""
+        metricsOutput = ""
 
         hgt = Hgt(filename: hgtFilename)
-        
         hgtCoordinate = hgt.getCoordinate()
         hgtElevation = hgt.getElevation()
         
         self.centerMapOnLocation(self.hgt.getCenterLocation())
-     
-        
-        
         
         setupFogEvents()
-        
-        
-        
     }
     
 
@@ -64,9 +64,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // MARK: Viewshed Serial/Parallel
     
-    func performParallelViewshed(observer: Observer, viewshedGroup: dispatch_group_t) {//-> [[Double]] {
-        
+    
+    func singleRandomObserver() {
+        let name = String(arc4random_uniform(10000) + 1)
+        let x = Int(arc4random_uniform(700) + 200)
+        let y = Int(arc4random_uniform(700) + 200)
+        let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
+        self.performSerialViewshed(observer)
+    }
+    
+    
+    func performParallelViewshed(observer: Observer, viewshedGroup: dispatch_group_t) {
         
         dispatch_group_enter(viewshedGroup)
         
@@ -74,31 +84,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             print("Starting Parallel Viewshed Processing on \(observer.name).")
             
-            
-            //let initialTime = CFAbsoluteTimeGetCurrent()
-            
             let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
+            let obsResults:[[Int]] = obsViewshed.viewshed()
             
-            let obsResults:[[Double]] = obsViewshed.viewshed()
-            //print("\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
-            
-            
-            
-
             dispatch_async(dispatch_get_main_queue()) {
-                let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
-                
-                self.addOverlay(image, imageLocation: self.hgtCoordinate)
                 
                 print("\tFinished Viewshed Processing on \(observer.name).")
                 
+                let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
+                self.pinObserverLocation(observer)
+                self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                
                 dispatch_group_leave(viewshedGroup)
-                  
            }
         }
-        
-        // return obsResults
-        
     }
     
     
@@ -106,63 +105,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         print("Starting Serial Viewshed Processing on \(observer.name).")
         
-        //et initialTime = CFAbsoluteTimeGetCurrent()
-        
         let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
-        
-        let obsResults:[[Double]] = obsViewshed.viewshed()
-        
-        //print("\t\(observer.name) Viewshed Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
-        
-        
-        let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
+        let obsResults:[[Int]] = obsViewshed.viewshed()
         
         print("\tFinished Viewshed Processing on \(observer.name).")
+        
+        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
+        self.pinObserverLocation(observer)
         self.addOverlay(image, imageLocation: self.hgtCoordinate)
     }
     
     
-    func displaySingleResult(viewshedResult: [[Double]], hgtCoordinate: CLLocationCoordinate2D, observerCoordinate: CLLocationCoordinate2D, name: String) -> UIImage {
-        
-        //let initialTime = CFAbsoluteTimeGetCurrent()
-        let resultImage = displayViewshed(viewshedResult, hgtLocation: hgtCoordinate)
-        //print("\t\(name) Display Time: \(CFAbsoluteTimeGetCurrent() - initialTime)")
-        
-        pinObserverLocation(observerCoordinate, name: name)
-
-        return resultImage
-    }
-    
-    
-    func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
-        
-        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo:CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-        let bitsPerComponent:Int = 8
-        let bitsPerPixel:Int = 32
-        let bytesPerRow = width * Int(sizeof(Pixel))
-        
-        // assert(pixels.count == Int(width * height))
-        
-        var data = pixels // Copy to mutable []
-        let length = data.count * sizeof(Pixel)
-        let providerRef = CGDataProviderCreateWithCFData(NSData(bytes: &data, length: length))
-        
-        let cgImage = CGImageCreate(
-            width,
-            height,
-            bitsPerComponent,
-            bitsPerPixel,
-            bytesPerRow,
-            rgbColorSpace,
-            bitmapInfo,
-            providerRef,
-            nil,
-            true,
-            CGColorRenderingIntent.RenderingIntentDefault
-        )
-        return UIImage(CGImage: cgImage!)
-    }
+    // MARK: Display Manipulations
     
     
     func addOverlay(image: UIImage, imageLocation: CLLocationCoordinate2D) {
@@ -206,7 +160,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func displayViewshed(viewshed: [[Double]], hgtLocation: CLLocationCoordinate2D) -> UIImage {
+    func generateViewshedImage(viewshed: [[Int]], hgtLocation: CLLocationCoordinate2D) -> UIImage {
 
         let width = viewshed[0].count
         let height = viewshed.count
@@ -228,10 +182,40 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
-        //imageView.image = image
-        //addOverlay(image, imageLocation: hgtLocation)
+
         return image
         
+    }
+    
+    
+    func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
+        
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo:CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
+        let bitsPerComponent:Int = 8
+        let bitsPerPixel:Int = 32
+        let bytesPerRow = width * Int(sizeof(Pixel))
+        
+        // assert(pixels.count == Int(width * height))
+        
+        var data = pixels // Copy to mutable []
+        let length = data.count * sizeof(Pixel)
+        let providerRef = CGDataProviderCreateWithCFData(NSData(bytes: &data, length: length))
+        
+        let cgImage = CGImageCreate(
+            width,
+            height,
+            bitsPerComponent,
+            bitsPerPixel,
+            bytesPerRow,
+            rgbColorSpace,
+            bitmapInfo,
+            providerRef,
+            nil,
+            true,
+            CGColorRenderingIntent.RenderingIntentDefault
+        )
+        return UIImage(CGImage: cgImage!)
     }
     
  
@@ -241,13 +225,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func pinObserverLocation(location: CLLocationCoordinate2D, name: String) {
-        
+    func pinObserverLocation(observer: Observer) {
         let dropPin = MKPointAnnotation()
-        dropPin.coordinate = location
-        dropPin.title = name
+        dropPin.coordinate = observer.getObserverLocation()
+        dropPin.title = observer.name
         mapView.addAnnotation(dropPin)
-        
     }
     
     
@@ -301,6 +283,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // MARK: Timer
+    
+    
     func startParallelTimer() {
         startParallelTime = CFAbsoluteTimeGetCurrent()
         //startParallelTimer = mach_absolute_time()
@@ -344,6 +329,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
+    // MARK: Logging/Printing
+    
+    
     func log(logMessage: String, functionName: String = __FUNCTION__) {
         printOut("\(functionName): \(logMessage)")
     }
@@ -352,71 +340,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func printOut(output: String) {
         //Can easily change this to print out to a file without modifying the rest of the code.
         //print(output)
-        megaOutput = megaOutput + "\n" + output
+        metricsOutput = metricsOutput + "\n" + output
     }
     
     
-    @IBAction func mapTypeChanged(sender: AnyObject) {
-        let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
-        switch (mapType!) {
-        case .Standard:
-            mapView.mapType = MKMapType.Standard
-        case .Hybrid:
-            mapView.mapType = MKMapType.Hybrid
-        case .Satellite:
-            mapView.mapType = MKMapType.Satellite
-        }
-    }
-    
-    
-    @IBAction func startParallel(sender: AnyObject) {
-    //dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-            
-            let viewshedGroup = dispatch_group_create()
-            self.startParallelTimer()
-            //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
-                // let count = Int(index + 1)
-            for count in 1...8 {
-
-                let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
-                
-                self.performParallelViewshed(observer, viewshedGroup: viewshedGroup)
-                
-                
-            }
-            
-//            dispatch_group_wait(viewshedGroup, DISPATCH_TIME_FOREVER)
-//            dispatch_async(dispatch_get_main_queue()) {
-            
-            dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
-                self.stopParallelTimer()
-            }
-            
-        //}
-    }
-    
-    
-    @IBAction func startSerial(sender: AnyObject) {
-        self.startSerialTimer()
-        
-        for count in 1...8 {
-            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
-            self.performSerialViewshed(observer)
-            
-        }
-        
-        self.stopSerialTimer()
-    }
+    // MARK: Metrics
     
     
     func initiateMetricsGathering() {
         var metricGroup = dispatch_group_create()
+        
         dispatch_group_enter(metricGroup)
         self.gatherMetrics(false, metricGroup: metricGroup)
+        
         dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
             metricGroup = dispatch_group_create()
+            
             dispatch_group_enter(metricGroup)
             self.gatherMetrics(true, metricGroup: metricGroup)
+            
             dispatch_group_notify(metricGroup, dispatch_get_main_queue()) {
                 print("All Done!")
             }
@@ -425,7 +367,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func gatherMetrics(randomData: Bool, metricGroup: dispatch_group_t) {
-        megaOutput = ""
+        metricsOutput = ""
         
         self.printOut("Metrics Report.")
         var viewshedGroup = dispatch_group_create()
@@ -444,7 +386,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.runComparison(16, viewshedGroup: viewshedGroup, randomData: randomData)
                     
                     dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
-                        print("\nmegaOutput\n\n\n\(self.megaOutput)")
+                        print("\nmetricsOutput\n\n\n\(self.metricsOutput)")
                         dispatch_group_leave(metricGroup)
                     }
                 }
@@ -486,7 +428,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 radius = count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
             }
             
-            
             let observer = Observer(name: name, x: x, y: y, height: height, radius: radius, coordinate: self.hgtCoordinate)
             self.printOut("\tObserver \(name): x: \(x)\ty: \(y)\theight: \(height)\tradius: \(radius)")
             observers.append(observer)
@@ -500,23 +441,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             self.performSerialViewshed(obs)
         }
         self.stopSerialTimer()
-        
         self.removeAllFromMap()
         
         self.printOut("Serial Viewshed Total Time: \(self.elapsedSerialTime)")
         self.printOut("\nStarting Parallel Viewshed")
         
-        
-
         self.startParallelTimer()
-        
         for obsP in observers {
             self.performParallelViewshed(obsP, viewshedGroup: viewshedGroup)
         }
         
-        
-        //dispatch_group_wait(viewshedParallelGroup, DISPATCH_TIME_FOREVER)
-        //dispatch_async(dispatch_get_main_queue()) {
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
             self.stopParallelTimer()
             self.printOut("Parallel Viewshed Total Time: \(self.elapsedParallelTime)")
@@ -528,25 +462,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func singleRandomObserver() {
-        let name = String(arc4random_uniform(10000) + 1)
-        let x = Int(arc4random_uniform(700) + 200)
-        let y = Int(arc4random_uniform(700) + 200)
-        let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
-        self.performSerialViewshed(observer)
-    }
-    
-    
-    // Used to kick-off various test cases/processing
-    @IBAction func randomObserver(sender: AnyObject) {
-        //singleRandomObserver()
-        
-        //initiateMetricsGathering()
-        
-        initiateFogViewshed()
-        
-    }
-    
+    // MARK: Fog Viewshed
     
     
     func initiateFogViewshed() {
@@ -566,17 +482,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
                 
         } else {
-
+            
             
             //setupFogEvents()
             startFogViewshed()
-            
-            
-//            let name = String(arc4random_uniform(10000) + 1)
-//            let x = Int(arc4random_uniform(700) + 200)
-//            let y = Int(arc4random_uniform(700) + 200)
-//            let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
-//            self.performFogViewshed(observer, numberOfQuadrants: ConnectionManager.allWorkers.count)
+
         }
         
         
@@ -592,10 +502,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: quadrant)
         
-        let obsResults:[[Double]] = obsViewshed.viewshedParallel()
+        let obsResults:[[Int]] = obsViewshed.viewshedParallel()
         
-        let image = self.displaySingleResult(obsResults, hgtCoordinate: self.hgt.getCoordinate(), observerCoordinate: observer.getObserverLocation(), name: observer.name)
-        
+        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
+        self.pinObserverLocation(observer)
         print("\tFinished Viewshed Processing on \(observer.name).")
         self.addOverlay(image, imageLocation: self.hgtCoordinate)
     }
@@ -610,7 +520,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let dict = object as! [String: NSData]
             let workArray = ViewshedWorkArray(mpcSerialized: dict["workArray"]!)
             var returnTo = ""
-           // let returnMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            // let returnMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             
             for work:ViewshedWork in workArray.array {
                 returnTo = work.searchInitiator
@@ -632,8 +542,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let result = ViewshedWork(mpcSerialized: dict["searchResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
-               self.responsesRecieved[peerID.displayName] = true
-               // self.searchResultTotal += Int(result.searchResults) ?? 0
+                self.responsesRecieved[peerID.displayName] = true
+                // self.searchResultTotal += Int(result.searchResults) ?? 0
                 print("Result recieved from \(peerID.displayName): \(result.whichQuadrant) quadrant.")
                 
                 // check to see if all responses have been recieved
@@ -652,10 +562,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-
+    
     
     func startFogViewshed() {
-
+        
         print("Beginning viewshed")
         
         let numberOfPeers = ConnectionManager.allWorkers.count
@@ -672,17 +582,27 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             //let lower = startBound == 0 ? 1 : startBound
             //let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
             
-            let emptyMatrix = [[Double]](count:Srtm3.MAX_SIZE, repeatedValue:[Double](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            let emptyMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             
             let work = ViewshedWork(numberOfQuadrants: "15", whichQuadrant: "15", viewshedResult: "emptyMatrix", assignedTo: peer.name, searchInitiator: Worker.getMe().name)
             
             tempArray.append(work)
-//            startBound += workDivision + 1
+            //            startBound += workDivision + 1
             
             if peer.name == Worker.getMe().name {
                 //let initiatingNodeResults = self.performSearch(work)
                 self.responsesRecieved[Worker.getMe().name] = true
                 //self.searchResultTotal += initiatingNodeResults
+                
+                
+                //            let name = String(arc4random_uniform(10000) + 1)
+                //            let x = Int(arc4random_uniform(700) + 200)
+                //            let y = Int(arc4random_uniform(700) + 200)
+                //            let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
+                //            self.performFogViewshed(observer, numberOfQuadrants: ConnectionManager.allWorkers.count)
+                
+                
+                
                 print("Found results locally out of \(numberOfPeers).")
             }
         }
@@ -690,6 +610,65 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let workArray = ViewshedWorkArray(array: tempArray)
         
         ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
+    }
+    
+    
+    // MARK: IBActions
+    
+    
+    @IBAction func mapTypeChanged(sender: AnyObject) {
+        let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
+        switch (mapType!) {
+        case .Standard:
+            mapView.mapType = MKMapType.Standard
+        case .Hybrid:
+            mapView.mapType = MKMapType.Hybrid
+        case .Satellite:
+            mapView.mapType = MKMapType.Satellite
+        }
+    }
+    
+    
+    @IBAction func startParallel(sender: AnyObject) {
+        
+        let viewshedGroup = dispatch_group_create()
+        self.startParallelTimer()
+        //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
+        // let count = Int(index + 1)
+        for count in 1...8 {
+            
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+            
+            self.performParallelViewshed(observer, viewshedGroup: viewshedGroup)
+        }
+
+        dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
+            self.stopParallelTimer()
+        }
+    }
+    
+    
+    @IBAction func startSerial(sender: AnyObject) {
+        self.startSerialTimer()
+        
+        for count in 1...8 {
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+            self.performSerialViewshed(observer)
+            
+        }
+        
+        self.stopSerialTimer()
+    }
+    
+    
+    // Used to kick-off various test cases/processing
+    @IBAction func randomObserver(sender: AnyObject) {
+        //singleRandomObserver()
+        
+        //initiateMetricsGathering()
+        
+        initiateFogViewshed()
+        
     }
     
     
