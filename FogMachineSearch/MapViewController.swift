@@ -45,7 +45,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         peerStatusLabel.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         mapView.delegate = self
 
-        let hgtFilename = "N38W077"//"N39W075"//"N38W077"
+        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
         metricsOutput = ""
 
         hgt = Hgt(filename: hgtFilename)
@@ -67,12 +67,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // MARK: Viewshed Serial/Parallel
     
     
-    func singleRandomObserver() {
+    func singleTestObserver() -> Observer {
+        let name = "Tester"
+        let x = 900
+        let y = 900
+        return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
+        
+    }
+    
+    
+    func singleRandomObserver() -> Observer {
         let name = String(arc4random_uniform(10000) + 1)
         let x = Int(arc4random_uniform(700) + 200)
         let y = Int(arc4random_uniform(700) + 200)
-        let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
-        self.performSerialViewshed(observer)
+        return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
+        
+    }
+    
+    
+    func singleViewshed() {
+        self.performSerialViewshed(singleRandomObserver())
     }
     
     
@@ -480,27 +494,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.presentViewController(alertController, animated: true) {
                     // ...
                 }
-                
         } else {
-            
-            
-            //setupFogEvents()
             startFogViewshed()
-
         }
-        
-        
     }
     
     
-    
-    func performFogViewshed(observer: Observer, numberOfQuadrants: Int) {
+    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
         
         print("Starting Fog Viewshed Processing on \(observer.name)...")
         
-        let quadrant = 1
-        
-        let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: quadrant)
+        let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
         
         let obsResults:[[Int]] = obsViewshed.viewshedParallel()
         
@@ -509,7 +513,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         print("\tFinished Viewshed Processing on \(observer.name).")
         self.addOverlay(image, imageLocation: self.hgtCoordinate)
     }
-    
     
     
     func setupFogEvents() {
@@ -527,17 +530,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 if work.assignedTo == Worker.getMe().name {
                     print("Beginning viewshed for \"\(work.whichQuadrant)\" from indecies \(work.numberOfQuadrants)")
+                    self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
                 }
             }
             
             print("Sending results back.")
-            let result = ViewshedWork(numberOfQuadrants: "10", whichQuadrant: "10", viewshedResult: "returnMatrix", assignedTo: Worker.getMe().name, searchInitiator: returnTo)
+            let result = ViewshedWork(numberOfQuadrants: 10, whichQuadrant: 10, viewshedResult: "returnMatrix", observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
             
             ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["searchResult": result])
         }
         
         
         ConnectionManager.onEvent(Event.SendViewshedResult) { peerID, object in
+            print("Received Event.SendViewshedResult")
             var dict = object as! [NSString: NSData]
             let result = ViewshedWork(mpcSerialized: dict["searchResult"]!)
             
@@ -563,53 +568,55 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    
     func startFogViewshed() {
         
         print("Beginning viewshed")
-        
         let numberOfPeers = ConnectionManager.allWorkers.count
         //let totalWorkUnits = MonteCristo.paragraphs.count
-        //let workDivision = totalWorkUnits / numberOfPeers
+        let workDivision = getQuadrant(numberOfPeers)
         
-        //var startBound:Int = 0
+        var count = 0
         var tempArray = [ViewshedWork]()
         
         
         for peer in ConnectionManager.allWorkers {
             self.responsesRecieved[peer.name] = false
             
-            //let lower = startBound == 0 ? 1 : startBound
-            //let upper = startBound + workDivision >= totalWorkUnits ? totalWorkUnits : startBound + workDivision
+            let currentQuadrant = workDivision[count]
+            count++
             
-            let emptyMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
-            
-            let work = ViewshedWork(numberOfQuadrants: "15", whichQuadrant: "15", viewshedResult: "emptyMatrix", assignedTo: peer.name, searchInitiator: Worker.getMe().name)
+            let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: "emptyMatrix", observer: self.singleTestObserver(), assignedTo: peer.name, searchInitiator: Worker.getMe().name)
             
             tempArray.append(work)
-            //            startBound += workDivision + 1
             
             if peer.name == Worker.getMe().name {
-                //let initiatingNodeResults = self.performSearch(work)
                 self.responsesRecieved[Worker.getMe().name] = true
-                //self.searchResultTotal += initiatingNodeResults
-                
-                
-                //            let name = String(arc4random_uniform(10000) + 1)
-                //            let x = Int(arc4random_uniform(700) + 200)
-                //            let y = Int(arc4random_uniform(700) + 200)
-                //            let observer = Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
-                //            self.performFogViewshed(observer, numberOfQuadrants: ConnectionManager.allWorkers.count)
-                
-                
-                
+                self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
                 print("Found results locally out of \(numberOfPeers).")
             }
         }
         
         let workArray = ViewshedWorkArray(array: tempArray)
-        
+        print("Sending Event.StartViewshed")
         ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
+    }
+    
+    
+    private func getQuadrant(numberOfWorkers: Int) -> [Int] {
+        var quadrants:[Int] = []
+
+        if (numberOfWorkers == 1) {
+            quadrants.append(1)
+        } else if (numberOfWorkers == 2) {
+            quadrants.append(1)
+            quadrants.append(2)
+        } else if (numberOfWorkers == 4) {
+            quadrants.append(1)
+            quadrants.append(2)
+            quadrants.append(3)
+            quadrants.append(4)
+        }
+        return quadrants
     }
     
     
@@ -663,7 +670,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // Used to kick-off various test cases/processing
     @IBAction func randomObserver(sender: AnyObject) {
-        //singleRandomObserver()
+        //singleViewshed()
         
         //initiateMetricsGathering()
         

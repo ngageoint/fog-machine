@@ -23,8 +23,18 @@ struct FogViewshed {
     static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
     static let WHICH_QUADRANT = "whichQuadrant"
     static let VIEWSHED_RESULT = "viewshedResult"
+    //static let OBSERVER = "observer"
     static let ASSIGNED_TO = "assignedTo"
     static let SEARCH_INITIATOR = "searchInitiator"
+    
+    static let NAME = "name"
+    static let X = "x"
+    static let Y = "y"
+    static let HEIGHT = "height"
+    static let RADIUS = "radius"
+    static let LATITUDE = "latitude"
+    static let LONGITUDE = "longitude"
+    
 }
 
 //SRTM = Shuttle Radar Topography Mission
