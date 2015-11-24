@@ -37,7 +37,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var hgtElevation:[[Int]]!
     
     var responsesRecieved = Dictionary<String, Bool>()
-    
+    var viewshedResults: [[Int]]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,8 +105,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 print("\tFinished Viewshed Processing on \(observer.name).")
                 
-                let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
                 self.pinObserverLocation(observer)
+                let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
                 self.addOverlay(image, imageLocation: self.hgtCoordinate)
                 
                 dispatch_group_leave(viewshedGroup)
@@ -124,8 +124,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         print("\tFinished Viewshed Processing on \(observer.name).")
         
-        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
         self.pinObserverLocation(observer)
+        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
         self.addOverlay(image, imageLocation: self.hgtCoordinate)
     }
     
@@ -199,6 +199,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         return image
         
+    }
+    
+    
+    func mergeViewshedResults(viewshedOne: [[Int]], viewshedTwo: [[Int]]) -> [[Int]] {
+        var viewshedResult = viewshedOne
+        
+        for (var row = 0; row < viewshedOne.count; row++) {
+            for (var column = 0; column < viewshedOne[row].count; column++) {
+                if (viewshedTwo[row][column] == 1) {
+                    viewshedResult[row][column] = 1
+                }
+            }
+        }
+        
+        return viewshedResult
     }
     
     
@@ -495,12 +510,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     // ...
                 }
         } else {
+            viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             startFogViewshed()
         }
     }
     
     
-    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
+    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
         print("Starting Fog Viewshed Processing on \(observer.name)...")
         
@@ -508,10 +524,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let obsResults:[[Int]] = obsViewshed.viewshedParallel()
         
-        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
-        self.pinObserverLocation(observer)
         print("\tFinished Viewshed Processing on \(observer.name).")
-        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+
+        self.pinObserverLocation(observer)
+        
+        return obsResults
     }
     
     
@@ -522,35 +539,49 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let dict = object as! [String: NSData]
             let workArray = ViewshedWorkArray(mpcSerialized: dict["workArray"]!)
-            var returnTo = ""
+            //var returnTo = ""
             // let returnMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            //var viewshedResults: [[Int]] = []
             
             for work:ViewshedWork in workArray.array {
-                returnTo = work.searchInitiator
+                //returnTo = work.searchInitiator
                 
                 if work.assignedTo == Worker.getMe().name {
-                    print("Beginning viewshed for \"\(work.whichQuadrant)\" from indecies \(work.numberOfQuadrants)")
-                    self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                    print("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
+                    self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                    
+                    print("\tSending results back.")
+                    let result = ViewshedResult(viewshedResult: self.viewshedResults, assignedTo: work.assignedTo, searchInitiator: work.searchInitiator)
+
+                    //ViewshedWork(numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant, viewshedResult: viewshedResults, observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
+             
+                    if (work.searchInitiator != Worker.getMe().name) {
+                        print("\tDisplay result locally on \(work.assignedTo)")
+                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    }
+                    print("\tSending Viewshedresults from \(work.assignedTo)")
+                    ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["viewshedResult": result])
+                    break
                 }
             }
             
-            print("Sending results back.")
-            let result = ViewshedWork(numberOfQuadrants: 10, whichQuadrant: 10, viewshedResult: "returnMatrix", observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
-            
-            ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["searchResult": result])
         }
         
         
         ConnectionManager.onEvent(Event.SendViewshedResult) { peerID, object in
             print("Received Event.SendViewshedResult")
             var dict = object as! [NSString: NSData]
-            let result = ViewshedWork(mpcSerialized: dict["searchResult"]!)
+            let result = ViewshedResult(mpcSerialized: dict["viewshedResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
                 self.responsesRecieved[peerID.displayName] = true
                 // self.searchResultTotal += Int(result.searchResults) ?? 0
-                print("Result recieved from \(peerID.displayName): \(result.whichQuadrant) quadrant.")
+                print("\tResult recieved from \(peerID.displayName).")
                 
+                self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+                
+                print("\tFinished merging results")
                 // check to see if all responses have been recieved
                 var allRecieved = true
                 for (_, didRespond) in self.responsesRecieved {
@@ -559,8 +590,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         break
                     }
                 }
-                
+                print("\tChecked if all reveived")
                 if allRecieved {
+                    print("\tAll received")
+                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    
                     print("Viewshed complete.")
                 }
             }
@@ -584,20 +619,28 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let currentQuadrant = workDivision[count]
             count++
-            
-            let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: "emptyMatrix", observer: self.singleTestObserver(), assignedTo: peer.name, searchInitiator: Worker.getMe().name)
-            
-            tempArray.append(work)
+            let observer = singleTestObserver()
+
             
             if peer.name == Worker.getMe().name {
                 self.responsesRecieved[Worker.getMe().name] = true
-                self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-                print("Found results locally out of \(numberOfPeers).")
+                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant)
+                if (numberOfPeers < 1) {
+                    let image = self.generateViewshedImage(viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                }
+                print("\tFound results locally out of \(numberOfPeers).")
             }
+            
+            let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: viewshedResults, observer: observer, assignedTo: peer.name, searchInitiator: Worker.getMe().name)
+            
+            tempArray.append(work)
+            
         }
         
         let workArray = ViewshedWorkArray(array: tempArray)
-        print("Sending Event.StartViewshed")
+        
+        print("\tSending Event.StartViewshed")
         ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
     }
     
