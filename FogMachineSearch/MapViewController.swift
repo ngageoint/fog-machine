@@ -97,10 +97,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
             print("Starting Parallel Viewshed Processing on \(observer.name).")
-            
-            let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
-            let obsResults:[[Int]] = obsViewshed.viewshed()
-            
+            let optionsObj = Options.sharedInstance
+            var obsResults:[[Int]]!
+            if (optionsObj.viewshedAlgorithmName == 0) {
+                let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
+                obsResults = obsViewshed.viewshed()
+            } else if (optionsObj.viewshedAlgorithmName == 1) {
+                // running Van Kreveld viewshed.
+                let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
+                let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
+                let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
+                obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
+            }
             dispatch_async(dispatch_get_main_queue()) {
                 
                 print("\tFinished Viewshed Processing on \(observer.name).")
@@ -119,15 +127,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let optionsObj = Options.sharedInstance
         
         print("Starting Serial Viewshed Processing on \(observer.name).")
-        //observer.x = 600
-        //observer.y = 600
-        //observer.radius = 200
+
         var obsResults:[[Int]]!
         if (optionsObj.viewshedAlgorithmName == 0) {
             let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
             obsResults = obsViewshed.viewshed()
         } else if (optionsObj.viewshedAlgorithmName == 1) {
-            // testing Kreveld viewshed..
+            // running Van Kreveld viewshed.
             let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
             let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)

@@ -15,12 +15,13 @@ class OptionsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        // setting the default algorithm option is none is selected before
         if (optionsObj.viewshedAlgorithmName == 0 || optionsObj.viewshedAlgorithmName == 1) {
             segmentedControl.selectedSegmentIndex = optionsObj.viewshedAlgorithmName
         } else {
             segmentedControl.selectedSegmentIndex = 0
         }
-        // Do any additional setup after loading the view, typically from a nib.
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -29,12 +30,6 @@ class OptionsViewController: UIViewController {
     
     @IBAction func segmentControlOptionAction(sender: AnyObject) {
         self.optionsObj.viewshedAlgorithmName = segmentedControl.selectedSegmentIndex
-        //if(segmentedControl.selectedSegmentIndex == 0) {
-        //    self.optionsObj.viewshedAlgorithmName = 0
-       // }
-       // else if(segmentedControl.selectedSegmentIndex == 1) {
-       //     self.optionsObj.viewshedAlgorithmName = 2
-       // }
     }
 
     
