@@ -47,8 +47,8 @@ class KreveldViewshedImpl {
             
             let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
             
-            if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
-            } else {
+            //if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
+            //} else {
                 
                 let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 1,
                     dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
@@ -60,7 +60,7 @@ class KreveldViewshedImpl {
                 sweepEventQueue.push(sweepEnterEventList)
                 sweepEventQueue.push(sweepExitEventList)
                 sweepEventQueue.push(sweepCenterEventList)
-            }
+         //   }
         }
 
         var currentTime = getCurrentMillis()

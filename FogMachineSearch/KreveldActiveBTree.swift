@@ -403,7 +403,10 @@ public class KreveldActiveBTree {
             return retValue
         }
         maxSlope = max(maxSlope, maxSlopeOf(x.left))
-        if maxSlope < x.slope {
+        // when the elevations are "0.0" the slope will be "0.0" at this point....
+        // need to return true when the slopes are less than or equal..
+        //if maxSlope < x.slope {
+        if maxSlope <= x.slope {
             retValue = true
         } else {
             retValue = false

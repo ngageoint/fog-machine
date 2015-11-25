@@ -45,7 +45,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         peerStatusLabel.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         mapView.delegate = self
 
-        let hgtFilename = "N40W110"//"N39W075"//"N38W077"
+        let hgtFilename = "N38W077"//"N39W075"//"N38W077"
         metricsOutput = ""
 
         hgt = Hgt(filename: hgtFilename)
@@ -100,12 +100,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let optionsObj = Options.sharedInstance
             var obsResults:[[Int]]!
             if (optionsObj.viewshedAlgorithmName == 0) {
+                observer.radius = optionsObj.radius
                 let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
                 obsResults = obsViewshed.viewshed()
             } else if (optionsObj.viewshedAlgorithmName == 1) {
                 // running Van Kreveld viewshed.
                 let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
                 let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
+                observer.radius = optionsObj.radius
                 let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
                 obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
             }
@@ -130,12 +132,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         var obsResults:[[Int]]!
         if (optionsObj.viewshedAlgorithmName == 0) {
+            observer.radius = optionsObj.radius
             let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
             obsResults = obsViewshed.viewshed()
         } else if (optionsObj.viewshedAlgorithmName == 1) {
             // running Van Kreveld viewshed.
             let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
             let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
+            observer.radius = optionsObj.radius
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
             obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
         }

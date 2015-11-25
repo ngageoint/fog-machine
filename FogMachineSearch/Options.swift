@@ -10,7 +10,8 @@ import Foundation
 
 class Options {
     
-    var viewshedAlgorithmName: Int = 1
+    var viewshedAlgorithmName: Int = 0
+    var radius: Int = 100
     
     class var sharedInstance: Options {
         struct Static {
