@@ -45,7 +45,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         peerStatusLabel.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         mapView.delegate = self
 
-        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
+        let hgtFilename = "N40W110"//"N39W075"//"N38W077"
         metricsOutput = ""
 
         hgt = Hgt(filename: hgtFilename)
@@ -118,9 +118,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func performSerialViewshed(observer: Observer) {
         
         print("Starting Serial Viewshed Processing on \(observer.name).")
+        //observer.x = 600
+        //observer.y = 600
+        //observer.radius = 200
         
-        let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
-        let obsResults:[[Int]] = obsViewshed.viewshed()
+//        let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
+//        let obsResults:[[Int]] = obsViewshed.viewshed()
+
+        // testing Kreveld viewshed..
+        let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
+        let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
+        let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
+        let obsResults:[[Int]] = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
+
         
         print("\tFinished Viewshed Processing on \(observer.name).")
         

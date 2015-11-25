@@ -47,7 +47,7 @@ class Hgt: NSObject {
         var column = 0
         for (var cell = 0; cell < data.length; cell+=1) {
             elevationMatrix[row][column] = Int(elevation[cell].bigEndian)
-            
+            //print(elevationMatrix[row][column])
             column++
             
             if column >= Srtm3.MAX_SIZE {
@@ -58,6 +58,7 @@ class Hgt: NSObject {
             if row >= Srtm3.MAX_SIZE {
                 break
             }
+            
         }
         
         return elevationMatrix
