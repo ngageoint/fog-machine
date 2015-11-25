@@ -28,7 +28,7 @@ class KreveldViewshedImpl {
         let observerPtHeight: ElevationPoint = demData.getHeightedPoint(observPt.getXCoor(), yTemp: observPt.getYCoor())
         observPt.height = observerPtHeight.height
         
-        let demDataMatrix: [[Double]] = demData.getDem2DMatrix()
+        let demDataMatrix: [[Int]] = demData.getDem2DMatrix()
         let kreveldActive: KreveldActiveBTree = KreveldActiveBTree(reference: observPt)
 
         // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
@@ -42,7 +42,7 @@ class KreveldViewshedImpl {
         for (x, y) in cellsInRadius {
             dataCounter++
             //print("x: \(x)\t\ty: \(y)\t\t\(demDataMatrix[x][y])")
-            let elevationAtXandY:Double = demDataMatrix[x][y]
+            let elevationAtXandY:Double = Double(demDataMatrix[x][y])
             
             let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
             
