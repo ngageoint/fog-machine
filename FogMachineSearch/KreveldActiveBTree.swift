@@ -296,7 +296,6 @@ public class KreveldActiveBTree {
                     }
                 }
             }
-            
             if p.parent == nil {
                 root = l
             } else if p.parent.right === p {
@@ -379,6 +378,7 @@ public class KreveldActiveBTree {
         setFlag(xx, c: FLAG_TRUE)
     }
     
+    // check the visibility of this cell to the observer
     public func isVisible(let pt: ElevationPoint) -> Bool {
         let key: Double = reference.calcDistance(pt)
         var p: StatusEntry! = nil

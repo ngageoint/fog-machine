@@ -42,6 +42,7 @@ class KreveldViewshedImpl {
         for (x, y) in cellsInRadius {
             dataCounter++
             //print("x: \(x)\t\ty: \(y)\t\t\(demDataMatrix[x][y])")
+            // handle everything in Double .. atleast for now
             let elevationAtXandY:Double = Double(demDataMatrix[x][y])
             
             let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
