@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
@@ -386,6 +386,51 @@
             </objects>
             <point key="canvasLocation" x="1610" y="453"/>
         </scene>
+        <!--Options View Controller-->
+        <scene sceneID="SnO-hu-vL6">
+            <objects>
+                <viewController id="cxO-4m-Wpk" customClass="OptionsViewController" customModule="FogMachineSearch" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cSI-FH-0DG"/>
+                        <viewControllerLayoutGuide type="bottom" id="uz0-be-zyw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="a35-qc-Fwt">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dTa-uM-bU4">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <items>
+                                    <navigationItem title="Viewshed Algorithm Options" id="MxA-Dw-kN6"/>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Viewshed Algorithm Options" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FdC-hb-VE9">
+                                <rect key="frame" x="7" y="77" width="218" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SiU-Qf-14c">
+                                <rect key="frame" x="228" y="74" width="167" height="29"/>
+                                <segments>
+                                    <segment title="Bresenham"/>
+                                    <segment title="VanKreveld"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentControlOptionAction:" destination="cxO-4m-Wpk" eventType="valueChanged" id="vp9-wA-Ipn"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="segmentedControl" destination="SiU-Qf-14c" id="xfW-Qt-bpv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1w4-qg-jsM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1649" y="1164"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -555,7 +600,11 @@
                                 <action selector="mapTypeChanged:" destination="pEj-gH-Hgf" eventType="valueChanged" id="Po3-cI-n25"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" systemItem="organize" id="zR3-sj-Rfp"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="organize" id="zR3-sj-Rfp">
+                            <connections>
+                                <segue destination="cxO-4m-Wpk" kind="show" id="ohZ-UT-cnI"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="mapTypeSelector" destination="nzQ-pP-oJH" id="d2m-9C-YpP"/>

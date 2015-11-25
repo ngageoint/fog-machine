@@ -70,9 +70,9 @@ public class DEMData  {
     }
     
     public  func getHeightedPoint(p: POINT) ->ElevationPoint {
-        let xTemp1: Int = p.getXCoor()
-        let yTemp1: Int = p.getYCoor()
-        let elevPoint :ElevationPoint =  self.getHeightedPoint(xTemp1, yTemp: yTemp1)
+        let xTemp: Int = p.getXCoor()
+        let yTemp: Int = p.getYCoor()
+        let elevPoint :ElevationPoint =  self.getHeightedPoint(xTemp, yTemp: yTemp)
         return elevPoint
     }
 

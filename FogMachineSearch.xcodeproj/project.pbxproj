@@ -27,11 +27,12 @@
 		9BD5C0FC1C05E51E004A37B6 /* KreveldViewshedImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F21C05E51E004A37B6 /* KreveldViewshedImpl.swift */; };
 		9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */; };
 		9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */; };
-		9BD5C0FF1C05E51E004A37B6 /* KreveldActiveStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F51C05E51E004A37B6 /* KreveldActiveStructure.swift */; };
 		9BD5C1001C05E51E004A37B6 /* POINT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F61C05E51E004A37B6 /* POINT.swift */; };
 		9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */; };
-		9BD5C1021C05E51E004A37B6 /* StreamScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F91C05E51E004A37B6 /* StreamScanner.swift */; };
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
+		9BD5C1061C05ECF3004A37B6 /* N40W110.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */; };
+		9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */; };
+		9BD5C10A1C060FDC004A37B6 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1091C060FDC004A37B6 /* Options.swift */; };
 		B4D468E8AD4BB93521EAC726 /* Pods_FogMachineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5569D2DBACE92A58C5690A78 /* Pods_FogMachineSearch.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
@@ -82,12 +83,12 @@
 		9BD5C0F21C05E51E004A37B6 /* KreveldViewshedImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldViewshedImpl.swift; sourceTree = "<group>"; };
 		9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationPoint.swift; sourceTree = "<group>"; };
 		9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldActiveBTree.swift; sourceTree = "<group>"; };
-		9BD5C0F51C05E51E004A37B6 /* KreveldActiveStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldActiveStructure.swift; sourceTree = "<group>"; };
 		9BD5C0F61C05E51E004A37B6 /* POINT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POINT.swift; sourceTree = "<group>"; };
-		9BD5C0F71C05E51E004A37B6 /* StreamScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamScanner.h; sourceTree = "<group>"; };
 		9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftPriorityQueue.swift; sourceTree = "<group>"; };
-		9BD5C0F91C05E51E004A37B6 /* StreamScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamScanner.swift; sourceTree = "<group>"; };
 		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
+		9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W110.hgt; path = HGT/N40W110.hgt; sourceTree = "<group>"; };
+		9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
+		9BD5C1091C060FDC004A37B6 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -173,6 +174,8 @@
 				E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */,
 				E314F6BE1B79023D005B75C6 /* Supporting Files */,
 				753D3D751BF65A60004E3589 /* Constants.swift */,
+				9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */,
+				9BD5C1091C060FDC004A37B6 /* Options.swift */,
 			);
 			path = FogMachineSearch;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 		E3B933E21B7BD0F9007B9444 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */,
 				753D3D731BF6374E004E3589 /* N39W075.hgt */,
 				753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */,
 				E3B933E31B7BD106007B9444 /* MonteCristo.swift */,
@@ -230,11 +234,8 @@
 				9BD5C0F21C05E51E004A37B6 /* KreveldViewshedImpl.swift */,
 				9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */,
 				9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */,
-				9BD5C0F51C05E51E004A37B6 /* KreveldActiveStructure.swift */,
 				9BD5C0F61C05E51E004A37B6 /* POINT.swift */,
-				9BD5C0F71C05E51E004A37B6 /* StreamScanner.h */,
 				9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */,
-				9BD5C0F91C05E51E004A37B6 /* StreamScanner.swift */,
 				E3CB97F81B7975EA006D6961 /* Worker.swift */,
 				E386DD501B7C34DB00FA8827 /* SearchWork.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
@@ -359,6 +360,7 @@
 				753D3D741BF6374E004E3589 /* N39W075.hgt in Resources */,
 				753D3D6A1BEBA59E004E3589 /* HGT in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
+				9BD5C1061C05ECF3004A37B6 /* N40W110.hgt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,10 +438,10 @@
 				9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */,
 				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
-				9BD5C0FF1C05E51E004A37B6 /* KreveldActiveStructure.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
+				9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */,
 				753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */,
 				E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */,
 				E314F6E51B790275005B75C6 /* ConnectionManager.swift in Sources */,
@@ -452,8 +454,8 @@
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
+				9BD5C10A1C060FDC004A37B6 /* Options.swift in Sources */,
 				9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */,
-				9BD5C1021C05E51E004A37B6 /* StreamScanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

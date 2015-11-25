@@ -116,21 +116,23 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func performSerialViewshed(observer: Observer) {
+        let optionsObj = Options.sharedInstance
         
         print("Starting Serial Viewshed Processing on \(observer.name).")
         //observer.x = 600
         //observer.y = 600
         //observer.radius = 200
-        
-//        let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
-//        let obsResults:[[Int]] = obsViewshed.viewshed()
-
-        // testing Kreveld viewshed..
-        let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
-        let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
-        let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
-        let obsResults:[[Int]] = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
-
+        var obsResults:[[Int]]!
+        if (optionsObj.viewshedAlgorithmName == 0) {
+            let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
+            obsResults = obsViewshed.viewshed()
+        } else if (optionsObj.viewshedAlgorithmName == 1) {
+            // testing Kreveld viewshed..
+            let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
+            let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
+            let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
+            obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
+        }
         
         print("\tFinished Viewshed Processing on \(observer.name).")
         
