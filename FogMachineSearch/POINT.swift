@@ -36,16 +36,5 @@ public class POINT: NSObject {
         let distY: Double = Double (self.getYCoor() - to.getYCoor())
         return sqrt((distX*distX) + (distY*distY))
     }
-    
-    // Calculates the direction to the other point in a 2D plane.
-    // to Other point
-    // return A value <tt>g</tt> such that <tt>dx * g = dy</tt>
-    public func calcGradientTemp (to:POINT) -> Double {
-        let distX: Double = Double (to.getXCoor() - self.getXCoor())
-        let distY: Double = Double (to.getYCoor() - self.getYCoor())
-        let result: Double = Double (Double (distY)/Double(distX))
-        return result
-    }
-    
-    
+   
 }

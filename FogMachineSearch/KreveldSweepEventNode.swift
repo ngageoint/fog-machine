@@ -73,12 +73,15 @@ func < <T>(lhs: KreveldSweepEventNode<T>, rhs: KreveldSweepEventNode<T>) -> Bool
 
 func == <T>(lhs: KreveldSweepEventNode<T>, rhs: KreveldSweepEventNode<T>) -> Bool {
     // TODO Commenting to see if this improves the performace..
+    // stopped comparing the entire object to conserve time!
+    // if the angles are equal compare the entire object
     if lhs.angle == rhs.angle {
-        return true
+        if (lhs === rhs) {
+            return true
+        } else {
+            return false
+        }
     }
     return false
-    // stopped comparing the entire object to conserve time!
-    //return lhs === rhs
-     //return false
 }
 
