@@ -18,10 +18,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
 
-    @IBOutlet weak var peerStatusLabel: UILabel!
-    @IBOutlet weak var serialLabel: UILabel!
-    @IBOutlet weak var parallelLabel: UILabel!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
+    @IBOutlet weak var logBox: UITextView!
     
     
     // MARK: Class Variables
@@ -37,16 +35,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var hgtElevation:[[Int]]!
     
     var responsesRecieved = Dictionary<String, Bool>()
-    
+    var viewshedResults: [[Int]]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        peerStatusLabel.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         mapView.delegate = self
 
-        let hgtFilename = "N38W077"//"N39W075"//"N38W077"
+        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
         metricsOutput = ""
+        
+        logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
+        logBox.editable = false
 
         hgt = Hgt(filename: hgtFilename)
         hgtCoordinate = hgt.getCoordinate()
@@ -85,29 +85,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func singleViewshed() {
-        self.performSerialViewshed(singleRandomObserver())
+    func singleViewshed(algorithm: ViewshedAlgorithm) {
+        self.performSerialViewshed(singleRandomObserver(), algorithm: algorithm)
     }
     
     
-    func performParallelViewshed(observer: Observer, viewshedGroup: dispatch_group_t) {
+    func performParallelViewshed(observer: Observer, algorithm: ViewshedAlgorithm, viewshedGroup: dispatch_group_t) {
         
         dispatch_group_enter(viewshedGroup)
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
             print("Starting Parallel Viewshed Processing on \(observer.name).")
-            let optionsObj = Options.sharedInstance
             var obsResults:[[Int]]!
-            if (optionsObj.viewshedAlgorithmName == 0) {
-                observer.radius = optionsObj.radius
+            if (algorithm == ViewshedAlgorithm.FranklinRay) {
                 let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
                 obsResults = obsViewshed.viewshed()
-            } else if (optionsObj.viewshedAlgorithmName == 1) {
+            } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
                 // running Van Kreveld viewshed.
-                let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
-                let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
-                observer.radius = optionsObj.radius
+                let kreveld: KreveldViewshed = KreveldViewshed()
+                let demObj: DemData = DemData(demMatrix: self.hgtElevation)
                 let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
                 obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
             }
@@ -115,8 +112,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 print("\tFinished Viewshed Processing on \(observer.name).")
                 
-                let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
                 self.pinObserverLocation(observer)
+                let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
                 self.addOverlay(image, imageLocation: self.hgtCoordinate)
                 
                 dispatch_group_leave(viewshedGroup)
@@ -125,29 +122,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func performSerialViewshed(observer: Observer) {
-        let optionsObj = Options.sharedInstance
+    func performSerialViewshed(observer: Observer, algorithm: ViewshedAlgorithm) {
         
         print("Starting Serial Viewshed Processing on \(observer.name).")
 
         var obsResults:[[Int]]!
-        if (optionsObj.viewshedAlgorithmName == 0) {
-            observer.radius = optionsObj.radius
+        if (algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
             obsResults = obsViewshed.viewshed()
-        } else if (optionsObj.viewshedAlgorithmName == 1) {
-            // running Van Kreveld viewshed.
-            let kreveld: KreveldViewshedImpl = KreveldViewshedImpl()
-            let demObj: DEMData = DEMData(demMatrix: self.hgtElevation)
-            observer.radius = optionsObj.radius
+        } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
+            let kreveld: KreveldViewshed = KreveldViewshed()
+            let demObj: DemData = DemData(demMatrix: self.hgtElevation)
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
             obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
         }
         
         print("\tFinished Viewshed Processing on \(observer.name).")
         
-        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
         self.pinObserverLocation(observer)
+        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
         self.addOverlay(image, imageLocation: self.hgtCoordinate)
     }
     
@@ -221,6 +214,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         return image
         
+    }
+    
+    
+    func mergeViewshedResults(viewshedOne: [[Int]], viewshedTwo: [[Int]]) -> [[Int]] {
+        var viewshedResult = viewshedOne
+        
+        for (var row = 0; row < viewshedOne.count; row++) {
+            for (var column = 0; column < viewshedOne[row].count; column++) {
+                if (viewshedTwo[row][column] == 1) {
+                    viewshedResult[row][column] = 1
+                }
+            }
+        }
+        
+        return viewshedResult
     }
     
     
@@ -330,7 +338,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func stopParallelTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
         elapsedParallelTime = CFAbsoluteTimeGetCurrent() - startParallelTime
-        parallelLabel.text = String(format: "%.6f", elapsedParallelTime)
+        self.printOut("Parallel Time: " + String(format: "%.6f", elapsedParallelTime))
         //let elapsedTime = mach_absolute_time() - startParallelTimer
         //parallelLabel.text = String(elapsedTime)
         if toPrint {
@@ -347,7 +355,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func stopSerialTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
         elapsedSerialTime = CFAbsoluteTimeGetCurrent() - startSerialTime
-        serialLabel.text = String(format: "%.6f", elapsedSerialTime)
+        self.printOut("Serial Time: " + String(format: "%.6f", elapsedSerialTime))
         if toPrint {
             log("Observer \(observer):\t\(elapsedSerialTime)")
         }
@@ -356,8 +364,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     
     func clearTimer() {
-        parallelLabel.text = "0"
-        serialLabel.text = "0"
         startParallelTime = 0
         startSerialTime = 0
         elapsedParallelTime = 0
@@ -375,8 +381,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     func printOut(output: String) {
         //Can easily change this to print out to a file without modifying the rest of the code.
-        //print(output)
-        metricsOutput = metricsOutput + "\n" + output
+        print(output)
+        //metricsOutput = metricsOutput + "\n" + output
+        logBox.text = logBox.text + "\n" + output
     }
     
     
@@ -439,6 +446,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var y:Int
         var height:Int
         var radius:Int
+        let options = Options.sharedInstance
         
         self.printOut("Metrics Started for \(numObservers) observer(s).")
         if randomData {
@@ -461,7 +469,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 x = count * 74
                 y = count * 74
                 height = count + 5
-                radius = count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
+                radius = options.radius//count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
             }
             
             let observer = Observer(name: name, x: x, y: y, height: height, radius: radius, coordinate: self.hgtCoordinate)
@@ -474,7 +482,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         self.startSerialTimer()
         for obs in observers {
-            self.performSerialViewshed(obs)
+            self.performSerialViewshed(obs, algorithm: options.viewshedAlgorithm)
         }
         self.stopSerialTimer()
         self.removeAllFromMap()
@@ -484,7 +492,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         self.startParallelTimer()
         for obsP in observers {
-            self.performParallelViewshed(obsP, viewshedGroup: viewshedGroup)
+            self.performParallelViewshed(obsP, algorithm: options.viewshedAlgorithm, viewshedGroup: viewshedGroup)
         }
         
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
@@ -502,10 +510,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func initiateFogViewshed() {
-        
-        if (ConnectionManager.allWorkers.count != 1 &&
-            ConnectionManager.allWorkers.count != 2 &&
-            ConnectionManager.allWorkers.count != 4) {
+
+        // Check does nothing, is there in case it is needed once the Fog device requirements are specified.
+        if (ConnectionManager.allWorkers.count < 0) {
                 let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
                 let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
                 
@@ -517,62 +524,89 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     // ...
                 }
         } else {
+            viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            logBox.text = ""
             startFogViewshed()
         }
     }
     
     
-    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
+    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
-        print("Starting Fog Viewshed Processing on \(observer.name)...")
+        printOut("Starting Fog Viewshed Processing on \(observer.name)...")
         
         let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
         
         let obsResults:[[Int]] = obsViewshed.viewshedParallel()
         
-        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
+        printOut("\tFinished Viewshed Processing on \(observer.name).")
+
         self.pinObserverLocation(observer)
-        print("\tFinished Viewshed Processing on \(observer.name).")
-        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+        
+        return obsResults
     }
     
     
     func setupFogEvents() {
         
         ConnectionManager.onEvent(Event.StartViewshed){ peerID, object in
-            print("Recieved request to initiate a viewshed from \(peerID.displayName)")
+            self.printOut("Recieved request to initiate a viewshed from \(peerID.displayName)")
             
             let dict = object as! [String: NSData]
             let workArray = ViewshedWorkArray(mpcSerialized: dict["workArray"]!)
-            var returnTo = ""
+            //var returnTo = ""
             // let returnMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            //var viewshedResults: [[Int]] = []
             
             for work:ViewshedWork in workArray.array {
-                returnTo = work.searchInitiator
+                //returnTo = work.searchInitiator
                 
                 if work.assignedTo == Worker.getMe().name {
-                    print("Beginning viewshed for \"\(work.whichQuadrant)\" from indecies \(work.numberOfQuadrants)")
-                    self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                    self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
+                    self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                    
+                    self.printOut("\tSending results back.")
+                    
+                    
+                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    
+                    let result = ViewshedResult(viewshedResult: image,//self.viewshedResults,
+                        assignedTo: work.assignedTo, searchInitiator: work.searchInitiator)
+
+                    //ViewshedWork(numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant, viewshedResult: viewshedResults, observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
+             
+                    if (work.searchInitiator != Worker.getMe().name) {
+                        self.printOut("\tDisplay result locally on \(work.assignedTo)")
+                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    }
+                    self.printOut("\tSending Event.SendViewshedResults from \(work.assignedTo)")
+                    ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["viewshedResult": result])
+                    
+                    break
                 }
             }
             
-            print("Sending results back.")
-            let result = ViewshedWork(numberOfQuadrants: 10, whichQuadrant: 10, viewshedResult: "returnMatrix", observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
-            
-            ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["searchResult": result])
         }
         
         
         ConnectionManager.onEvent(Event.SendViewshedResult) { peerID, object in
-            print("Received Event.SendViewshedResult")
+            self.printOut("Received Event.SendViewshedResult")
             var dict = object as! [NSString: NSData]
-            let result = ViewshedWork(mpcSerialized: dict["searchResult"]!)
+            let result = ViewshedResult(mpcSerialized: dict["viewshedResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
                 self.responsesRecieved[peerID.displayName] = true
                 // self.searchResultTotal += Int(result.searchResults) ?? 0
-                print("Result recieved from \(peerID.displayName): \(result.whichQuadrant) quadrant.")
+                self.printOut("\tResult recieved from \(peerID.displayName).")
                 
+               // self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+                
+                self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
+                
+                
+                self.printOut("\tFinished merging results")
                 // check to see if all responses have been recieved
                 var allRecieved = true
                 for (_, didRespond) in self.responsesRecieved {
@@ -581,9 +615,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         break
                     }
                 }
-                
+                self.printOut("\tChecked if all received")
                 if allRecieved {
-                    print("Viewshed complete.")
+                    print("\tAll received")
+                    
+                    //let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    //self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    
+                    self.printOut("Viewshed complete.")
                 }
             }
         }
@@ -592,7 +631,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func startFogViewshed() {
         
-        print("Beginning viewshed")
+        printOut("Beginning viewshed")
         let numberOfPeers = ConnectionManager.allWorkers.count
         //let totalWorkUnits = MonteCristo.paragraphs.count
         let workDivision = getQuadrant(numberOfPeers)
@@ -606,38 +645,42 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let currentQuadrant = workDivision[count]
             count++
+            let observer = singleTestObserver()
+
             
-            let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: "emptyMatrix", observer: self.singleTestObserver(), assignedTo: peer.name, searchInitiator: Worker.getMe().name)
+            if peer.name == Worker.getMe().name {
+                self.printOut("\tBeginning viewshed locally for \(currentQuadrant) from \(numberOfPeers)")
+                
+                self.responsesRecieved[Worker.getMe().name] = true
+                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant)
+                //if (numberOfPeers < 2) {
+                    let image = self.generateViewshedImage(viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+               // }
+                printOut("\tFound results locally out of \(numberOfPeers).")
+            }
+            
+            let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: viewshedResults, observer: observer, assignedTo: peer.name, searchInitiator: Worker.getMe().name)
             
             tempArray.append(work)
             
-            if peer.name == Worker.getMe().name {
-                self.responsesRecieved[Worker.getMe().name] = true
-                self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-                print("Found results locally out of \(numberOfPeers).")
-            }
         }
         
         let workArray = ViewshedWorkArray(array: tempArray)
-        print("Sending Event.StartViewshed")
+        
+        printOut("\tSending Event.StartViewshed")
         ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
+
     }
-    
-    
+
+
     private func getQuadrant(numberOfWorkers: Int) -> [Int] {
         var quadrants:[Int] = []
 
-        if (numberOfWorkers == 1) {
-            quadrants.append(1)
-        } else if (numberOfWorkers == 2) {
-            quadrants.append(1)
-            quadrants.append(2)
-        } else if (numberOfWorkers == 4) {
-            quadrants.append(1)
-            quadrants.append(2)
-            quadrants.append(3)
-            quadrants.append(4)
+        for var count = 0; count < numberOfWorkers; count++ {
+            quadrants.append(count + 1)
         }
+
         return quadrants
     }
     
@@ -661,14 +704,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func startParallel(sender: AnyObject) {
         
         let viewshedGroup = dispatch_group_create()
+        let options = Options.sharedInstance
         self.startParallelTimer()
         //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
         // let count = Int(index + 1)
         for count in 1...8 {
             
-            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
             
-            self.performParallelViewshed(observer, viewshedGroup: viewshedGroup)
+            self.performParallelViewshed(observer, algorithm: options.viewshedAlgorithm, viewshedGroup: viewshedGroup)
         }
 
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
@@ -678,11 +722,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     @IBAction func startSerial(sender: AnyObject) {
+        
+        let options = Options.sharedInstance
         self.startSerialTimer()
         
         for count in 1...8 {
-            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: 100, coordinate: self.hgtCoordinate)
-            self.performSerialViewshed(observer)
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
+            self.performSerialViewshed(observer, algorithm: options.viewshedAlgorithm)
             
         }
         
@@ -705,6 +751,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         clearTimer()
         removeAllFromMap()
         self.centerMapOnLocation(self.hgt.getCenterLocation())
+        self.logBox.text = ""
     }
     
 

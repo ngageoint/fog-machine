@@ -7,7 +7,7 @@
 //
 import Foundation
 
-public class ElevationPoint: POINT {
+public class ElevationPoint: Point {
     
     var height: Double = 0;
    
@@ -31,7 +31,7 @@ public class ElevationPoint: POINT {
         return self.height;
     }
     
-    public func equalsPosition (p: POINT) -> Bool {
+    public func equalsPosition (p: Point) -> Bool {
         if (p.getXCoor() == self.getXCoor() &&  p.getYCoor() == self.getYCoor()) {
             return true
         } else {

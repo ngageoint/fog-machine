@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class POINT: NSObject {
+public class Point: NSObject {
     
     var xCoor: Int = 0
     var yCoor: Int = 0
@@ -30,7 +30,7 @@ public class POINT: NSObject {
     //Calculates the euclidean distance (distance between two points in Euclidean space) to another point in 2D space.
     //to Other point
     // return Distance between this point and <tt>to</tt>
-    public func calcDistance(to:POINT) -> Double {
+    public func calcDistance(to:Point) -> Double {
         // distance between this (observer) point and the "to point"
         let distX: Double = Double (self.getXCoor() - to.getXCoor())
         let distY: Double = Double (self.getYCoor() - to.getYCoor())

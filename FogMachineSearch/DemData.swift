@@ -1,5 +1,5 @@
 //
-//  DEMData.swift
+//  DemData.swift
 //  Viewshed
 //
 //  Created by Ram Subramaniam on 11/12/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class DEMData  {
+public class DemData  {
     
     private var ncols: Int = 0
     private var nrows: Int = 0
@@ -69,7 +69,7 @@ public class DEMData  {
         return elevPoint
     }
     
-    public  func getHeightedPoint(p: POINT) ->ElevationPoint {
+    public  func getHeightedPoint(p: Point) ->ElevationPoint {
         let xTemp: Int = p.getXCoor()
         let yTemp: Int = p.getYCoor()
         let elevPoint :ElevationPoint =  self.getHeightedPoint(xTemp, yTemp: yTemp)

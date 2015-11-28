@@ -20,8 +20,8 @@ class OptionsViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         // setting the default algorithm option is none is selected before
-        if (optionsObj.viewshedAlgorithmName == 0 || optionsObj.viewshedAlgorithmName == 1) {
-            segmentedControl.selectedSegmentIndex = optionsObj.viewshedAlgorithmName
+        if (optionsObj.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay || optionsObj.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
+            segmentedControl.selectedSegmentIndex = optionsObj.viewshedAlgorithm.rawValue
         } else {
             segmentedControl.selectedSegmentIndex = 0
         }
@@ -41,7 +41,7 @@ class OptionsViewController: UIViewController {
         self.optionsObj.radius = Int(stepperControl.value)
     }
     @IBAction func segmentControlOptionAction(sender: AnyObject) {
-        self.optionsObj.viewshedAlgorithmName = segmentedControl.selectedSegmentIndex
+        self.optionsObj.viewshedAlgorithm = ViewshedAlgorithm(rawValue: segmentedControl.selectedSegmentIndex)!
     }
 
     

@@ -1,5 +1,5 @@
 //
-//  KreveldViewshedImpl.swift
+//  KreveldViewshed.swift
 //  Viewshed
 //
 //  Created by Ram Subramaniam on 11/11/15.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-class KreveldViewshedImpl {
+class KreveldViewshed {
 
-    func calculateViewshed (demData: DEMData, observPt: ElevationPoint, radius: Int) ->[[Int]] {
+    func calculateViewshed (demData: DemData, observPt: ElevationPoint, radius: Int) ->[[Int]] {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
         
         let startTime: Int64 = getCurrentMillis()
@@ -135,7 +135,7 @@ class KreveldViewshedImpl {
     
     // Viewpoint starting point , point of observation
     // return All points that lie to the right of the starting point and have the same y-coordinate
-    func pointsOnLine(d: DEMData, viewpoint: ElevationPoint) -> [ElevationPoint] {
+    func pointsOnLine(d: DemData, viewpoint: ElevationPoint) -> [ElevationPoint] {
         let xCoor: Int = viewpoint.getXCoor()
         let maxXcoor: Int = d.getNcols() - 1
         

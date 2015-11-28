@@ -13,7 +13,7 @@ class ViewshedWork: MPCSerializable {
     
     let numberOfQuadrants: Int
     let whichQuadrant: Int
-    let viewshedResult: String
+    let viewshedResult: [[Int]]
     //let observer: Observer
     let assignedTo: String
     let searchInitiator: String
@@ -62,7 +62,7 @@ class ViewshedWork: MPCSerializable {
 //        self.longitude = longitude
 //    }
     
-    init (numberOfQuadrants: Int, whichQuadrant: Int, viewshedResult: String, observer: Observer, assignedTo: String, searchInitiator: String) {
+    init (numberOfQuadrants: Int, whichQuadrant: Int, viewshedResult: [[Int]], observer: Observer, assignedTo: String, searchInitiator: String) {
         self.numberOfQuadrants = numberOfQuadrants
         self.whichQuadrant = whichQuadrant
         self.viewshedResult = viewshedResult
@@ -88,7 +88,7 @@ class ViewshedWork: MPCSerializable {
         let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
         numberOfQuadrants = dict[FogViewshed.NUMBER_OF_QUADRANTS] as! Int
         whichQuadrant = dict[FogViewshed.WHICH_QUADRANT] as! Int
-        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! String
+        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! [[Int]]
         //observer = NSKeyedUnarchiver.unarchiveObjectWithData(dict[FogViewshed.OBSERVER] as! NSData) as! Observer
         assignedTo = dict[FogViewshed.ASSIGNED_TO] as! String
         searchInitiator = dict[FogViewshed.SEARCH_INITIATOR] as! String

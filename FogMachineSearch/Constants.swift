@@ -60,3 +60,8 @@ enum Event: String {
     StartViewshed = "StartViewshed",
     SendViewshedResult = "SendViewshedResult"
 }
+
+enum ViewshedAlgorithm: Int {
+    case FranklinRay = 0
+    case VanKreveld = 1
+}

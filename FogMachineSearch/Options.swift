@@ -10,7 +10,7 @@ import Foundation
 
 class Options {
     
-    var viewshedAlgorithmName: Int = 0
+    var viewshedAlgorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay
     var radius: Int = 100
     
     class var sharedInstance: Options {
