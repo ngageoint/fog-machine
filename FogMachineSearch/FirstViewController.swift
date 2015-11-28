@@ -19,7 +19,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         refreshControl.addTarget(self, action: "findPeers:", forControlEvents: UIControlEvents.ValueChanged)
         
         return refreshControl
-        }()
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()

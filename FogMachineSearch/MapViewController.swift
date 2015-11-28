@@ -18,10 +18,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
 
-    @IBOutlet weak var peerStatusLabel: UILabel!
-    @IBOutlet weak var serialLabel: UILabel!
-    @IBOutlet weak var parallelLabel: UILabel!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
+    @IBOutlet weak var logBox: UITextView!
     
     
     // MARK: Class Variables
@@ -42,11 +40,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        peerStatusLabel.text = "Connected to \(ConnectionManager.otherWorkers.count) peers"
         mapView.delegate = self
 
+        
         let hgtFilename = "N39W075"//"N39W075"//"N38W077"
         metricsOutput = ""
+        
+        logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
+        logBox.editable = false
 
         hgt = Hgt(filename: hgtFilename)
         hgtCoordinate = hgt.getCoordinate()
@@ -323,7 +324,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func stopParallelTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
         elapsedParallelTime = CFAbsoluteTimeGetCurrent() - startParallelTime
-        parallelLabel.text = String(format: "%.6f", elapsedParallelTime)
+        self.printOut("Parallel Time: " + String(format: "%.6f", elapsedParallelTime))
         //let elapsedTime = mach_absolute_time() - startParallelTimer
         //parallelLabel.text = String(elapsedTime)
         if toPrint {
@@ -340,7 +341,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func stopSerialTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
         elapsedSerialTime = CFAbsoluteTimeGetCurrent() - startSerialTime
-        serialLabel.text = String(format: "%.6f", elapsedSerialTime)
+        self.printOut("Serial Time: " + String(format: "%.6f", elapsedSerialTime))
         if toPrint {
             log("Observer \(observer):\t\(elapsedSerialTime)")
         }
@@ -349,8 +350,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     
     func clearTimer() {
-        parallelLabel.text = "0"
-        serialLabel.text = "0"
         startParallelTime = 0
         startSerialTime = 0
         elapsedParallelTime = 0
@@ -368,8 +367,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     func printOut(output: String) {
         //Can easily change this to print out to a file without modifying the rest of the code.
-        //print(output)
-        metricsOutput = metricsOutput + "\n" + output
+        print(output)
+        //metricsOutput = metricsOutput + "\n" + output
+        logBox.text = logBox.text + "\n" + output
     }
     
     
@@ -495,10 +495,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func initiateFogViewshed() {
-        
-        if (ConnectionManager.allWorkers.count != 1 &&
-            ConnectionManager.allWorkers.count != 2 &&
-            ConnectionManager.allWorkers.count != 4) {
+
+        // Check does nothing, is there in case it is needed once the Fog device requirements are specified.
+        if (ConnectionManager.allWorkers.count < 0) {
                 let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
                 let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
                 
@@ -511,6 +510,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 }
         } else {
             viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            logBox.text = ""
             startFogViewshed()
         }
     }
@@ -518,13 +518,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
-        print("Starting Fog Viewshed Processing on \(observer.name)...")
+        printOut("Starting Fog Viewshed Processing on \(observer.name)...")
         
         let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
         
         let obsResults:[[Int]] = obsViewshed.viewshedParallel()
         
-        print("\tFinished Viewshed Processing on \(observer.name).")
+        printOut("\tFinished Viewshed Processing on \(observer.name).")
 
         self.pinObserverLocation(observer)
         
@@ -535,7 +535,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func setupFogEvents() {
         
         ConnectionManager.onEvent(Event.StartViewshed){ peerID, object in
-            print("Recieved request to initiate a viewshed from \(peerID.displayName)")
+            self.printOut("Recieved request to initiate a viewshed from \(peerID.displayName)")
             
             let dict = object as! [String: NSData]
             let workArray = ViewshedWorkArray(mpcSerialized: dict["workArray"]!)
@@ -547,21 +547,28 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 //returnTo = work.searchInitiator
                 
                 if work.assignedTo == Worker.getMe().name {
-                    print("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
+                    self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
                     self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
                     
-                    print("\tSending results back.")
-                    let result = ViewshedResult(viewshedResult: self.viewshedResults, assignedTo: work.assignedTo, searchInitiator: work.searchInitiator)
+                    self.printOut("\tSending results back.")
+                    
+                    
+                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    
+                    let result = ViewshedResult(viewshedResult: image,//self.viewshedResults,
+                        assignedTo: work.assignedTo, searchInitiator: work.searchInitiator)
 
                     //ViewshedWork(numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant, viewshedResult: viewshedResults, observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
              
                     if (work.searchInitiator != Worker.getMe().name) {
-                        print("\tDisplay result locally on \(work.assignedTo)")
+                        self.printOut("\tDisplay result locally on \(work.assignedTo)")
                         let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
                         self.addOverlay(image, imageLocation: self.hgtCoordinate)
                     }
-                    print("\tSending Viewshedresults from \(work.assignedTo)")
+                    self.printOut("\tSending Event.SendViewshedResults from \(work.assignedTo)")
                     ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["viewshedResult": result])
+                    
                     break
                 }
             }
@@ -570,18 +577,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         
         ConnectionManager.onEvent(Event.SendViewshedResult) { peerID, object in
-            print("Received Event.SendViewshedResult")
+            self.printOut("Received Event.SendViewshedResult")
             var dict = object as! [NSString: NSData]
             let result = ViewshedResult(mpcSerialized: dict["viewshedResult"]!)
             
             if (result.searchInitiator == Worker.getMe().name) {
                 self.responsesRecieved[peerID.displayName] = true
                 // self.searchResultTotal += Int(result.searchResults) ?? 0
-                print("\tResult recieved from \(peerID.displayName).")
+                self.printOut("\tResult recieved from \(peerID.displayName).")
                 
-                self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+               // self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
                 
-                print("\tFinished merging results")
+                self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
+                
+                
+                self.printOut("\tFinished merging results")
                 // check to see if all responses have been recieved
                 var allRecieved = true
                 for (_, didRespond) in self.responsesRecieved {
@@ -590,13 +600,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         break
                     }
                 }
-                print("\tChecked if all reveived")
+                self.printOut("\tChecked if all received")
                 if allRecieved {
                     print("\tAll received")
-                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
                     
-                    print("Viewshed complete.")
+                    //let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    //self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    
+                    self.printOut("Viewshed complete.")
                 }
             }
         }
@@ -605,7 +616,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func startFogViewshed() {
         
-        print("Beginning viewshed")
+        printOut("Beginning viewshed")
         let numberOfPeers = ConnectionManager.allWorkers.count
         //let totalWorkUnits = MonteCristo.paragraphs.count
         let workDivision = getQuadrant(numberOfPeers)
@@ -623,13 +634,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
             
             if peer.name == Worker.getMe().name {
+                self.printOut("\tBeginning viewshed locally for \(currentQuadrant) from \(numberOfPeers)")
+                
                 self.responsesRecieved[Worker.getMe().name] = true
                 self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant)
-                if (numberOfPeers < 1) {
+                //if (numberOfPeers < 2) {
                     let image = self.generateViewshedImage(viewshedResults, hgtLocation: self.hgt.getCoordinate())
                     self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                }
-                print("\tFound results locally out of \(numberOfPeers).")
+               // }
+                printOut("\tFound results locally out of \(numberOfPeers).")
             }
             
             let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: viewshedResults, observer: observer, assignedTo: peer.name, searchInitiator: Worker.getMe().name)
@@ -640,25 +653,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let workArray = ViewshedWorkArray(array: tempArray)
         
-        print("\tSending Event.StartViewshed")
+        printOut("\tSending Event.StartViewshed")
         ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
+
     }
-    
-    
+
+
     private func getQuadrant(numberOfWorkers: Int) -> [Int] {
         var quadrants:[Int] = []
 
-        if (numberOfWorkers == 1) {
-            quadrants.append(1)
-        } else if (numberOfWorkers == 2) {
-            quadrants.append(1)
-            quadrants.append(2)
-        } else if (numberOfWorkers == 4) {
-            quadrants.append(1)
-            quadrants.append(2)
-            quadrants.append(3)
-            quadrants.append(4)
+        for var count = 0; count < numberOfWorkers; count++ {
+            quadrants.append(count + 1)
         }
+
         return quadrants
     }
     
@@ -726,6 +733,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         clearTimer()
         removeAllFromMap()
         self.centerMapOnLocation(self.hgt.getCenterLocation())
+        self.logBox.text = ""
     }
     
 

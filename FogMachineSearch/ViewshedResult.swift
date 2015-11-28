@@ -12,7 +12,7 @@ import MapKit
 class ViewshedResult: MPCSerializable {
     
     
-    let viewshedResult: [[Int]]
+    let viewshedResult: UIImage//[[Int]]
     let assignedTo: String
     let searchInitiator: String
     
@@ -27,7 +27,7 @@ class ViewshedResult: MPCSerializable {
     }
     
     
-    init (viewshedResult: [[Int]], assignedTo: String, searchInitiator: String) {
+    init (viewshedResult: UIImage, assignedTo: String, searchInitiator: String) {
         self.viewshedResult = viewshedResult
         self.assignedTo = assignedTo
         self.searchInitiator = searchInitiator
@@ -36,7 +36,7 @@ class ViewshedResult: MPCSerializable {
     
     required init (mpcSerialized: NSData) {
         let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! [[Int]]
+        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! UIImage//[[Int]]
         assignedTo = dict[FogViewshed.ASSIGNED_TO] as! String
         searchInitiator = dict[FogViewshed.SEARCH_INITIATOR] as! String
     }
