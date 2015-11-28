@@ -340,7 +340,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         elapsedParallelTime = CFAbsoluteTimeGetCurrent() - startParallelTime
         self.printOut("Parallel Time: " + String(format: "%.6f", elapsedParallelTime))
         //let elapsedTime = mach_absolute_time() - startParallelTimer
-        //parallelLabel.text = String(elapsedTime)
         if toPrint {
             log("Observer \(observer):\t\(elapsedParallelTime)")
         }
@@ -568,10 +567,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                     self.printOut("\tSending results back.")
                     
                     
-                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    //let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    //self.addOverlay(image, imageLocation: self.hgtCoordinate)
                     
-                    let result = ViewshedResult(viewshedResult: image,//self.viewshedResults,
+                    let result = ViewshedResult(viewshedResult: self.viewshedResults,//image
                         assignedTo: work.assignedTo, searchInitiator: work.searchInitiator)
 
                     //ViewshedWork(numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant, viewshedResult: viewshedResults, observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
@@ -601,9 +600,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 // self.searchResultTotal += Int(result.searchResults) ?? 0
                 self.printOut("\tResult recieved from \(peerID.displayName).")
                 
-               // self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
                 
-                self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
+                self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+                
+                //self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
                 
                 
                 self.printOut("\tFinished merging results")
@@ -619,8 +619,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 if allRecieved {
                     print("\tAll received")
                     
-                    //let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    //self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
                     
                     self.printOut("Viewshed complete.")
                 }
@@ -653,10 +653,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 self.responsesRecieved[Worker.getMe().name] = true
                 self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant)
-                //if (numberOfPeers < 2) {
+                if (numberOfPeers < 2) {
                     let image = self.generateViewshedImage(viewshedResults, hgtLocation: self.hgt.getCoordinate())
                     self.addOverlay(image, imageLocation: self.hgtCoordinate)
-               // }
+                }
                 printOut("\tFound results locally out of \(numberOfPeers).")
             }
             
