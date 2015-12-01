@@ -10,45 +10,50 @@ import Foundation
 
 class KreveldViewshed {
 
-    func calculateViewshed (demData: DemData, observPt: ElevationPoint, radius: Int) ->[[Int]] {
+//    init(dummy: Point1, observPt1: ElevationPoint) {
+//        self.observPt1 = observPt1
+//        self.dummy = dummy
+//    }
+    
+    
+    // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
+    func calculateViewshed (demData: DemData, observPt: ElevationPoint, radius: Int, quadrant: Int) ->[[Int]] {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        struct Point1 { // Dummy structure TODO: get rid off it
+            let x: Int
+            let y: Int
+        }
+        let dummy: Point1 = Point1(x: -1, y: -1);
         
         let startTime: Int64 = getCurrentMillis()
         
         let KreveldEventTypeEnter:Int = 1
         let KreveldEventTypeCenter:Int = 2
         let KreveldEventTypeExit:Int = 3
-        let KreveldEventTypeOther:Int = 0
-        struct Point1 { // Dummy structure TODO: get rid off it
-            let x: Int
-            let y: Int
-        }
-        let dummy: Point1 = Point1(x: -1, y: -1)
+        let KreveldEventTypeOther:Int = 0 // only be used on creation/initialization
+
         
         let observerPtHeight: ElevationPoint = demData.getHeightedPoint(observPt.getXCoor(), yTemp: observPt.getYCoor())
         observPt.height = observerPtHeight.height
         
         let demDataMatrix: [[Int]] = demData.getDem2DMatrix()
         let kreveldActive: KreveldActiveBTree = KreveldActiveBTree(reference: observPt)
-
-        // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
         var sweepEventQueue = PriorityQueue(ascending: true, startingValues: [KreveldSweepEventNode(state: dummy, eventType: KreveldEventTypeOther,
             dataElevPoint: observPt, observerViewPt: observPt, angle: calculateAngle(observPt, view: observPt, type: KreveldEventTypeOther), distance: 0.0)])
+
         
         //  fill the EventList with all points
         var dataCounter: Int = 0
+
         let cellsInRadius:[(x:Int, y:Int)] = getCellsInRadius(observPt.getXCoor(), inY: observPt.getYCoor(), radius: radius)
-        
         for (x, y) in cellsInRadius {
             dataCounter++
-            //print("x: \(x)\t\ty: \(y)\t\t\(demDataMatrix[x][y])")
-            // handle everything in Double .. atleast for now
-            let elevationAtXandY:Double = Double(demDataMatrix[x][y])
-            
-            let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
-            
-            //if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
-            //} else {
+            let currQuadrant: Int =  getQuadrant(x, y: y, observX: observPt.getXCoor(), observY: observPt.getYCoor())
+            if currQuadrant == quadrant {
+                 // handle everything in Double .. atleast for now
+                let elevationAtXandY:Double = Double(demDataMatrix[x][y])
+                
+                let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
                 
                 let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 1,
                     dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
@@ -60,15 +65,35 @@ class KreveldViewshed {
                 sweepEventQueue.push(sweepEnterEventList)
                 sweepEventQueue.push(sweepExitEventList)
                 sweepEventQueue.push(sweepCenterEventList)
-         //   }
+            } else if quadrant == 0 { // process all 4 quadrants
+                 // handle everything in Double .. atleast for now
+                let elevationAtXandY:Double = Double(demDataMatrix[x][y])
+                
+                let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
+                if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
+                } else {
+                    let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 1,
+                        dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
+                    let sweepExitEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 2,
+                        dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 2), distance: calcDistance(elevPointData, observerViewPt: observPt))
+                    let sweepCenterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 3,
+                        dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 3), distance: calcDistance(elevPointData, observerViewPt: observPt))
+                    
+                    sweepEventQueue.push(sweepEnterEventList)
+                    sweepEventQueue.push(sweepExitEventList)
+                    sweepEventQueue.push(sweepCenterEventList)
+                }
+            }
+           
         }
 
+        
         var currentTime = getCurrentMillis()
         var elapsedTime = currentTime - startTime
         print("Data added to queue in: \(Double(elapsedTime)) (ms)")
         print("Total dataCounter: \(dataCounter)")
+
         let elevPoints: [ElevationPoint] = pointsOnLine(demData, viewpoint: observPt);
-        
         for elevPoint in elevPoints {
            kreveldActive.insert(elevPoint);
         }
@@ -120,6 +145,7 @@ class KreveldViewshed {
         return viewshedMatrix
     }
     
+    
     // finds out all the elevation points with in the selected radius
     private func getCellsInRadius(inX: Int, inY: Int, radius: Int) -> [(x:Int,y:Int)] {
         var cellsInRadius:[(x:Int, y:Int)] = []
@@ -128,8 +154,9 @@ class KreveldViewshed {
             for (var b:Int = (inY - radius); b <= inY + radius; b++) {
                 cellsInRadius.append((a, Int(b)))
             }
-            //print("\t\(cellsInRadius)")
         }
+//        print("\t\(cellsInRadius)")
+        
         return cellsInRadius
     }
     
@@ -236,20 +263,15 @@ class KreveldViewshed {
     // Returns the quadrant where (x,y) is
     // x and y must be non-zero integers
     // TODO : need to be done for the DEM matrix data
-    func getQuadrant(x: Int, y: Int) -> Int {
-        if (x > 0) {
-            if (y > 0) {
-                return 1
-            } else {
-                return 4
-            }
-        }
-        if (x < 0) {
-            if (y > 0) {
-                return 2
-            } else {
-                return 3
-            }
+    func getQuadrant(x: Int, y: Int, observX: Int, observY: Int) -> Int {
+        if (x <= observX && y <= observY) {
+            return 1
+        } else if (x > observX && y < observY) {
+            return 2
+        } else if (x < observX && y > observY) {
+            return 3
+        } else if (x >= observX && y >= observY) {
+            return 4
         }
         return 0 // This should never be reached
     }

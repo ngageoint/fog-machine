@@ -106,7 +106,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let kreveld: KreveldViewshed = KreveldViewshed()
                 let demObj: DemData = DemData(demMatrix: self.hgtElevation)
                 let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
-                obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
+                obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, quadrant: 0)
             }
             dispatch_async(dispatch_get_main_queue()) {
                 
@@ -134,7 +134,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let kreveld: KreveldViewshed = KreveldViewshed()
             let demObj: DemData = DemData(demMatrix: self.hgtElevation)
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
-            obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius)
+            obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, quadrant: 0)
         }
         
         print("\tFinished Viewshed Processing on \(observer.name).")

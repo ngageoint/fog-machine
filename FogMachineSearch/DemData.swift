@@ -12,9 +12,6 @@ public class DemData  {
     
     private var ncols: Int = 0
     private var nrows: Int = 0
-    private var xllcorner: Int = 0
-    private var yllcorner: Int = 0
-    private var cellsize: Int = 0
     private var nodata: Double = 0.0
     var noDataValue: Double = 0.0
     //public static var DEFAULT_INPUT_DATA_TYPE_SRTM = "SRTM"
@@ -25,9 +22,6 @@ public class DemData  {
         self.demData = demMatrix
         self.ncols = 0
         self.nrows = 0
-        self.xllcorner = 0
-        self.yllcorner = 0
-        self.cellsize = 0
         self.nodata = 0
         self.noDataValue = 0.0
     }
@@ -36,23 +30,11 @@ public class DemData  {
         return demData
     }
     public func getNcols() ->Int {
-        return ncols
+        return Srtm3.MAX_SIZE
     }
     
     public func getNrows()  ->Int {
-        return nrows
-    }
-    
-    public func getXllcorner() ->Int {
-        return xllcorner
-    }
-    
-    public func getYllcorner()  ->Int {
-        return yllcorner
-    }
-    
-    public func getCellsize()  ->Int {
-        return cellsize
+        return Srtm3.MAX_SIZE
     }
     
     public func getNodata() ->Double {
