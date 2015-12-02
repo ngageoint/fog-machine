@@ -10,9 +10,22 @@ import Foundation
 
 class KreveldViewshed {
 
-    // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
-    func calculateViewshed (demData: DemData, observPt: ElevationPoint, radius: Int, quadrant: Int) ->[[Int]] {
+    
+    func parallelKreveld(demData: DemData, observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        
+        let cellsInRadius:[(x:Int, y:Int)] = getCellsInRadius(observPt.getXCoor(), observerY: observPt.getYCoor(), radius: radius, numQuadrants: numQuadrants, quadrant2Calc: quadrant2Calc)
+        viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numQuadrants, quadrant2Calc: quadrant2Calc)
+     
+        
+        return viewshedMatrix
+    }
+    
+    
+    // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
+    private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], demData: DemData, observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
+        var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        
         struct Point1 { // Dummy structure TODO: get rid off it
             let x: Int
             let y: Int
@@ -40,16 +53,18 @@ class KreveldViewshed {
         //  fill the EventList with all points
         var dataCounter: Int = 0
         
-        let cellsInRadius:[(x:Int, y:Int)] = getCellsInRadius(observPt.getXCoor(), inY: observPt.getYCoor(), radius: radius)
+        //let cellsInRadius:[(x:Int, y:Int)] = getCellsInRadius(observPt.getXCoor(), inY: observPt.getYCoor(), radius: radius, numQuadrants: numQuadrants, quadrant2Calc: quadrant2Calc)
+        
         for (x, y) in cellsInRadius {
             dataCounter++
-            let currQuadrant: Int =  getQuadrant(x, y: y, observX: observPt.getXCoor(), observY: observPt.getYCoor())
-            if currQuadrant == quadrant {
-                // handle everything in Double .. atleast for now
-                let elevationAtXandY:Double = Double(demDataMatrix[x][y])
-                
-                let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
-                
+            //let currQuadrant: Int =  getQuadrant(x, y: y, observX: observPt.getXCoor(), observY: observPt.getYCoor())
+            //if currQuadrant == numQuadrants {
+            // handle everything in Double .. atleast for now
+            let elevationAtXandY:Double = Double(demDataMatrix[x][y])
+            
+            let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
+            if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
+            } else {
                 let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 1,
                     dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
                 let sweepExitEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 2,
@@ -60,27 +75,9 @@ class KreveldViewshed {
                 sweepEventQueue.push(sweepEnterEventList)
                 sweepEventQueue.push(sweepExitEventList)
                 sweepEventQueue.push(sweepCenterEventList)
-            } else if quadrant == 0 { // process all 4 quadrants
-                // handle everything in Double .. atleast for now
-                let elevationAtXandY:Double = Double(demDataMatrix[x][y])
-                
-                let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
-                if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
-                } else {
-                    let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 1,
-                        dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
-                    let sweepExitEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 2,
-                        dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 2), distance: calcDistance(elevPointData, observerViewPt: observPt))
-                    let sweepCenterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 3,
-                        dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 3), distance: calcDistance(elevPointData, observerViewPt: observPt))
-                    
-                    sweepEventQueue.push(sweepEnterEventList)
-                    sweepEventQueue.push(sweepExitEventList)
-                    sweepEventQueue.push(sweepCenterEventList)
-                }
             }
         }
-        
+    
         var currentTime = getCurrentMillis()
         var elapsedTime = currentTime - startTime
         print("Data added to queue in: \(Double(elapsedTime)) (ms)")
@@ -137,20 +134,69 @@ class KreveldViewshed {
         print("EXIT: \(counterExit)")
         print("VISIBLE POINTS: \(visiblePtCounter)")
         print("\n")
-        
+
         // should return the updated DEM data...
         return viewshedMatrix
     }
     
     
     // finds out all the elevation points with in the selected radius
-    private func getCellsInRadius(inX: Int, inY: Int, radius: Int) -> [(x:Int,y:Int)] {
+    private func getCellsInRadius(observerX: Int, observerY: Int, radius: Int, numQuadrants: Int, quadrant2Calc:Int ) -> [(x:Int,y:Int)] {
         var cellsInRadius:[(x:Int, y:Int)] = []
-        
-
-        for (var a = (inX - radius); a <= (inX + radius); a++) {
-            for (var b:Int = (inY - radius); b <= (inY + radius); b++) {
-                cellsInRadius.append((a, Int(b)))
+  
+        // get all the points inside the radius (all 4 quadrants)
+        if (numQuadrants == 1) {
+            for (var a = (observerX - radius); a <= (observerX + radius); a++) {
+                for (var b:Int = (observerY - radius); b <= (observerY + radius); b++) {
+                    cellsInRadius.append((a, Int(b)))
+                }
+            }
+        } else if (numQuadrants == 2) { // split into two halves
+            
+            if (quadrant2Calc == 1) {
+                 // left of observer - top left
+                for (var a = (observerX - radius); a <= observerX; a++) {
+                    for (var b:Int = (observerY - radius); b <= observerY; b++) {
+                        cellsInRadius.append((a, Int(b)))
+                    }
+                }
+            } else if (quadrant2Calc == 2) {
+                // left of observer - bottom left
+                for (var b:Int = observerY; b <= (observerY + radius); b++) {
+                    for (var a = (observerX - radius); a <= observerX; a++) {
+                        cellsInRadius.append((b, Int(a)))
+                    }
+                }
+            }
+        } else if (numQuadrants == 4) {
+            if (quadrant2Calc == 1) {
+                // left of observer - top left
+                for (var a = (observerX - radius); a <= observerX; a++) {
+                    for (var b:Int = (observerY - radius); b <= observerY; b++) {
+                        cellsInRadius.append((a, Int(b)))
+                    }
+                }
+            } else if (quadrant2Calc == 2) {
+                // left of observer - bottom left
+                for (var b:Int = observerY; b <= (observerY + radius); b++) {
+                    for (var a = (observerX - radius); a <= observerX; a++) {
+                        cellsInRadius.append((b, Int(a)))
+                    }
+                }
+            } else if (quadrant2Calc == 3) {
+                // right of observer - bottom right
+                for (var a = observerX; a <= (observerX + radius); a++) {
+                    for (var b:Int = observerY; b <= (observerY + radius); b++) {
+                        cellsInRadius.append((a, Int(b)))
+                    }
+                }
+            } else if (quadrant2Calc == 4) {
+                //  right of observer - top right
+                for (var b:Int = observerY; b <= (observerY + radius); b++) {
+                    for (var a = (observerX - radius); a <= observerX; a++) {
+                        cellsInRadius.append((a, Int(b)))
+                    }
+                }
             }
         }
         //print("\t\(cellsInRadius)")

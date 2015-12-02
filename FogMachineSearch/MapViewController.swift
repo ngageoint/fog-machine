@@ -106,7 +106,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let kreveld: KreveldViewshed = KreveldViewshed()
                 let demObj: DemData = DemData(demMatrix: self.hgtElevation)
                 let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
-                obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, quadrant: 0)
+                obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 1, quadrant2Calc: 0)
+                //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
             }
             dispatch_async(dispatch_get_main_queue()) {
                 
@@ -136,8 +137,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
            // observer.radius = 200 // default radius 100
             // set the added observer height 
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y, h: Double(observer.height))
-            
-            obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, quadrant: 0)
+            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 1, quadrant2Calc: 0)
+            //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
         }
         
         print("\tFinished Viewshed Processing on \(observer.name).")
@@ -537,10 +538,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
         printOut("Starting Fog Viewshed Processing on \(observer.name)...")
+        let options = Options.sharedInstance
+        var obsResults:[[Int]]!
         
-        let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
-        
-        let obsResults:[[Int]] = obsViewshed.viewshedParallel()
+        if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
+            let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
+            obsResults = obsViewshed.viewshedParallel()
+        } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
+            let kreveld: KreveldViewshed = KreveldViewshed()
+            let demObj: DemData = DemData(demMatrix: self.hgtElevation)
+            //let x: Int = work.getObserver().x
+            let observerPoints: ElevationPoint = ElevationPoint (x: observer.x, y: observer.y, h: Double(observer.height))
+            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: numberOfQuadrants, quadrant2Calc: whichQuadrant)
+        }
         
         printOut("\tFinished Viewshed Processing on \(observer.name).")
 
@@ -560,16 +570,27 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             //var returnTo = ""
             // let returnMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             //var viewshedResults: [[Int]] = []
+            let options = Options.sharedInstance
             
             for work:ViewshedWork in workArray.array {
                 //returnTo = work.searchInitiator
                 
                 if work.assignedTo == Worker.getMe().name {
                     self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-                    self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                    
+                    
+                    if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
+                        self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                    } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
+                        let kreveld: KreveldViewshed = KreveldViewshed()
+                        let demObj: DemData = DemData(demMatrix: self.hgtElevation)
+                        //let x: Int = work.getObserver().x
+                        let observerPoints: ElevationPoint = ElevationPoint (x: work.getObserver().x, y: work.getObserver().x, h: Double(work.getObserver().height))
+                        self.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: work.getObserver().radius, numQuadrants: work.numberOfQuadrants, quadrant2Calc: work.whichQuadrant)
+                    }
                     
                     self.printOut("\tSending results back.")
-                    
+                
                     
                     let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
                     self.addOverlay(image, imageLocation: self.hgtCoordinate)
@@ -665,6 +686,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: viewshedResults, observer: observer, assignedTo: peer.name, searchInitiator: Worker.getMe().name)
             
+            
+            
             tempArray.append(work)
             
         }
@@ -731,6 +754,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         for count in 1...8 {
             let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
+            //let observer = Observer(name: String(count), x: 8 * 100, y: 8 * 100, height: 20, radius: options.radius, coordinate:self.hgtCoordinate)
             self.performSerialViewshed(observer, algorithm: options.viewshedAlgorithm)
             
         }
