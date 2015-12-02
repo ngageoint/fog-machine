@@ -133,7 +133,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
             let demObj: DemData = DemData(demMatrix: self.hgtElevation)
-            let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y)
+           // observer.radius = 200 // default radius 100
+            // set the added observer height 
+            let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y, h: Double(observer.height))
+            
             obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, quadrant: 0)
         }
         
