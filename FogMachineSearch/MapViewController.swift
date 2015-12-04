@@ -515,7 +515,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
-        printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)...")
+        printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
         let options = Options.sharedInstance
         var obsResults:[[Int]]!
         
