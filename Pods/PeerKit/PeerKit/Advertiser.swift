@@ -33,9 +33,19 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
 
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: NSData?, invitationHandler: ((Bool, MCSession) -> Void)) {
         let accept = mcSession.myPeerID.hashValue > peerID.hashValue
+        if accept {
+            print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
+        } else {
+            print("Advertiser \(advertiser.myPeerID.displayName) NOT accepting \(peerID.displayName)")
+        }
         invitationHandler(accept, mcSession)
         if accept {
             stopAdvertising()
         }
+    }
+    
+    
+    func advertiser(advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: NSError) {
+        print("didNotStartAdvertisingPeer: \(error.localizedDescription)")
     }
 }

@@ -26,16 +26,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     var metricsOutput:String!
-    var startParallelTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
-    var elapsedParallelTime: CFAbsoluteTime!
-    var startSerialTime: CFAbsoluteTime!
-    var elapsedSerialTime: CFAbsoluteTime!
+    var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
+    var elapsedTime: CFAbsoluteTime!
     var hgt: Hgt!
     var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Int]]!
     
-    var responsesRecieved = Dictionary<String, Bool>()
     var viewshedResults: [[Int]]!
+    private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +94,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
-            print("Starting Parallel Viewshed Processing on \(observer.name).")
+            self.printOut("Starting Parallel Viewshed Processing on \(observer.name).")
             var obsResults:[[Int]]!
             if (algorithm == ViewshedAlgorithm.FranklinRay) {
                 let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
@@ -111,7 +109,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
             dispatch_async(dispatch_get_main_queue()) {
                 
-                print("\tFinished Viewshed Processing on \(observer.name).")
+                self.printOut("\tFinished Viewshed Processing on \(observer.name).")
                 
                 self.pinObserverLocation(observer)
                 let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
@@ -125,7 +123,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func performSerialViewshed(observer: Observer, algorithm: ViewshedAlgorithm) {
         
-        print("Starting Serial Viewshed Processing on \(observer.name).")
+        self.printOut("Starting Serial Viewshed Processing on \(observer.name).")
 
         var obsResults:[[Int]]!
         if (algorithm == ViewshedAlgorithm.FranklinRay) {
@@ -141,7 +139,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
         }
         
-        print("\tFinished Viewshed Processing on \(observer.name).")
+        self.printOut("\tFinished Viewshed Processing on \(observer.name).")
         
         self.pinObserverLocation(observer)
         let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
@@ -334,60 +332,39 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // MARK: Timer
     
     
-    func startParallelTimer() {
-        startParallelTime = CFAbsoluteTimeGetCurrent()
+    func startTimer() {
+        startTime = CFAbsoluteTimeGetCurrent()
         //startParallelTimer = mach_absolute_time()
     }
     
     
-    func stopParallelTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
-        elapsedParallelTime = CFAbsoluteTimeGetCurrent() - startParallelTime
-        self.printOut("Parallel Time: " + String(format: "%.6f", elapsedParallelTime))
+    func stopTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
+        elapsedTime = CFAbsoluteTimeGetCurrent() - startTime
+        self.printOut("Stop Time: " + String(format: "%.6f", elapsedTime))
         //let elapsedTime = mach_absolute_time() - startParallelTimer
-        //parallelLabel.text = String(elapsedTime)
         if toPrint {
-            log("Observer \(observer):\t\(elapsedParallelTime)")
+            self.printOut("Observer \(observer):\t\(elapsedTime)")
         }
-        return elapsedParallelTime
-    }
-
-    
-    func startSerialTimer() {
-        startSerialTime = CFAbsoluteTimeGetCurrent()
-    }
-    
-    
-    func stopSerialTimer(toPrint: Bool=false, observer: String="") -> CFAbsoluteTime {
-        elapsedSerialTime = CFAbsoluteTimeGetCurrent() - startSerialTime
-        self.printOut("Serial Time: " + String(format: "%.6f", elapsedSerialTime))
-        if toPrint {
-            log("Observer \(observer):\t\(elapsedSerialTime)")
-        }
-        return elapsedSerialTime
+        return elapsedTime
     }
 
     
     func clearTimer() {
-        startParallelTime = 0
-        startSerialTime = 0
-        elapsedParallelTime = 0
-        elapsedSerialTime = 0
+        startTime = 0
+        elapsedTime = 0
     }
     
     
     // MARK: Logging/Printing
     
-    
-    func log(logMessage: String, functionName: String = __FUNCTION__) {
-        printOut("\(functionName): \(logMessage)")
-    }
-    
 
     func printOut(output: String) {
-        //Can easily change this to print out to a file without modifying the rest of the code.
-        print(output)
-        //metricsOutput = metricsOutput + "\n" + output
-        logBox.text = logBox.text + "\n" + output
+        dispatch_async(dispatch_get_main_queue()) {
+            //Can easily change this to print out to a file without modifying the rest of the code.
+            print(output)
+            //metricsOutput = metricsOutput + "\n" + output
+            self.logBox.text = self.logBox.text + "\n" + output
+        }
     }
     
     
@@ -484,25 +461,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         //Starting serial before the parallel so the parallel will not be running when the serial runs
         self.printOut("\nStarting Serial Viewshed")
         
-        self.startSerialTimer()
+        self.startTimer()
         for obs in observers {
             self.performSerialViewshed(obs, algorithm: options.viewshedAlgorithm)
         }
-        self.stopSerialTimer()
+        self.stopTimer()
         self.removeAllFromMap()
         
-        self.printOut("Serial Viewshed Total Time: \(self.elapsedSerialTime)")
+        self.printOut("Serial Viewshed Total Time: \(self.elapsedTime)")
         self.printOut("\nStarting Parallel Viewshed")
         
-        self.startParallelTimer()
+        self.startTimer()
         for obsP in observers {
             self.performParallelViewshed(obsP, algorithm: options.viewshedAlgorithm, viewshedGroup: viewshedGroup)
         }
         
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
-            self.stopParallelTimer()
-            self.printOut("Parallel Viewshed Total Time: \(self.elapsedParallelTime)")
-            print("Parallel Viewshed Total Time: \(self.elapsedParallelTime)")
+            self.stopTimer()
+            self.printOut("Parallel Viewshed Total Time: \(self.elapsedTime)")
+            print("Parallel Viewshed Total Time: \(self.elapsedTime)")
             self.clearTimer()
             self.printOut("Metrics Finished for \(numObservers) Observer(s).\n")
         }
@@ -515,7 +492,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func initiateFogViewshed() {
 
-        // Check does nothing, is there in case it is needed once the Fog device requirements are specified.
+        // Check does nothing and is there in case it is needed once the Fog device requirements are specified.
         if (ConnectionManager.allWorkers.count < 0) {
                 let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
                 let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
@@ -530,14 +507,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         } else {
             viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             logBox.text = ""
-            startFogViewshed()
+            self.startTimer()
+            startFogViewshedFramework()
         }
     }
     
     
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
-        printOut("Starting Fog Viewshed Processing on \(observer.name)...")
+        printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)...")
         let options = Options.sharedInstance
         var obsResults:[[Int]]!
         
@@ -562,140 +540,128 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func setupFogEvents() {
         
-        ConnectionManager.onEvent(Event.StartViewshed){ peerID, object in
-            self.printOut("Recieved request to initiate a viewshed from \(peerID.displayName)")
+        ConnectionManager.onEvent(Event.StartViewshed){ fromPeerId, object in
+            self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
             
             let dict = object as! [String: NSData]
-            let workArray = ViewshedWorkArray(mpcSerialized: dict["workArray"]!)
-            //var returnTo = ""
-            // let returnMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
-            //var viewshedResults: [[Int]] = []
+            let work = ViewshedWork(mpcSerialized: dict[Event.StartViewshed.rawValue]!)
+            
+            self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
+            
+            
             let options = Options.sharedInstance
-            
-            for work:ViewshedWork in workArray.array {
-                //returnTo = work.searchInitiator
-                
-                if work.assignedTo == Worker.getMe().name {
-                    self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-                    
-                    
-                    if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
-                        self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-                    } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
-                        let kreveld: KreveldViewshed = KreveldViewshed()
-                        let demObj: DemData = DemData(demMatrix: self.hgtElevation)
-                        //let x: Int = work.getObserver().x
-                        let observerPoints: ElevationPoint = ElevationPoint (x: work.getObserver().x, y: work.getObserver().x, h: Double(work.getObserver().height))
-                        self.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: work.getObserver().radius, numQuadrants: work.numberOfQuadrants, quadrant2Calc: work.whichQuadrant)
-                    }
-                    
-                    self.printOut("\tSending results back.")
-                
-                    
-                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                    
-                    let result = ViewshedResult(viewshedResult: image,//self.viewshedResults,
-                        assignedTo: work.assignedTo, searchInitiator: work.searchInitiator)
-
-                    //ViewshedWork(numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant, viewshedResult: viewshedResults, observer: self.singleRandomObserver(), assignedTo: Worker.getMe().name, searchInitiator: returnTo)
-             
-                    if (work.searchInitiator != Worker.getMe().name) {
-                        self.printOut("\tDisplay result locally on \(work.assignedTo)")
-                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                        self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                    }
-                    self.printOut("\tSending Event.SendViewshedResults from \(work.assignedTo)")
-                    ConnectionManager.sendEvent(Event.SendViewshedResult, object: ["viewshedResult": result])
-                    
-                    break
-                }
+        
+            if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
+                self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+            } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
+                let kreveld: KreveldViewshed = KreveldViewshed()
+                let demObj: DemData = DemData(demMatrix: self.hgtElevation)
+                //let x: Int = work.getObserver().x
+                let observerPoints: ElevationPoint = ElevationPoint (x: work.getObserver().x, y: work.getObserver().x, h: Double(work.getObserver().height))
+                self.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: work.getObserver().radius, numQuadrants: work.numberOfQuadrants, quadrant2Calc: work.whichQuadrant)
             }
+            
+            
+            //Uncomment if passing [[Int]]
+            //let result = ViewshedResult(viewshedResult: self.viewshedResults)
+            
+            
+            self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
+            
+            let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+            self.addOverlay(image, imageLocation: self.hgtCoordinate)
+            
+            
+            //Use if passing UIImage
+            let result = ViewshedResult(viewshedResult: image)//self.viewshedResults)
+            
+            
+            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
+            
+            ConnectionManager.sendEventTo(Event.SendViewshedResult, willThrottle: true, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
             
         }
         
         
-        ConnectionManager.onEvent(Event.SendViewshedResult) { peerID, object in
-            self.printOut("Received Event.SendViewshedResult")
+        ConnectionManager.onEvent(Event.SendViewshedResult) { fromPeerId, object in
+            
             var dict = object as! [NSString: NSData]
-            let result = ViewshedResult(mpcSerialized: dict["viewshedResult"]!)
+            let result = ViewshedResult(mpcSerialized: dict[Event.SendViewshedResult.rawValue]!)
             
-            if (result.searchInitiator == Worker.getMe().name) {
-                self.responsesRecieved[peerID.displayName] = true
-                // self.searchResultTotal += Int(result.searchResults) ?? 0
-                self.printOut("\tResult recieved from \(peerID.displayName).")
-                
-               // self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-                
-                self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
+            
+            //dispatch_barrier_async(self.serialQueue) {
                 
                 
-                self.printOut("\tFinished merging results")
-                // check to see if all responses have been recieved
-                var allRecieved = true
-                for (_, didRespond) in self.responsesRecieved {
-                    if didRespond == false {
-                        allRecieved = false
-                        break
-                    }
-                }
-                self.printOut("\tChecked if all received")
-                if allRecieved {
-                    print("\tAll received")
-                    
-                    //let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    //self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                    
-                    self.printOut("Viewshed complete.")
-                }
-            }
+                ConnectionManager.processResult(Event.SendViewshedResult, responseEvent: Event.StartViewshed, sender: fromPeerId.displayName, receiver: Worker.getMe().name, object: [Event.SendViewshedResult.rawValue: result],
+                    responseMethod: {
+                        
+                        // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.printOut("\tResult recieved from \(fromPeerId.displayName).")
+                            //   }
+                            
+                            
+                            
+                            //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+                            
+                            self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
+                        }
+                        
+                        
+                        // self.printOut("\tFinished merging results")
+                        //  }
+                    },
+                    completeMethod: {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.printOut("\tAll received")
+                            let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                            self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                            self.printOut("Viewshed complete.")
+                            self.stopTimer()
+                        }
+                })
+            //}
         }
+        
     }
     
     
-    func startFogViewshed() {
+    func startFogViewshedFramework() {
         
-        printOut("Beginning viewshed")
-        let numberOfPeers = ConnectionManager.allWorkers.count
-        //let totalWorkUnits = MonteCristo.paragraphs.count
-        let workDivision = getQuadrant(numberOfPeers)
+        printOut("Beginning viewshed on \(Worker.getMe().displayName)")
+        let observer = self.singleTestObserver()
+        let selfQuadrant = 1
+        var count = 1 //Start at one since initiator is 0-indexed
         
-        var count = 0
-        var tempArray = [ViewshedWork]()
-        
-        
-        for peer in ConnectionManager.allWorkers {
-            self.responsesRecieved[peer.name] = false
-            
-            let currentQuadrant = workDivision[count]
-            count++
-            let observer = singleTestObserver()
-
-            
-            if peer.name == Worker.getMe().name {
-                self.printOut("\tBeginning viewshed locally for \(currentQuadrant) from \(numberOfPeers)")
+        ConnectionManager.sendEventToAll(Event.StartViewshed,
+            workForPeer: { workerCount in
                 
-                self.responsesRecieved[Worker.getMe().name] = true
-                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant)
-                //if (numberOfPeers < 2) {
-                    let image = self.generateViewshedImage(viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                let workDivision = self.getQuadrant(workerCount)
+                let currentQuadrant = workDivision[count]
+                let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
+                
+                count++
+                
+                return theWork
+            },
+            workForSelf: { workerCount in
+                
+                self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
+                
+                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
+                
+                if (workerCount < 2) {
+                    //if no peers
+                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
                     self.addOverlay(image, imageLocation: self.hgtCoordinate)
-               // }
-                printOut("\tFound results locally out of \(numberOfPeers).")
-            }
-            
-            let work = ViewshedWork(numberOfQuadrants: numberOfPeers, whichQuadrant: currentQuadrant, viewshedResult: viewshedResults, observer: observer, assignedTo: peer.name, searchInitiator: Worker.getMe().name)
-            
-            
-            
-            tempArray.append(work)
-            
-        }
-        
-        let workArray = ViewshedWorkArray(array: tempArray)
-        
-        printOut("\tSending Event.StartViewshed")
-        ConnectionManager.sendEvent(Event.StartViewshed, object: ["workArray": workArray])
+                    self.stopTimer()
+                }
+                
+                self.printOut("\tFound results locally out of \(workerCount).")
+            },
+            log: { peerName in
+                self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
+        })
 
     }
 
@@ -731,7 +697,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let viewshedGroup = dispatch_group_create()
         let options = Options.sharedInstance
-        self.startParallelTimer()
+        self.startTimer()
         //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
         // let count = Int(index + 1)
         for count in 1...8 {
@@ -742,7 +708,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
 
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
-            self.stopParallelTimer()
+            self.stopTimer()
         }
     }
     
@@ -750,22 +716,22 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func startSerial(sender: AnyObject) {
         
         let options = Options.sharedInstance
-        self.startSerialTimer()
+        self.startTimer()
         
         for count in 1...8 {
             let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
             //let observer = Observer(name: String(count), x: 8 * 100, y: 8 * 100, height: 20, radius: options.radius, coordinate:self.hgtCoordinate)
             self.performSerialViewshed(observer, algorithm: options.viewshedAlgorithm)
-            
         }
         
-        self.stopSerialTimer()
+        self.stopTimer()
     }
     
     
     // Used to kick-off various test cases/processing
     @IBAction func randomObserver(sender: AnyObject) {
-        //singleViewshed()
+        
+        //singleViewshed(ViewshedAlgorithm.FranklinRay)
         
         //initiateMetricsGathering()
         
@@ -778,8 +744,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         clearTimer()
         removeAllFromMap()
         self.centerMapOnLocation(self.hgt.getCenterLocation())
-        self.logBox.text = ""
+        self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
     }
     
-
 }

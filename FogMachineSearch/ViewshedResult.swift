@@ -12,33 +12,26 @@ import MapKit
 class ViewshedResult: MPCSerializable {
     
     
-    let viewshedResult: UIImage//[[Int]]
-    let assignedTo: String
-    let searchInitiator: String
+    let viewshedResult:UIImage// UIImage//[[Int]]
     
     
     var mpcSerialized : NSData {
         let result = NSKeyedArchiver.archivedDataWithRootObject(
-            [FogViewshed.VIEWSHED_RESULT: viewshedResult,
-                FogViewshed.ASSIGNED_TO: assignedTo,
-                FogViewshed.SEARCH_INITIATOR: searchInitiator])
+            [FogViewshed.VIEWSHED_RESULT: viewshedResult])
         
         return result
     }
     
     
-    init (viewshedResult: UIImage, assignedTo: String, searchInitiator: String) {
+    init (viewshedResult: UIImage) { //UIImage) { //[[Int]]) {
         self.viewshedResult = viewshedResult
-        self.assignedTo = assignedTo
-        self.searchInitiator = searchInitiator
     }
     
     
     required init (mpcSerialized: NSData) {
         let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! UIImage//[[Int]]
-        assignedTo = dict[FogViewshed.ASSIGNED_TO] as! String
-        searchInitiator = dict[FogViewshed.SEARCH_INITIATOR] as! String
+        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! UIImage //UIImage//[[Int]]
     }
+
 }
 

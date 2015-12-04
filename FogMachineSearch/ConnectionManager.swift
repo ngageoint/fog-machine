@@ -18,6 +18,9 @@ protocol MPCSerializable {
 
 struct ConnectionManager {
     
+
+    static var hasReceivedResponse:[String:[String:[String:Bool]]] = ["sender": ["event":["peer":true]]] //better way to do this?
+    static private let serialQueue = dispatch_queue_create("mil.nga.magic.fog", DISPATCH_QUEUE_SERIAL)
     
     // MARK: Properties
     private static var peers: [MCPeerID] {
@@ -36,7 +39,7 @@ struct ConnectionManager {
     // MARK: Start
     static func start() {
         NSLog("Transceiving")
-        PeerKit.transceive("fogsearch")
+        PeerKit.transceive("fogmachine")
     }
     
     
@@ -51,11 +54,47 @@ struct ConnectionManager {
     }
     
     static func onEvent(event: Event, run: ObjectBlock?) {
+        print("onEvent was called for \(event.rawValue)")
         if let run = run {
             PeerKit.eventBlocks[event.rawValue] = run
         } else {
             PeerKit.eventBlocks.removeValueForKey(event.rawValue)
         }
+    }
+    
+    
+    // MARK: Receipt Assurance
+    
+    
+    static func receiving(event: Event, sender: String, receiver: String) {
+        guard let theReceiver = hasReceivedResponse[receiver] else {
+            return
+        }
+        guard let theEvent = theReceiver[event.rawValue] else {
+            return
+        }
+        guard (theEvent[sender] != nil) else {
+            return
+        }
+        hasReceivedResponse[receiver]![event.rawValue]![sender] = true
+        
+    }
+
+    
+    static func allReceived(event: Event, sender: String) -> Bool {
+        guard (hasReceivedResponse[sender] != nil) else {
+            return false
+        }
+        
+        var result = true
+        
+        for (_, value) in hasReceivedResponse[sender]![event.rawValue]! {
+            if (value == false) {
+                result = false
+            }
+        }
+        
+        return result
     }
     
     
@@ -72,9 +111,83 @@ struct ConnectionManager {
     }
     
     
+    static func processResult(event: Event, responseEvent: Event, sender: String, receiver: String, object: [String: MPCSerializable], responseMethod: () -> (), completeMethod: () -> ()) {
+        
+        //dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+        dispatch_barrier_async(self.serialQueue) {
+            responseMethod()
+            
+            receiving(responseEvent, sender: sender, receiver: receiver)
+            
+          //  dispatch_async(dispatch_get_main_queue()) {
+                
+                
+                if allReceived(responseEvent, sender: receiver) {
+                    completeMethod()
+                }
+         //   }
+        }
+    }
+    
+    
+    static func sendEventTo(event: Event, willThrottle: Bool = false, object: [String: MPCSerializable]? = nil, sendTo: String) {
+        var anyObject: [String: NSData]?
+        if let object = object {
+            anyObject = [String: NSData]()
+            for (key, value) in object {
+                anyObject![key] = value.mpcSerialized
+            }
+        }
+        
+        for peer in peers {
+            if peer.displayName == sendTo {
+                let toPeer:[MCPeerID] = [peer]
+                if willThrottle {
+                    //self.throttle()
+                }
+                PeerKit.sendEvent(event.rawValue, object: anyObject, toPeers: toPeer)
+                break
+            }
+        }
+
+    }
+    
+    
+    static func throttle() {
+        // I dislike sleep's but this is required so the Multipeer Connectivity doesn't send events too fast to the same peer. (The events will go *poof* and never get sent if the sleep doesn't throttle them.)
+        //Although this does not always work
+        let sleepAmount:UInt32 = UInt32(peers.count * 5 + 1)
+        //Output is here as a reminder that there is a sleep  and to hopefully figure out a way to remove it.
+        NSLog("I NEEDZ NAP FOR \(sleepAmount) SECONDZ")
+        let alignment = "\t\t\t\t\t\t\t\t\t\t\t\t\t"
+        print("\(alignment)           /\\_/\\ ")
+        print("\(alignment)      ____/ o o \\ ")
+        print("\(alignment)    /~____  =ø= /  ")
+        print("\(alignment)   (______)__m_m)  ")
+        sleep(UInt32(arc4random_uniform(sleepAmount) + sleepAmount))
+    }
+    
+    
+    static func sendEventToAll<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> ()) {
+        
+        workForSelf(allWorkers.count)
+        
+        // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
+        dispatch_barrier_async(self.serialQueue) {
+            for peer in peers {
+                hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peer.displayName: false]]
+                let theWork = workForPeer(allWorkers.count)
+                self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peer.displayName)
+                log(peer.displayName)
+            }
+        }
+    }
+    
+    
     static func sendEventForEach(event: Event, objectBlock: () -> ([String: MPCSerializable])) {
         for peer in ConnectionManager.peers {
             ConnectionManager.sendEvent(event, object: objectBlock(), toPeers: [peer])
         }
     }
+    
 }

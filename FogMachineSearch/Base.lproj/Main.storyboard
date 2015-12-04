@@ -615,7 +615,7 @@
                     <navigationItem key="navigationItem" id="U46-Hx-SEf">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="nzQ-pP-oJH">
-                            <rect key="frame" x="185" y="6.5" width="230" height="31"/>
+                            <rect key="frame" x="185" y="7" width="230" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Map"/>
