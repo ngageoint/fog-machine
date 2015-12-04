@@ -38,6 +38,7 @@ public class Transceiver: SessionDelegate {
         advertiser.stopAdvertising()
         browser.stopBrowsing()
         session.disconnect()
+        NSLog("Disconnecting from transceiver.")
     }
 
     func startAdvertising(serviceType serviceType: String, discoveryInfo: [String: String]? = nil) {
@@ -63,6 +64,7 @@ public class Transceiver: SessionDelegate {
     }
 
     public func receivedData(myPeerID: MCPeerID, data: NSData, fromPeer peer: MCPeerID) {
+        print("Receiving data from \(peer.displayName) (on \(myPeerID.displayName))")
         didReceiveData(data, fromPeer: peer)
     }
 

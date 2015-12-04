@@ -12,7 +12,7 @@ import MapKit
 class ViewshedResult: MPCSerializable {
     
     
-    let viewshedResult: [[Int]]
+    let viewshedResult:UIImage// UIImage//[[Int]]
     
     
     var mpcSerialized : NSData {
@@ -23,14 +23,14 @@ class ViewshedResult: MPCSerializable {
     }
     
     
-    init (viewshedResult: [[Int]]) {
+    init (viewshedResult: UIImage) { //UIImage) { //[[Int]]) {
         self.viewshedResult = viewshedResult
     }
     
     
     required init (mpcSerialized: NSData) {
         let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! [[Int]]
+        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! UIImage //UIImage//[[Int]]
     }
 
 }

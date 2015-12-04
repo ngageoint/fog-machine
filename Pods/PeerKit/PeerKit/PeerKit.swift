@@ -68,18 +68,27 @@ func didDisconnect(myPeerID: MCPeerID, peer: MCPeerID) {
 }
 
 func didReceiveData(data: NSData, fromPeer peer: MCPeerID) {
-    if let dict = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [String: AnyObject],
-        let event = dict["event"] as? String,
-        let object: AnyObject? = dict["object"] {
+    if let dict = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [String: AnyObject] {
+        print("Received dictionary")
+        if        let event = dict["event"] as? String {
+            print("Received event \(event)")
+        if let object: AnyObject? = dict["object"] {
+            print("Received object")
+            print("\tunarchived data from \(peer.displayName)")
             dispatch_async(dispatch_get_main_queue()) {
                 if let onEvent = onEvent {
+                    print("\tonEvent")
                     onEvent(peerID: peer, event: event, object: object)
                 }
                 if let eventBlock = eventBlocks[event] {
+                    print("\teventBlock")
                     eventBlock(peerID: peer, object: object)
                 }
             }
-    }
+            }
+        }
+        }
+        print("\tEnd of didReceiveData from \(peer.displayName)")
 }
 
 func didFinishReceivingResource(myPeerID: MCPeerID, resourceName: String, fromPeer peer: MCPeerID, atURL localURL: NSURL) {
@@ -127,7 +136,7 @@ public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [M
     do {
         try session?.sendData(data, toPeers: peers, withMode: .Reliable)
     } catch let errors as NSError{
-        NSLog("\(errors)")
+        NSLog("Error sending data: \(errors.localizedDescription)")
     }
 }
 

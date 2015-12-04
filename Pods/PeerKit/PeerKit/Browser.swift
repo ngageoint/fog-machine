@@ -34,10 +34,16 @@ class Browser: NSObject, MCNearbyServiceBrowserDelegate {
     }
 
     func browser(browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
+        print("Browser \(browser.myPeerID.displayName) found peerID \(peerID.displayName)")
         browser.invitePeer(peerID, toSession: mcSession, withContext: nil, timeout: 30)
     }
 
     func browser(browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        // unused
+        print("Browser \(browser.myPeerID.displayName) lost peer \(peerID.displayName)")
+    }
+    
+    
+    func browser(browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: NSError) {
+        print("didNotStartBrowsingForPeers: \(error.localizedDescription)")
     }
 }
