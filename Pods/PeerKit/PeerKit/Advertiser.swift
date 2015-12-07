@@ -32,7 +32,9 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
     }
 
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: NSData?, invitationHandler: ((Bool, MCSession) -> Void)) {
-        let accept = mcSession.myPeerID.hashValue > peerID.hashValue
+        
+        // Changed based on http://stackoverflow.com/a/19529933
+        let accept = mcSession.myPeerID.displayName.compare(peerID.displayName) == NSComparisonResult.OrderedDescending
         if accept {
             print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
         } else {

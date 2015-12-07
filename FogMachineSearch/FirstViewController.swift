@@ -41,7 +41,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     
     func findPeers(refreshControl: UIRefreshControl) {
-        PeerKit.transceive("fogsearch")
+        PeerKit.transceive(Fog.SERVICE_TYPE)
         refreshControl.endRefreshing()
     }
 

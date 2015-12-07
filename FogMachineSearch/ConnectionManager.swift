@@ -39,7 +39,7 @@ struct ConnectionManager {
     // MARK: Start
     static func start() {
         NSLog("Transceiving")
-        PeerKit.transceive("fogmachine")
+        PeerKit.transceive(Fog.SERVICE_TYPE)
     }
     
     
