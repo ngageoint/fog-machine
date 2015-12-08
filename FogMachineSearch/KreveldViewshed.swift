@@ -15,30 +15,6 @@ class KreveldViewshed {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
         var cellsInRadius:[(x:Int, y:Int)] = []
         
-        /*
-        var cellsInRadius:[(x:Int, y:Int)] = []
-        let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(observPt.getXCoor(), inY: observPt.getYCoor(), radius: radius, numberOfQuadrants: numOfPeers, whichQuadrant: quadrant2Calc)
-        
-        for (x, y) in perimeter {
-        let pointsInLine:[(x:Int, y:Int)] = findLine(observPt.getXCoor(), y1: observPt.getYCoor(), x2: x, y2: y)
-        cellsInRadius.appendContentsOf(pointsInLine)
-        //print("\t\(pointsInLine)")
-        //print("==========================")
-        }
-        print("Data Count: \(cellsInRadius.count)")
-        viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
-        */
-        /*
-        let cellsInRadius:[(x:Int, y:Int)] = getCellsInRadius(observPt.getXCoor(), observerY: observPt.getYCoor(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
-        
-        viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
-        //for (x, y) in cellsInRadius {
-        //    viewshedMatrix[x][y] = 1
-        //}
-        */
-        
-
-        
         cellsInRadius = getCellsInRadius(observPt.getXCoor(), observerY: observPt.getYCoor(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
         viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
 
@@ -77,11 +53,8 @@ class KreveldViewshed {
         var sweepEventQueue = PriorityQueue(ascending: true, startingValues: [KreveldSweepEventNode(state: dummy, eventType: KreveldEventTypeOther,
             dataElevPoint: observPt, observerViewPt: observPt, angle: calculateAngle(observPt, view: observPt, type: KreveldEventTypeOther), distance: 0.0)])
         
-        
         //  fill the EventList with all points
         var dataCounter: Int = 0
-        
-        //let cellsInRadius:[(x:Int, y:Int)] = getCellsInRadius(observPt.getXCoor(), inY: observPt.getYCoor(), radius: radius, numQuadrants: numQuadrants, quadrant2Calc: quadrant2Calc)
         
         for (x, y) in cellsInRadius {
             dataCounter++
@@ -108,7 +81,6 @@ class KreveldViewshed {
         
         var currentTime = getCurrentMillis()
         var elapsedTime = currentTime - startTime
-        //print("Data added to queue in: \(Double(elapsedTime)) (ms)")
         print("Total dataCounter: \(dataCounter)")
         
         let elevPoints: [ElevationPoint] = pointsOnLine(demData, viewpoint: observPt, radius: radius, numQuadrants: numQuadrants);
@@ -341,45 +313,16 @@ class KreveldViewshed {
         } else if (numOfPeers == 3 || numOfPeers >= 5 ) {
             
             // parametric euqation of a circle
-            //x = r cos(t)    y = r sin(t)
             if (quadrant2Calc >= 1) {
-                
                let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(observerX, inY:observerY, radius: radius, numberOfQuadrants: numOfPeers, whichQuadrant: quadrant2Calc)
                 
                 for (x, y) in perimeter {
                     let pointsInLine:[(x:Int, y:Int)] = findLine(observerX, y1: observerY, x2: x, y2: y)
                     cellsInRadius.appendContentsOf(pointsInLine)
                 }
-                /*
-                // get all the points
-                for (var a = (observerX - radius); a <= (observerX + radius); a++) {
-                    for (var b:Int = (observerY - radius); b <= (observerY + radius); b++) {
-                        cellsInRadius.append((a, Int(b)))
-                    }
-                }
-                
-                
-                // 360/3 ==> 120 degrees
-                var angleInDegrees:Double = 120
-                var x: Double = Double(observerX) - Double(radius) * cos(angleInDegrees)
-                var y: Double = Double(observerY) - Double(radius) * sin(angleInDegrees)
-                print("\tx: \(x)\ty: \(y)")
-                
-                let pointsInLine:[(x:Int, y:Int)] = findLine(observerX, y1: observerY, x2: Int(x), y2: Int(y))
-                print("\t\(pointsInLine)")
-
-                var newDataArray = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
-                for (x, y) in cellsInRadius {
-                    for (x1, y1) in pointsInLine {
-                        if ((x >= x1 && x <= (observerX + radius)) && (y >= y1 && y <= (observerY))) {
-                            newDataArray[x][y] = 1
-                        }
-                    }
-                }*/
             }
         }
         //print("\t\(cellsInRadius)")
-        
         return cellsInRadius
     }
     
