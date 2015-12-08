@@ -3,7 +3,7 @@
 //  Viewshed
 //
 //  Created by Ram Subramaniam on 11/11/15.
-//  Copyright © 2015 Ram Subramaniam. All rights reserved.
+//  Copyright (c) 2015 NGA. All rights reserved.
 //
 
 import Foundation
@@ -243,7 +243,7 @@ class KreveldViewshed {
     // finds out all the elevation points with in the selected radius
     private func getCellsInRadius(observerX: Int, observerY: Int, radius: Int, numOfPeers: Int, quadrant2Calc:Int ) -> [(x:Int,y:Int)] {
         var cellsInRadius:[(x:Int, y:Int)] = []
-        
+
         // get all the points inside the radius (all 4 quadrants)
         if (numOfPeers == 1) {
             for (var a = (observerX - radius); a <= (observerX + radius); a++) {
@@ -311,8 +311,7 @@ class KreveldViewshed {
                 }
             }
         } else if (numOfPeers == 3 || numOfPeers >= 5 ) {
-            
-            // parametric euqation of a circle
+
             if (quadrant2Calc >= 1) {
                let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(observerX, inY:observerY, radius: radius, numberOfQuadrants: numOfPeers, whichQuadrant: quadrant2Calc)
                 
@@ -322,7 +321,7 @@ class KreveldViewshed {
                 }
             }
         }
-        //print("\t\(cellsInRadius)")
+
         return cellsInRadius
     }
     

@@ -135,7 +135,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
            // observer.radius = 200 // default radius 100
             // set the added observer height 
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y, h: Double(observer.height))
-            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 2, quadrant2Calc: 1)
+            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 1)
             //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
         }
         

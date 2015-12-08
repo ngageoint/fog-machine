@@ -3,7 +3,7 @@
 //  Viewshed
 //
 //  Created by Ram Subramaniam on 11/15/15.
-//  Copyright © 2015 Ram Subramaniam. All rights reserved.
+//  Copyright (c) 2015 NGA. All rights reserved.
 //
 
 import Foundation
