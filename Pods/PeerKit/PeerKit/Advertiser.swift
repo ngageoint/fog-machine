@@ -31,20 +31,26 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
         advertiser?.stopAdvertisingPeer()
     }
 
+    
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: NSData?, invitationHandler: ((Bool, MCSession) -> Void)) {
+        guard let peerRunningTime = NSKeyedUnarchiver.unarchiveObjectWithData(context!) as! NSTimeInterval? else {
+            return
+        }
+
+        let runningTime = -timeStarted.timeIntervalSinceNow
+        let isPeerOlder = (peerRunningTime >= runningTime)
+        print("peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
+        invitationHandler(isPeerOlder, mcSession)
         
-        // Changed based on http://stackoverflow.com/a/19529933
-        let accept = mcSession.myPeerID.displayName.compare(peerID.displayName) == NSComparisonResult.OrderedDescending
-        if accept {
+        if isPeerOlder {
+            advertiser.stopAdvertisingPeer()
             print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
         } else {
             print("Advertiser \(advertiser.myPeerID.displayName) NOT accepting \(peerID.displayName)")
         }
-        invitationHandler(accept, mcSession)
-        if accept {
-            stopAdvertising()
-        }
     }
+    
+    
     
     
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: NSError) {

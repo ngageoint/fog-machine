@@ -33,10 +33,17 @@ class Browser: NSObject, MCNearbyServiceBrowserDelegate {
         mcBrowser?.stopBrowsingForPeers()
     }
 
+    
     func browser(browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
+        
         print("Browser \(browser.myPeerID.displayName) found peerID \(peerID.displayName)")
-        browser.invitePeer(peerID, toSession: mcSession, withContext: nil, timeout: 30)
+        let runningTime = -timeStarted.timeIntervalSinceNow
+        print("runningTime: \(runningTime)")
+
+        let context = NSKeyedArchiver.archivedDataWithRootObject(runningTime)
+        browser.invitePeer(peerID, toSession: mcSession, withContext: context, timeout: 30)
     }
+    
 
     func browser(browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         print("Browser \(browser.myPeerID.displayName) lost peer \(peerID.displayName)")
