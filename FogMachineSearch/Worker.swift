@@ -9,7 +9,7 @@
 import Foundation
 import MultipeerConnectivity
 
-private let myName = String(UIDevice.currentDevice().hash)
+private let myName = UIDevice.currentDevice().name + "-" + String(UIDevice.currentDevice().hash)
 
 struct Worker: Hashable, Equatable, MPCSerializable {
     // MARK: Properties

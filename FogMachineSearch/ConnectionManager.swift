@@ -54,7 +54,6 @@ struct ConnectionManager {
     }
     
     static func onEvent(event: Event, run: ObjectBlock?) {
-        print("onEvent was called for \(event.rawValue)")
         if let run = run {
             PeerKit.eventBlocks[event.rawValue] = run
         } else {
@@ -143,6 +142,7 @@ struct ConnectionManager {
             if peer.displayName == sendTo {
                 let toPeer:[MCPeerID] = [peer]
                 if willThrottle {
+                    //This is not currently needed, but keeping it here in case it's used for other testing/debugging
                     //self.throttle()
                 }
                 PeerKit.sendEvent(event.rawValue, object: anyObject, toPeers: toPeer)
@@ -154,10 +154,9 @@ struct ConnectionManager {
     
     
     static func throttle() {
-        // I dislike sleep's but this is required so the Multipeer Connectivity doesn't send events too fast to the same peer. (The events will go *poof* and never get sent if the sleep doesn't throttle them.)
-        //Although this does not always work
+        // I dislike sleep's but this was being used so the Multipeer Connectivity doesn't send events too fast to the same peer. (The events will go *poof* and never get sent if the sleep doesn't throttle them.) Although this does not always work so it might be related to some other unknown issue.
         let sleepAmount:UInt32 = UInt32(peers.count * 5 + 1)
-        //Output is here as a reminder that there is a sleep  and to hopefully figure out a way to remove it.
+        //Output is here as a reminder that there is a sleep
         NSLog("I NEEDZ NAP FOR \(sleepAmount) SECONDZ")
         let alignment = "\t\t\t\t\t\t\t\t\t\t\t\t\t"
         print("\(alignment)           /\\_/\\ ")
@@ -173,6 +172,7 @@ struct ConnectionManager {
         workForSelf(allWorkers.count)
         
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
+        // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
             for peer in peers {
                 hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peer.displayName: false]]
