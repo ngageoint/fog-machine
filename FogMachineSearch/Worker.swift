@@ -8,8 +8,9 @@
 
 import Foundation
 import MultipeerConnectivity
+import PeerKit
 
-private let myName = UIDevice.currentDevice().name + "-" + String(UIDevice.currentDevice().hash)
+private let myName = PeerKit.myName
 
 struct Worker: Hashable, Equatable, MPCSerializable {
     // MARK: Properties
