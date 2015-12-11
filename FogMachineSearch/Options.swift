@@ -12,6 +12,7 @@ class Options {
     
     var viewshedAlgorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay
     var radius: Int = 100
+    var selectedPeers = Array<String>()
     
     class var sharedInstance: Options {
         struct Static {
@@ -24,5 +25,4 @@ class Options {
         }
         return Static.instance!
     }
-
 }

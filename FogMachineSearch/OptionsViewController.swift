@@ -12,6 +12,7 @@ class OptionsViewController: UIViewController {
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var optionsObj = Options.sharedInstance
+    
 
     @IBOutlet weak var radiusTextControl: UITextField!
     @IBOutlet weak var stepperControl: UIStepper!
@@ -44,5 +45,6 @@ class OptionsViewController: UIViewController {
         self.optionsObj.viewshedAlgorithm = ViewshedAlgorithm(rawValue: segmentedControl.selectedSegmentIndex)!
     }
 
+    
     
 }
