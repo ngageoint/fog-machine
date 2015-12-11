@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Options {
+class Options: NSObject {
     
     var viewshedAlgorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay
     var radius: Int = 100
