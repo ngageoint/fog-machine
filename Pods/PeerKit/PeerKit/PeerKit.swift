@@ -30,7 +30,7 @@ public var eventBlocks = [String: ObjectBlock]()
 
 #if os(iOS)
 import UIKit
-public let myName = String(UIDevice.currentDevice().hash)
+public let myName = String(UIDevice.currentDevice().name + "-" + String(UIDevice.currentDevice().hash))
 #else
 public let myName = NSHost.currentHost().localizedName ?? ""
 #endif
