@@ -51,7 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         hgtElevation = hgt.getElevation()
         
         self.centerMapOnLocation(self.hgt.getCenterLocation())
-        
+        //print("MapViewController  (viewDidLoad): \(self.optionsObj1.selectedPeers)")
         setupFogEvents()
     }
     
@@ -69,7 +69,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let name = "Tester"
         let x = 600
         let y = 600
-        return Observer(name: name, x: x, y: y, height: 20, radius: 600, coordinate: self.hgtCoordinate)
+        return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
         
     }
     
@@ -540,17 +540,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func setupFogEvents() {
+        let options = Options.sharedInstance
         
         ConnectionManager.onEvent(Event.StartViewshed){ fromPeerId, object in
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
-            
             let dict = object as! [String: NSData]
             let work = ViewshedWork(mpcSerialized: dict[Event.StartViewshed.rawValue]!)
             
             self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-            
-            
-            let options = Options.sharedInstance
         
             if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
                 self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
@@ -580,19 +577,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
             
             ConnectionManager.sendEventTo(Event.SendViewshedResult, willThrottle: true, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
-            
         }
-        
-        
         ConnectionManager.onEvent(Event.SendViewshedResult) { fromPeerId, object in
             
             var dict = object as! [NSString: NSData]
             let result = ViewshedResult(mpcSerialized: dict[Event.SendViewshedResult.rawValue]!)
             
-            
-            //dispatch_barrier_async(self.serialQueue) {
-                
-                
                 ConnectionManager.processResult(Event.SendViewshedResult, responseEvent: Event.StartViewshed, sender: fromPeerId.displayName, receiver: Worker.getMe().name, object: [Event.SendViewshedResult.rawValue: result],
                     responseMethod: {
                         
@@ -600,17 +590,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         dispatch_async(dispatch_get_main_queue()) {
                             self.printOut("\tResult recieved from \(fromPeerId.displayName).")
                             //   }
-                            
-                            
-                            
                             //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-                            
                             self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
                         }
-                        
-                        
-                        // self.printOut("\tFinished merging results")
-                        //  }
                     },
                     completeMethod: {
                         dispatch_async(dispatch_get_main_queue()) {
@@ -628,42 +610,41 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func startFogViewshedFramework() {
-        
+        let options = Options.sharedInstance
         printOut("Beginning viewshed on \(Worker.getMe().displayName)")
         let observer = self.singleTestObserver()
         let selfQuadrant = 1
         var count = 1 //Start at one since initiator is 0-indexed
         
-        ConnectionManager.sendEventToAll(Event.StartViewshed,
-            workForPeer: { workerCount in
-                
-                let workDivision = self.getQuadrant(workerCount)
-                let currentQuadrant = workDivision[count]
-                let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
-                
-                count++
-                
-                return theWork
-            },
-            workForSelf: { workerCount in
-                
-                self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-                
-                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
-                
-                if (workerCount < 2) {
-                    //if no peers
-                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                    self.stopTimer()
-                }
-                
-                self.printOut("\tFound results locally out of \(workerCount).")
-            },
-            log: { peerName in
-                self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
-        })
-
+        for var selectedPeer in options.selectedPeers {
+            ConnectionManager.sendEventToPeer(Event.StartViewshed,
+                workForPeer: { workerCount in
+                    
+                    let workDivision = self.getQuadrant(workerCount)
+                    let currentQuadrant = workDivision[count]
+                    let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
+                    count++
+                    return theWork
+                },
+                workForSelf: { workerCount in
+                    
+                    self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
+                    self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
+                    
+                    if (workerCount < 2) {
+                        //if no peers
+                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                        self.stopTimer()
+                    }
+                    
+                    self.printOut("\tFound results locally out of \(workerCount).")
+                },
+                log: { peerName in
+                    self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
+                },
+                peerName: selectedPeer)
+        }
     }
 
 
