@@ -11,20 +11,23 @@ import MultipeerConnectivity
 
 class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
 
-    let mcSession: MCSession
-
-    init(mcSession: MCSession) {
-        self.mcSession = mcSession
+    let theSession: Session
+    let displayName: String
+    private var advertiser: MCNearbyServiceAdvertiser?
+    
+    init(displayName: String, session: Session) {
+        self.displayName = displayName
+        self.theSession = session
         super.init()
     }
-
-    private var advertiser: MCNearbyServiceAdvertiser?
+    
 
     func startAdvertising(serviceType serviceType: String, discoveryInfo: [String: String]? = nil) {
-        advertiser = MCNearbyServiceAdvertiser(peer: mcSession.myPeerID, discoveryInfo: discoveryInfo, serviceType: serviceType)
+        advertiser = MCNearbyServiceAdvertiser(peer: theSession.getPeerId(displayName), discoveryInfo: discoveryInfo, serviceType: serviceType)
         advertiser?.delegate = self
         advertiser?.startAdvertisingPeer()
     }
+    
 
     func stopAdvertising() {
         advertiser?.delegate = nil
@@ -38,11 +41,15 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
         }
 
         let runningTime = -timeStarted.timeIntervalSinceNow
-        let isPeerOlder = (peerRunningTime >= runningTime)
-        print("peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
-        invitationHandler(isPeerOlder, mcSession)
+        let isPeerYounger = (peerRunningTime <= runningTime)
+        print("isPeerYounger: \(isPeerYounger)  peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
         
-        if isPeerOlder {
+        //let session = availableSession()
+        
+        if let aSession = theSession.getSession(displayName) {
+            invitationHandler(isPeerYounger, aSession)
+        }
+        if isPeerYounger {
             advertiser.stopAdvertisingPeer()
             print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
         } else {
@@ -51,9 +58,9 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
     }
     
     
-    
-    
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: NSError) {
         print("didNotStartAdvertisingPeer: \(error.localizedDescription)")
     }
+    
+    
 }

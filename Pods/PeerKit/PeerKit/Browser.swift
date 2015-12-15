@@ -13,21 +13,26 @@ let timeStarted = NSDate()
 
 class Browser: NSObject, MCNearbyServiceBrowserDelegate {
 
-    let mcSession: MCSession
-
-    init(mcSession: MCSession) {
-        self.mcSession = mcSession
+    let theSession: Session
+    let displayName: String
+    
+    var mcBrowser: MCNearbyServiceBrowser?
+    
+    
+    init(displayName: String, session: Session) {
+        self.displayName = displayName
+        self.theSession = session
         super.init()
     }
 
-    var mcBrowser: MCNearbyServiceBrowser?
 
     func startBrowsing(serviceType: String) {
-        mcBrowser = MCNearbyServiceBrowser(peer: mcSession.myPeerID, serviceType: serviceType)
+        mcBrowser = MCNearbyServiceBrowser(peer: theSession.getPeerId(displayName), serviceType: serviceType)
         mcBrowser?.delegate = self
         mcBrowser?.startBrowsingForPeers()
     }
 
+    
     func stopBrowsing() {
         mcBrowser?.delegate = nil
         mcBrowser?.stopBrowsingForPeers()
@@ -38,10 +43,14 @@ class Browser: NSObject, MCNearbyServiceBrowserDelegate {
         
         print("Browser \(browser.myPeerID.displayName) found peerID \(peerID.displayName)")
         let runningTime = -timeStarted.timeIntervalSinceNow
-        print("runningTime: \(runningTime)")
+        //print("runningTime: \(runningTime)")
 
         let context = NSKeyedArchiver.archivedDataWithRootObject(runningTime)
-        browser.invitePeer(peerID, toSession: mcSession, withContext: context, timeout: 30)
+
+        if let aSession = theSession.getSession(displayName) {
+            print("sending invitePeer")
+            browser.invitePeer(peerID, toSession: aSession, withContext: context, timeout: 30)
+        }
     }
     
 

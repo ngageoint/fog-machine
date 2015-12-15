@@ -41,7 +41,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     
     func findPeers(refreshControl: UIRefreshControl) {
-        PeerKit.transceive(Fog.SERVICE_TYPE)
+        ConnectionManager.start()
         refreshControl.endRefreshing()
     }
 

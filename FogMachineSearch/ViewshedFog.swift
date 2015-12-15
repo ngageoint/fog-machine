@@ -116,8 +116,9 @@ public class ViewshedFog: NSObject {
 
         var resultPerimeter: [(x:Int, y:Int)] = []
         
-        for (startSection; startSection < endSection; startSection++) {
+        while (startSection < endSection) {
             resultPerimeter.append(perimeter[startSection])
+            startSection++
         }
         
         return resultPerimeter
