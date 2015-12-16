@@ -44,11 +44,9 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
         let isPeerYounger = (peerRunningTime <= runningTime)
         print("isPeerYounger: \(isPeerYounger)  peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
         
-        //let session = availableSession()
-        
-        if let aSession = theSession.getSession(displayName) {
-            invitationHandler(isPeerYounger, aSession)
-        }
+        let aSession = theSession.availableSession(displayName)
+        invitationHandler(isPeerYounger, aSession)
+
         if isPeerYounger {
             advertiser.stopAdvertisingPeer()
             print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")

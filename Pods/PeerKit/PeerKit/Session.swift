@@ -28,10 +28,10 @@ public class Session: NSObject, MCSessionDelegate {
     
     public init(displayName: String, delegate: SessionDelegate? = nil) {
         self.delegate = delegate
-        let newSession = MCSession(peer: MCPeerID(displayName: displayName))
+        //let newSession = MCSession(peer: MCPeerID(displayName: displayName))
         super.init()
-        newSession.delegate = self
-        myPeerSessions[displayName] = newSession
+        //newSession.delegate = self
+        myPeerSessions[displayName] = self.availableSession(displayName)//newSession
     }
 
     
@@ -43,7 +43,13 @@ public class Session: NSObject, MCSessionDelegate {
         //myPeerSessions[displayName]?.delegate = nil
         //myPeerSessions[displayName]?.disconnect()
         
-        NSLog("Disconnecting \(displayName)")
+        if let session = self.getSession(displayName) {
+            session.delegate = nil
+            session.disconnect()
+            myPeerSessions.removeValueForKey(displayName)
+        }
+        
+        print("Disconnected \(displayName)")
     }
     
     
@@ -97,34 +103,35 @@ public class Session: NSObject, MCSessionDelegate {
     }
     
     
+    func availableSession(displayName: String) -> MCSession {
+        print("\tavailableSession for \(displayName)")
+        var notFound = true
+        var availableSession: MCSession? = nil
+        
+        for (name,session) in myPeerSessions {
+            if name == displayName {
+                notFound = false
+                availableSession = session
+                break
+            }
+        }
+        
+        if notFound {
+            availableSession = self.newSession(displayName)
+        }
+        
+        return availableSession!
+    }
     
-//    
-//    
-//    func availableSession() -> MCSession {
-//        
-//        //Try and use an existing session (_sessions is a mutable array)
-//        for session: MCSession in mcSessions {
-//            if session.connectedPeers.count < kMCSessionMaximumNumberOfPeers {
-//                return session
-//            }
-//        }
-//        
-//        //Or create a new session
-//        let newSession: MCSession = self.newSession()
-//        mcSessions.append(newSession)
-//        return newSession
-//    }
-//    
-//    
-//    func newSession() -> MCSession {
-//        
-//        let session: MCSession = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.Required)
-//        session.delegate = self
-//        return session
-//        
-//    }
-//    
-//    
+    
+    func newSession(displayName: String) -> MCSession {
+        let newSession = MCSession(peer: MCPeerID(displayName: displayName))
+        
+        newSession.delegate = self
+        myPeerSessions[displayName] = newSession
+
+        return newSession
+    }
     
     
     func sendData(data: NSData, toPeers peerIDs: [MCPeerID], withMode: MCSessionSendDataMode) {
@@ -162,7 +169,8 @@ public class Session: NSObject, MCSessionDelegate {
                 delegate?.connected(session.myPeerID, toPeer: peerID)
             case .NotConnected:
                 print("NotConnected \(ids)")
-                session.disconnect()
+                self.disconnect(peerID.displayName)
+                //session.disconnect()
                 //myPeerSessions.removeValueForKey(peerID.displayName)
                 delegate?.disconnected(session.myPeerID, fromPeer: peerID)
         }
