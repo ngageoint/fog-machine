@@ -25,6 +25,7 @@
 		758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7841C0D170000A193A7 /* WorkArray.swift */; };
 		758FB7871C0D177200A193A7 /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7861C0D177200A193A7 /* Work.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
+		9B5032AC1C24659C00BF6F15 /* OptionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5032AB1C24659C00BF6F15 /* OptionsTableViewController.swift */; };
 		9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F01C05E51E004A37B6 /* DemData.swift */; };
 		9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */; };
 		9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */; };
@@ -84,6 +85,7 @@
 		758FB7841C0D170000A193A7 /* WorkArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkArray.swift; sourceTree = "<group>"; };
 		758FB7861C0D177200A193A7 /* Work.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
+		9B5032AB1C24659C00BF6F15 /* OptionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsTableViewController.swift; sourceTree = "<group>"; };
 		9BD5C0F01C05E51E004A37B6 /* DemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemData.swift; sourceTree = "<group>"; };
 		9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldSweepEventNode.swift; sourceTree = "<group>"; };
 		9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldViewshed.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
 				753D3D561BE7A031004E3589 /* Viewshed.swift */,
 				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
+				9B5032AB1C24659C00BF6F15 /* OptionsTableViewController.swift */,
 			);
 			name = Viewshed;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				E314F6E51B790275005B75C6 /* ConnectionManager.swift in Sources */,
 				753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */,
 				753D3D571BE7A031004E3589 /* Viewshed.swift in Sources */,
+				9B5032AC1C24659C00BF6F15 /* OptionsTableViewController.swift in Sources */,
 				9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */,
 				9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */,
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,

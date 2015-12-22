@@ -179,6 +179,7 @@ struct ConnectionManager {
                     let theWork = workForPeer(allWorkers.count)
                     self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peer.displayName)
                     log(peer.displayName)
+                    break
                 }
             }
         }

@@ -232,7 +232,7 @@ class KreveldViewshed {
         
         var resultPerimeter: [(x:Int, y:Int)] = []
         
-        for (startSection; startSection < endSection; startSection++) {
+        for (; startSection < endSection; startSection++) {
             resultPerimeter.append(perimeter[startSection])
         }
         
