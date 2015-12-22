@@ -9,20 +9,25 @@
 import UIKit
 import MapKit
 
-class OptionsViewController: UIViewController {
+class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    @IBOutlet weak var hgtDataTextView: UITextField!
+    //@IBOutlet weak var hgtDataTextView: UITextField!
      //@IBOutlet weak var hgtDataPickerView: UIPickerView!
 
+    @IBOutlet weak var hgtDataTextField: UITextField!
     @IBOutlet weak var hgtDataPickerView: UIPickerView!
     @IBOutlet weak var radiusTextControl: UITextField!
     @IBOutlet weak var stepperControl: UIStepper!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-
+    @IBOutlet weak var radiusSlider: UISlider!
+    
+    @IBOutlet weak var radiusValueLabel: UILabel!
+    
     var coordinate:CLLocationCoordinate2D!
     var optionsObj = Options.sharedInstance
-
+    //var pickerData: [String] =  ["Mozzarella", "Gorgonzola", "Provolone","Brie", "Maytag Blue", "Sharp Cheddar", "Monterrey Jack", "Stilton", "Gouda", "Goat Cheese",  "Asiago"]
     var pickerData: [String] = [String]()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,10 +50,18 @@ class OptionsViewController: UIViewController {
         stepperControl.minimumValue = 100
         radiusTextControl.text = "100"
         
-        //getHgtFileInfo()
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        hgtDataTextField.inputView = pickerView
+        
+        radiusSlider.minimumValue = 100
+        radiusSlider.maximumValue = 1200
+        radiusSlider.value = 100
+        radiusValueLabel.text = "100"
+        getHgtFileInfo()
 
         
-        //hgtDataTextView.text = pickerData[0]
+        //hgtDataTextField.text = pickerData[0]
     }
     
     func generateRadiusData () {
@@ -143,7 +156,7 @@ class OptionsViewController: UIViewController {
         }
         print("Done with all the HGT Files...\n")
     }
-    
+
     
 /*
     func getHgtFileInfo() {
@@ -185,7 +198,7 @@ class OptionsViewController: UIViewController {
         }
         print("Done with all the HGT Files...\n")
     }
-
+*/
     class CustomPointAnnotation: MKPointAnnotation {
         var pinImageName: String!
     }
@@ -204,9 +217,14 @@ class OptionsViewController: UIViewController {
     }
     
     func pickerView(pickerView: UIPickerView!, didSelectRow row: Int, inComponent component: Int){
-        hgtDataTextView.text = pickerData[row]
-        self.view.endEditing(true)
+        hgtDataTextField.text = pickerData[row]
+        //self.view.endEditing(true)
     }
-*/
-    
+
+    @IBAction func radiusSliderValueChanged(sender: AnyObject) {
+        let step: Float = 5
+        
+        let roundedValue = Int(round(radiusSlider.value / step) * step)
+        radiusValueLabel.text = "\(roundedValue)"
+    }
 }
