@@ -40,7 +40,7 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
         
         radiusSlider.minimumValue = 100
-        radiusSlider.maximumValue = 1200
+        radiusSlider.maximumValue = 1000
         radiusSlider.value = 100
         
         radiusValueLText.delegate = self
@@ -95,7 +95,7 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             radiusValue = enteredRadiusValue
             return
         }
-        if (radiusValue >= 100 && radiusValue < 1200) {
+        if (radiusValue >= 100 && radiusValue < 1000) {
             radiusSlider.value = Float(radiusValue)
         }
     }
@@ -143,8 +143,8 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
 
             if( prospectiveText.isNumeric() &&
                 prospectiveText.doesNotContainCharactersIn("-e" + decimalSeparator) &&
-                prospectiveText.characters.count <= 4 && (Int(prospectiveText) < 1200)) {
-                if (Int(prospectiveText) >= 100 && Int(prospectiveText) < 1200) {
+                prospectiveText.characters.count <= 4 && (Int(prospectiveText) < 1000)) {
+                if (Int(prospectiveText) >= 100 && Int(prospectiveText) < 1000) {
                     radiusSlider.value = Float(prospectiveText)!
                 }
                 return true
