@@ -86,6 +86,7 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         hgtDataText.text = pickerData[row]
         hgtDataPickerView.hidden = true;
         self.view.endEditing(true)
+        print (pickerData[row])
     }
 
     
