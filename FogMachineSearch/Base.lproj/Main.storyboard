@@ -384,7 +384,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1610" y="453"/>
+            <point key="canvasLocation" x="1411" y="164"/>
         </scene>
         <!--Title-->
         <scene sceneID="SnO-hu-vL6">
@@ -399,16 +399,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Algorithm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FdC-hb-VE9">
-                                <rect key="frame" x="68" y="78" width="66" height="17"/>
+                                <rect key="frame" x="84" y="78" width="66" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="66" id="IHY-JG-cVJ"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="SiU-Qf-14c">
-                                <rect key="frame" x="151" y="72" width="177" height="29"/>
+                                <rect key="frame" x="165" y="72" width="177" height="29"/>
                                 <segments>
                                     <segment title="Franklin Ray"/>
                                     <segment title="VanKreveld"/>
@@ -418,7 +418,7 @@
                                 </connections>
                             </segmentedControl>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jgs-NX-dr6">
-                                <rect key="frame" x="271" y="121" width="47" height="30"/>
+                                <rect key="frame" x="285" y="121" width="47" height="30"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <bool key="isElement" value="NO"/>
                                 </accessibility>
@@ -426,7 +426,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="9uc-0I-Wix">
-                                <rect key="frame" x="151" y="122" width="94" height="29"/>
+                                <rect key="frame" x="165" y="122" width="94" height="29"/>
                                 <connections>
                                     <action selector="stepperValueChanged:" destination="cxO-4m-Wpk" eventType="valueChanged" id="XUH-sH-LSb"/>
                                 </connections>
@@ -435,31 +435,51 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Radius" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4l5-Fo-KLy">
-                                <rect key="frame" x="86" y="126" width="48" height="17"/>
+                                <rect key="frame" x="102" y="126" width="48" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="0b4-bP-xG9"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sct-qS-O2K">
-                                <rect key="frame" x="298" y="179" width="63" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KkD-4U-dBI">
-                                <rect key="frame" x="151" y="226" width="177" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2Yc-Nj-b6S">
-                                <rect key="frame" x="149" y="175" width="118" height="31"/>
+                                <rect key="frame" x="163" y="175" width="118" height="31"/>
                                 <connections>
                                     <action selector="radiusSliderValueChanged:" destination="cxO-4m-Wpk" eventType="valueChanged" id="Laa-xQ-ZrW"/>
                                 </connections>
                             </slider>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KkD-4U-dBI">
+                                <rect key="frame" x="165" y="226" width="200" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="hgtDataTxtFieldShouldBeginEditing:" destination="cxO-4m-Wpk" eventType="editingDidBegin" id="GpJ-7x-6hB"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Radius" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Ol-JO-nLx">
+                                <rect key="frame" x="102" y="181" width="48" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="48" id="lpv-ia-lPj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="HGT/SRTM Data File" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wqr-GO-gGj">
+                                <rect key="frame" x="7" y="232" width="143" height="17"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="48" id="uZO-pg-r2a"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kGO-7Z-rLz">
+                                <rect key="frame" x="296" y="174" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -481,15 +501,15 @@
                     <connections>
                         <outlet property="hgtDataTextField" destination="KkD-4U-dBI" id="WdL-Vd-hpD"/>
                         <outlet property="radiusSlider" destination="2Yc-Nj-b6S" id="W7O-tF-lik"/>
-                        <outlet property="radiusTextControl" destination="jgs-NX-dr6" id="pGg-Fg-qKC"/>
-                        <outlet property="radiusValueLabel" destination="sct-qS-O2K" id="fmw-KG-F7g"/>
+                        <outlet property="radiusTextControl" destination="jgs-NX-dr6" id="dda-PM-7J8"/>
+                        <outlet property="radiusTextField" destination="kGO-7Z-rLz" id="eqX-KT-U7J"/>
                         <outlet property="segmentedControl" destination="SiU-Qf-14c" id="xfW-Qt-bpv"/>
                         <outlet property="stepperControl" destination="9uc-0I-Wix" id="5hh-Dk-Sw9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1w4-qg-jsM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1686" y="1506"/>
+            <point key="canvasLocation" x="2459" y="1025"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -651,7 +671,7 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="organize" id="zR3-sj-Rfp">
                             <connections>
-                                <segue destination="cxO-4m-Wpk" kind="show" id="uLP-AU-1GA"/>
+                                <segue destination="zA9-9m-RT6" kind="show" id="rI5-Qr-AG4"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -683,6 +703,89 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3It-gU-Ah6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="148" y="902"/>
+        </scene>
+        <!--Options View Controller-->
+        <scene sceneID="X2j-k0-ccE">
+            <objects>
+                <viewController id="zA9-9m-RT6" customClass="OptionsViewController" customModule="FogMachineSearch" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="csI-Wm-Rie"/>
+                        <viewControllerLayoutGuide type="bottom" id="M4q-vN-axu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="INe-ib-kcr" customClass="UIControl">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Algorithm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UI3-eQ-jOT">
+                                <rect key="frame" x="69" y="79" width="66" height="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8zH-n1-eTN">
+                                <rect key="frame" x="138" y="73" width="177" height="29"/>
+                                <segments>
+                                    <segment title="Franklin Ray"/>
+                                    <segment title="VanKreveld"/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentControlOptionAction:" destination="cxO-4m-Wpk" eventType="valueChanged" id="ANu-So-JxH"/>
+                                </connections>
+                            </segmentedControl>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvy-uR-REK">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            </navigationBar>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="YzH-rf-R7X">
+                                <rect key="frame" x="136" y="124" width="146" height="31"/>
+                                <connections>
+                                    <action selector="radiusSliderValueChanged:" destination="cxO-4m-Wpk" eventType="valueChanged" id="aGl-Qo-6wD"/>
+                                    <action selector="radiusSliderValueChanged:" destination="zA9-9m-RT6" eventType="valueChanged" id="djm-kb-9kH"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Radius" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8w8-Ea-6Lo">
+                                <rect key="frame" x="87" y="131" width="48" height="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SRTM/HGT Data File" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACT-Rf-BUb">
+                                <rect key="frame" x="4" y="187" width="131" height="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JJd-zM-FCN">
+                                <rect key="frame" x="138" y="181" width="153" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="hgDataTextEditingDidBegin:" destination="zA9-9m-RT6" eventType="editingDidBegin" id="HPb-hM-h8W"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9un-ci-9Cv">
+                                <rect key="frame" x="288" y="125" width="72" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="radiusTextEditingDidEnd:forEvent:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="5gq-5d-wms"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <connections>
+                            <action selector="userTappedBackground:" destination="zA9-9m-RT6" eventType="touchDown" id="66h-b7-aLU"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="hgtDataText" destination="JJd-zM-FCN" id="acU-gD-gzt"/>
+                        <outlet property="radiusSlider" destination="YzH-rf-R7X" id="OWK-rO-hMT"/>
+                        <outlet property="radiusValueLText" destination="9un-ci-9Cv" id="mXX-sF-pnY"/>
+                        <outlet property="viewshedTypeSegmented" destination="8zH-n1-eTN" id="rFh-UD-YM1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="loG-pv-V9z" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1803" y="1317"/>
         </scene>
     </scenes>
     <resources>

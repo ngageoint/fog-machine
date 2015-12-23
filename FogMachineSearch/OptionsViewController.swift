@@ -9,63 +9,56 @@
 import UIKit
 import MapKit
 
-class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
-
-    //@IBOutlet weak var hgtDataTextView: UITextField!
-     //@IBOutlet weak var hgtDataPickerView: UIPickerView!
-
-    @IBOutlet weak var hgtDataTextField: UITextField!
-    @IBOutlet weak var hgtDataPickerView: UIPickerView!
-    @IBOutlet weak var radiusTextControl: UITextField!
-    @IBOutlet weak var stepperControl: UIStepper!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
+class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var radiusSlider: UISlider!
     
-    @IBOutlet weak var radiusValueLabel: UILabel!
-    
+    @IBOutlet weak var hgtDataText: UITextField!
+    @IBOutlet weak var viewshedTypeSegmented: UISegmentedControl!
+    @IBOutlet weak var radiusValueLText: UITextField!
+    var hgtDataPickerView: UIPickerView!
+
     var coordinate:CLLocationCoordinate2D!
     var optionsObj = Options.sharedInstance
-    //var pickerData: [String] =  ["Mozzarella", "Gorgonzola", "Provolone","Brie", "Maytag Blue", "Sharp Cheddar", "Monterrey Jack", "Stilton", "Gouda", "Goat Cheese",  "Asiago"]
     var pickerData: [String] = [String]()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        //hgtDataTextView.enabled = false
-        //hgtDataPickerView.dataSource = self
-        //hgtDataPickerView.delegate = self
-        
-        
         
         // Do any additional setup after loading the view, typically from a nib.
         // setting the default algorithm option is none is selected before
         if (optionsObj.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay || optionsObj.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
-            segmentedControl.selectedSegmentIndex = optionsObj.viewshedAlgorithm.rawValue
+            viewshedTypeSegmented.selectedSegmentIndex = optionsObj.viewshedAlgorithm.rawValue
         } else {
-            segmentedControl.selectedSegmentIndex = 0
+            viewshedTypeSegmented.selectedSegmentIndex = 0
         }
-        stepperControl.autorepeat = true
-        stepperControl.maximumValue = 1200
-        stepperControl.minimumValue = 100
-        radiusTextControl.text = "100"
+
         
-        let pickerView = UIPickerView()
-        pickerView.delegate = self
-        hgtDataTextField.inputView = pickerView
+        hgtDataPickerView = UIPickerView()
+        hgtDataPickerView.delegate = self
+        hgtDataText.inputView = hgtDataPickerView
+        
         
         radiusSlider.minimumValue = 100
         radiusSlider.maximumValue = 1200
         radiusSlider.value = 100
-        radiusValueLabel.text = "100"
-        getHgtFileInfo()
-
         
-        //hgtDataTextField.text = pickerData[0]
-    }
-    
-    func generateRadiusData () {
+        radiusValueLText.delegate = self
+        radiusValueLText.keyboardType = UIKeyboardType.DecimalPad
 
+        radiusValueLText.text = "100"
+        
+        getHgtFileInfo()
+        hgtDataPickerView.hidden = true;
+
+    }
+    // Tap outside a text field to dismiss the keyboard
+    // ------------------------------------------------
+    // By changing the underlying class of the view from UIView to UIControl,
+    // the view can respond to events, including Touch Down, which is
+    // wired to this method.
+    @IBAction func userTappedBackground(sender: AnyObject) {
+        view.endEditing(true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -73,17 +66,103 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func stepperValueChanged(sender: AnyObject) {
-        radiusTextControl.text = String (Int(stepperControl.value))
-        self.optionsObj.radius = Int(stepperControl.value)
-    }
     @IBAction func segmentControlOptionAction(sender: AnyObject) {
-        self.optionsObj.viewshedAlgorithm = ViewshedAlgorithm(rawValue: segmentedControl.selectedSegmentIndex)!
+        self.optionsObj.viewshedAlgorithm = ViewshedAlgorithm(rawValue: viewshedTypeSegmented.selectedSegmentIndex)!
+    }
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return pickerData.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        return pickerData[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView!, didSelectRow row: Int, inComponent component: Int){
+        hgtDataText.text = pickerData[row]
+        hgtDataPickerView.hidden = true;
+        self.view.endEditing(true)
+    }
+
+    
+    @IBAction func radiusTextEditingDidEnd(sender: UITextField, forEvent event: UIEvent) {
+        var radiusValue: Int!
+        if let enteredRadiusValue: Int! = Int (radiusValueLText.text!) {
+            radiusValue = enteredRadiusValue
+            return
+        }
+        if (radiusValue >= 100 && radiusValue < 1200) {
+            radiusSlider.value = Float(radiusValue)
+        }
+    }
+    
+    @IBAction func radiusSliderValueChanged(sender: UISlider) {
+        let step: Float = 5
+        
+        let roundedValue = Int(round(radiusSlider.value / step) * step)
+        radiusValueLText.text = String (roundedValue)
+    }
+    
+    // Dismiss the keyboard when the user taps the "Return" key or its equivalent
+    // while editing a text field.
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true;
+    }
+    
+    // MARK: UITextFieldDelegate events and related methods
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        // We ignore any change that doesn't add characters to the text field.
+        // These changes are things like character deletions and cuts, as well
+        // as moving the insertion point.
+
+        // We still return true to allow the change to take place.
+        if string.characters.count == 0 {
+            return true
+        }
+        
+        // Check to see if the text field's contents still fit the constraints
+        // with the new content added to it.
+        // If the contents still fit the constraints, allow the change
+        // by returning true; otherwise disallow the change by returning false.
+        let currentText = textField.text ?? ""
+        let prospectiveText = (currentText as NSString).stringByReplacingCharactersInRange(range, withString: string)
+        
+        switch textField {
+            
+            // In this field, allow only values that evalulate to proper numeric values and
+            // do not contain the "-" and "e" characters, nor the decimal separator character
+            // for the current locale. Limit its contents to a maximum of 5 characters.
+        case radiusValueLText:
+            let decimalSeparator = NSLocale.currentLocale().objectForKey(NSLocaleDecimalSeparator) as! String
+            
+
+            if( prospectiveText.isNumeric() &&
+                prospectiveText.doesNotContainCharactersIn("-e" + decimalSeparator) &&
+                prospectiveText.characters.count <= 4 && (Int(prospectiveText) < 1200)) {
+                if (Int(prospectiveText) >= 100 && Int(prospectiveText) < 1200) {
+                    radiusSlider.value = Float(prospectiveText)!
+                }
+                return true
+            } else {
+                return false
+            }
+            // Do not put constraints on any other text field in this view
+            // that uses this class as its delegate.
+        default:
+            return true
+        }
     }
     
     
-    // File names refer to the latitude and longitude of the lower left corner of
-    // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
+    @IBAction func hgDataTextEditingDidBegin(sender: AnyObject) {
+         hgtDataPickerView.hidden = false
+    }
+    
     // latitude and 105 degrees west longitude
     func parseCoordinate(filename : String) -> CLLocationCoordinate2D {
         
@@ -114,12 +193,12 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
         let fm = NSFileManager.defaultManager()
         let path = NSBundle.mainBundle().resourcePath!
-        print("path \(path)\n")
+        
         do {
             let items = try fm.contentsOfDirectoryAtPath(path)
             for var item: String in items {
                 if (item == "HGT") {
-                    print("item:  \(item)\n")
+                    
                     let hgtFolder = path + "/HGT"
                     let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
                     for var hgFileWithExt: String in hgtFiles {
@@ -133,20 +212,6 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                         let strName = String(hgFileName!).substringWithRange(Range<String.Index>(start: String(hgFileName!).startIndex, end: String(hgFileName!).startIndex.advancedBy(countstr)))
                         
                         pickerData.append("Lat: \(self.coordinate.latitude), Lng: \(self.coordinate.longitude)")
-                        print("name \(hgFileName)\t\t \(coordinate)")
-                        // drop a pin....custom annotation.
-                        //var customAnnotation = CustomPointAnnotation()
-                        //customAnnotation.coordinate =  self.coordinate
-                        //customAnnotation.pinImageName = "ViewshedMap"
-                        //customAnnotation.title = String ("\(self.coordinate.latitude), \(self.coordinate.longitude)")
-                        //annotationView = MKPinAnnotationView(annotation: customAnnotation, reuseIdentifier: "pin")
-                        //self.hgtDataMap.addAnnotation(annotationView.annotation!)
-                        ////hgtDataMap.addAnnotation(customAnnotation)
-                        // drop a pin....annotation.
-                        //let annotation = MKPointAnnotation()
-                        //annotation.coordinate = self.coordinate
-                        //annotation.title = String ("\(self.coordinate.latitude), \(self.coordinate.longitude)")
-                        //hgtDataMap.addAnnotation(annotation)
                     }
                     break
                 }
@@ -154,77 +219,11 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         } catch {
             // failed to read directory – bad permissions, perhaps?
         }
-        print("Done with all the HGT Files...\n")
-    }
-
-    
-/*
-    func getHgtFileInfo() {
-        var annotationView:MKPinAnnotationView!
-        
-        let fm = NSFileManager.defaultManager()
-        let path = NSBundle.mainBundle().resourcePath!
-        print("path \(path)\n")
-        do {
-            let items = try fm.contentsOfDirectoryAtPath(path)
-            for var item: String in items {
-                if (item == "HGT") {
-                    print("item:  \(item)\n")
-                    let hgtFolder = path + "/HGT"
-                    let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
-                    for var hgFileWithExt: String in hgtFiles {
-                        let hgFileName = NSURL(fileURLWithPath: hgFileWithExt).URLByDeletingPathExtension?.lastPathComponent
-                        self.coordinate = parseCoordinate(hgFileName!)
-                        //print("name \(hgFileName)\t\t \(coordinate)")
-                        // drop a pin....custom annotation.
-                        //var customAnnotation = CustomPointAnnotation()
-                        //customAnnotation.coordinate =  self.coordinate
-                        //customAnnotation.pinImageName = "ViewshedMap"
-                        //customAnnotation.title = String ("\(self.coordinate.latitude), \(self.coordinate.longitude)")
-                        //annotationView = MKPinAnnotationView(annotation: customAnnotation, reuseIdentifier: "pin")
-                        //self.hgtDataMap.addAnnotation(annotationView.annotation!)
-                        ////hgtDataMap.addAnnotation(customAnnotation)
-                        // drop a pin....annotation.
-                        //let annotation = MKPointAnnotation()
-                        //annotation.coordinate = self.coordinate
-                        //annotation.title = String ("\(self.coordinate.latitude), \(self.coordinate.longitude)")
-                        //hgtDataMap.addAnnotation(annotation)
-                    }
-                    break
-                }
-            }
-        } catch {
-            // failed to read directory – bad permissions, perhaps?
-        }
-        print("Done with all the HGT Files...\n")
-    }
-*/
-    class CustomPointAnnotation: MKPointAnnotation {
-        var pinImageName: String!
+        //print("Done with all the HGT Files...\n")
     }
 
 
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
-        return pickerData.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-        return pickerData[row]
-    }
-    
-    func pickerView(pickerView: UIPickerView!, didSelectRow row: Int, inComponent component: Int){
-        hgtDataTextField.text = pickerData[row]
-        //self.view.endEditing(true)
-    }
-
-    @IBAction func radiusSliderValueChanged(sender: AnyObject) {
-        let step: Float = 5
-        
-        let roundedValue = Int(round(radiusSlider.value / step) * step)
-        radiusValueLabel.text = "\(roundedValue)"
-    }
 }
+
+
+
