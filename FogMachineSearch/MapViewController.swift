@@ -79,14 +79,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func singleTestObserver() -> Observer {
         let name = "Tester"
-        let x = 600
-        let y = 600
-        return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
+        let optionsObj = Options.sharedInstance
+        let x = optionsObj.observerX //600
+        let y = optionsObj.observerY //600
+        return Observer(name: name, x: x, y: y, height: optionsObj.observerElevation, radius: optionsObj.radius, coordinate: self.hgtCoordinate)
         
     }
     
     
     func singleRandomObserver() -> Observer {
+        let optionsObj = Options.sharedInstance
         let name = String(arc4random_uniform(10000) + 1)
         let x = Int(arc4random_uniform(700) + 200)
         let y = Int(arc4random_uniform(700) + 200)
@@ -712,9 +714,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let options = Options.sharedInstance
         self.startTimer()
         
-        for count in 1...1 {
-            //let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
-            let observer = Observer(name: String(count), x: 600, y: 600, height: 20, radius: 600, coordinate: self.hgtCoordinate)
+        for count in 1...8 {
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
+            //let observer = Observer(name: String(count), x: 600, y: 600, height: 20, radius: 600, coordinate: self.hgtCoordinate)
             //let observer = Observer(name: String(count), x: 8 * 100, y: 8 * 100, height: 20, radius: options.radius, coordinate:self.hgtCoordinate)
             self.performSerialViewshed(observer, algorithm: options.viewshedAlgorithm)
         }

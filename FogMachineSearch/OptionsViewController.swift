@@ -53,17 +53,28 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
         radiusSlider.minimumValue = 100
         radiusSlider.maximumValue = 1000
-        radiusSlider.value = 100
+        
         radiusValueLText.delegate = self
         radiusValueLText.keyboardType = UIKeyboardType.DecimalPad
-        radiusValueLText.text = "100"
+        if (self.optionsObj.radius > 0) {
+            radiusValueLText.text = String (self.optionsObj.radius)
+            radiusSlider.value = Float (self.optionsObj.radius)
+        } else {
+            radiusValueLText.text = "300"
+            radiusSlider.value = 300
+        }
         
         // get all the HGT File names from the resource folder
         getHgtFileInfo()
         hgtDataPickerView.hidden = true;
         
-        if (!self.optionsObj.selectedHGTPickerValue.isEmpty) {
+        if !self.optionsObj.selectedHGTPickerValue.isEmpty {
             hgtDataText.text = self.optionsObj.selectedHGTPickerValue
+        }
+        if let tmpString: String = optionsObj.selectedHGTPickerValue {
+            if !tmpString.isEmpty {
+                self.optionsObj.selectedHGTFile = tmpString[tmpString.startIndex.advancedBy(0)...tmpString.startIndex.advancedBy(11)]
+            }
         }
 
     }
@@ -123,10 +134,10 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         var radiusValue: Int!
         if let enteredRadiusValue: Int! = Int (radiusValueLText.text!) {
             radiusValue = enteredRadiusValue
-            return
         }
         if (radiusValue >= 100 && radiusValue < 1000) {
             radiusSlider.value = Float(radiusValue)
+            self.optionsObj.radius = radiusValue
         }
     }
     
@@ -135,6 +146,7 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
         let roundedValue = Int(round(radiusSlider.value / step) * step)
         radiusValueLText.text = String (roundedValue)
+        self.optionsObj.radius = roundedValue
     }
     
     // Dismiss the keyboard when the user taps the "Return" key or its equivalent

@@ -11,7 +11,7 @@ import Foundation
 class Options: NSObject {
     
     var viewshedAlgorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay
-    var radius: Int = 100
+    var radius: Int = 300
     var observerX: Int = 600
     var observerY: Int = 600
     var observerElevation = 20
