@@ -25,6 +25,11 @@
 		758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7841C0D170000A193A7 /* WorkArray.swift */; };
 		758FB7871C0D177200A193A7 /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7861C0D177200A193A7 /* Work.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
+		9B77FAB31C31C886007F2E4F /* N00W079.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAAE1C31C886007F2E4F /* N00W079.hgt */; };
+		9B77FAB41C31C886007F2E4F /* N01W052.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAAF1C31C886007F2E4F /* N01W052.hgt */; };
+		9B77FAB51C31C886007F2E4F /* N38W075.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAB01C31C886007F2E4F /* N38W075.hgt */; };
+		9B77FAB61C31C886007F2E4F /* N49W111.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAB11C31C886007F2E4F /* N49W111.hgt */; };
+		9B77FAB71C31C886007F2E4F /* N69W144.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAB21C31C886007F2E4F /* N69W144.hgt */; };
 		9B81E6781C2ADED100D47535 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B81E6771C2ADED100D47535 /* StringUtils.swift */; };
 		9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F01C05E51E004A37B6 /* DemData.swift */; };
 		9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */; };
@@ -85,6 +90,11 @@
 		758FB7841C0D170000A193A7 /* WorkArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkArray.swift; sourceTree = "<group>"; };
 		758FB7861C0D177200A193A7 /* Work.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
+		9B77FAAE1C31C886007F2E4F /* N00W079.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N00W079.hgt; path = HGT/N00W079.hgt; sourceTree = "<group>"; };
+		9B77FAAF1C31C886007F2E4F /* N01W052.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N01W052.hgt; path = HGT/N01W052.hgt; sourceTree = "<group>"; };
+		9B77FAB01C31C886007F2E4F /* N38W075.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W075.hgt; path = HGT/N38W075.hgt; sourceTree = "<group>"; };
+		9B77FAB11C31C886007F2E4F /* N49W111.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N49W111.hgt; path = HGT/N49W111.hgt; sourceTree = "<group>"; };
+		9B77FAB21C31C886007F2E4F /* N69W144.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N69W144.hgt; path = HGT/N69W144.hgt; sourceTree = "<group>"; };
 		9B81E6771C2ADED100D47535 /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringUtils.swift; path = FogMachineSearch/StringUtils.swift; sourceTree = "<group>"; };
 		9BD5C0F01C05E51E004A37B6 /* DemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemData.swift; sourceTree = "<group>"; };
 		9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldSweepEventNode.swift; sourceTree = "<group>"; };
@@ -262,6 +272,11 @@
 		E3B933E21B7BD0F9007B9444 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				9B77FAAE1C31C886007F2E4F /* N00W079.hgt */,
+				9B77FAAF1C31C886007F2E4F /* N01W052.hgt */,
+				9B77FAB01C31C886007F2E4F /* N38W075.hgt */,
+				9B77FAB11C31C886007F2E4F /* N49W111.hgt */,
+				9B77FAB21C31C886007F2E4F /* N69W144.hgt */,
 				9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */,
 				753D3D731BF6374E004E3589 /* N39W075.hgt */,
 				753D3D6B1BEBA5D7004E3589 /* N38W077.hgt */,
@@ -391,8 +406,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				753D3D6C1BEBA5D7004E3589 /* N38W077.hgt in Resources */,
+				9B77FAB31C31C886007F2E4F /* N00W079.hgt in Resources */,
+				9B77FAB51C31C886007F2E4F /* N38W075.hgt in Resources */,
+				9B77FAB41C31C886007F2E4F /* N01W052.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
+				9B77FAB71C31C886007F2E4F /* N69W144.hgt in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
+				9B77FAB61C31C886007F2E4F /* N49W111.hgt in Resources */,
 				753D3D741BF6374E004E3589 /* N39W075.hgt in Resources */,
 				753D3D6A1BEBA59E004E3589 /* HGT in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,

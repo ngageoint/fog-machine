@@ -603,6 +603,9 @@
                                     <segment title="Franklin Ray"/>
                                     <segment title="VanKreveld"/>
                                 </segments>
+                                <connections>
+                                    <action selector="segmentAlgorithmTypeChanged:" destination="zA9-9m-RT6" eventType="valueChanged" id="Dac-hv-E4O"/>
+                                </connections>
                             </segmentedControl>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvy-uR-REK">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -619,14 +622,14 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Available SRTM/HGT File" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACT-Rf-BUb">
-                                <rect key="frame" x="42" y="322" width="177" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pick SRTM/HGT File from the available list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACT-Rf-BUb">
+                                <rect key="frame" x="42" y="322" width="312" height="17"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JJd-zM-FCN">
-                                <rect key="frame" x="42" y="347" width="261" height="30"/>
+                                <rect key="frame" x="42" y="347" width="287" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -658,7 +661,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
-                                    <action selector="radiusTextEditingDidEnd:forEvent:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="4YF-cZ-NQL"/>
+                                    <action selector="observerXTextEditingDidEnd:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="Ojv-ga-zXt"/>
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G5n-1a-Eak">
@@ -666,19 +669,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
-                                    <action selector="radiusTextEditingDidEnd:forEvent:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="VMn-mv-iBo"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pMK-0V-S46">
-                                <rect key="frame" x="266" y="189" width="58" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="radiusTextEditingDidEnd:forEvent:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="ou0-Oi-l5X"/>
+                                    <action selector="observerYTextEditingDidEnd:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="z2V-qN-eLx"/>
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Elevation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lz2-pf-NV4">
-                                <rect key="frame" x="271" y="159" width="66" height="17"/>
+                                <rect key="frame" x="257" y="159" width="66" height="17"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -690,11 +685,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(meters)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cED-9c-uZQ">
-                                <rect key="frame" x="335" y="157" width="37" height="21"/>
+                                <rect key="frame" x="319" y="157" width="37" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="8"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pMK-0V-S46">
+                                <rect key="frame" x="257" y="189" width="58" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="observerElevationTextEditingDidEnd:" destination="zA9-9m-RT6" eventType="editingDidEnd" id="3I6-Zh-gBD"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <connections>
@@ -702,7 +705,10 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="elevationText" destination="pMK-0V-S46" id="iwz-5P-ICl"/>
                         <outlet property="hgtDataText" destination="JJd-zM-FCN" id="acU-gD-gzt"/>
+                        <outlet property="observerXText" destination="rxd-4V-VuC" id="gZ7-ab-ryt"/>
+                        <outlet property="observerYText" destination="G5n-1a-Eak" id="Vq3-AL-b5k"/>
                         <outlet property="radiusSlider" destination="YzH-rf-R7X" id="OWK-rO-hMT"/>
                         <outlet property="radiusValueLText" destination="9un-ci-9Cv" id="mXX-sF-pnY"/>
                         <outlet property="viewshedTypeSegmented" destination="8zH-n1-eTN" id="rFh-UD-YM1"/>

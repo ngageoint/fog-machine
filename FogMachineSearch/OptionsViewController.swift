@@ -15,8 +15,12 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     @IBOutlet weak var hgtDataText: UITextField!
     @IBOutlet weak var viewshedTypeSegmented: UISegmentedControl!
     @IBOutlet weak var radiusValueLText: UITextField!
+    @IBOutlet weak var elevationText: UITextField!
+    @IBOutlet weak var observerXText: UITextField!
+    @IBOutlet weak var observerYText: UITextField!
     var hgtDataPickerView: UIPickerView!
-
+    
+    
     var coordinate:CLLocationCoordinate2D!
     var optionsObj = Options.sharedInstance
     var pickerData: [String] = [String]()
@@ -33,23 +37,34 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             viewshedTypeSegmented.selectedSegmentIndex = 0
         }
 
+        observerXText.text = "600"
+        observerYText.text = "600"
+        elevationText.text = "20"
+        observerXText.delegate = self
+        observerYText.delegate = self
+        elevationText.delegate = self
+        observerXText.keyboardType = UIKeyboardType.DecimalPad
+        observerYText.keyboardType = UIKeyboardType.DecimalPad
+        elevationText.keyboardType = UIKeyboardType.DecimalPad
         
         hgtDataPickerView = UIPickerView()
         hgtDataPickerView.delegate = self
         hgtDataText.inputView = hgtDataPickerView
         
-        
         radiusSlider.minimumValue = 100
         radiusSlider.maximumValue = 1000
         radiusSlider.value = 100
-        
         radiusValueLText.delegate = self
         radiusValueLText.keyboardType = UIKeyboardType.DecimalPad
-
         radiusValueLText.text = "100"
         
+        // get all the HGT File names from the resource folder
         getHgtFileInfo()
         hgtDataPickerView.hidden = true;
+        
+        if (!self.optionsObj.selectedHGTPickerValue.isEmpty) {
+            hgtDataText.text = self.optionsObj.selectedHGTPickerValue
+        }
 
     }
     // Tap outside a text field to dismiss the keyboard
@@ -66,10 +81,10 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func segmentControlOptionAction(sender: AnyObject) {
-        self.optionsObj.viewshedAlgorithm = ViewshedAlgorithm(rawValue: viewshedTypeSegmented.selectedSegmentIndex)!
+    @IBAction func segmentAlgorithmTypeChanged(sender: AnyObject) {
+         self.optionsObj.viewshedAlgorithm = ViewshedAlgorithm(rawValue: viewshedTypeSegmented.selectedSegmentIndex)!
     }
-    
+
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
         return 1
     }
@@ -78,18 +93,32 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         return pickerData.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerData[row]
     }
     
-    func pickerView(pickerView: UIPickerView!, didSelectRow row: Int, inComponent component: Int){
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         hgtDataText.text = pickerData[row]
         hgtDataPickerView.hidden = true;
         self.view.endEditing(true)
-        print (pickerData[row])
+        let pickerLine: String = pickerData[row]
+        self.optionsObj.selectedHGTPickerValue = pickerLine
+        self.optionsObj.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
+        //print (self.optionsObj.selectedHGTFile)
     }
 
+    @IBAction func observerXTextEditingDidEnd(sender: UITextField) {
+        self.optionsObj.observerX = Int(observerXText.text!)!
+    }
+
+    @IBAction func observerYTextEditingDidEnd(sender: UITextField) {
+        self.optionsObj.observerY = Int(observerYText.text!)!
+    }
     
+    @IBAction func observerElevationTextEditingDidEnd(sender: UITextField) {
+        self.optionsObj.observerElevation = Int(elevationText.text!)!
+    }
+
     @IBAction func radiusTextEditingDidEnd(sender: UITextField, forEvent event: UIEvent) {
         var radiusValue: Int!
         if let enteredRadiusValue: Int! = Int (radiusValueLText.text!) {
@@ -137,15 +166,42 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             
             // In this field, allow only values that evalulate to proper numeric values and
             // do not contain the "-" and "e" characters, nor the decimal separator character
-            // for the current locale. Limit its contents to a maximum of 5 characters.
+            // for the current locale. Limit its contents to a maximum of 4 characters.
+        case elevationText:
+            let decimalSeparator = NSLocale.currentLocale().objectForKey(NSLocaleDecimalSeparator) as! String
+            if( prospectiveText.isNumeric() &&
+                prospectiveText.doesNotContainCharactersIn("-e" + decimalSeparator) &&
+                prospectiveText.characters.count <= 4 && (Int(prospectiveText) <= 9999)) {
+                    return true
+            } else {
+                return false
+            }
+        case observerYText:
+            let decimalSeparator = NSLocale.currentLocale().objectForKey(NSLocaleDecimalSeparator) as! String
+            if( prospectiveText.isNumeric() &&
+                prospectiveText.doesNotContainCharactersIn("-e" + decimalSeparator) &&
+                prospectiveText.characters.count <= 4 && (Int(prospectiveText) <= 1100)) {
+                    return true
+            } else {
+                return false
+            }
+        case observerXText:
+            let decimalSeparator = NSLocale.currentLocale().objectForKey(NSLocaleDecimalSeparator) as! String
+            if( prospectiveText.isNumeric() &&
+                prospectiveText.doesNotContainCharactersIn("-e" + decimalSeparator) &&
+                prospectiveText.characters.count <= 4 && (Int(prospectiveText) <= 1100)) {
+                    return true
+            } else {
+                return false
+            }
         case radiusValueLText:
             let decimalSeparator = NSLocale.currentLocale().objectForKey(NSLocaleDecimalSeparator) as! String
             
 
             if( prospectiveText.isNumeric() &&
                 prospectiveText.doesNotContainCharactersIn("-e" + decimalSeparator) &&
-                prospectiveText.characters.count <= 4 && (Int(prospectiveText) < 1000)) {
-                if (Int(prospectiveText) >= 100 && Int(prospectiveText) < 1000) {
+                prospectiveText.characters.count <= 4 && (Int(prospectiveText) <= 600)) {
+                if (Int(prospectiveText) >= 100 && Int(prospectiveText) <= 600) {
                     radiusSlider.value = Float(prospectiveText)!
                 }
                 return true
@@ -212,7 +268,10 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                         
                         let strName = String(hgFileName!).substringWithRange(Range<String.Index>(start: String(hgFileName!).startIndex, end: String(hgFileName!).startIndex.advancedBy(countstr)))
                         
-                        pickerData.append("Lat: \(self.coordinate.latitude), Lng: \(self.coordinate.longitude)")
+                        pickerData.append("\(hgFileWithExt) (Lat:\(self.coordinate.latitude) Lng:\(self.coordinate.longitude))")
+                        
+                        self.optionsObj.selectedHGTFile = hgFileWithExt
+                        hgtDataText.text = pickerData[0]
                     }
                     break
                 }

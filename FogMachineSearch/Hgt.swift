@@ -33,6 +33,7 @@ class Hgt: NSObject {
     // SRTM3 files contain 1201 lines and 1201 samples
     func parseElevation() -> [[Int]] {
         let path = NSBundle.mainBundle().pathForResource(filename, ofType: "hgt")
+        //let path = NSBundle.mainBundle().resourcePath! + "/" + filename + ".hgt"
         let url = NSURL(fileURLWithPath: path!)
         let data = NSData(contentsOfURL: url)!
         

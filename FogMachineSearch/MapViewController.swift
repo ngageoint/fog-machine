@@ -31,6 +31,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var hgt: Hgt!
     var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Int]]!
+    var hgtFilename = "N39W075"
     
     var viewshedResults: [[Int]]!
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
@@ -39,8 +40,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         
         mapView.delegate = self
-
-        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
+        
         metricsOutput = ""
         
         logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
@@ -51,10 +51,22 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         hgtElevation = hgt.getElevation()
         
         self.centerMapOnLocation(self.hgt.getCenterLocation())
-        //print("MapViewController  (viewDidLoad): \(self.optionsObj1.selectedPeers)")
-        setupFogEvents()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let optionsObj = Options.sharedInstance
+        if let aString:String = optionsObj.selectedHGTFile {
+            if !aString.isEmpty {
+                hgtFilename = aString[aString.startIndex.advancedBy(0)...aString.startIndex.advancedBy(6)]
+                hgt = Hgt(filename: hgtFilename)
+                hgtCoordinate = hgt.getCoordinate()
+                hgtElevation = hgt.getElevation()
+                self.centerMapOnLocation(self.hgt.getCenterLocation())
+            }
+        }
+        setupFogEvents()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

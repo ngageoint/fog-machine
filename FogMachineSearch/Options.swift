@@ -12,6 +12,11 @@ class Options: NSObject {
     
     var viewshedAlgorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay
     var radius: Int = 100
+    var observerX: Int = 600
+    var observerY: Int = 600
+    var observerElevation = 20
+    var selectedHGTFile: String = ""
+    var selectedHGTPickerValue: String = ""
     var selectedPeers = Array<String>()
     
     class var sharedInstance: Options {
