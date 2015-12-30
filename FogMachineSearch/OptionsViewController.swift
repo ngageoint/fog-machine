@@ -104,20 +104,20 @@ class OptionsViewController: UIViewController {
         print("path \(path)\n")
         do {
             let items = try fm.contentsOfDirectoryAtPath(path)
-            for var item: String in items {
+            for item: String in items {
                 if (item == "HGT") {
                     print("item:  \(item)\n")
                     let hgtFolder = path + "/HGT"
                     let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
-                    for var hgFileWithExt: String in hgtFiles {
+                    for hgFileWithExt: String in hgtFiles {
                         let hgFileName = NSURL(fileURLWithPath: hgFileWithExt).URLByDeletingPathExtension?.lastPathComponent
                         self.coordinate = parseCoordinate(hgFileName!)
                         //let strFileName: String = String(hgFileName!)
                         
-                        let countstr: Int = String(hgFileName!).characters.count
+                        //let countstr: Int = String(hgFileName!).characters.count
                         
                         
-                        let strName = String(hgFileName!).substringWithRange(Range<String.Index>(start: String(hgFileName!).startIndex, end: String(hgFileName!).startIndex.advancedBy(countstr)))
+                        //let strName = String(hgFileName!).substringWithRange(Range<String.Index>(start: String(hgFileName!).startIndex, end: String(hgFileName!).startIndex.advancedBy(countstr)))
                         
                         pickerData.append("Lat: \(self.coordinate.latitude), Lng: \(self.coordinate.longitude)")
                         print("name \(hgFileName)\t\t \(coordinate)")

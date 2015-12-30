@@ -67,8 +67,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func singleTestObserver() -> Observer {
         let name = "Tester"
-        let x = 600
-        let y = 600
+        let x = 900
+        let y = 900
         return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
         
     }
@@ -616,7 +616,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let selfQuadrant = 1
         var count = 1 //Start at one since initiator is 0-indexed
         
-        for var selectedPeer in options.selectedPeers {
+        for selectedPeer in options.selectedPeers {
             ConnectionManager.sendEventToPeer(Event.StartViewshed,
                 workForPeer: { workerCount in
                     
