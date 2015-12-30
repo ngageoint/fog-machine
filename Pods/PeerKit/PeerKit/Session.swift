@@ -49,7 +49,7 @@ public class Session: NSObject, MCSessionDelegate {
             myPeerSessions.removeValueForKey(displayName)
         }
         
-        print("Disconnected \(displayName)")
+        print("\t\tSession disconnect \(displayName)")
     }
     
     
@@ -104,7 +104,7 @@ public class Session: NSObject, MCSessionDelegate {
     
     
     func availableSession(displayName: String) -> MCSession {
-        print("\tavailableSession for \(displayName)")
+        print("\t\tSession availableSession for \(displayName)")
         var notFound = true
         var availableSession: MCSession? = nil
         
@@ -148,7 +148,7 @@ public class Session: NSObject, MCSessionDelegate {
             do {
                 try session.sendData(data, toPeers: peerIDs, withMode: withMode)
             } catch let errors as NSError{
-                NSLog("Error sending data: \(errors.localizedDescription)")
+                NSLog("\t\tSession error sending data: \(errors.localizedDescription)")
             }
         }
     }
@@ -158,17 +158,17 @@ public class Session: NSObject, MCSessionDelegate {
 
     
     public func session(session: MCSession, peer peerID: MCPeerID, didChangeState state: MCSessionState) {
-        let ids = "to peer \(peerID.displayName) from \(session.myPeerID.displayName)"
+        let ids = "from \(session.myPeerID.displayName) to peer \(peerID.displayName)"
         switch state {
             case .Connecting:
-                print("Connecting \(ids)")
+                print("\t\tSession Connecting \(ids)")
                 delegate?.connecting(session.myPeerID, toPeer: peerID)
             case .Connected:
-                print("Connected \(ids)")
+                print("\t\tSession Connected \(ids)")
                 //myPeerSessions[peerID.displayName] = session
                 delegate?.connected(session.myPeerID, toPeer: peerID)
             case .NotConnected:
-                print("NotConnected \(ids)")
+                print("\t\tSession NotConnected \(ids)")
                 self.disconnect(peerID.displayName)
                 //session.disconnect()
                 //myPeerSessions.removeValueForKey(peerID.displayName)

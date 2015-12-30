@@ -42,7 +42,7 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
 
         let runningTime = -timeStarted.timeIntervalSinceNow
         let isPeerYounger = (peerRunningTime <= runningTime)
-        print("isPeerYounger: \(isPeerYounger)  peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
+        print("Advertiser isPeerYounger: \(isPeerYounger)  peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
         
         let aSession = theSession.availableSession(displayName)
         invitationHandler(isPeerYounger, aSession)
@@ -57,7 +57,7 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
     
     
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: NSError) {
-        print("didNotStartAdvertisingPeer: \(error.localizedDescription)")
+        print("Advertiser didNotStartAdvertisingPeer: \(error.localizedDescription)")
     }
     
     

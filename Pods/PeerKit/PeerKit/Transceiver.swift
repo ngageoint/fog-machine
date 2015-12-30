@@ -69,12 +69,13 @@ public class Transceiver: SessionDelegate {
             masterSession = transceiver.getSession()
         }
         if let onConnecting = onConnecting {
-            print("onConnecting was valid")
+            //print("onConnecting was valid")
             dispatch_async(dispatch_get_main_queue()) {
                 onConnecting(myPeerID: myPeerID, peerID: peer)
             }
         } else {
-            print("onConnecting was INVALID")
+            //Seens to always be invalid
+            //print("onConnecting was INVALID")
         }
     }
 
@@ -84,15 +85,15 @@ public class Transceiver: SessionDelegate {
         let peerSession = session.getSession(peer.displayName)
         
         if mySession == nil {
-            print("mySession: nil")
+            print("\t\t\tTransceiver mySession: nil")
         } else {
-            print("mySession: \(mySession?.myPeerID.displayName)")
+            print("\t\t\tTransceiver mySession: \(mySession?.myPeerID.displayName)")
         }
         
         if peerSession == nil {
-            print("peerSession: nil")
+            print("\t\t\tTransceiver peerSession: nil")
         } else {
-            print("peerSession: \(peerSession?.myPeerID.displayName)")
+            print("\t\t\tTransceiver peerSession: \(peerSession?.myPeerID.displayName)")
         }
         
         

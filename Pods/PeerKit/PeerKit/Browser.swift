@@ -41,25 +41,32 @@ class Browser: NSObject, MCNearbyServiceBrowserDelegate {
     
     func browser(browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         
-        print("Browser \(browser.myPeerID.displayName) found peerID \(peerID.displayName)")
+        print("\tBrowser \(browser.myPeerID.displayName) found peerID \(peerID.displayName)")
         let runningTime = -timeStarted.timeIntervalSinceNow
         //print("runningTime: \(runningTime)")
 
         let context = NSKeyedArchiver.archivedDataWithRootObject(runningTime)
 
         if let aSession = theSession.getSession(displayName) {
-            print("sending invitePeer")
+            print("\tBrowser sending invitePeer")
             browser.invitePeer(peerID, toSession: aSession, withContext: context, timeout: 30)
         }
     }
     
 
     func browser(browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        print("Browser \(browser.myPeerID.displayName) lost peer \(peerID.displayName)")
+        
+        //Remove from myPeerSessions? Or only on NotConnected remove from myPeersession?
+        //Also, if this is called from one phone, does the other phone still connect? 
+        //Example: (phone A and B); A does not connect to B, so A lostPeer B, but B connects to
+        // A so Session is connected from B to A. (Meaning it makes no difference which phone connected
+        //  to which, only that one connected and the other didn't).
+        
+        print("\tBrowser \(browser.myPeerID.displayName) lost peer \(peerID.displayName)")
     }
     
     
     func browser(browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: NSError) {
-        print("didNotStartBrowsingForPeers: \(error.localizedDescription)")
+        print("\tBrowser didNotStartBrowsingForPeers: \(error.localizedDescription)")
     }
 }
