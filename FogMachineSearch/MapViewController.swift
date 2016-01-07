@@ -56,9 +56,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let optionsObj = Options.sharedInstance
-        if let aString:String = optionsObj.selectedHGTFile {
-            if !aString.isEmpty {
-                hgtFilename = aString[aString.startIndex.advancedBy(0)...aString.startIndex.advancedBy(6)]
+        if let aTmpStr:String = optionsObj.selectedHGTFile {
+            if !aTmpStr.isEmpty {
+                hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
                 hgt = Hgt(filename: hgtFilename)
                 hgtCoordinate = hgt.getCoordinate()
                 hgtElevation = hgt.getElevation()
@@ -76,14 +76,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: Viewshed Serial/Parallel
     
-    
     func singleTestObserver() -> Observer {
         let name = "Tester"
         let optionsObj = Options.sharedInstance
         let x = optionsObj.observerX //600
         let y = optionsObj.observerY //600
         return Observer(name: name, x: x, y: y, height: optionsObj.observerElevation, radius: optionsObj.radius, coordinate: self.hgtCoordinate)
-        
     }
     
     
@@ -93,7 +91,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let x = Int(arc4random_uniform(700) + 200)
         let y = Int(arc4random_uniform(700) + 200)
         return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
-        
     }
     
     
@@ -628,37 +625,39 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         printOut("Beginning viewshed on \(Worker.getMe().displayName)")
         let observer = self.singleTestObserver()
         let selfQuadrant = 1
-        var count = 1 //Start at one since initiator is 0-indexed
+        var count = 0 //Start at one since initiator is 0-indexed
         
-        for var selectedPeer in options.selectedPeers {
-            ConnectionManager.sendEventToPeer(Event.StartViewshed,
-                workForPeer: { workerCount in
-                    
-                    let workDivision = self.getQuadrant(workerCount)
-                    let currentQuadrant = workDivision[count]
-                    let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
+        
+        ConnectionManager.sendEventToPeer(Event.StartViewshed,
+            workForPeer: { workerCount in
+                self.printOut("\t workForPeer: workerCount \(workerCount)")
+                let workDivision = self.getQuadrant(workerCount)
+                print("workDivision : \(workDivision)")
+
+                let currentQuadrant = workDivision[count]
+                let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
                     count++
-                    return theWork
-                },
-                workForSelf: { workerCount in
+                return theWork
+            },
+            workForSelf: { workerCount in
+                self.printOut("\t workForSelf: workerCount \(workerCount)")
+                self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
+                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
                     
-                    self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-                    self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
-                    
-                    if (workerCount < 2) {
-                        //if no peers
+                if (workerCount < 2) {
+                       //if no peers
                         let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
                         self.addOverlay(image, imageLocation: self.hgtCoordinate)
                         self.stopTimer()
-                    }
-                    
-                    self.printOut("\tFound results locally out of \(workerCount).")
-                },
-                log: { peerName in
+                }
+                self.printOut("\tFound results locally out of \(workerCount).")
+            },
+            log: { peerName in
                     self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
-                },
-                peerName: selectedPeer)
-        }
+            },
+            selectedWorkersCount: options.selectedPeers.count,
+            selectedPeers: options.selectedPeers
+         )
     }
 
 

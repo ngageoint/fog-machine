@@ -166,25 +166,25 @@ struct ConnectionManager {
         sleep(UInt32(arc4random_uniform(sleepAmount) + sleepAmount))
     }
     
-    static func sendEventToPeer<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> (), peerName: String) {
+    
+    static func sendEventToPeer<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (count: Int) -> (T), workForSelf: (Int) -> (), log: (String) -> (), selectedWorkersCount: Int, selectedPeers: Array<String>) { //, peerName: String) {
         
-        workForSelf(allWorkers.count)
-        
+        workForSelf(selectedWorkersCount)
+        print("selectedWorkersCount-> : \(selectedWorkersCount)")
+        print("selectedPeers-> : \(selectedPeers)")
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
-            for peer in peers {
-                if peer.displayName == peerName {
-                    hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peer.displayName: false]]
-                    let theWork = workForPeer(allWorkers.count)
-                    self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peer.displayName)
-                    log(peer.displayName)
-                    break
-                }
+            for peerName in selectedPeers {
+                //if peer.displayName == peerName {
+                hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peerName: false]]
+                let theWork = workForPeer(count: selectedWorkersCount)
+                print("theWork : \(theWork)")
+                self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peerName)
+                log(peerName)
             }
         }
     }
-    
     
     static func sendEventToAll<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> ()) {
         

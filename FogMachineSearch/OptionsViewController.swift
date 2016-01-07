@@ -115,7 +115,6 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         let pickerLine: String = pickerData[row]
         self.optionsObj.selectedHGTPickerValue = pickerLine
         self.optionsObj.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
-        //print (self.optionsObj.selectedHGTFile)
     }
 
     @IBAction func observerXTextEditingDidEnd(sender: UITextField) {
@@ -275,10 +274,8 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                         self.coordinate = parseCoordinate(hgFileName!)
                         //let strFileName: String = String(hgFileName!)
                         
-                        let countstr: Int = String(hgFileName!).characters.count
-                        
-                        
-                        let strName = String(hgFileName!).substringWithRange(Range<String.Index>(start: String(hgFileName!).startIndex, end: String(hgFileName!).startIndex.advancedBy(countstr)))
+                        //let countstr: Int = String(hgFileName!).characters.count
+                        //let strName = String(hgFileName!).substringWithRange(Range<String.Index>(start: String(hgFileName!).startIndex, end: String(hgFileName!).startIndex.advancedBy(countstr)))
                         
                         pickerData.append("\(hgFileWithExt) (Lat:\(self.coordinate.latitude) Lng:\(self.coordinate.longitude))")
                         
@@ -291,7 +288,6 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         } catch {
             // failed to read directory – bad permissions, perhaps?
         }
-        //print("Done with all the HGT Files...\n")
     }
 
 
