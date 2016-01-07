@@ -46,11 +46,12 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func findPeers(refreshControl: UIRefreshControl) {
         PeerKit.transceive(Fog.SERVICE_TYPE)
         refreshControl.endRefreshing()
-        print("Selected Peers (findPeers): \(self.optionsObj.selectedPeers)")
+        //print("Selected Peers (findPeers): \(self.optionsObj.selectedPeers)")
     }
 
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //print("tableView->ConnectionManager.allWorkers.count : \(ConnectionManager.allWorkers.count)")
         return ConnectionManager.allWorkers.count
     }
     
@@ -71,8 +72,14 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             cell.accessoryType = .None
         }
-        print("Selected Peers : \(self.optionsObj.selectedPeers)")
-
+        if (self.optionsObj.selectedPeers.count != ConnectionManager.allWorkers.count) {
+            self.optionsObj.selectedPeers.removeAll()
+            for (var i=0; i < ConnectionManager.allWorkers.count; i++) {
+                let strPeerName: String = ConnectionManager.allWorkers[i].displayName
+                self.optionsObj.selectedPeers.append(strPeerName)
+            }
+        }
+        //print("Selected Peers : \(self.optionsObj.selectedPeers)")
         return cell
     }
     
@@ -92,7 +99,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.optionsObj.selectedPeers.removeAtIndex(index)
             }
         }
-        //print("SomeClass (FirstViewController): \(self.optionsObj.selectedPeers)")
+
+        //print("Selected Peers->tableView : \(self.optionsObj.selectedPeers)")
         tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
     
@@ -112,6 +120,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
         connectionTableView.reloadData()
+        //print("Peers - updateWorkers : \(self.optionsObj.selectedPeers)")
     }
 }
 
