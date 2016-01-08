@@ -67,12 +67,13 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.optionsObj.selectedPeers.append(strPeerName)
             }
         }
+
         if checked[indexPath.row] {
             cell.accessoryType = .Checkmark
         } else {
             cell.accessoryType = .None
         }
-        if (self.optionsObj.selectedPeers.count != ConnectionManager.allWorkers.count) {
+        if (self.optionsObj.selectedPeers.count > ConnectionManager.allWorkers.count) {
             self.optionsObj.selectedPeers.removeAll()
             for (var i=0; i < ConnectionManager.allWorkers.count; i++) {
                 let strPeerName: String = ConnectionManager.allWorkers[i].displayName

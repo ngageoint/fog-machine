@@ -81,7 +81,7 @@ class KreveldViewshed {
         
         var currentTime = getCurrentMillis()
         var elapsedTime = currentTime - startTime
-        print("Total dataCounter: \(dataCounter)")
+        //print("Total dataCounter: \(dataCounter)")
         
         let elevPoints: [ElevationPoint] = pointsOnLine(demData, viewpoint: observPt, radius: radius, numQuadrants: numQuadrants);
         for elevPoint in elevPoints {
@@ -126,14 +126,10 @@ class KreveldViewshed {
         }
         currentTime = getCurrentMillis()
         elapsedTime = currentTime - startTime
-        print("Kreveld processing time: \(Double(elapsedTime)) (ms)")
-        print("Total Kreveld Events: \(eventCounter)")
-        
-        //print("ENTER: \(counterEnter)")
-        //print("CENTER: \(counterCenter)")
-        //print("EXIT: \(counterExit)")
-        print("VISIBLE POINTS: \(visiblePtCounter)")
-        print("\n")
+        //print("Kreveld processing time: \(Double(elapsedTime)) (ms)")
+        //print("Total Kreveld Events: \(eventCounter)")
+        //print("VISIBLE POINTS: \(visiblePtCounter)")
+        //print("\n")
         
         // should return the updated DEM data...
         return viewshedMatrix
@@ -374,9 +370,6 @@ class KreveldViewshed {
         } else if (numQuadrants == 4) {
             
         }
-        
-        
-        
         return elevPointOnline
     }
     
