@@ -170,8 +170,6 @@ struct ConnectionManager {
     static func sendEventToPeer<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (count: Int) -> (T), workForSelf: (Int) -> (), log: (String) -> (), selectedWorkersCount: Int, selectedPeers: Array<String>) { //, peerName: String) {
         
         workForSelf(selectedWorkersCount)
-        print("selectedWorkersCount-> : \(selectedWorkersCount)")
-        print("selectedPeers-> : \(selectedPeers)")
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
@@ -179,7 +177,6 @@ struct ConnectionManager {
                 //if peer.displayName == peerName {
                 hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peerName: false]]
                 let theWork = workForPeer(count: selectedWorkersCount)
-                print("theWork : \(theWork)")
                 self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peerName)
                 log(peerName)
             }
