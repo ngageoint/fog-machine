@@ -502,31 +502,35 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="72J-Ir-eqG">
-                                <rect key="frame" x="20" y="125" width="560" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
                                 <rect key="frame" x="20" y="155" width="560" height="259"/>
                                 <connections>
                                     <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
                                 </connections>
                             </mapView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="72J-Ir-eqG">
+                                <rect key="frame" x="20" y="125" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="72J-Ir-eqG" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="bottom" constant="8" id="6Zr-dz-Euq"/>
                             <constraint firstAttribute="leadingMargin" secondItem="88U-br-EID" secondAttribute="leading" id="AR9-4w-aZs"/>
                             <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" id="GgP-Cq-Sw7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UrZ-Fz-RFo" secondAttribute="trailing" id="HfS-1a-1eZ"/>
+                            <constraint firstItem="72J-Ir-eqG" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="61" id="Iak-1m-Ktg"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="88U-br-EID" secondAttribute="bottom" id="Lsn-QS-6Kq"/>
                             <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" id="MBh-Yb-WDT"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="SXy-BA-2Xc"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="72J-Ir-eqG" secondAttribute="leading" id="asG-Pv-WhP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="72J-Ir-eqG" secondAttribute="trailing" id="doT-ur-vEG"/>
                             <constraint firstItem="UrZ-Fz-RFo" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="8" symbolic="YES" id="hwr-Wp-55i"/>
-                            <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="170" id="nrC-2f-Etb"/>
+                            <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="160" id="nrC-2f-Etb"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="qrK-DX-3sW"/>
                             <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" id="smb-RS-vRN"/>
-                            <constraint firstItem="skG-eX-ae4" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="55" id="xAe-Uv-bAd"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="100" id="xAe-Uv-bAd"/>
                             <constraint firstAttribute="leadingMargin" secondItem="UrZ-Fz-RFo" secondAttribute="leading" id="yWu-oG-GG3"/>
                         </constraints>
                         <variation key="default">
