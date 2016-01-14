@@ -18,13 +18,12 @@ protocol MPCSerializable {
 
 struct ConnectionManager {
     
-
     static var hasReceivedResponse:[String:[String:[String:Bool]]] = ["sender": ["event":["peer":true]]] //better way to do this?
     static private let serialQueue = dispatch_queue_create("mil.nga.magic.fog", DISPATCH_QUEUE_SERIAL)
     
     // MARK: Properties
     private static var peers: [MCPeerID] {
-        return PeerKit.session?.connectedPeers ?? []
+        return PeerKit.masterSession?.allConnectedPeers() ?? []
     }
     
     static var otherWorkers: [Worker] {
@@ -39,7 +38,7 @@ struct ConnectionManager {
     // MARK: Start
     static func start() {
         NSLog("Transceiving")
-        PeerKit.transceive(Fog.SERVICE_TYPE)
+        transceiver.startTransceiving(serviceType: Fog.SERVICE_TYPE)
     }
     
     
@@ -92,13 +91,14 @@ struct ConnectionManager {
                 result = false
             }
         }
-        
+
         return result
     }
     
     
     // MARK: Sending
-    static func sendEvent(event: Event, object: [String: MPCSerializable]? = nil, toPeers peers: [MCPeerID]? = PeerKit.session?.connectedPeers ) {
+    static func sendEvent(event: Event, object: [String: MPCSerializable]? = nil, toPeers peers: [MCPeerID]? =
+        PeerKit.masterSession!.allConnectedPeers()) {
         var anyObject: [String: NSData]?
         if let object = object {
             anyObject = [String: NSData]()
