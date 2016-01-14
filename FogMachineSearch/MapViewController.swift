@@ -10,17 +10,18 @@ import UIKit
 import MapKit
 
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
     
     // MARK: IBOutlets
     
+    @IBOutlet weak var hgtDataText: UITextField!
     
     @IBOutlet weak var mapView: MKMapView!
 
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     @IBOutlet weak var logBox: UITextView!
-    
+    var hgtDataPickerView: UIPickerView!
     
     // MARK: Class Variables
     
@@ -32,12 +33,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Int]]!
     var hgtFilename = "N39W075"
-    
+    var pickerData: [String] = [String]()
     var viewshedResults: [[Int]]!
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
+    var coordinate:CLLocationCoordinate2D!
+    var optionsObjMap = Options.sharedInstance
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        hgtFilePickerProcess()
         
         mapView.delegate = self
         
@@ -45,7 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
         logBox.editable = false
-
+        
         hgt = Hgt(filename: hgtFilename)
         hgtCoordinate = hgt.getCoordinate()
         hgtElevation = hgt.getElevation()
@@ -67,12 +73,105 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         setupFogEvents()
     }
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    func hgtFilePickerProcess() {
+        hgtDataPickerView = UIPickerView()
+        hgtDataPickerView.delegate = self
+        hgtDataText.inputView = hgtDataPickerView
+        // get all the HGT File names from the resource folder
+        getHgtFileInfo()
+        hgtDataPickerView.hidden = true;
+        
+        if !self.optionsObjMap.selectedHGTPickerValue.isEmpty {
+            hgtDataText.text = self.optionsObjMap.selectedHGTPickerValue
+        }
+        if let tmpString: String = optionsObjMap.selectedHGTPickerValue {
+            if !tmpString.isEmpty {
+            self.optionsObjMap.selectedHGTFile = tmpString[tmpString.startIndex.advancedBy(0)...tmpString.startIndex.advancedBy(11)]
+            }
+        }
+        
+    }
+    
+    func getHgtFileInfo() {
+        
+        let fm = NSFileManager.defaultManager()
+        let path = NSBundle.mainBundle().resourcePath!
+        
+        do {
+            let items = try fm.contentsOfDirectoryAtPath(path)
+            for var item: String in items {
+                if (item == "HGT") {
+                    
+                    let hgtFolder = path + "/HGT"
+                    let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
+                    for var hgFileWithExt: String in hgtFiles {
+                        let hgFileName = NSURL(fileURLWithPath: hgFileWithExt).URLByDeletingPathExtension?.lastPathComponent
+                        self.coordinate = parseCoordinate(hgFileName!)
+                        pickerData.append("\(hgFileWithExt) (Lat:\(self.coordinate.latitude) Lng:\(self.coordinate.longitude))")
+                        
+                        self.optionsObjMap.selectedHGTFile = hgFileWithExt
+                        hgtDataText.text = pickerData[0]
+                        print("Map picker data: \(pickerData[0])")
+                    }
+                    break
+                }
+            }
+        } catch {
+            // failed to read directory – bad permissions, perhaps?
+        }
+    }
+    
+    @IBAction func hgDataTextEditingDidBegin(sender: AnyObject) {
+         hgtDataPickerView.hidden = false
+    }
+    // latitude and 105 degrees west longitude
+    func parseCoordinate(filename : String) -> CLLocationCoordinate2D {
+        
+        let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
+        let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
+        let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
+        let longitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(4),end: filename.endIndex))
+        
+        var latitude:Double = Double(latitudeValue)!
+        var longitude:Double = Double(longitudeValue)!
+        
+        if (northSouth.uppercaseString == "S") {
+            latitude = latitude * -1.0
+        }
+        
+        if (westEast.uppercaseString == "W") {
+            longitude = longitude * -1.0
+        }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return pickerData.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        hgtDataText.text = pickerData[row]
+        hgtDataPickerView.hidden = true;
+        self.view.endEditing(true)
+        let pickerLine: String = pickerData[row]
+        self.optionsObjMap.selectedHGTPickerValue = pickerLine
+        self.optionsObjMap.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
+    }
     
     // MARK: Viewshed Serial/Parallel
     
@@ -127,7 +226,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.addOverlay(image, imageLocation: self.hgtCoordinate)
                 
                 dispatch_group_leave(viewshedGroup)
-           }
+            }
         }
     }
     
@@ -135,7 +234,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func performSerialViewshed(observer: Observer, algorithm: ViewshedAlgorithm) {
         
         self.printOut("Starting Serial Viewshed Processing on \(observer.name).")
-
+        
         var obsResults:[[Int]]!
         if (algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = Viewshed(elevation: self.hgtElevation, observer: observer)
@@ -143,8 +242,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
             let demObj: DemData = DemData(demMatrix: self.hgtElevation)
-           // observer.radius = 200 // default radius 100
-            // set the added observer height 
+            // observer.radius = 200 // default radius 100
+            // set the added observer height
             let observerPoints: ElevationPoint = ElevationPoint (x:observer.x, y: observer.y, h: Double(observer.height))
             obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 1)
             //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
@@ -162,7 +261,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func addOverlay(image: UIImage, imageLocation: CLLocationCoordinate2D) {
-
+        
         var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(
             latitude: imageLocation.latitude + 1.0,
             longitude: imageLocation.longitude)
@@ -172,7 +271,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
             latitude: imageLocation.latitude,
             longitude: imageLocation.longitude)
-
+        
         var overlayBottomRightCoordinate: CLLocationCoordinate2D {
             get {
                 return CLLocationCoordinate2DMake(overlayBottomLeftCoordinate.latitude,
@@ -203,7 +302,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func generateViewshedImage(viewshed: [[Int]], hgtLocation: CLLocationCoordinate2D) -> UIImage {
-
+        
         let width = viewshed[0].count
         let height = viewshed.count
         var data: [Pixel] = []
@@ -224,7 +323,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
-
+        
         return image
         
     }
@@ -275,7 +374,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return UIImage(CGImage: cgImage!)
     }
     
- 
+    
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
         mapView.setRegion(coordinateRegion, animated: true)
@@ -292,12 +391,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var polygonView:MKPolygonRenderer? = nil
-//        if overlay is MKPolygon {
-//            polygonView = MKPolygonRenderer(overlay: overlay)
-//            polygonView!.lineWidth = 0.1
-//            polygonView!.strokeColor = UIColor.grayColor()
-//            polygonView!.fillColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
-//        } else
+        //        if overlay is MKPolygon {
+        //            polygonView = MKPolygonRenderer(overlay: overlay)
+        //            polygonView!.lineWidth = 0.1
+        //            polygonView!.strokeColor = UIColor.grayColor()
+        //            polygonView!.fillColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
+        //        } else
         if overlay is Cell {
             polygonView = MKPolygonRenderer(overlay: overlay)
             polygonView!.lineWidth = 0.1
@@ -310,13 +409,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             return overlayView
         }
-
+        
         return polygonView!
     }
     
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-
+        
         var view:MKPinAnnotationView? = nil
         let identifier = "pin"
         if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
@@ -358,7 +457,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         return elapsedTime
     }
-
+    
     
     func clearTimer() {
         startTime = 0
@@ -368,7 +467,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: Logging/Printing
     
-
+    
     func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
             //Can easily change this to print out to a file without modifying the rest of the code.
@@ -502,19 +601,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func initiateFogViewshed() {
-
+        
         // Check does nothing and is there in case it is needed once the Fog device requirements are specified.
         if (ConnectionManager.allWorkers.count < 0) {
-                let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
-                let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-                
-                let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-                    //print(action)
-                }
-                alertController.addAction(cancelAction)
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+            let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
+            let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+                //print(action)
+            }
+            alertController.addAction(cancelAction)
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
         } else {
             viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             logBox.text = ""
@@ -539,11 +638,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             //let x: Int = work.getObserver().x
             let observerPoints: ElevationPoint = ElevationPoint (x: observer.x, y: observer.y, h: Double(observer.height))
             obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
-
+            
         }
         
         printOut("\tFinished Viewshed Processing on \(observer.name).")
-
+        
         self.pinObserverLocation(observer)
         
         return obsResults
@@ -559,7 +658,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let work = ViewshedWork(mpcSerialized: dict[Event.StartViewshed.rawValue]!)
             
             self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-        
+            
             if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
                 self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
             } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
@@ -594,26 +693,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             var dict = object as! [NSString: NSData]
             let result = ViewshedResult(mpcSerialized: dict[Event.SendViewshedResult.rawValue]!)
             
-                ConnectionManager.processResult(Event.SendViewshedResult, responseEvent: Event.StartViewshed, sender: fromPeerId.displayName, receiver: Worker.getMe().name, object: [Event.SendViewshedResult.rawValue: result],
-                    responseMethod: {
-                        
-                        // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.printOut("\tResult recieved from \(fromPeerId.displayName).")
-                            //   }
-                            //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-                            self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
-                        }
-                    },
-                    completeMethod: {
-                        dispatch_async(dispatch_get_main_queue()) {
-                            self.printOut("\tAll received")
-                            let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                            self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                            self.printOut("Viewshed complete.")
-                            self.stopTimer()
-                        }
-                })
+            ConnectionManager.processResult(Event.SendViewshedResult, responseEvent: Event.StartViewshed, sender: fromPeerId.displayName, receiver: Worker.getMe().name, object: [Event.SendViewshedResult.rawValue: result],
+                responseMethod: {
+                    
+                    // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.printOut("\tResult recieved from \(fromPeerId.displayName).")
+                        //   }
+                        //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+                        self.addOverlay(result.viewshedResult, imageLocation: self.hgtCoordinate)
+                    }
+                },
+                completeMethod: {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.printOut("\tAll received")
+                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                        self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                        self.printOut("Viewshed complete.")
+                        self.stopTimer()
+                    }
+            })
             //}
         }
         
@@ -633,41 +732,41 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.printOut("\t workForPeer: workerCount \(workerCount)")
                 let workDivision = self.getQuadrant(workerCount)
                 print("workDivision : \(workDivision)")
-
+                
                 let currentQuadrant = workDivision[count]
                 let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
-                    count++
+                count++
                 return theWork
             },
             workForSelf: { workerCount in
                 self.printOut("\t workForSelf: workerCount \(workerCount)")
                 self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
                 self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
-                    
+                
                 if (workerCount < 2) {
-                       //if no peers
-                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                        self.addOverlay(image, imageLocation: self.hgtCoordinate)
-                        self.stopTimer()
+                    //if no peers
+                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
+                    self.addOverlay(image, imageLocation: self.hgtCoordinate)
+                    self.stopTimer()
                 }
                 self.printOut("\tFound results locally out of \(workerCount).")
             },
             log: { peerName in
-                    self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
+                self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
             },
             selectedWorkersCount: options.selectedPeers.count,
             selectedPeers: options.selectedPeers
-         )
+        )
     }
-
-
+    
+    
     private func getQuadrant(numberOfWorkers: Int) -> [Int] {
         var quadrants:[Int] = []
-
+        
         for var count = 0; count < numberOfWorkers; count++ {
             quadrants.append(count + 1)
         }
-
+        
         return quadrants
     }
     
@@ -701,7 +800,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             self.performParallelViewshed(observer, algorithm: options.viewshedAlgorithm, viewshedGroup: viewshedGroup)
         }
-
+        
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
             self.stopTimer()
         }

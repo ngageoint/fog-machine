@@ -512,6 +512,9 @@
                                 <rect key="frame" x="20" y="125" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="hgDataTextEditingDidBegin:" destination="pEj-gH-Hgf" eventType="editingDidBegin" id="LBh-4R-ZJJ"/>
+                                </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -560,6 +563,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="hgtDataText" destination="72J-Ir-eqG" id="Ohs-Xc-OZy"/>
                         <outlet property="logBox" destination="88U-br-EID" id="3DW-K5-j0S"/>
                         <outlet property="mapTypeSelector" destination="nzQ-pP-oJH" id="d2m-9C-YpP"/>
                         <outlet property="mapView" destination="skG-eX-ae4" id="fWJ-nl-x23"/>
