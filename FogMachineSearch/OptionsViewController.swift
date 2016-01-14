@@ -281,7 +281,6 @@ class OptionsViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                         
                         self.optionsObj.selectedHGTFile = hgFileWithExt
                         hgtDataText.text = pickerData[0]
-                        print("Options picker data: \(pickerData[0])")
                     }
                     break
                 }

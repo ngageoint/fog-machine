@@ -59,6 +59,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         self.centerMapOnLocation(self.hgt.getCenterLocation())
     }
     
+    /*
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let optionsObj = Options.sharedInstance
@@ -73,7 +74,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         }
         setupFogEvents()
     }
-    
+    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -96,7 +97,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
             self.optionsObjMap.selectedHGTFile = tmpString[tmpString.startIndex.advancedBy(0)...tmpString.startIndex.advancedBy(11)]
             }
         }
-        
     }
     
     func getHgtFileInfo() {
@@ -118,7 +118,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
                         
                         self.optionsObjMap.selectedHGTFile = hgFileWithExt
                         hgtDataText.text = pickerData[0]
-                        print("Map picker data: \(pickerData[0])")
                     }
                     break
                 }
@@ -171,6 +170,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         let pickerLine: String = pickerData[row]
         self.optionsObjMap.selectedHGTPickerValue = pickerLine
         self.optionsObjMap.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
+        
+        let optionsObj = Options.sharedInstance
+        if let aTmpStr:String = optionsObj.selectedHGTFile {
+            if !aTmpStr.isEmpty {
+                hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
+                hgt = Hgt(filename: hgtFilename)
+                hgtCoordinate = hgt.getCoordinate()
+                hgtElevation = hgt.getElevation()
+                self.centerMapOnLocation(self.hgt.getCenterLocation())
+            }
+        }
+        setupFogEvents()
     }
     
     // MARK: Viewshed Serial/Parallel
