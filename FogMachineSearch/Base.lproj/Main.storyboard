@@ -638,24 +638,6 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Pick SRTM/HGT File from the available list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACT-Rf-BUb">
-                                <rect key="frame" x="17" y="322" width="277" height="17"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="17" id="9o1-M1-2aI"/>
-                                    <constraint firstAttribute="width" constant="312" id="uad-4X-eMG"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JJd-zM-FCN">
-                                <rect key="frame" x="17" y="347" width="287" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="hgDataTextEditingDidBegin:" destination="zA9-9m-RT6" eventType="editingDidBegin" id="HPb-hM-h8W"/>
-                                </connections>
-                            </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9un-ci-9Cv">
                                 <rect key="frame" x="165" y="260" width="58" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -747,13 +729,11 @@
                             <constraint firstItem="Lz2-pf-NV4" firstAttribute="top" secondItem="csI-Wm-Rie" secondAttribute="bottom" constant="95" id="JW2-Jr-lvR"/>
                             <constraint firstItem="pMK-0V-S46" firstAttribute="top" secondItem="Lz2-pf-NV4" secondAttribute="bottom" constant="13" id="Lsy-vt-sry"/>
                             <constraint firstItem="heT-6e-6CT" firstAttribute="top" secondItem="8zH-n1-eTN" secondAttribute="bottom" constant="29" id="NcZ-4y-BUx"/>
-                            <constraint firstItem="JJd-zM-FCN" firstAttribute="top" secondItem="ACT-Rf-BUb" secondAttribute="bottom" constant="8" id="TDf-no-KA7"/>
                             <constraint firstItem="9un-ci-9Cv" firstAttribute="leading" secondItem="YzH-rf-R7X" secondAttribute="trailing" constant="8" id="Vk9-tu-u0h"/>
                             <constraint firstItem="G5n-1a-Eak" firstAttribute="top" secondItem="heT-6e-6CT" secondAttribute="bottom" constant="13" id="WhW-IN-8eP"/>
                             <constraint firstItem="YzH-rf-R7X" firstAttribute="top" secondItem="8w8-Ea-6Lo" secondAttribute="bottom" constant="7" id="ZQl-H8-lY9"/>
                             <constraint firstItem="cED-9c-uZQ" firstAttribute="leading" secondItem="Lz2-pf-NV4" secondAttribute="trailing" constant="-4" id="eLx-6q-U57"/>
                             <constraint firstItem="cED-9c-uZQ" firstAttribute="leading" secondItem="heT-6e-6CT" secondAttribute="trailing" constant="146" id="j00-SQ-nDc"/>
-                            <constraint firstItem="ACT-Rf-BUb" firstAttribute="top" secondItem="YzH-rf-R7X" secondAttribute="bottom" constant="32" id="j6g-zJ-kU0"/>
                             <constraint firstItem="8w8-Ea-6Lo" firstAttribute="top" secondItem="rxd-4V-VuC" secondAttribute="bottom" constant="17" id="m2Z-Fr-iEx"/>
                             <constraint firstItem="s5o-kU-Av0" firstAttribute="top" secondItem="pMK-0V-S46" secondAttribute="bottom" constant="50" id="rDt-tW-wy1"/>
                             <constraint firstItem="cED-9c-uZQ" firstAttribute="top" secondItem="csI-Wm-Rie" secondAttribute="bottom" constant="99" id="vP5-IR-gBu"/>
@@ -765,7 +745,6 @@
                     </view>
                     <connections>
                         <outlet property="elevationText" destination="pMK-0V-S46" id="iwz-5P-ICl"/>
-                        <outlet property="hgtDataText" destination="JJd-zM-FCN" id="acU-gD-gzt"/>
                         <outlet property="observerXText" destination="rxd-4V-VuC" id="gZ7-ab-ryt"/>
                         <outlet property="observerYText" destination="G5n-1a-Eak" id="Vq3-AL-b5k"/>
                         <outlet property="radiusSlider" destination="YzH-rf-R7X" id="OWK-rO-hMT"/>

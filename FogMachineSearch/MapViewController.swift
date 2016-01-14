@@ -59,23 +59,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         self.centerMapOnLocation(self.hgt.getCenterLocation())
     }
     
-    /*
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        let optionsObj = Options.sharedInstance
-        if let aTmpStr:String = optionsObj.selectedHGTFile {
-            if !aTmpStr.isEmpty {
-                hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
-                hgt = Hgt(filename: hgtFilename)
-                hgtCoordinate = hgt.getCoordinate()
-                hgtElevation = hgt.getElevation()
-                self.centerMapOnLocation(self.hgt.getCenterLocation())
-            }
-        }
-        setupFogEvents()
-    }
-    */
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -130,6 +113,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     @IBAction func hgDataTextEditingDidBegin(sender: AnyObject) {
          hgtDataPickerView.hidden = false
     }
+    
     // latitude and 105 degrees west longitude
     func parseCoordinate(filename : String) -> CLLocationCoordinate2D {
         
@@ -164,6 +148,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // handle the item selected from the picker view
         hgtDataText.text = pickerData[row]
         hgtDataPickerView.hidden = true;
         self.view.endEditing(true)
