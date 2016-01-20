@@ -16,21 +16,14 @@ enum TransceiverMode {
 public class Transceiver: SessionDelegate {
 
     var transceiverMode = TransceiverMode.Both
-    let session: Session
     let advertiser: Advertiser
     let browser: Browser
 
     
     public init(displayName: String!) {
-        session = Session(displayName: displayName, delegate: nil)
-        advertiser = Advertiser(displayName: displayName, session: session)
-        browser = Browser(displayName: displayName, session: session)
-        session.delegate = self
-    }
-    
-    
-    public func getSession() -> Session {
-        return session
+        advertiser = Advertiser(displayName: displayName)
+        browser = Browser(displayName: displayName)
+        masterSession.delegate = self
     }
     
 
@@ -42,11 +35,10 @@ public class Transceiver: SessionDelegate {
     
 
     func stopTransceiving() {
-        session.delegate = nil
         advertiser.stopAdvertising()
         browser.stopBrowsing()
         
-        //Need to handle this correctly
+        //Need to possibly handle this differently?
         //session.disconnect(session.myPeerID.displayName)
         NSLog("Disconnecting from transceiver.")
     }
@@ -65,9 +57,7 @@ public class Transceiver: SessionDelegate {
     
 
     public func connecting(myPeerID: MCPeerID, toPeer peer: MCPeerID) {
-        if masterSession == nil {
-            masterSession = transceiver.getSession()
-        }
+
         if let onConnecting = onConnecting {
             //print("onConnecting was valid")
             dispatch_async(dispatch_get_main_queue()) {
@@ -81,20 +71,20 @@ public class Transceiver: SessionDelegate {
 
     
     public func connected(myPeerID: MCPeerID, toPeer peer: MCPeerID) {
-        let mySession = session.getSession(myPeerID.displayName)
-        let peerSession = session.getSession(peer.displayName)
-        
-        if mySession == nil {
-            print("\t\t\tTransceiver mySession: nil")
-        } else {
-            print("\t\t\tTransceiver mySession: \(mySession?.myPeerID.displayName)")
-        }
-        
-        if peerSession == nil {
-            print("\t\t\tTransceiver peerSession: nil")
-        } else {
-            print("\t\t\tTransceiver peerSession: \(peerSession?.myPeerID.displayName)")
-        }
+//        let mySession = session.getSession(myPeerID.displayName)
+//        let peerSession = session.getSession(peer.displayName)
+//        
+//        if mySession == nil {
+//            print("\t\t\tTransceiver mySession: nil")
+//        } else {
+//            print("\t\t\tTransceiver mySession: \(mySession?.myPeerID.displayName)")
+//        }
+//        
+//        if peerSession == nil {
+//            print("\t\t\tTransceiver peerSession: nil")
+//        } else {
+//            print("\t\t\tTransceiver peerSession: \(peerSession?.myPeerID.displayName)")
+//        }
         
         
         //if session == nil {

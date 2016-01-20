@@ -32,21 +32,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     var hgt: Hgt!
     var hgtCoordinate:CLLocationCoordinate2D!
     var hgtElevation:[[Int]]!
-    var hgtFilename = "N39W075"
+    
     var pickerData: [String] = [String]()
     var viewshedResults: [[Int]]!
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
-    var coordinate:CLLocationCoordinate2D!
-    var optionsObjMap = Options.sharedInstance
+    //var coordinate:CLLocationCoordinate2D!
+    //var optionsObjMap = Options.sharedInstance
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        hgtFilePickerProcess()
+       // hgtFilePickerProcess()
         
         mapView.delegate = self
-        
+        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
         metricsOutput = ""
         
         logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
@@ -57,6 +57,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         hgtElevation = hgt.getElevation()
         
         self.centerMapOnLocation(self.hgt.getCenterLocation())
+        setupFogEvents()
     }
     
     override func didReceiveMemoryWarning() {
@@ -69,46 +70,46 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         hgtDataPickerView.delegate = self
         hgtDataText.inputView = hgtDataPickerView
         // get all the HGT File names from the resource folder
-        getHgtFileInfo()
+        //getHgtFileInfo()
         hgtDataPickerView.hidden = true;
         
-        if !self.optionsObjMap.selectedHGTPickerValue.isEmpty {
-            hgtDataText.text = self.optionsObjMap.selectedHGTPickerValue
+        if !Options.sharedInstance.selectedHGTPickerValue.isEmpty {
+            hgtDataText.text = Options.sharedInstance.selectedHGTPickerValue
         }
-        if let tmpString: String = optionsObjMap.selectedHGTPickerValue {
+        if let tmpString: String = Options.sharedInstance.selectedHGTPickerValue {
             if !tmpString.isEmpty {
-            self.optionsObjMap.selectedHGTFile = tmpString[tmpString.startIndex.advancedBy(0)...tmpString.startIndex.advancedBy(11)]
+            Options.sharedInstance.selectedHGTFile = tmpString[tmpString.startIndex.advancedBy(0)...tmpString.startIndex.advancedBy(11)]
             }
         }
     }
     
-    func getHgtFileInfo() {
-        
-        let fm = NSFileManager.defaultManager()
-        let path = NSBundle.mainBundle().resourcePath!
-        
-        do {
-            let items = try fm.contentsOfDirectoryAtPath(path)
-            for var item: String in items {
-                if (item == "HGT") {
-                    
-                    let hgtFolder = path + "/HGT"
-                    let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
-                    for var hgFileWithExt: String in hgtFiles {
-                        let hgFileName = NSURL(fileURLWithPath: hgFileWithExt).URLByDeletingPathExtension?.lastPathComponent
-                        self.coordinate = parseCoordinate(hgFileName!)
-                        pickerData.append("\(hgFileWithExt) (Lat:\(self.coordinate.latitude) Lng:\(self.coordinate.longitude))")
-                        
-                        self.optionsObjMap.selectedHGTFile = hgFileWithExt
-                        hgtDataText.text = pickerData[0]
-                    }
-                    break
-                }
-            }
-        } catch {
-            // failed to read directory – bad permissions, perhaps?
-        }
-    }
+//    func getHgtFileInfo() {
+//        
+//        let fm = NSFileManager.defaultManager()
+//        let path = NSBundle.mainBundle().resourcePath!
+//        
+//        do {
+//            let items = try fm.contentsOfDirectoryAtPath(path)
+//            for var item: String in items {
+//                if (item == "HGT") {
+//                    
+//                    let hgtFolder = path + "/HGT"
+//                    let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
+//                    for var hgFileWithExt: String in hgtFiles {
+//                        let hgFileName = NSURL(fileURLWithPath: hgFileWithExt).URLByDeletingPathExtension?.lastPathComponent
+//                        self.coordinate = parseCoordinate(hgFileName!)
+//                        pickerData.append("\(hgFileWithExt) (Lat:\(self.coordinate.latitude) Lng:\(self.coordinate.longitude))")
+//                        
+//                        self.optionsObjMap.selectedHGTFile = hgFileWithExt
+//                        hgtDataText.text = pickerData[0]
+//                    }
+//                    break
+//                }
+//            }
+//        } catch {
+//            // failed to read directory – bad permissions, perhaps?
+//        }
+//    }
     
     @IBAction func hgDataTextEditingDidBegin(sender: AnyObject) {
          hgtDataPickerView.hidden = false
@@ -153,13 +154,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         hgtDataPickerView.hidden = true;
         self.view.endEditing(true)
         let pickerLine: String = pickerData[row]
-        self.optionsObjMap.selectedHGTPickerValue = pickerLine
-        self.optionsObjMap.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
+        Options.sharedInstance.selectedHGTPickerValue = pickerLine
+        Options.sharedInstance.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
         
         let optionsObj = Options.sharedInstance
         if let aTmpStr:String = optionsObj.selectedHGTFile {
             if !aTmpStr.isEmpty {
-                hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
+                let hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
                 hgt = Hgt(filename: hgtFilename)
                 hgtCoordinate = hgt.getCoordinate()
                 hgtElevation = hgt.getElevation()
@@ -173,15 +174,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     
     func singleTestObserver() -> Observer {
         let name = "Tester"
-        let optionsObj = Options.sharedInstance
-        let x = optionsObj.observerX //600
-        let y = optionsObj.observerY //600
-        return Observer(name: name, x: x, y: y, height: optionsObj.observerElevation, radius: optionsObj.radius, coordinate: self.hgtCoordinate)
+        let x = 900
+        let y = 900
+        return Observer(name: name, x: x, y: y, height: 20, radius: 300, coordinate: self.hgtCoordinate)
     }
     
     
     func singleRandomObserver() -> Observer {
-        let optionsObj = Options.sharedInstance
         let name = String(arc4random_uniform(10000) + 1)
         let x = Int(arc4random_uniform(700) + 200)
         let y = Int(arc4random_uniform(700) + 200)
@@ -720,12 +719,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         printOut("Beginning viewshed on \(Worker.getMe().displayName)")
         let observer = self.singleTestObserver()
         let selfQuadrant = 1
-        var count = 0 //Start at one since initiator is 0-indexed
+        var count = 1 //Start at one since initiator is 0-indexed
         
         
-        ConnectionManager.sendEventToPeer(Event.StartViewshed,
+        ConnectionManager.sendEventToAll(Event.StartViewshed,
             workForPeer: { workerCount in
-                self.printOut("\t workForPeer: workerCount \(workerCount)")
                 let workDivision = self.getQuadrant(workerCount)
                 print("workDivision : \(workDivision)")
                 
@@ -735,7 +733,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
                 return theWork
             },
             workForSelf: { workerCount in
-                self.printOut("\t workForSelf: workerCount \(workerCount)")
                 self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
                 self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
                 
@@ -749,9 +746,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
             },
             log: { peerName in
                 self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
-            },
-            selectedWorkersCount: options.selectedPeers.count,
-            selectedPeers: options.selectedPeers
+            }//,
+           // selectedWorkersCount: options.selectedPeers.count,
+           // selectedPeers: options.selectedPeers
         )
     }
     
@@ -809,8 +806,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         self.startTimer()
         
         for count in 1...8 {
-            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
-            //let observer = Observer(name: String(count), x: 600, y: 600, height: 20, radius: 600, coordinate: self.hgtCoordinate)
+            //let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
+            let observer = Observer(name: String(count), x: 600, y: 600, height: 20, radius: 600, coordinate: self.hgtCoordinate)
             //let observer = Observer(name: String(count), x: 8 * 100, y: 8 * 100, height: 20, radius: options.radius, coordinate:self.hgtCoordinate)
             self.performSerialViewshed(observer, algorithm: options.viewshedAlgorithm)
         }

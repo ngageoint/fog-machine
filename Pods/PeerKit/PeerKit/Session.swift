@@ -24,14 +24,14 @@ public class Session: NSObject, MCSessionDelegate {
     //var newSession: MCSession
     var delegate: SessionDelegate?
     var myPeerSessions = [String: MCSession]()
-    
+    let myPeerId = MCPeerID(displayName: myName)
     
     public init(displayName: String, delegate: SessionDelegate? = nil) {
         self.delegate = delegate
         //let newSession = MCSession(peer: MCPeerID(displayName: displayName))
         super.init()
         //newSession.delegate = self
-        myPeerSessions[displayName] = self.availableSession(displayName)//newSession
+        myPeerSessions[String(myPeerSessions.count)] = self.availableSession(displayName, peerName: displayName)//newSession
     }
 
     
@@ -55,23 +55,32 @@ public class Session: NSObject, MCSessionDelegate {
     
     func getSession(displayName: String) -> MCSession? {
         guard myPeerSessions.indexForKey(displayName) != nil else {
+            print("\t\tSession getSession not found for \(displayName)")
             return nil
         }
+        //print("\t\tSession getSession found for \(displayName)")
         return myPeerSessions[displayName]!
         //return newSession
     }
     
     
-    public func getPeerId(displayName: String) -> MCPeerID {
-        var peer: MCPeerID = MCPeerID(displayName: displayName)
-        for (name, session) in myPeerSessions {
-            if name == displayName {
-                peer = session.myPeerID
-            }
-        }
-            
-        return peer
-        //return newSession.myPeerID
+//    public func getPeerId(displayName: String) -> MCPeerID {
+//        //print("\t\tSession getPeerId for \(displayName)")
+//        var peer: MCPeerID = MCPeerID(displayName: displayName)
+//        for (name, session) in myPeerSessions {
+//            if name == displayName {
+//                peer = session.myPeerID
+//                //print("\t\tSession getPeerId found \(peer.displayName)")
+//            }
+//        }
+//            
+//        return peer
+//        //return newSession.myPeerID
+//    }
+    
+    
+    func getPeerId() -> MCPeerID {
+        return myPeerId
     }
     
 
@@ -80,10 +89,14 @@ public class Session: NSObject, MCSessionDelegate {
 
     public func allConnectedPeers() -> [MCPeerID] {
         var allPeers: [MCPeerID] = []
-        for (_, session) in myPeerSessions {
+        //print("\t\tSession allConnectedPeers \(myPeerSessions.count)")
+        for (name, session) in myPeerSessions {
+            //print("\t\t\tsession name: \(name)")
             for peer in session.connectedPeers {
+                //print("\t\t\t\tsessions peer: \(peer.displayName)")
                 allPeers.append(peer)
             }
+            //allPeers.append(MCPeerID(displayName: name))
 //            if session.myPeerID.displayName != myName {
 //                allPeers.append(session.myPeerID)
 //            }
@@ -94,6 +107,7 @@ public class Session: NSObject, MCSessionDelegate {
     
     
     public func allConnectedSessions() -> [MCSession] {
+        //print("\t\tSession allConnectedSessions")
         var allSessions: [MCSession] = []
         for (_, session) in myPeerSessions {
             allSessions.append(session)
@@ -103,32 +117,46 @@ public class Session: NSObject, MCSessionDelegate {
     }
     
     
-    func availableSession(displayName: String) -> MCSession {
-        print("\t\tSession availableSession for \(displayName)")
+    func availableSession(displayName: String, peerName: String) -> MCSession {
+        print("\t\tSession checking availableSession for \(displayName)")
         var notFound = true
         var availableSession: MCSession? = nil
         
-        for (name,session) in myPeerSessions {
-            if name == displayName {
+        
+        //Try and use an existing session (_sessions is a mutable array)
+        for (_, session) in myPeerSessions {
+            if (session.connectedPeers.count < kMCSessionMaximumNumberOfPeers) {
                 notFound = false
                 availableSession = session
+                print("\t\tSession availableSession found session")
                 break
             }
         }
+
+        
+//        for (name,session) in myPeerSessions {
+//            if name == displayName {
+//                notFound = false
+//                availableSession = session
+//                print("\t\tSession availableSession found session")
+//                break
+//            }
+//        }
         
         if notFound {
-            availableSession = self.newSession(displayName)
+            print("\t\tSession availableSession create new session")
+            availableSession = self.newSession(displayName, peerName: peerName)
         }
         
         return availableSession!
     }
     
     
-    func newSession(displayName: String) -> MCSession {
-        let newSession = MCSession(peer: MCPeerID(displayName: displayName))
+    func newSession(displayName: String, peerName: String) -> MCSession {
+        let newSession = MCSession(peer: myPeerId)
         
         newSession.delegate = self
-        myPeerSessions[displayName] = newSession
+        myPeerSessions[String(myPeerSessions.count)] = newSession
 
         return newSession
     }
@@ -165,11 +193,14 @@ public class Session: NSObject, MCSessionDelegate {
                 delegate?.connecting(session.myPeerID, toPeer: peerID)
             case .Connected:
                 print("\t\tSession Connected \(ids)")
-                //myPeerSessions[peerID.displayName] = session
+                //myPeerSessions[session.myPeerID.displayName] = session
                 delegate?.connected(session.myPeerID, toPeer: peerID)
             case .NotConnected:
                 print("\t\tSession NotConnected \(ids)")
-                self.disconnect(peerID.displayName)
+                
+                //self.disconnect(peerID.displayName)
+                
+                
                 //session.disconnect()
                 //myPeerSessions.removeValueForKey(peerID.displayName)
                 delegate?.disconnected(session.myPeerID, fromPeer: peerID)

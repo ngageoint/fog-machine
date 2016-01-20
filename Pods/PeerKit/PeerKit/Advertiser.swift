@@ -11,19 +11,17 @@ import MultipeerConnectivity
 
 class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
 
-    let theSession: Session
     let displayName: String
     private var advertiser: MCNearbyServiceAdvertiser?
     
-    init(displayName: String, session: Session) {
+    init(displayName: String) {
         self.displayName = displayName
-        self.theSession = session
         super.init()
     }
     
 
     func startAdvertising(serviceType serviceType: String, discoveryInfo: [String: String]? = nil) {
-        advertiser = MCNearbyServiceAdvertiser(peer: theSession.getPeerId(displayName), discoveryInfo: discoveryInfo, serviceType: serviceType)
+        advertiser = MCNearbyServiceAdvertiser(peer: masterSession.getPeerId(), discoveryInfo: discoveryInfo, serviceType: serviceType)
         advertiser?.delegate = self
         advertiser?.startAdvertisingPeer()
     }
@@ -36,23 +34,18 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
 
     
     func advertiser(advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: NSData?, invitationHandler: ((Bool, MCSession) -> Void)) {
-        guard let peerRunningTime = NSKeyedUnarchiver.unarchiveObjectWithData(context!) as! NSTimeInterval? else {
+        guard displayName != peerID.displayName else {
             return
         }
-
-        let runningTime = -timeStarted.timeIntervalSinceNow
-        let isPeerYounger = (peerRunningTime <= runningTime)
-        print("Advertiser isPeerYounger: \(isPeerYounger)  peerRunningTime: \(peerRunningTime) and runningTime: \(runningTime)")
         
-        let aSession = theSession.availableSession(displayName)
-        invitationHandler(isPeerYounger, aSession)
-
-        if isPeerYounger {
-            advertiser.stopAdvertisingPeer()
-            print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
-        } else {
-            print("Advertiser \(advertiser.myPeerID.displayName) NOT accepting \(peerID.displayName)")
-        }
+        let aSession = masterSession.availableSession(displayName, peerName: peerID.displayName)
+        invitationHandler(true, aSession)
+        
+        
+        advertiser.stopAdvertisingPeer()
+        
+        
+        print("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
     }
     
     

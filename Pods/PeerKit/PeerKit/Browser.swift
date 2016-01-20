@@ -13,21 +13,19 @@ let timeStarted = NSDate()
 
 class Browser: NSObject, MCNearbyServiceBrowserDelegate {
 
-    let theSession: Session
     let displayName: String
     
     var mcBrowser: MCNearbyServiceBrowser?
     
     
-    init(displayName: String, session: Session) {
+    init(displayName: String) {
         self.displayName = displayName
-        self.theSession = session
         super.init()
     }
 
 
     func startBrowsing(serviceType: String) {
-        mcBrowser = MCNearbyServiceBrowser(peer: theSession.getPeerId(displayName), serviceType: serviceType)
+        mcBrowser = MCNearbyServiceBrowser(peer: masterSession.getPeerId(), serviceType: serviceType)
         mcBrowser?.delegate = self
         mcBrowser?.startBrowsingForPeers()
     }
@@ -40,22 +38,32 @@ class Browser: NSObject, MCNearbyServiceBrowserDelegate {
 
     
     func browser(browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        
+        guard displayName != peerID.displayName else {
+            return
+        }
+
         print("\tBrowser \(browser.myPeerID.displayName) found peerID \(peerID.displayName)")
-        let runningTime = -timeStarted.timeIntervalSinceNow
-        //print("runningTime: \(runningTime)")
+        
+        //Only invite from one side. Example: For devices A and B, only one should invite the other.
+        let hasInvite = (displayName.componentsSeparatedByString("😺")[1] > peerID.displayName.componentsSeparatedByString("😺")[1])
+        
+        if (hasInvite) {
+            print("\tBrowser sending invitePeer using session")
+            let aSession = masterSession.availableSession(displayName, peerName: peerID.displayName)
+            browser.invitePeer(peerID, toSession: aSession, withContext: nil, timeout: 30.0)
+        }
+        else {
+            print("\tBrowser NOT sending invitePeer")
 
-        let context = NSKeyedArchiver.archivedDataWithRootObject(runningTime)
-
-        if let aSession = theSession.getSession(displayName) {
-            print("\tBrowser sending invitePeer")
-            browser.invitePeer(peerID, toSession: aSession, withContext: context, timeout: 30)
         }
     }
     
 
     func browser(browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        
+        guard displayName != peerID.displayName else {
+            return
+        }
+
         //Remove from myPeerSessions? Or only on NotConnected remove from myPeersession?
         //Also, if this is called from one phone, does the other phone still connect? 
         //Example: (phone A and B); A does not connect to B, so A lostPeer B, but B connects to

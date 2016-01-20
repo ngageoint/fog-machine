@@ -30,7 +30,7 @@ public var eventBlocks = [String: ObjectBlock]()
 
 #if os(iOS)
 import UIKit
-public let myName = String(UIDevice.currentDevice().name + "-" + String(UIDevice.currentDevice().hash))
+public let myName = String(UIDevice.currentDevice().name + "😺" + String(UIDevice.currentDevice().hash))
 //public let myName = String(UIDevice.currentDevice().hash)
 #else
 public let myName = NSHost.currentHost().localizedName ?? ""
@@ -39,7 +39,7 @@ public let myName = NSHost.currentHost().localizedName ?? ""
 public var transceiver = Transceiver(displayName: myName)
 
 //Maybe instead create a [Session] and have PeerKit interaction work with that?
-public var masterSession: Session?
+public var masterSession: Session = Session(displayName: myName, delegate: nil)
 
 
 // MARK: Event Handling
@@ -48,7 +48,7 @@ public var masterSession: Session?
 // MARK: Events
 
 
-public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [MCPeerID]? = masterSession!.allConnectedPeers()) {
+public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [MCPeerID]? = masterSession.allConnectedPeers()) {
     guard let peers = peers where !peers.isEmpty else {
         return
     }
@@ -61,7 +61,15 @@ public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [M
 
     let data = NSKeyedArchiver.archivedDataWithRootObject(rootObject)
 
-    masterSession!.sendData(data, toPeers: peers, withMode: .Reliable)
+    masterSession.sendData(data, toPeers: peers, withMode: .Reliable)
 }
 
 
+// MARK: Development
+public let debug = false
+
+public func print(message: String) {
+    if debug {
+        print(message)
+    }
+}

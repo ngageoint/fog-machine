@@ -56,62 +56,94 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell =  self.connectionTableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath) as UITableViewCell
-        
-        // set cell label
-        let strPeerName: String = ConnectionManager.allWorkers[indexPath.row].displayName
-        cell.textLabel?.text = strPeerName
-        if (!self.optionsObj.selectedPeers.contains(strPeerName)) {
-            if (checked[indexPath.row]) {
-                self.optionsObj.selectedPeers.append(strPeerName)
-            }
-        }
+//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+//        let cell =  self.connectionTableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath) as UITableViewCell
+//        
+//        if indexPath.row < ConnectionManager.allWorkers.count {
+//            
+//            // set cell label
+//            let strPeerName: String = ConnectionManager.allWorkers[indexPath.row].displayName
+//            cell.textLabel?.text = strPeerName.componentsSeparatedByString("😺").joinWithSeparator("-")
+//            if (!self.optionsObj.selectedPeers.contains(strPeerName)) {
+//                if (checked[indexPath.row]) {
+//                    self.optionsObj.selectedPeers.append(strPeerName)
+//                }
+//            }
+//            if checked[indexPath.row] {
+//                cell.accessoryType = .Checkmark
+//            } else {
+//                cell.accessoryType = .None
+//            }
+//            // print("Selected Peers : \(self.optionsObj.selectedPeers)")
+//        }
+//
+//        if checked[indexPath.row] {
+//            cell.accessoryType = .Checkmark
+//        } else {
+//            cell.accessoryType = .None
+//        }
+//        if (self.optionsObj.selectedPeers.count > ConnectionManager.allWorkers.count) {
+//            self.optionsObj.selectedPeers.removeAll()
+//            for (var i=0; i < ConnectionManager.allWorkers.count; i++) {
+//                let strPeerName: String = ConnectionManager.allWorkers[i].displayName
+//                self.optionsObj.selectedPeers.append(strPeerName)
+//            }
+//        }
+//        //print("Selected Peers : \(self.optionsObj.selectedPeers)")
+//
+//        return cell
+//    }
+//    
+//    
+//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        if (indexPath.row == 0) {
+//        } else {
+//            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+//            checked[indexPath.row] = !checked[indexPath.row]
+//            let strPeerName: String = ConnectionManager.allWorkers[indexPath.row].displayName
+//            if (checked[indexPath.row]) {
+//                if (!self.optionsObj.selectedPeers.contains(strPeerName)) {
+//                    self.optionsObj.selectedPeers.append(strPeerName)
+//                }
+//            } else {
+//                let index: Int! = self.optionsObj.selectedPeers.indexOf(strPeerName)
+//                self.optionsObj.selectedPeers.removeAtIndex(index)
+//            }
+//        }
+//
+//        //print("Selected Peers->tableView : \(self.optionsObj.selectedPeers)")
+//        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+//    }
+//    
+//    func setupTableView() {
+//        checked = [Bool](count: tempPeerCount, repeatedValue: true)
+//        connectionTableView.dataSource = self
+//        connectionTableView.delegate = self
+//        connectionTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+//        connectionTableView.addSubview(self.refreshControl)
+//    }
+//    
 
-        if checked[indexPath.row] {
-            cell.accessoryType = .Checkmark
-        } else {
-            cell.accessoryType = .None
-        }
-        if (self.optionsObj.selectedPeers.count > ConnectionManager.allWorkers.count) {
-            self.optionsObj.selectedPeers.removeAll()
-            for (var i=0; i < ConnectionManager.allWorkers.count; i++) {
-                let strPeerName: String = ConnectionManager.allWorkers[i].displayName
-                self.optionsObj.selectedPeers.append(strPeerName)
-            }
-        }
-        //print("Selected Peers : \(self.optionsObj.selectedPeers)")
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell:ConnectionCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell") as! ConnectionCell
+        // set cell label
+        cell.label.text = ConnectionManager.allWorkers[indexPath.row].displayName.componentsSeparatedByString("😺").joinWithSeparator("-")
         return cell
     }
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if (indexPath.row == 0) {
-        } else {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            checked[indexPath.row] = !checked[indexPath.row]
-            let strPeerName: String = ConnectionManager.allWorkers[indexPath.row].displayName
-            if (checked[indexPath.row]) {
-                if (!self.optionsObj.selectedPeers.contains(strPeerName)) {
-                    self.optionsObj.selectedPeers.append(strPeerName)
-                }
-            } else {
-                let index: Int! = self.optionsObj.selectedPeers.indexOf(strPeerName)
-                self.optionsObj.selectedPeers.removeAtIndex(index)
-            }
-        }
-
-        //print("Selected Peers->tableView : \(self.optionsObj.selectedPeers)")
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        NSLog("selected a cell")
     }
     
+    
     func setupTableView() {
-        checked = [Bool](count: tempPeerCount, repeatedValue: true)
-        connectionTableView.dataSource = self
         connectionTableView.delegate = self
-        connectionTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        connectionTableView.dataSource = self
         connectionTableView.addSubview(self.refreshControl)
     }
+
     
     func updateWorkers() {
         if (ConnectionManager.otherWorkers.count > 0) {
