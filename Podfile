@@ -2,11 +2,11 @@
 # platform :ios, '6.0'
 use_frameworks!
 
-target 'FogMachineSearch' do
+target 'FogMachine' do
 	pod 'PeerKit', '~> 1.1'
 end
 
-target 'FogMachineSearchTests' do
+target 'FogMachineTests' do
 
 end
 

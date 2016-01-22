@@ -90,7 +90,7 @@ public class Session: NSObject, MCSessionDelegate {
     public func allConnectedPeers() -> [MCPeerID] {
         var allPeers: [MCPeerID] = []
         //print("\t\tSession allConnectedPeers \(myPeerSessions.count)")
-        for (name, session) in myPeerSessions {
+        for (_, session) in myPeerSessions {
             //print("\t\t\tsession name: \(name)")
             for peer in session.connectedPeers {
                 //print("\t\t\t\tsessions peer: \(peer.displayName)")
