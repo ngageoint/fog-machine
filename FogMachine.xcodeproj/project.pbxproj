@@ -71,7 +71,7 @@
 		9BD5C10A1C060FDC004A37B6 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1091C060FDC004A37B6 /* Options.swift */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
-		E314F6C51B79023D005B75C6 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* SecondViewController.swift */; };
+		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
 		E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C61B79023D005B75C6 /* Main.storyboard */; };
 		E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C91B79023D005B75C6 /* Images.xcassets */; };
 		E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */; };
@@ -164,7 +164,7 @@
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E314F6C21B79023D005B75C6 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		E314F6C41B79023D005B75C6 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		E314F6C41B79023D005B75C6 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		E314F6C71B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E314F6C91B79023D005B75C6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E314F6CC1B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -385,7 +385,7 @@
 			isa = PBXGroup;
 			children = (
 				E314F6C21B79023D005B75C6 /* FirstViewController.swift */,
-				E314F6C41B79023D005B75C6 /* SecondViewController.swift */,
+				E314F6C41B79023D005B75C6 /* DataViewController.swift */,
 				E314F6E41B790275005B75C6 /* ConnectionManager.swift */,
 				758FB77F1C0A3AE400A193A7 /* Viewshed */,
 			);
@@ -600,7 +600,7 @@
 				9BD5C1001C05E51E004A37B6 /* Point.swift in Sources */,
 				E386DD511B7C34DB00FA8827 /* SearchWork.swift in Sources */,
 				9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */,
-				E314F6C51B79023D005B75C6 /* SecondViewController.swift in Sources */,
+				E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */,
 				9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */,
 				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
 				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
