@@ -30,7 +30,10 @@ class Observer: NSObject {
     }
     
     
-    func getObserverLocation() -> CLLocationCoordinate2D {
+    func getObserverLocation(offset: Bool) -> CLLocationCoordinate2D {
+        guard offset else {
+            return coordinate
+        }
         
         return CLLocationCoordinate2DMake(
             coordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(x - 1)) + Srtm3.LATITUDE_CELL_CENTER,

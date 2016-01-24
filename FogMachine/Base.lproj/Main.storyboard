@@ -89,18 +89,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="SFh-7f-20t">
-                                <rect key="frame" x="0.0" y="28" width="600" height="310.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="3:1.5" constant="-21" id="cQO-CX-pbx"/>
-                                    <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="200:69" id="yFQ-fp-aVZ"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="yFQ-fp-aVZ"/>
-                                    </mask>
-                                </variation>
-                            </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kfZ-7b-XgS">
                                 <rect key="frame" x="0.0" y="338.5" width="600" height="212.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -127,6 +115,18 @@
                                     <outlet property="delegate" destination="8rJ-Kc-sve" id="2L2-AM-Lrn"/>
                                 </connections>
                             </tableView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="SFh-7f-20t">
+                                <rect key="frame" x="0.0" y="28" width="600" height="310.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="3:1.5" constant="-21" id="cQO-CX-pbx"/>
+                                    <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="200:69" id="yFQ-fp-aVZ"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="yFQ-fp-aVZ"/>
+                                    </mask>
+                                </variation>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -189,118 +189,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UrZ-Fz-RFo" userLabel="ContainerView">
-                                <rect key="frame" x="20" y="72" width="560" height="45"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nBt-4I-eLZ">
-                                        <rect key="frame" x="0.0" y="7" width="60" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="ySI-sd-MpR"/>
-                                        </constraints>
-                                        <state key="normal" title="Parallel"/>
-                                        <connections>
-                                            <action selector="startParallel:" destination="pEj-gH-Hgf" eventType="touchUpInside" id="FRZ-7G-95U"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c7O-Gq-a7f">
-                                        <rect key="frame" x="438" y="8" width="60" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="eLu-u1-6vP"/>
-                                        </constraints>
-                                        <state key="normal" title="Random"/>
-                                        <connections>
-                                            <action selector="randomObserver:" destination="pEj-gH-Hgf" eventType="touchUpInside" id="E1Y-Nu-rlq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jq7-ez-xvk">
-                                        <rect key="frame" x="506" y="8" width="46" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="46" id="H9L-G8-nfH"/>
-                                        </constraints>
-                                        <state key="normal" title="Clear"/>
-                                        <connections>
-                                            <action selector="clearTimer:" destination="pEj-gH-Hgf" eventType="touchUpInside" id="N12-cs-8u0"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTE-e5-KVd">
-                                        <rect key="frame" x="68" y="7" width="60" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="5VT-JZ-FHm"/>
-                                        </constraints>
-                                        <state key="normal" title="Serial">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="startSerial:" destination="pEj-gH-Hgf" eventType="touchUpInside" id="4bX-eM-szW"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="c7O-Gq-a7f" firstAttribute="leading" secondItem="UrZ-Fz-RFo" secondAttribute="leading" constant="441" id="78u-kE-OXX"/>
-                                    <constraint firstItem="FTE-e5-KVd" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="top" constant="-6" id="DK7-kj-bpb"/>
-                                    <constraint firstAttribute="height" constant="45" id="F8n-QL-1nZ"/>
-                                    <constraint firstItem="Jq7-ez-xvk" firstAttribute="leading" secondItem="c7O-Gq-a7f" secondAttribute="trailing" constant="8" id="Pro-KY-VJ1"/>
-                                    <constraint firstItem="nBt-4I-eLZ" firstAttribute="leading" secondItem="UrZ-Fz-RFo" secondAttribute="leading" id="SAF-fs-haX"/>
-                                    <constraint firstItem="Jq7-ez-xvk" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="top" constant="8" id="SOs-gJ-idi"/>
-                                    <constraint firstAttribute="trailing" secondItem="Jq7-ez-xvk" secondAttribute="trailing" constant="8" id="grV-cq-dcG"/>
-                                    <constraint firstItem="FTE-e5-KVd" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="top" constant="7" id="j0u-Kk-YIL"/>
-                                    <constraint firstItem="FTE-e5-KVd" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="top" constant="5" id="nau-wt-xTm"/>
-                                    <constraint firstItem="nBt-4I-eLZ" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="top" constant="7" id="pKa-HN-DU6"/>
-                                    <constraint firstItem="c7O-Gq-a7f" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="top" constant="8" id="to5-ML-BT7"/>
-                                    <constraint firstItem="FTE-e5-KVd" firstAttribute="leading" secondItem="nBt-4I-eLZ" secondAttribute="trailing" constant="8" id="wIt-JD-XPe"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="DK7-kj-bpb"/>
-                                        <exclude reference="nau-wt-xTm"/>
-                                        <exclude reference="78u-kE-OXX"/>
-                                    </mask>
-                                </variation>
-                            </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
-                                <rect key="frame" x="20" y="427" width="560" height="122"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
-                                <rect key="frame" x="20" y="164" width="560" height="264"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="364"/>
                                 <connections>
                                     <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
                                 </connections>
                             </mapView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="72J-Ir-eqG">
-                                <rect key="frame" x="20" y="125" width="560" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="hgDataTextEditingDidBegin:" destination="pEj-gH-Hgf" eventType="editingDidBegin" id="LBh-4R-ZJJ"/>
-                                </connections>
-                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
+                                <rect key="frame" x="5" y="428" width="590" height="123"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="72J-Ir-eqG" firstAttribute="top" secondItem="UrZ-Fz-RFo" secondAttribute="bottom" constant="8" id="6Zr-dz-Euq"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="88U-br-EID" secondAttribute="leading" id="AR9-4w-aZs"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" id="GgP-Cq-Sw7"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="UrZ-Fz-RFo" secondAttribute="trailing" id="HfS-1a-1eZ"/>
-                            <constraint firstItem="72J-Ir-eqG" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="61" id="Iak-1m-Ktg"/>
-                            <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="88U-br-EID" secondAttribute="bottom" constant="2" id="Lsn-QS-6Kq"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" id="MBh-Yb-WDT"/>
-                            <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="-1" id="SXy-BA-2Xc"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="72J-Ir-eqG" secondAttribute="leading" id="asG-Pv-WhP"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="72J-Ir-eqG" secondAttribute="trailing" id="doT-ur-vEG"/>
-                            <constraint firstItem="UrZ-Fz-RFo" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="8" symbolic="YES" id="hwr-Wp-55i"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="88U-br-EID" secondAttribute="leading" constant="-20" id="AR9-4w-aZs"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" constant="-20" id="GgP-Cq-Sw7"/>
+                            <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="88U-br-EID" secondAttribute="bottom" id="Lsn-QS-6Kq"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" constant="-20" id="MBh-Yb-WDT"/>
+                            <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="SXy-BA-2Xc"/>
+                            <constraint firstItem="88U-br-EID" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="-15" id="cuv-LI-FBY"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="123" id="nrC-2f-Etb"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" constant="-15" id="q0r-KS-5Jv"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="qrK-DX-3sW"/>
-                            <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" id="smb-RS-vRN"/>
-                            <constraint firstItem="skG-eX-ae4" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" constant="100" id="xAe-Uv-bAd"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="UrZ-Fz-RFo" secondAttribute="leading" id="yWu-oG-GG3"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="-20" id="smb-RS-vRN"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" id="xAe-Uv-bAd"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="AR9-4w-aZs"/>
+                                <exclude reference="GgP-Cq-Sw7"/>
                                 <exclude reference="qrK-DX-3sW"/>
                             </mask>
                         </variation>
@@ -326,7 +246,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="hgtDataText" destination="72J-Ir-eqG" id="Ohs-Xc-OZy"/>
                         <outlet property="logBox" destination="88U-br-EID" id="3DW-K5-j0S"/>
                         <outlet property="mapTypeSelector" destination="nzQ-pP-oJH" id="d2m-9C-YpP"/>
                         <outlet property="mapView" destination="skG-eX-ae4" id="fWJ-nl-x23"/>

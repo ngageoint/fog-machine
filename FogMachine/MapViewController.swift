@@ -46,6 +46,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
        // hgtFilePickerProcess()
         
         mapView.delegate = self
+        let gesture = UILongPressGestureRecognizer(target: self, action: "addAnnotationGesture:")
+        gesture.minimumPressDuration = 1.0
+        mapView.addGestureRecognizer(gesture)
+        
         let hgtFilename = "N39W075"//"N39W075"//"N38W077"
         metricsOutput = ""
         
@@ -376,11 +380,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     }
     
     
-    func pinObserverLocation(observer: Observer) {
+    func pinObserverLocation(observer: Observer, offset: Bool = true) {
         let dropPin = MKPointAnnotation()
-        dropPin.coordinate = observer.getObserverLocation()
+        dropPin.coordinate = observer.getObserverLocation(offset)
         dropPin.title = observer.name
+        dropPin.subtitle = "Settings"
         mapView.addAnnotation(dropPin)
+    }
+    
+    
+    func addAnnotationGesture(gestureRecognizer: UIGestureRecognizer) {
+        let touchPoint = gestureRecognizer.locationInView(mapView)
+        let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
+        let obs = singleTestObserver()
+        obs.coordinate = newCoordinates
+        
+        pinObserverLocation(obs, offset: false)
     }
     
     
@@ -420,6 +435,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view!.canShowCallout = true
             view!.calloutOffset = CGPoint(x: -5, y: 5)
+            
+            let button = UIButton(type: UIButtonType.Custom)
+            let image = UIImage(named: "Viewshed")
+            button.setImage(image, forState: .Normal)
+            view!.leftCalloutAccessoryView = button as UIView
             view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIView
             view?.pinColor = MKPinAnnotationColor.Purple
         }

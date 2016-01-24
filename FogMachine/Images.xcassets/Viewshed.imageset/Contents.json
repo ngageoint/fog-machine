@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "viewshed.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "viewshed.png",
+      "filename" : "viewshe@2x.png",
       "scale" : "2x"
     },
     {
