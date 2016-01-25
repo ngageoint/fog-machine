@@ -136,8 +136,16 @@
                             <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="kfZ-7b-XgS" secondAttribute="bottom" id="bFC-Kw-Y5j"/>
                             <constraint firstAttribute="trailingMargin" secondItem="SFh-7f-20t" secondAttribute="trailing" constant="-20" id="fWw-uf-bSE"/>
                             <constraint firstItem="kfZ-7b-XgS" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="-20" id="mBu-Me-9Ic"/>
+                            <constraint firstAttribute="trailing" secondItem="SFh-7f-20t" secondAttribute="trailing" id="vkP-pG-Hix"/>
                             <constraint firstItem="SFh-7f-20t" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="yiy-PP-pQa"/>
+                            <constraint firstItem="SFh-7f-20t" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leading" id="zlD-8M-HJe"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="LTp-Jo-wV5"/>
+                                <exclude reference="fWw-uf-bSE"/>
+                            </mask>
+                        </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Data" image="Data" id="cPa-gy-q4n"/>
                     <connections>
@@ -211,14 +219,18 @@
                             <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" constant="-20" id="MBh-Yb-WDT"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="SXy-BA-2Xc"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="-15" id="cuv-LI-FBY"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leading" id="dMh-tm-2Zh"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="123" id="nrC-2f-Etb"/>
                             <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" constant="-15" id="q0r-KS-5Jv"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="qrK-DX-3sW"/>
                             <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="-20" id="smb-RS-vRN"/>
                             <constraint firstItem="skG-eX-ae4" firstAttribute="top" secondItem="ex2-aV-BLO" secondAttribute="bottom" id="xAe-Uv-bAd"/>
+                            <constraint firstAttribute="trailing" secondItem="skG-eX-ae4" secondAttribute="trailing" id="z0w-GN-x3I"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="MBh-Yb-WDT"/>
+                                <exclude reference="smb-RS-vRN"/>
                                 <exclude reference="AR9-4w-aZs"/>
                                 <exclude reference="GgP-Cq-Sw7"/>
                                 <exclude reference="qrK-DX-3sW"/>

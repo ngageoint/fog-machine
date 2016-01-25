@@ -384,7 +384,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         let dropPin = MKPointAnnotation()
         dropPin.coordinate = observer.getObserverLocation(offset)
         dropPin.title = observer.name
-        dropPin.subtitle = "Settings"
         mapView.addAnnotation(dropPin)
     }
     
@@ -435,10 +434,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view!.canShowCallout = true
             view!.calloutOffset = CGPoint(x: -5, y: 5)
-            
-            let button = UIButton(type: UIButtonType.Custom)
+       
             let image = UIImage(named: "Viewshed")
-            button.setImage(image, forState: .Normal)
+            let button = UIButton(type: UIButtonType.DetailDisclosure)
+            button.setImage(image, forState: UIControlState.Normal)
+            
             view!.leftCalloutAccessoryView = button as UIView
             view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIView
             view?.pinColor = MKPinAnnotationColor.Purple
@@ -451,6 +451,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             performSegueWithIdentifier("observerSettings", sender: view)
+        } else if control == view.leftCalloutAccessoryView {
+            initiateFogViewshed()
         }
     }
     
