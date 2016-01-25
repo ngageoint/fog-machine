@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 
-class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate {
 
     
     // MARK: IBOutlets
@@ -25,6 +25,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     
     // MARK: Class Variables
     
+    var masterObserver:Observer! //Will be replaced with collection of stored observer; placeholder to compile code
     
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
@@ -36,9 +37,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     var pickerData: [String] = [String]()
     var viewshedResults: [[Int]]!
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
-    //var coordinate:CLLocationCoordinate2D!
-    //var optionsObjMap = Options.sharedInstance
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +59,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         hgtCoordinate = hgt.getCoordinate()
         hgtElevation = hgt.getElevation()
         
+        masterObserver = singleTestObserver()
+        
         self.centerMapOnLocation(self.hgt.getCenterLocation())
         setupFogEvents()
     }
@@ -69,110 +70,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         // Dispose of any resources that can be recreated.
     }
     
-    func hgtFilePickerProcess() {
-        hgtDataPickerView = UIPickerView()
-        hgtDataPickerView.delegate = self
-        hgtDataText.inputView = hgtDataPickerView
-        // get all the HGT File names from the resource folder
-        //getHgtFileInfo()
-        hgtDataPickerView.hidden = true;
-        
-        if !Options.sharedInstance.selectedHGTPickerValue.isEmpty {
-            hgtDataText.text = Options.sharedInstance.selectedHGTPickerValue
-        }
-        if let tmpString: String = Options.sharedInstance.selectedHGTPickerValue {
-            if !tmpString.isEmpty {
-            Options.sharedInstance.selectedHGTFile = tmpString[tmpString.startIndex.advancedBy(0)...tmpString.startIndex.advancedBy(11)]
-            }
-        }
-    }
-    
-//    func getHgtFileInfo() {
-//        
-//        let fm = NSFileManager.defaultManager()
-//        let path = NSBundle.mainBundle().resourcePath!
-//        
-//        do {
-//            let items = try fm.contentsOfDirectoryAtPath(path)
-//            for var item: String in items {
-//                if (item == "HGT") {
-//                    
-//                    let hgtFolder = path + "/HGT"
-//                    let hgtFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(hgtFolder)
-//                    for var hgFileWithExt: String in hgtFiles {
-//                        let hgFileName = NSURL(fileURLWithPath: hgFileWithExt).URLByDeletingPathExtension?.lastPathComponent
-//                        self.coordinate = parseCoordinate(hgFileName!)
-//                        pickerData.append("\(hgFileWithExt) (Lat:\(self.coordinate.latitude) Lng:\(self.coordinate.longitude))")
-//                        
-//                        self.optionsObjMap.selectedHGTFile = hgFileWithExt
-//                        hgtDataText.text = pickerData[0]
-//                    }
-//                    break
-//                }
-//            }
-//        } catch {
-//            // failed to read directory – bad permissions, perhaps?
-//        }
-//    }
-    
-    @IBAction func hgDataTextEditingDidBegin(sender: AnyObject) {
-         hgtDataPickerView.hidden = false
-    }
-    
-    // latitude and 105 degrees west longitude
-    func parseCoordinate(filename : String) -> CLLocationCoordinate2D {
-        
-        let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
-        let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
-        let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
-        let longitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(4),end: filename.endIndex))
-        
-        var latitude:Double = Double(latitudeValue)!
-        var longitude:Double = Double(longitudeValue)!
-        
-        if (northSouth.uppercaseString == "S") {
-            latitude = latitude * -1.0
-        }
-        
-        if (westEast.uppercaseString == "W") {
-            longitude = longitude * -1.0
-        }
-        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-    }
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
-        return pickerData.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        // handle the item selected from the picker view
-        hgtDataText.text = pickerData[row]
-        hgtDataPickerView.hidden = true;
-        self.view.endEditing(true)
-        let pickerLine: String = pickerData[row]
-        Options.sharedInstance.selectedHGTPickerValue = pickerLine
-        Options.sharedInstance.selectedHGTFile = pickerLine[pickerLine.startIndex.advancedBy(0)...pickerLine.startIndex.advancedBy(11)]
-        
-        let optionsObj = Options.sharedInstance
-        if let aTmpStr:String = optionsObj.selectedHGTFile {
-            if !aTmpStr.isEmpty {
-                let hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
-                hgt = Hgt(filename: hgtFilename)
-                hgtCoordinate = hgt.getCoordinate()
-                hgtElevation = hgt.getElevation()
-                self.centerMapOnLocation(self.hgt.getCenterLocation())
-            }
-        }
-        setupFogEvents()
-    }
     
     // MARK: Viewshed Serial/Parallel
     
@@ -380,21 +277,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     }
     
     
-    func pinObserverLocation(observer: Observer, offset: Bool = true) {
+    func pinObserverLocation(observer: Observer) {
         let dropPin = MKPointAnnotation()
-        dropPin.coordinate = observer.getObserverLocation(offset)
+        dropPin.coordinate = observer.getObserverLocation()
         dropPin.title = observer.name
         mapView.addAnnotation(dropPin)
     }
     
     
     func addAnnotationGesture(gestureRecognizer: UIGestureRecognizer) {
-        let touchPoint = gestureRecognizer.locationInView(mapView)
-        let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-        let obs = singleTestObserver()
-        obs.coordinate = newCoordinates
-        
-        pinObserverLocation(obs, offset: false)
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
+            let touchPoint = gestureRecognizer.locationInView(mapView)
+            let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
+            //let obs = singleTestObserver()
+            //obs.coordinate = newCoordinates
+            masterObserver.setHgtCoordinate(newCoordinates, hgtCoordinate: hgt.getCoordinate())
+            pinObserverLocation(masterObserver)
+        }
     }
     
     
@@ -561,7 +460,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         var y:Int
         var height:Int
         var radius:Int
-        let options = Options.sharedInstance
         
         self.printOut("Metrics Started for \(numObservers) observer(s).")
         if randomData {
@@ -584,7 +482,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
                 x = count * 74
                 y = count * 74
                 height = count + 5
-                radius = options.radius//count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
+                radius = masterObserver.radius//count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
             }
             
             let observer = Observer(name: name, x: x, y: y, height: height, radius: radius, coordinate: self.hgtCoordinate)
@@ -597,7 +495,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         
         self.startTimer()
         for obs in observers {
-            self.performSerialViewshed(obs, algorithm: options.viewshedAlgorithm)
+            self.performSerialViewshed(obs, algorithm: masterObserver.viewshedAlgorithm)
         }
         self.stopTimer()
         self.removeAllFromMap()
@@ -607,7 +505,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         
         self.startTimer()
         for obsP in observers {
-            self.performParallelViewshed(obsP, algorithm: options.viewshedAlgorithm, viewshedGroup: viewshedGroup)
+            self.performParallelViewshed(obsP, algorithm: masterObserver.viewshedAlgorithm, viewshedGroup: viewshedGroup)
         }
         
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
@@ -650,13 +548,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
-        let options = Options.sharedInstance
         var obsResults:[[Int]]!
         
-        if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
+        if (masterObserver.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = ViewshedFog(elevation: self.hgtElevation, observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
             obsResults = obsViewshed.viewshedParallel()
-        } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
+        } else if (masterObserver.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
             let demObj: DemData = DemData(demMatrix: self.hgtElevation)
             //let x: Int = work.getObserver().x
@@ -667,14 +564,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         
         printOut("\tFinished Viewshed Processing on \(observer.name).")
         
-        self.pinObserverLocation(observer)
+        //self.pinObserverLocation(observer)
         
         return obsResults
     }
     
     
     func setupFogEvents() {
-        let options = Options.sharedInstance
         
         ConnectionManager.onEvent(Event.StartViewshed){ fromPeerId, object in
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
@@ -683,9 +579,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
             
             self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
             
-            if (options.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
+            if (self.masterObserver.viewshedAlgorithm == ViewshedAlgorithm.FranklinRay) {
                 self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-            } else if (options.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
+            } else if (self.masterObserver.viewshedAlgorithm == ViewshedAlgorithm.VanKreveld) {
                 let kreveld: KreveldViewshed = KreveldViewshed()
                 let demObj: DemData = DemData(demMatrix: self.hgtElevation)
                 //let x: Int = work.getObserver().x
@@ -746,7 +642,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     func startFogViewshedFramework() {
         //let options = Options.sharedInstance
         printOut("Beginning viewshed on \(Worker.getMe().displayName)")
-        let observer = self.singleTestObserver()
+        //let observer = self.singleTestObserver()
         let selfQuadrant = 1
         var count = 1 //Start at one since initiator is 0-indexed
         
@@ -757,13 +653,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
                 print("workDivision : \(workDivision)")
                 
                 let currentQuadrant = workDivision[count]
-                let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
+                let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: self.masterObserver)
                 count++
                 return theWork
             },
             workForSelf: { workerCount in
                 self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
+                self.viewshedResults = self.performFogViewshed(self.masterObserver, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
                 
                 if (workerCount < 2) {
                     //if no peers
@@ -812,15 +708,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     @IBAction func startParallel(sender: AnyObject) {
         
         let viewshedGroup = dispatch_group_create()
-        let options = Options.sharedInstance
         self.startTimer()
         //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
         // let count = Int(index + 1)
         for count in 1...8 {
             
-            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
+            let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: masterObserver.radius, coordinate: self.hgtCoordinate)
             
-            self.performParallelViewshed(observer, algorithm: options.viewshedAlgorithm, viewshedGroup: viewshedGroup)
+            self.performParallelViewshed(observer, algorithm: masterObserver.viewshedAlgorithm, viewshedGroup: viewshedGroup)
         }
         
         dispatch_group_notify(viewshedGroup, dispatch_get_main_queue()) {
@@ -831,14 +726,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     
     @IBAction func startSerial(sender: AnyObject) {
         
-        let options = Options.sharedInstance
         self.startTimer()
         
         for count in 1...8 {
             //let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
             let observer = Observer(name: String(count), x: 600, y: 600, height: 20, radius: 600, coordinate: self.hgtCoordinate)
             //let observer = Observer(name: String(count), x: 8 * 100, y: 8 * 100, height: 20, radius: options.radius, coordinate:self.hgtCoordinate)
-            self.performSerialViewshed(observer, algorithm: options.viewshedAlgorithm)
+            self.performSerialViewshed(observer, algorithm: masterObserver.viewshedAlgorithm)
         }
         
         self.stopTimer()

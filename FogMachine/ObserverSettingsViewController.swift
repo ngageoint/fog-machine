@@ -22,7 +22,7 @@ class ObserverSettingsViewController: UIViewController {
     }
     
     @IBAction func resetSettings(sender: AnyObject) {
-        
+        applyObserverDefaults()
     }
     
     @IBAction func applySettings(sender: AnyObject) {
@@ -40,6 +40,7 @@ class ObserverSettingsViewController: UIViewController {
     func applyUserSettings() {
         applyObserverDefaults()
         
+        //Pull any saved settings from User Details
         if let userDefaultAlgorithm: Int = defaults.integerForKey(FogViewshed.ALGORITHM) {
             algorithm.selectedSegmentIndex = userDefaultAlgorithm
         }
@@ -49,7 +50,16 @@ class ObserverSettingsViewController: UIViewController {
     
     func applyObserverDefaults() {
         algorithm.selectedSegmentIndex = 1
+        
+        //Need to hook in the following
+        
+        //Radius
+        //Observer Name
+        //Observer latitude
+        //Observer longitude
+        //Observer elevation
     }
     
 
+    
 }

@@ -15,8 +15,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     var checked: [Bool]!
     let CellIdentifier = "TableCellView"
     let tempPeerCount: Int = 100
-    var optionsObj = Options.sharedInstance
-
+    
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()

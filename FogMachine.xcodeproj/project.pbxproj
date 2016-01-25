@@ -69,7 +69,6 @@
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
 		9BD5C1061C05ECF3004A37B6 /* N40W110.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */; };
 		9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */; };
-		9BD5C10A1C060FDC004A37B6 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1091C060FDC004A37B6 /* Options.swift */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
 		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
@@ -160,7 +159,6 @@
 		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
 		9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W110.hgt; path = HGT/N40W110.hgt; sourceTree = "<group>"; };
 		9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
-		9BD5C1091C060FDC004A37B6 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		D18A74A424D7E9AE3C3F046F /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -372,7 +370,6 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9BD5C1091C060FDC004A37B6 /* Options.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,
@@ -626,7 +623,6 @@
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
-				9BD5C10A1C060FDC004A37B6 /* Options.swift in Sources */,
 				9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
