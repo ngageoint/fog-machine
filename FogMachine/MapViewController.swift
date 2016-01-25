@@ -448,6 +448,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
     }
     
     
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            performSegueWithIdentifier("observerSettings", sender: view)
+        }
+    }
+    
+    
     func removeAllFromMap() {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
@@ -853,6 +860,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIPickerViewDataSo
         removeAllFromMap()
         self.centerMapOnLocation(self.hgt.getCenterLocation())
         self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
+    }
+    
+    
+    // MARK: Segue
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "observerSettings" {
+            //pass any details here
+        }
+    }
+    
+    
+    @IBAction func unwindFromFilter(segue: UIStoryboardSegue) {
+        
     }
     
 }

@@ -35,6 +35,8 @@ struct FogViewshed {
     static let ASSIGNED_TO = "assignedTo"
     static let SEARCH_INITIATOR = "searchInitiator"
     
+    static let ALGORITHM = "algorithm"
+    
     static let NAME = "name"
     static let X = "x"
     static let Y = "y"

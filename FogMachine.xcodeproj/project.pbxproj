@@ -21,6 +21,7 @@
 		753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7B1BFBCF66004E3589 /* Hgt.swift */; };
 		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
+		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
 		758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7841C0D170000A193A7 /* WorkArray.swift */; };
 		758FB7871C0D177200A193A7 /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7861C0D177200A193A7 /* Work.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
@@ -111,6 +112,7 @@
 		753D3D7B1BFBCF66004E3589 /* Hgt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hgt.swift; sourceTree = "<group>"; };
 		753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedFog.swift; sourceTree = "<group>"; };
 		753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
+		754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverSettingsViewController.swift; sourceTree = "<group>"; };
 		758FB7841C0D170000A193A7 /* WorkArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkArray.swift; sourceTree = "<group>"; };
 		758FB7861C0D177200A193A7 /* Work.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
 				753D3D561BE7A031004E3589 /* Viewshed.swift */,
 				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
+				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 			);
 			name = Viewshed;
 			sourceTree = "<group>";
@@ -618,6 +621,7 @@
 				9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */,
 				9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */,
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
+				754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */,
 				E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,

@@ -198,7 +198,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
                                 <rect key="frame" x="5" y="428" width="590" height="123"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
@@ -249,6 +249,7 @@
                         <outlet property="logBox" destination="88U-br-EID" id="3DW-K5-j0S"/>
                         <outlet property="mapTypeSelector" destination="nzQ-pP-oJH" id="d2m-9C-YpP"/>
                         <outlet property="mapView" destination="skG-eX-ae4" id="fWJ-nl-x23"/>
+                        <segue destination="Z35-Yt-lAb" kind="presentation" identifier="observerSettings" id="PmB-Og-wWT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4FL-gy-5Gs" sceneMemberID="firstResponder"/>
@@ -450,7 +451,139 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="loG-pv-V9z" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2269" y="930"/>
+            <point key="canvasLocation" x="1791" y="1641"/>
+        </scene>
+        <!--Observer Settings-->
+        <scene sceneID="d5e-Uy-1d2">
+            <objects>
+                <viewController id="4wN-Fl-Gwg" customClass="ObserverSettingsViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Crf-ce-Ftj"/>
+                        <viewControllerLayoutGuide type="bottom" id="a8g-tM-PIT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hhx-Rm-YqC">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="92i-js-eLQ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dLM-i8-oAa" userLabel="contentView">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
+                                        <subviews>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="I1s-0H-aDB">
+                                                <rect key="frame" x="415" y="8" width="177" height="29"/>
+                                                <segments>
+                                                    <segment title="Franklin Ray"/>
+                                                    <segment title="VanKreveld"/>
+                                                </segments>
+                                                <connections>
+                                                    <action selector="segmentAlgorithmTypeChanged:" destination="zA9-9m-RT6" eventType="valueChanged" id="JAV-df-Ywv"/>
+                                                </connections>
+                                            </segmentedControl>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Algorithm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdI-4t-bmM">
+                                                <rect key="frame" x="8" y="14" width="64.5" height="16"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="MdI-4t-bmM" firstAttribute="leading" secondItem="dLM-i8-oAa" secondAttribute="leading" constant="8" id="5Kn-S7-dU5"/>
+                                            <constraint firstAttribute="trailing" secondItem="I1s-0H-aDB" secondAttribute="trailing" constant="8" id="EgA-JQ-4vI"/>
+                                            <constraint firstItem="MdI-4t-bmM" firstAttribute="top" secondItem="dLM-i8-oAa" secondAttribute="top" constant="14" id="TVN-H8-Pji"/>
+                                            <constraint firstAttribute="height" constant="428" id="geG-PH-3GE"/>
+                                            <constraint firstItem="I1s-0H-aDB" firstAttribute="top" secondItem="dLM-i8-oAa" secondAttribute="top" constant="8" id="wGb-c0-U4x"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="dLM-i8-oAa" secondAttribute="trailing" id="CD8-Jw-JMe"/>
+                                    <constraint firstAttribute="bottom" secondItem="dLM-i8-oAa" secondAttribute="bottom" id="H3w-TF-pMc"/>
+                                    <constraint firstItem="dLM-i8-oAa" firstAttribute="leading" secondItem="92i-js-eLQ" secondAttribute="leading" id="bLc-2l-QGN"/>
+                                    <constraint firstItem="dLM-i8-oAa" firstAttribute="top" secondItem="92i-js-eLQ" secondAttribute="top" id="v5a-s1-I2s"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="HDU-fT-Vm9" appends="YES" id="Wpj-Jw-DFQ"/>
+                                </connections>
+                            </scrollView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZtC-yC-Crd">
+                                <rect key="frame" x="0.0" y="492" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem title="Reset" id="KB4-MF-rBB">
+                                        <connections>
+                                            <action selector="resetSettings:" destination="4wN-Fl-Gwg" id="WfU-Lj-UhK"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EyR-ye-Va8"/>
+                                    <barButtonItem title="Apply" id="f20-UE-7Gy">
+                                        <connections>
+                                            <action selector="applySettings:" destination="4wN-Fl-Gwg" id="w3i-UM-j84"/>
+                                            <segue destination="zPC-SU-HQn" kind="unwind" identifier="applyAdvancedFilter" unwindAction="applyFilters:" id="d6t-aB-859"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ZtC-yC-Crd" firstAttribute="trailing" secondItem="92i-js-eLQ" secondAttribute="trailing" id="1gf-QD-fEG"/>
+                            <constraint firstItem="92i-js-eLQ" firstAttribute="top" secondItem="Crf-ce-Ftj" secondAttribute="bottom" id="2Yd-EL-1eO"/>
+                            <constraint firstItem="ZtC-yC-Crd" firstAttribute="leading" secondItem="92i-js-eLQ" secondAttribute="leading" id="8Lc-RQ-4tv"/>
+                            <constraint firstItem="a8g-tM-PIT" firstAttribute="top" secondItem="ZtC-yC-Crd" secondAttribute="bottom" id="8bj-85-0IV"/>
+                            <constraint firstAttribute="bottom" secondItem="92i-js-eLQ" secondAttribute="bottom" id="edX-bR-gVE"/>
+                            <constraint firstItem="92i-js-eLQ" firstAttribute="leading" secondItem="Hhx-Rm-YqC" secondAttribute="leading" id="fyT-JJ-cLQ"/>
+                            <constraint firstItem="dLM-i8-oAa" firstAttribute="width" secondItem="Hhx-Rm-YqC" secondAttribute="width" id="hSd-Rr-B0w"/>
+                            <constraint firstAttribute="trailing" secondItem="92i-js-eLQ" secondAttribute="trailing" id="oFV-PQ-A0w"/>
+                            <constraint firstItem="ZtC-yC-Crd" firstAttribute="top" secondItem="92i-js-eLQ" secondAttribute="bottom" id="r14-wP-ZyG"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="edX-bR-gVE"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" title="Observer Settings" id="yip-Mv-qfd">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="AU2-Kb-vBi">
+                            <connections>
+                                <segue destination="zPC-SU-HQn" kind="unwind" identifier="cancelAdvancedFilter" unwindAction="unwindFromFilter:" id="jMp-YS-oeC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="algorithm" destination="I1s-0H-aDB" id="D5g-yL-i6C"/>
+                        <outlet property="scrollView" destination="92i-js-eLQ" id="65N-fi-UmE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WAq-1K-kHm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="zPC-SU-HQn" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="HDU-fT-Vm9">
+                    <connections>
+                        <action selector="hideKeyboard:" destination="4wN-Fl-Gwg" id="vuf-uW-Rng"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="3028" y="801"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="xFI-pB-LLN">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Z35-Yt-lAb" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="iQX-2m-GL3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="4wN-Fl-Gwg" kind="relationship" relationship="rootViewController" id="865-HR-YLp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qNC-NE-nvO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2306" y="801"/>
         </scene>
     </scenes>
     <resources>
