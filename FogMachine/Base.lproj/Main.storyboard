@@ -212,27 +212,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
-                                <rect key="frame" x="0.0" y="64" width="600" height="364"/>
-                                <connections>
-                                    <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
-                                </connections>
-                            </mapView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
-                                <rect key="frame" x="5" y="428" width="590" height="123"/>
+                                <rect key="frame" x="5" y="449" width="590" height="101.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
+                                <rect key="frame" x="0.0" y="64" width="600" height="385.5"/>
+                                <connections>
+                                    <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
+                                </connections>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="leadingMargin" secondItem="88U-br-EID" secondAttribute="leading" constant="-20" id="AR9-4w-aZs"/>
                             <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" constant="-20" id="GgP-Cq-Sw7"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="width" secondItem="gPy-Q9-cSb" secondAttribute="height" multiplier="600:551" id="Hh7-ys-g5D"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="88U-br-EID" secondAttribute="bottom" id="Lsn-QS-6Kq"/>
                             <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" constant="-20" id="MBh-Yb-WDT"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="SXy-BA-2Xc"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="height" secondItem="gPy-Q9-cSb" secondAttribute="height" multiplier="0.7" id="aVH-VT-mDq"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="-15" id="cuv-LI-FBY"/>
                             <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leading" id="dMh-tm-2Zh"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="123" id="nrC-2f-Etb"/>
@@ -244,10 +246,12 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="Hh7-ys-g5D"/>
                                 <exclude reference="MBh-Yb-WDT"/>
                                 <exclude reference="smb-RS-vRN"/>
                                 <exclude reference="AR9-4w-aZs"/>
                                 <exclude reference="GgP-Cq-Sw7"/>
+                                <exclude reference="nrC-2f-Etb"/>
                                 <exclude reference="qrK-DX-3sW"/>
                             </mask>
                         </variation>
