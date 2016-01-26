@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Connections-->
@@ -90,7 +91,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kfZ-7b-XgS">
-                                <rect key="frame" x="0.0" y="338.5" width="600" height="212.5"/>
+                                <rect key="frame" x="0.0" y="303.5" width="600" height="247.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="kfZ-7b-XgS" secondAttribute="height" multiplier="3:2" constant="200" id="Wac-a4-lsm"/>
@@ -116,13 +117,18 @@
                                 </connections>
                             </tableView>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="SFh-7f-20t">
-                                <rect key="frame" x="0.0" y="28" width="600" height="310.5"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="275.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="3:1.5" constant="-21" id="cQO-CX-pbx"/>
+                                    <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="3:2" id="k7O-X9-FQ4"/>
+                                    <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="3:2" id="pH1-do-jOd"/>
                                     <constraint firstAttribute="width" secondItem="SFh-7f-20t" secondAttribute="height" multiplier="200:69" id="yFQ-fp-aVZ"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="cQO-CX-pbx"/>
+                                        <exclude reference="k7O-X9-FQ4"/>
+                                        <exclude reference="pH1-do-jOd"/>
                                         <exclude reference="yFQ-fp-aVZ"/>
                                     </mask>
                                 </variation>
@@ -130,10 +136,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="kfZ-7b-XgS" secondAttribute="trailing" id="0PF-hF-RlW"/>
                             <constraint firstItem="kfZ-7b-XgS" firstAttribute="top" secondItem="SFh-7f-20t" secondAttribute="bottom" id="EqG-tn-epP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="kfZ-7b-XgS" secondAttribute="trailing" constant="-20" id="HXO-sz-Z1f"/>
+                            <constraint firstItem="SFh-7f-20t" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="Jvn-Kq-QjD"/>
                             <constraint firstItem="SFh-7f-20t" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="-20" id="LTp-Jo-wV5"/>
+                            <constraint firstItem="SFh-7f-20t" firstAttribute="width" secondItem="QS5-Rx-YEW" secondAttribute="width" id="PRb-bf-shn"/>
+                            <constraint firstItem="kfZ-7b-XgS" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leading" id="TJp-Jj-hbp"/>
                             <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="kfZ-7b-XgS" secondAttribute="bottom" id="bFC-Kw-Y5j"/>
+                            <constraint firstItem="SFh-7f-20t" firstAttribute="height" secondItem="QS5-Rx-YEW" secondAttribute="height" multiplier="0.5" id="brq-IK-9QK"/>
+                            <constraint firstItem="SFh-7f-20t" firstAttribute="width" secondItem="QS5-Rx-YEW" secondAttribute="height" multiplier="3:2" id="dmu-cL-b1T"/>
                             <constraint firstAttribute="trailingMargin" secondItem="SFh-7f-20t" secondAttribute="trailing" constant="-20" id="fWw-uf-bSE"/>
                             <constraint firstItem="kfZ-7b-XgS" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="-20" id="mBu-Me-9Ic"/>
                             <constraint firstAttribute="trailing" secondItem="SFh-7f-20t" secondAttribute="trailing" id="vkP-pG-Hix"/>
@@ -143,7 +155,10 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="LTp-Jo-wV5"/>
+                                <exclude reference="dmu-cL-b1T"/>
                                 <exclude reference="fWw-uf-bSE"/>
+                                <exclude reference="HXO-sz-Z1f"/>
+                                <exclude reference="mBu-Me-9Ic"/>
                             </mask>
                         </variation>
                     </view>
