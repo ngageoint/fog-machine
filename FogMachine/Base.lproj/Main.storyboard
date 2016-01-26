@@ -366,16 +366,15 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZtC-yC-Crd">
                                 <rect key="frame" x="0.0" y="492" width="600" height="44"/>
                                 <items>
-                                    <barButtonItem title="Reset" id="KB4-MF-rBB">
+                                    <barButtonItem title="Reset" id="Q0Z-EG-NUt">
                                         <connections>
-                                            <action selector="resetSettings:" destination="4wN-Fl-Gwg" id="WfU-Lj-UhK"/>
+                                            <action selector="resetSettings:" destination="4wN-Fl-Gwg" id="gWB-ge-hrB"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="EyR-ye-Va8"/>
-                                    <barButtonItem title="Apply" id="f20-UE-7Gy">
+                                    <barButtonItem title="Apply" id="oUQ-Hf-9VC">
                                         <connections>
-                                            <action selector="applySettings:" destination="4wN-Fl-Gwg" id="w3i-UM-j84"/>
-                                            <segue destination="zPC-SU-HQn" kind="unwind" identifier="applyAdvancedFilter" unwindAction="applyFilters:" id="d6t-aB-859"/>
+                                            <action selector="applySettings:" destination="4wN-Fl-Gwg" id="Zie-gj-0qe"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -500,10 +499,9 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Kag-N9-vGI"/>
-                                    <barButtonItem title="Apply" id="76b-Gs-2Gd">
+                                    <barButtonItem title="Apply" id="0z6-Nq-Hh4">
                                         <connections>
-                                            <action selector="applyOptions:" destination="V4j-6L-7be" id="xEO-yf-MWb"/>
-                                            <segue destination="Mfb-3w-qql" kind="unwind" identifier="applyAdvancedFilter" unwindAction="applyFilters:" id="yQc-AT-XOC"/>
+                                            <action selector="applyOptions:" destination="V4j-6L-7be" id="Wsh-xX-FKr"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>

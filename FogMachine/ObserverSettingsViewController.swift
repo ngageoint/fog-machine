@@ -22,23 +22,28 @@ class ObserverSettingsViewController: UIViewController {
     }
     
     @IBAction func resetSettings(sender: AnyObject) {
-        applyObserverDefaults()
+        loadObserverDefaults()
     }
     
     @IBAction func applySettings(sender: AnyObject) {
-        
+        saveUserSettings()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        applyUserSettings()
+        loadUserSettings()
         
     }
     
     
-    func applyUserSettings() {
-        applyObserverDefaults()
+    func saveUserSettings() {
+        defaults.setInteger(algorithm.selectedSegmentIndex, forKey: FogViewshed.ALGORITHM)
+    }
+    
+    
+    func loadUserSettings() {
+        loadObserverDefaults()
         
         //Pull any saved settings from User Details
         if let userDefaultAlgorithm: Int = defaults.integerForKey(FogViewshed.ALGORITHM) {
@@ -48,8 +53,8 @@ class ObserverSettingsViewController: UIViewController {
     }
     
     
-    func applyObserverDefaults() {
-        algorithm.selectedSegmentIndex = 1
+    func loadObserverDefaults() {
+        algorithm.selectedSegmentIndex = 0
         
         //Need to hook in the following
         

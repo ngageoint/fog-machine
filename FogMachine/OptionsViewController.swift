@@ -27,6 +27,7 @@ class OptionsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func applyOptions(sender: AnyObject) {
         
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
