@@ -14,15 +14,15 @@ public class Viewshed: NSObject {
     var elevation: [[Int]]
     var obsX: Int
     var obsY: Int
-    var obsHeight: Int
+    var obsElevation: Int
     var viewRadius: Int
     
     
     init(elevation: [[Int]], observer: Observer) {
         self.elevation = elevation
-        self.obsX = observer.x
-        self.obsY = observer.y
-        self.obsHeight = observer.height
+        self.obsX = observer.xCoord
+        self.obsY = observer.yCoord
+        self.obsElevation = observer.elevation
         self.viewRadius = observer.radius
     }
     
@@ -75,7 +75,7 @@ public class Viewshed: NSObject {
                     let zi:Int = elevation[x2][y2]
                     
                     // angle = arctan(opposite/adjacent)
-                    let opposite = ( zi - (zk + obsHeight) )
+                    let opposite = ( zi - (zk + obsElevation) )
                     let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
                     let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
                     

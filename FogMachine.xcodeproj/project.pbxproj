@@ -22,6 +22,7 @@
 		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
 		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
+		754175881C57C84B000D51E0 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
 		758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7841C0D170000A193A7 /* WorkArray.swift */; };
 		758FB7871C0D177200A193A7 /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7861C0D177200A193A7 /* Work.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
@@ -112,6 +113,7 @@
 		753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedFog.swift; sourceTree = "<group>"; };
 		753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
 		754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverSettingsViewController.swift; sourceTree = "<group>"; };
+		754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FogMachine.xcdatamodel; sourceTree = "<group>"; };
 		758FB7841C0D170000A193A7 /* WorkArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkArray.swift; sourceTree = "<group>"; };
 		758FB7861C0D177200A193A7 /* Work.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				E3CB97F71B7975C8006D6961 /* Controllers */,
 				E3CB97F61B7975BF006D6961 /* Models */,
 				E314F6C01B79023D005B75C6 /* AppDelegate.swift */,
+				754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */,
 				753D3D751BF65A60004E3589 /* Constants.swift */,
 				E314F6C61B79023D005B75C6 /* Main.storyboard */,
 				E314F6C91B79023D005B75C6 /* Images.xcassets */,
@@ -609,6 +612,7 @@
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
+				754175881C57C84B000D51E0 /* FogMachine.xcdatamodeld in Sources */,
 				9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */,
 				753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */,
 				E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */,
@@ -848,6 +852,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */,
+			);
+			currentVersion = 754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */;
+			path = FogMachine.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E314F6B31B79023D005B75C6 /* Project object */;
 }

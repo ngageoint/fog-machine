@@ -40,7 +40,7 @@ struct FogViewshed {
     static let NAME = "name"
     static let X = "x"
     static let Y = "y"
-    static let HEIGHT = "height"
+    static let ELEVATION = "elevation"
     static let RADIUS = "radius"
     static let LATITUDE = "latitude"
     static let LONGITUDE = "longitude"

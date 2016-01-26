@@ -15,7 +15,7 @@ class KreveldViewshed {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
         var cellsInRadius:[(x:Int, y:Int)] = []
         
-        cellsInRadius = getCellsInRadius(observPt.getXCoor(), observerY: observPt.getYCoor(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
+        cellsInRadius = getCellsInRadius(observPt.getXCoord(), observerY: observPt.getYCoord(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
         viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
 
         //for (x, y) in cellsInRadius {
@@ -44,7 +44,7 @@ class KreveldViewshed {
         let KreveldEventTypeOther:Int = 0 // only be used on creation/initialization
         
         
-        let observerPtHeight: ElevationPoint = demData.getHeightedPoint(observPt.getXCoor(), yTemp: observPt.getYCoor())
+        let observerPtHeight: ElevationPoint = demData.getHeightedPoint(observPt.getXCoord(), yTemp: observPt.getYCoord())
         // observerPtHeight.height is added with the additional height specified by the user ????
         observPt.height = observerPtHeight.height + observPt.getHeight()
         
@@ -58,13 +58,13 @@ class KreveldViewshed {
         
         for (x, y) in cellsInRadius {
             dataCounter++
-            //let currQuadrant: Int =  getQuadrant(x, y: y, observX: observPt.getXCoor(), observY: observPt.getYCoor())
+            //let currQuadrant: Int =  getQuadrant(x, y: y, observX: observPt.getXCoord(), observY: observPt.getYCoord())
             //if currQuadrant == numQuadrants {
             // handle everything in Double .. atleast for now
             let elevationAtXandY:Double = Double(demDataMatrix[x][y])
             
-            let elevPointData: ElevationPoint = ElevationPoint (x: x, y: y , h: elevationAtXandY)
-            if elevPointData.getXCoor() == observPt.getXCoor() && elevPointData.getYCoor() == observPt.getYCoor() {
+            let elevPointData: ElevationPoint = ElevationPoint (xCoord: x, yCoord: y , h: elevationAtXandY)
+            if elevPointData.getXCoord() == observPt.getXCoord() && elevPointData.getYCoord() == observPt.getYCoord() {
             } else {
                 let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(state: dummy, eventType: 1,
                     dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
@@ -106,8 +106,8 @@ class KreveldViewshed {
                 eventCounter++
             case KreveldEventTypeCenter:
                 if (kreveldActive.isVisible(sweepEvent.getDataElevPoint())) {
-                    let x: Int = sweepEvent.getDataElevPoint().getXCoor()
-                    let y: Int = sweepEvent.getDataElevPoint().getYCoor()
+                    let x: Int = sweepEvent.getDataElevPoint().getXCoord()
+                    let y: Int = sweepEvent.getDataElevPoint().getYCoord()
                     visiblePtCounter++
                     viewshedMatrix[x][y] = 1
                     //print("(\(x), \(y))\t")
@@ -324,8 +324,8 @@ class KreveldViewshed {
     // Viewpoint starting point , point of observation
     // return All points that lie to the right of the starting point and have the same y-coordinate
     func pointsOnLine(d: DemData, viewpoint: ElevationPoint, radius: Int, numQuadrants: Int) -> [ElevationPoint] {
-        let xCoor: Int = viewpoint.getXCoor()
-        let yCoor: Int = viewpoint.getYCoor()
+        let xCoor: Int = viewpoint.getXCoord()
+        let yCoor: Int = viewpoint.getYCoord()
         
         //let maxXcoor: Int = d.getNcols() - 1
         var maxXcoor: Int = 0
@@ -334,37 +334,37 @@ class KreveldViewshed {
         
         if  (numQuadrants == 1) {
             // radius added to this function to prevent sweep line to go beyond the defined radius
-            if ((viewpoint.getXCoor() + radius) < d.getNcols()) {
-                maxXcoor = viewpoint.getXCoor() + radius
+            if ((viewpoint.getXCoord() + radius) < d.getNcols()) {
+                maxXcoor = viewpoint.getXCoord() + radius
             }
             let iterateCount: Int = xCoor + 1
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxXcoor; i++ {
-                let tmp:ElevationPoint = d.getHeightedPoint(i, yTemp: viewpoint.getYCoor())
+                let tmp:ElevationPoint = d.getHeightedPoint(i, yTemp: viewpoint.getYCoord())
                 elevPointOnline.append(tmp)
             }
         } else if (numQuadrants == 2) {
             // radius added to this function to prevent sweep line to go beyond the defined radius
-            if ((viewpoint.getYCoor() - radius) < d.getNcols()) {
-                maxYCoor = viewpoint.getYCoor() - radius
+            if ((viewpoint.getYCoord() - radius) < d.getNcols()) {
+                maxYCoor = viewpoint.getYCoord() - radius
             }
             let iterateCount: Int = yCoor + 1
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxYCoor; i++ {
-                let tmp:ElevationPoint = d.getHeightedPoint(viewpoint.getXCoor(), yTemp: i)
-                print("\t\(tmp.getXCoor())\t\(tmp.getYCoor())")
+                let tmp:ElevationPoint = d.getHeightedPoint(viewpoint.getXCoord(), yTemp: i)
+                print("\t\(tmp.getXCoord())\t\(tmp.getYCoord())")
                 elevPointOnline.append(tmp)
             }
             
         } else if (numQuadrants == 3) {
             // radius added to this function to prevent sweep line to go beyond the defined radius
-            if ((viewpoint.getXCoor() + radius) < d.getNcols()) {
-                maxXcoor = viewpoint.getXCoor() + radius
+            if ((viewpoint.getXCoord() + radius) < d.getNcols()) {
+                maxXcoor = viewpoint.getXCoord() + radius
             }
             let iterateCount: Int = xCoor + 1
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxXcoor; i++ {
-                let tmp:ElevationPoint = d.getHeightedPoint(i, yTemp: viewpoint.getYCoor())
+                let tmp:ElevationPoint = d.getHeightedPoint(i, yTemp: viewpoint.getYCoord())
                 elevPointOnline.append(tmp)
             }
         } else if (numQuadrants == 4) {
@@ -377,11 +377,11 @@ class KreveldViewshed {
     // atan2 function automatically calculates the correct angle for each quadrant
     // return Angle between the starting point and cornerstone of a pixel
     func calculateAngle(point1: ElevationPoint, view: ElevationPoint, type: Int) -> Double {
-        let yc: Double = Double (point1.getYCoor())
-        let yv: Double =   Double (view.getYCoor())
+        let yc: Double = Double (point1.getYCoord())
+        let yv: Double =   Double (view.getYCoord())
         
-        let xc: Double = Double (point1.getXCoor())
-        let xv: Double =   Double (view.getXCoor())
+        let xc: Double = Double (point1.getXCoord())
+        let xv: Double =   Double (view.getXCoord())
         
         let dy: Double =  yc - yv
         let dx:Double = xc - xv

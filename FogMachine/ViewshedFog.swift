@@ -14,7 +14,7 @@ public class ViewshedFog: NSObject {
     var elevation: [[Int]]
     var obsX: Int
     var obsY: Int
-    var obsHeight: Int
+    var obsElevation: Int
     var viewRadius: Int
     var numberOfQuadrants: Int
     var whichQuadrant: Int
@@ -22,9 +22,9 @@ public class ViewshedFog: NSObject {
     
     init(elevation: [[Int]], observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
         self.elevation = elevation
-        self.obsX = observer.x
-        self.obsY = observer.y
-        self.obsHeight = observer.height
+        self.obsX = observer.xCoord
+        self.obsY = observer.yCoord
+        self.obsElevation = observer.elevation
         self.viewRadius = observer.radius
         self.numberOfQuadrants = numberOfQuadrants
         self.whichQuadrant = whichQuadrant
@@ -51,7 +51,7 @@ public class ViewshedFog: NSObject {
                     let zk:Int = elevation[obsX][obsY]
                     let zi:Int = elevation[x2][y2]
                     
-                    let opposite = ( zi - (zk + obsHeight) )
+                    let opposite = ( zi - (zk + obsElevation) )
                     let adjacent = sqrt( pow(Double(x2 - obsX), 2) + pow(Double(y2 - obsY), 2) )
                     let angle:Double = (Double(opposite)/Double(adjacent)) // for the actual angle use atan()
                     

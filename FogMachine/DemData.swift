@@ -47,13 +47,13 @@ public class DemData  {
     
     public func getHeightedPoint(xTemp: Int, yTemp: Int) ->ElevationPoint {
         let hTemp: Int =  self.getHeight (yTemp, y: xTemp)
-        let elevPoint :ElevationPoint =  ElevationPoint(x: xTemp, y: yTemp, h: Double(hTemp))
+        let elevPoint :ElevationPoint =  ElevationPoint(xCoord: xTemp, yCoord: yTemp, h: Double(hTemp))
         return elevPoint
     }
     
     public  func getHeightedPoint(p: Point) ->ElevationPoint {
-        let xTemp: Int = p.getXCoor()
-        let yTemp: Int = p.getYCoor()
+        let xTemp: Int = p.getXCoord()
+        let yTemp: Int = p.getYCoord()
         let elevPoint :ElevationPoint =  self.getHeightedPoint(xTemp, yTemp: yTemp)
         return elevPoint
     }

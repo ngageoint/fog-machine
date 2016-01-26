@@ -13,35 +13,35 @@ class Observer: NSObject {
     var name: String
     // 0,0 is top left for x, y
     //1200, 1 is bottom left for x, y
-    var x:Int
-    var y:Int
-    var height:Int
+    var xCoord:Int
+    var yCoord:Int
+    var elevation:Int
     var radius:Int
     var coordinate: CLLocationCoordinate2D
-    var viewshedAlgorithm: ViewshedAlgorithm
+    var algorithm: ViewshedAlgorithm
 
     
     
-    init(name: String, x: Int, y: Int, height: Int, radius: Int, coordinate: CLLocationCoordinate2D, viewshedAlgorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay) {
+    init(name: String, xCoord: Int, yCoord: Int, elevation: Int, radius: Int, coordinate: CLLocationCoordinate2D, algorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay) {
         self.name = name
-        self.x = x
-        self.y = y
-        self.height = height
+        self.xCoord = xCoord
+        self.yCoord = yCoord
+        self.elevation = elevation
         self.radius = radius
         self.coordinate = coordinate
-        self.viewshedAlgorithm = viewshedAlgorithm
+        self.algorithm = algorithm
     }
     
     
     func setHgtCoordinate(newCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) {
-        self.y = Int((newCoordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
-        self.x = Srtm3.MAX_SIZE - Int((newCoordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
+        self.yCoord = Int((newCoordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
+        self.xCoord = Srtm3.MAX_SIZE - Int((newCoordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
 
         self.coordinate = CLLocationCoordinate2DMake(
-                        hgtCoordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(x - 1)) + Srtm3.LATITUDE_CELL_CENTER,
-                        hgtCoordinate.longitude + (Srtm3.CELL_SIZE * Double(y - 1) + Srtm3.LONGITUDE_CELL_CENTER))
+                        hgtCoordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(xCoord - 1)) + Srtm3.LATITUDE_CELL_CENTER,
+                        hgtCoordinate.longitude + (Srtm3.CELL_SIZE * Double(yCoord - 1) + Srtm3.LONGITUDE_CELL_CENTER))
         
-        print("x: \(x) y: \(y) lat: \(coordinate.latitude) lon: \(coordinate.longitude) ")
+        print("xCoord: \(xCoord) yCoord: \(yCoord) lat: \(coordinate.latitude) lon: \(coordinate.longitude) ")
     }
     
     

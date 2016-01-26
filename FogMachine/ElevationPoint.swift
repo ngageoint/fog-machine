@@ -11,19 +11,19 @@ public class ElevationPoint: Point {
     
     var height: Double = 0;
    
-    override init(x: Int, y: Int) {
-        super.init(x: x, y: y)
+    override init(xCoord: Int, yCoord: Int) {
+        super.init(xCoord: xCoord, yCoord: yCoord)
     }
    
-    init(x: Int, y: Int, h: Double) {
+    init(xCoord: Int, yCoord: Int, h: Double) {
         self.height = h
-        super.init(x: x, y: y)
+        super.init(xCoord: xCoord, yCoord: yCoord)
     }
 
     // alternative to the constructor/init ...???
-    public func elsevationPoint (x :Int, y: Int, h: Double) -> ElevationPoint {
-        self.xCoor = x
-        self.yCoor = y
+    public func elsevationPoint (xCoord :Int, yCoord: Int, h: Double) -> ElevationPoint {
+        self.xCoord = xCoord
+        self.yCoord = yCoord
         return self
     }
     
@@ -32,7 +32,7 @@ public class ElevationPoint: Point {
     }
     
     public func equalsPosition (p: Point) -> Bool {
-        if (p.getXCoor() == self.getXCoor() &&  p.getYCoor() == self.getYCoor()) {
+        if (p.getXCoord() == self.getXCoord() &&  p.getYCoord() == self.getYCoord()) {
             return true
         } else {
             return false

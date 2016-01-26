@@ -16,9 +16,9 @@ class ViewshedWork: Work {
     
     // Observer properties
     let name: String
-    let x:Int
-    let y:Int
-    let height:Int
+    let xCoord:Int
+    let yCoord:Int
+    let elevation:Int
     let radius:Int
     let latitude: Double
     let longitude: Double
@@ -30,9 +30,9 @@ class ViewshedWork: Work {
                 FogViewshed.WHICH_QUADRANT: whichQuadrant,
                 //FogViewshed.OBSERVER: observer,
                 FogViewshed.NAME: name,
-                FogViewshed.X: x,
-                FogViewshed.Y: y,
-                FogViewshed.HEIGHT: height,
+                FogViewshed.X: xCoord,
+                FogViewshed.Y: yCoord,
+                FogViewshed.ELEVATION: elevation,
                 FogViewshed.RADIUS: radius,
                 FogViewshed.LATITUDE: latitude,
                 FogViewshed.LONGITUDE: longitude])
@@ -46,9 +46,9 @@ class ViewshedWork: Work {
         self.whichQuadrant = whichQuadrant
         //self.observer = observer
         self.name = observer.name
-        self.x = observer.x
-        self.y = observer.y
-        self.height = observer.height
+        self.xCoord = observer.xCoord
+        self.yCoord = observer.yCoord
+        self.elevation = observer.elevation
         self.radius = observer.radius
         self.latitude = observer.coordinate.latitude
         self.longitude = observer.coordinate.longitude
@@ -57,7 +57,7 @@ class ViewshedWork: Work {
     
     
     func getObserver() -> Observer {
-        return Observer(name: name, x: x, y: y, height: height, radius: radius, coordinate: CLLocationCoordinate2DMake(latitude, longitude))
+        return Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: elevation, radius: radius, coordinate: CLLocationCoordinate2DMake(latitude, longitude))
     }
     
     
@@ -67,9 +67,9 @@ class ViewshedWork: Work {
         whichQuadrant = dict[FogViewshed.WHICH_QUADRANT] as! Int
         //observer = NSKeyedUnarchiver.unarchiveObjectWithData(dict[FogViewshed.OBSERVER] as! NSData) as! Observer
         name = dict[FogViewshed.NAME] as! String
-        x = dict[FogViewshed.X] as! Int
-        y = dict[FogViewshed.Y] as! Int
-        height = dict[FogViewshed.HEIGHT] as! Int
+        xCoord = dict[FogViewshed.X] as! Int
+        yCoord = dict[FogViewshed.Y] as! Int
+        elevation = dict[FogViewshed.ELEVATION] as! Int
         radius = dict[FogViewshed.RADIUS] as! Int
         latitude = dict[FogViewshed.LATITUDE] as! Double
         longitude = dict[FogViewshed.LONGITUDE] as! Double
