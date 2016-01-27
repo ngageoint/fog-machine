@@ -24,10 +24,6 @@ class OptionsViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func applyOptions(sender: AnyObject) {
-        
-    }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +53,16 @@ class OptionsViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    
+    // MARK: Functions
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "applyOptions" {
+            // apply Options
+        }
+    }
+
     
 }
 

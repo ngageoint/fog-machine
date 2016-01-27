@@ -773,4 +773,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
     }
     
+    
+    @IBAction func applyOptions(segue: UIStoryboardSegue) {
+       
+    }
+    
+    
+    @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {
+        if segue.sourceViewController.isKindOfClass(ObserverSettingsViewController) {
+//            filterType = Filter.BASIC_TYPE
+        }
+//        if let mapViewController = segue.sourceViewController as? AdvFilterViewController {
+//            filterType = mapViewController.filterType
+//        }
+//        annon = retrieveAnnotations(filterType)
+//        MapViewDelegate.clusteringController.setAnnotations()
+    }
+    
 }

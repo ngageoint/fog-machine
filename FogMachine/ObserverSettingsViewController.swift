@@ -54,12 +54,14 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    @IBAction func applySettings(sender: AnyObject) {
-        saveUserSettings()
-    }
-    
-    
     // MARK: Functions
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "applyObserverSettings" {
+            saveUserSettings()
+        }
+    }
     
     
     override func viewDidLoad() {

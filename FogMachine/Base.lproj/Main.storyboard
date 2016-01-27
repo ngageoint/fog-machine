@@ -212,12 +212,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
-                                <rect key="frame" x="0.0" y="64" width="600" height="385.5"/>
-                                <connections>
-                                    <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
-                                </connections>
-                            </mapView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
                                 <rect key="frame" x="5" y="449.5" width="590" height="101"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -225,6 +219,12 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
+                                <rect key="frame" x="0.0" y="64" width="600" height="385.5"/>
+                                <connections>
+                                    <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
+                                </connections>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -521,7 +521,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="EyR-ye-Va8"/>
                                     <barButtonItem title="Apply" id="oUQ-Hf-9VC">
                                         <connections>
-                                            <action selector="applySettings:" destination="4wN-Fl-Gwg" id="Zie-gj-0qe"/>
+                                            <segue destination="zPC-SU-HQn" kind="unwind" identifier="applyObserverSettings" unwindAction="applyObserverSettings:" id="cQC-Rb-3An"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -653,7 +653,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Kag-N9-vGI"/>
                                     <barButtonItem title="Apply" id="0z6-Nq-Hh4">
                                         <connections>
-                                            <action selector="applyOptions:" destination="V4j-6L-7be" id="Wsh-xX-FKr"/>
+                                            <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="applyOptions:" id="44N-s0-ik5"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
