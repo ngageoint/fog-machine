@@ -549,7 +549,7 @@
                     <navigationItem key="navigationItem" title="Observer Settings" id="yip-Mv-qfd">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="AU2-Kb-vBi">
                             <connections>
-                                <segue destination="zPC-SU-HQn" kind="unwind" identifier="cancelAdvancedFilter" unwindAction="unwindFromFilter:" id="jMp-YS-oeC"/>
+                                <segue destination="zPC-SU-HQn" kind="unwind" identifier="cancelAdvancedFilter" unwindAction="unwindFromModal:" id="jMp-YS-oeC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -609,23 +609,24 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUU-dh-4tg" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reset User Data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hlW-vQ-pOe">
-                                                <rect key="frame" x="8" y="22" width="125" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pre-Load Observers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gui-yx-BhF">
                                                 <rect key="frame" x="8" y="68" width="155" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
+                                                <rect key="frame" x="252" y="14" width="97" height="30"/>
+                                                <state key="normal" title="Delete all Pins"/>
+                                                <connections>
+                                                    <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="hlW-vQ-pOe" firstAttribute="leading" secondItem="YUU-dh-4tg" secondAttribute="leading" constant="8" id="E3Y-OE-GFL"/>
-                                            <constraint firstItem="hlW-vQ-pOe" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="22" id="Lt1-ac-qcg"/>
                                             <constraint firstItem="gui-yx-BhF" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="68" id="QvV-4k-amU"/>
+                                            <constraint firstItem="wfz-Ba-OPZ" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="XEu-cZ-SvL"/>
+                                            <constraint firstItem="wfz-Ba-OPZ" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="14" id="YUN-CD-D9c"/>
                                             <constraint firstAttribute="height" constant="428" id="dO5-Rc-ngr"/>
                                             <constraint firstItem="gui-yx-BhF" firstAttribute="leading" secondItem="YUU-dh-4tg" secondAttribute="leading" constant="8" id="gMv-a2-cs8"/>
                                         </constraints>
@@ -681,7 +682,7 @@
                     <navigationItem key="navigationItem" title="Options" id="Xjx-Co-rQa">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="lT4-IB-pwF">
                             <connections>
-                                <segue destination="Mfb-3w-qql" kind="unwind" identifier="cancelAdvancedFilter" unwindAction="unwindFromFilter:" id="QWT-C0-oBT"/>
+                                <segue destination="Mfb-3w-qql" kind="unwind" identifier="cancelAdvancedFilter" unwindAction="unwindFromModal:" id="QWT-C0-oBT"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

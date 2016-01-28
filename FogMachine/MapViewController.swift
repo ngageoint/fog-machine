@@ -301,7 +301,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     
     func removeAllFromMap() {
-        //mapView.removeAnnotations(mapView.annotations)
+        mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
     }
     
@@ -527,7 +527,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func clear(sender: AnyObject) {
         clearTimer()
-        removeAllFromMap()
+        mapView.removeOverlays(mapView.overlays)
         self.centerMapOnLocation(self.hgt.getCenterLocation())
         self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
     }
@@ -543,13 +543,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    @IBAction func unwindFromFilter(segue: UIStoryboardSegue) {
+    @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
         
     }
     
     
     @IBAction func applyOptions(segue: UIStoryboardSegue) {
        
+    }
+    
+    
+    @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
+        model.clearEntity()
+        removeAllFromMap()
     }
     
     
