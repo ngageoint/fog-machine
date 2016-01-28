@@ -30,8 +30,8 @@ class ViewshedWork: Work {
                 FogViewshed.WHICH_QUADRANT: whichQuadrant,
                 //FogViewshed.OBSERVER: observer,
                 FogViewshed.NAME: name,
-                FogViewshed.X: xCoord,
-                FogViewshed.Y: yCoord,
+                FogViewshed.XCOORD: xCoord,
+                FogViewshed.YCOORD: yCoord,
                 FogViewshed.ELEVATION: elevation,
                 FogViewshed.RADIUS: radius,
                 FogViewshed.LATITUDE: latitude,
@@ -67,8 +67,8 @@ class ViewshedWork: Work {
         whichQuadrant = dict[FogViewshed.WHICH_QUADRANT] as! Int
         //observer = NSKeyedUnarchiver.unarchiveObjectWithData(dict[FogViewshed.OBSERVER] as! NSData) as! Observer
         name = dict[FogViewshed.NAME] as! String
-        xCoord = dict[FogViewshed.X] as! Int
-        yCoord = dict[FogViewshed.Y] as! Int
+        xCoord = dict[FogViewshed.XCOORD] as! Int
+        yCoord = dict[FogViewshed.YCOORD] as! Int
         elevation = dict[FogViewshed.ELEVATION] as! Int
         radius = dict[FogViewshed.RADIUS] as! Int
         latitude = dict[FogViewshed.LATITUDE] as! Double

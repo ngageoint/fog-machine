@@ -203,7 +203,7 @@
         <!--Viewshed-->
         <scene sceneID="XZA-M0-u1n">
             <objects>
-                <viewController id="pEj-gH-Hgf" userLabel="Viewshed" customClass="MapViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="pEj-gH-Hgf" userLabel="Viewshed" customClass="MapViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ex2-aV-BLO"/>
                         <viewControllerLayoutGuide type="bottom" id="nk6-LY-TBR"/>

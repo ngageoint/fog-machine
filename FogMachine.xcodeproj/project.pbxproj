@@ -22,7 +22,9 @@
 		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
 		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
-		754175881C57C84B000D51E0 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
+		7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */; };
+		7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */; };
+		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
 		758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7841C0D170000A193A7 /* WorkArray.swift */; };
 		758FB7871C0D177200A193A7 /* Work.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758FB7861C0D177200A193A7 /* Work.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
@@ -114,6 +116,8 @@
 		753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
 		754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverSettingsViewController.swift; sourceTree = "<group>"; };
 		754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FogMachine.xcdatamodel; sourceTree = "<group>"; };
+		7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverEntity.swift; sourceTree = "<group>"; };
+		7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
 		758FB7841C0D170000A193A7 /* WorkArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkArray.swift; sourceTree = "<group>"; };
 		758FB7861C0D177200A193A7 /* Work.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Work.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
@@ -377,6 +381,8 @@
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,
 				753D3D791BFA3ABA004E3589 /* Observer.swift */,
+				7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */,
+				7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */,
 				753D3D7B1BFBCF66004E3589 /* Hgt.swift */,
 				758FB77E1C0A3A2600A193A7 /* VanKreveld */,
 				75D5A93B1C051BF300B7B246 /* FogModels */,
@@ -602,17 +608,18 @@
 				753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */,
 				9BD5C1001C05E51E004A37B6 /* Point.swift in Sources */,
 				E386DD511B7C34DB00FA8827 /* SearchWork.swift in Sources */,
+				7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */,
 				9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */,
 				E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */,
 				9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */,
 				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
 				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
 				758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */,
+				7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
-				754175881C57C84B000D51E0 /* FogMachine.xcdatamodeld in Sources */,
 				9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */,
 				753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */,
 				E3B933E41B7BD106007B9444 /* MonteCristo.swift in Sources */,
@@ -624,6 +631,7 @@
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
 				754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */,
 				E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */,
+				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
