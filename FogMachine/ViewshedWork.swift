@@ -22,6 +22,7 @@ class ViewshedWork: Work {
     let radius:Int
     let latitude: Double
     let longitude: Double
+    let algorithm: Int
     
     
     override var mpcSerialized : NSData {
@@ -35,7 +36,8 @@ class ViewshedWork: Work {
                 FogViewshed.ELEVATION: elevation,
                 FogViewshed.RADIUS: radius,
                 FogViewshed.LATITUDE: latitude,
-                FogViewshed.LONGITUDE: longitude])
+                FogViewshed.LONGITUDE: longitude,
+                FogViewshed.ALGORITHM: algorithm])
         
         return result
     }
@@ -52,6 +54,7 @@ class ViewshedWork: Work {
         self.radius = observer.radius
         self.latitude = observer.coordinate.latitude
         self.longitude = observer.coordinate.longitude
+        self.algorithm = observer.algorithm.rawValue
         super.init()
     }
     
@@ -73,6 +76,7 @@ class ViewshedWork: Work {
         radius = dict[FogViewshed.RADIUS] as! Int
         latitude = dict[FogViewshed.LATITUDE] as! Double
         longitude = dict[FogViewshed.LONGITUDE] as! Double
+        algorithm = dict[FogViewshed.ALGORITHM] as! Int
         super.init(mpcSerialized: mpcSerialized)
     }
 }

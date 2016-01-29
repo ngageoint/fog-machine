@@ -446,7 +446,14 @@
                                                 <rect key="frame" x="225" y="271" width="150" height="30"/>
                                                 <state key="normal" title="Remove Pin from Map"/>
                                                 <connections>
-                                                    <action selector="removePinFromMap:" destination="4wN-Fl-Gwg" eventType="touchUpInside" id="LlO-J1-ZNh"/>
+                                                    <segue destination="zPC-SU-HQn" kind="unwind" identifier="removePinFromSettings" unwindAction="removePinFromSettings:" id="q56-Du-TZO"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lu5-E1-Xx6">
+                                                <rect key="frame" x="251" y="309" width="98" height="30"/>
+                                                <state key="normal" title="Run Viewshed"/>
+                                                <connections>
+                                                    <segue destination="zPC-SU-HQn" kind="unwind" unwindAction="runSelectedFogViewshed:" id="onP-uX-h2v"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -463,6 +470,7 @@
                                             <constraint firstItem="Ip7-af-thW" firstAttribute="leading" secondItem="38k-9p-c8a" secondAttribute="trailing" constant="8" id="IB7-b9-xvr"/>
                                             <constraint firstAttribute="trailing" secondItem="xTl-8d-jWv" secondAttribute="trailing" constant="8" id="Ja1-dj-FoU"/>
                                             <constraint firstItem="cWC-8Z-dDT" firstAttribute="leading" secondItem="dLM-i8-oAa" secondAttribute="leading" constant="8" id="LEC-dM-mZN"/>
+                                            <constraint firstItem="Lu5-E1-Xx6" firstAttribute="centerX" secondItem="dLM-i8-oAa" secondAttribute="centerX" id="LF9-pW-4J7"/>
                                             <constraint firstAttribute="trailing" secondItem="cc0-xr-QW6" secondAttribute="trailing" constant="8" id="LOk-CL-EbF"/>
                                             <constraint firstItem="KTL-tW-rzD" firstAttribute="top" secondItem="dLM-i8-oAa" secondAttribute="top" constant="106" id="Q9L-BR-01i"/>
                                             <constraint firstItem="38k-9p-c8a" firstAttribute="leading" secondItem="dLM-i8-oAa" secondAttribute="leading" constant="8" id="S0r-Yw-cVP"/>
@@ -470,6 +478,7 @@
                                             <constraint firstItem="gNu-dS-IVx" firstAttribute="top" secondItem="KTL-tW-rzD" secondAttribute="top" id="Tox-GI-7he"/>
                                             <constraint firstItem="WFb-xC-15J" firstAttribute="top" secondItem="cc0-xr-QW6" secondAttribute="bottom" constant="11" id="X7h-ru-Gi4"/>
                                             <constraint firstItem="xTl-8d-jWv" firstAttribute="top" secondItem="yds-81-aks" secondAttribute="bottom" constant="11" id="XJX-r1-peB"/>
+                                            <constraint firstItem="Lu5-E1-Xx6" firstAttribute="top" secondItem="CYh-vk-RQi" secondAttribute="bottom" constant="8" id="XgO-lq-r1a"/>
                                             <constraint firstItem="cc0-xr-QW6" firstAttribute="top" secondItem="xTl-8d-jWv" secondAttribute="bottom" constant="12" id="YC5-ij-tQx"/>
                                             <constraint firstItem="chq-dY-agV" firstAttribute="leading" secondItem="dLM-i8-oAa" secondAttribute="leading" constant="8" id="cf7-b7-SUg"/>
                                             <constraint firstItem="CYh-vk-RQi" firstAttribute="top" secondItem="dLM-i8-oAa" secondAttribute="top" constant="271" id="dA1-9n-QwG"/>
@@ -521,7 +530,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="EyR-ye-Va8"/>
                                     <barButtonItem title="Apply" id="oUQ-Hf-9VC">
                                         <connections>
-                                            <segue destination="zPC-SU-HQn" kind="unwind" identifier="applyObserverSettings" unwindAction="applyObserverSettings:" id="cQC-Rb-3An"/>
+                                            <segue destination="zPC-SU-HQn" kind="unwind" identifier="applyObserverSettings" unwindAction="applyObserverSettings:" id="hN2-pk-PSa"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>

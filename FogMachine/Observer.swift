@@ -20,7 +20,16 @@ class Observer: NSObject {
     var coordinate: CLLocationCoordinate2D
     var algorithm: ViewshedAlgorithm
 
-    
+    override init() {
+        self.name = "Enter Name"
+        self.xCoord = 1
+        self.yCoord = 1
+        self.elevation = 1
+        self.radius = 250
+        self.coordinate = CLLocationCoordinate2DMake(1, 1)
+        self.algorithm = ViewshedAlgorithm.FranklinRay
+        super.init()
+    }
     
     init(name: String, xCoord: Int, yCoord: Int, elevation: Int, radius: Int, coordinate: CLLocationCoordinate2D, algorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay) {
         self.name = name
@@ -40,13 +49,24 @@ class Observer: NSObject {
         self.coordinate = CLLocationCoordinate2DMake(
                         hgtCoordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(xCoord - 1)) + Srtm3.LATITUDE_CELL_CENTER,
                         hgtCoordinate.longitude + (Srtm3.CELL_SIZE * Double(yCoord - 1) + Srtm3.LONGITUDE_CELL_CENTER))
-        
-        print("xCoord: \(xCoord) yCoord: \(yCoord) lat: \(coordinate.latitude) lon: \(coordinate.longitude) ")
+
     }
     
     
     func getObserverLocation() -> CLLocationCoordinate2D {
             return coordinate
+    }
+    
+    
+    func populateEntity(entity: ObserverEntity) {
+        entity.name = name
+        entity.xCoord = Int16(xCoord)
+        entity.yCoord = Int16(yCoord)
+        entity.elevation = Int32(elevation)
+        entity.radius = Int16(radius)
+        entity.latitude = coordinate.latitude
+        entity.longitude = coordinate.longitude
+        entity.algorithm = Int16(algorithm.rawValue)
     }
 
 }

@@ -54,6 +54,12 @@ class ObserverFacade {
     }
     
     
+    func deleteObserver(observer: ObserverEntity) {
+        managedContext.deleteObject(observer)
+        saveContext(managedContext)
+    }
+    
+    
     func addObservers(addObservers: [Observer]) {
         let entity = NSEntityDescription.entityForName(Fog.ENTITY, inManagedObjectContext: managedContext)
         let managedObject = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)

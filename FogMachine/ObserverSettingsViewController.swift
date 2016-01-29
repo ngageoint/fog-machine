@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import CoreData
+import MapKit
 
 class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
@@ -16,7 +16,9 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     // MARK: Variables
     
     
-    let defaults = NSUserDefaults.standardUserDefaults()
+    var originalObserver : ObserverEntity?
+    var editedObserver = Observer()
+    var model = ObserverFacade()
     
     enum Warning: String {
         case POSITIVE_INTEGER = "positive integer",
@@ -39,18 +41,13 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     // MARK: IBActions
     
     
-    @IBAction func removePinFromMap(sender: AnyObject) {
-        print("removed!")
-    }
-    
-    
     @IBAction func hideKeyboard(sender: AnyObject) {
         scrollView.endEditing(true)
     }
     
     
     @IBAction func resetSettings(sender: AnyObject) {
-        loadObserverDefaults()
+        loadObserverSettings()
     }
     
     
@@ -59,7 +56,10 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "applyObserverSettings" {
-            saveUserSettings()
+            storeObserverSettings()
+            saveObserverSettings()
+        } else if segue.identifier == "removePinFromSettings" {
+            model.deleteObserver(originalObserver!)
         }
     }
     
@@ -77,85 +77,73 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         latitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
         longitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
         
-        loadUserSettings()
+        loadObserverSettings()
+    }
+    
+    
+    func saveObserverSettings() {
+        model.deleteObserver(originalObserver!)
+        model.addObserver(editedObserver)
+    }
+    
+    
+    func storeObserverSettings() -> Bool {
+        var hasSuccess = false
+        editedObserver.algorithm = ViewshedAlgorithm(rawValue: algorithm.selectedSegmentIndex)!
+        editedObserver.name = name.text!
+
+        let elevationValue = getIntegerValue(FogViewshed.ELEVATION, value: elevation.text, warningMessage: Warning.POSITIVE_INTEGER)
+        let radiusValue = getIntegerValue(FogViewshed.RADIUS, value: radius.text, warningMessage: Warning.POSITIVE_INTEGER)
+        let latitudeValue = getDoubleValue(FogViewshed.LATITUDE, value: latitude.text, warningMessage: Warning.DECIMAL)
+        let longitudeValue = getDoubleValue(FogViewshed.LONGITUDE, value: longitude.text, warningMessage: Warning.DECIMAL)
         
-    }
-    
-    
-    func saveUserSettings() {
-        defaults.setInteger(algorithm.selectedSegmentIndex, forKey: FogViewshed.ALGORITHM)
-        defaults.setObject(name.text, forKey: FogViewshed.NAME)
-        saveIntegerUserSetting(elevation.text, key: FogViewshed.ELEVATION, warningMessage: Warning.POSITIVE_INTEGER)
-        saveIntegerUserSetting(radius.text, key: FogViewshed.RADIUS, warningMessage: Warning.POSITIVE_INTEGER)
-        saveDoubleUserSetting(latitude.text, key: FogViewshed.LATITUDE, warningMessage: Warning.DECIMAL)
-        saveDoubleUserSetting(longitude.text, key: FogViewshed.LONGITUDE, warningMessage: Warning.DECIMAL)
-
-    }
-    
-    
-    func saveDoubleUserSetting(value: String?, key: String, warningMessage: Warning) {
-        guard let doubleValue = Double(value!) else {
-            alertUser("The \(key) requires a \(warningMessage).")
-            return
+        if elevationValue != nil && radiusValue != nil && latitudeValue != nil && longitudeValue != nil {
+            editedObserver.elevation = elevationValue!
+            editedObserver.radius = radiusValue!
+            editedObserver.coordinate = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
+            hasSuccess = true
         }
-
-        defaults.setDouble(doubleValue, forKey: key)
+        
+        return hasSuccess
     }
     
     
-    func saveIntegerUserSetting(value: String?, key: String, warningMessage: Warning) {
+    func getDoubleValue(key: String, value: String?, warningMessage: Warning) -> Double? {
+        guard let doubleValue = Double(value!) else {
+            alertUser("The \(key) requires a \(warningMessage.rawValue).")
+            return nil
+        }
+        
+        return doubleValue
+    }
+    
+    
+    func getIntegerValue(key: String, value: String?, warningMessage: Warning) -> Int? {
         guard let integerValue = Int(value!) else {
-            alertUser("The \(key) requires a \(warningMessage).")
-            return
+            alertUser("The \(key) requires a \(warningMessage.rawValue).")
+            return nil
         }
         
         guard integerValue > 0 else {
-            alertUser("The \(key) requires a \(warningMessage).")
-            return
+            alertUser("The \(key) requires a \(warningMessage.rawValue).")
+            return nil
         }
         
-        defaults.setInteger(integerValue, forKey: key)
+        return integerValue
     }
     
     
-    func loadUserSettings() {
-        loadObserverDefaults()
-        
-        //Pull any saved settings from User Details
-        if let userDefaultAlgorithm: Int = defaults.integerForKey(FogViewshed.ALGORITHM) {
-            algorithm.selectedSegmentIndex = userDefaultAlgorithm
-        }
-        if let userDefaultName: String = String(defaults.objectForKey(FogViewshed.NAME)) {
-             name.text = userDefaultName
-        }
-        if let userDefaultElevation: String = String(defaults.integerForKey(FogViewshed.ELEVATION)) {
-             elevation.text = userDefaultElevation
-        }
-        if let userDefaultRadius: String = String(defaults.integerForKey(FogViewshed.RADIUS)) {
-             radius.text = userDefaultRadius
-        }
-        if let userDefaultLatitude: String = String(defaults.doubleForKey(FogViewshed.LATITUDE)) {
-             latitude.text = userDefaultLatitude
-        }
-        if let userDefaultLongitude: String = String(defaults.doubleForKey(FogViewshed.LONGITUDE)) {
-            longitude.text = userDefaultLongitude
-        }
-        
-    }
-    
-    
-    func loadObserverDefaults() {
-        algorithm.selectedSegmentIndex = 0
-        name.text = "Enter Name"
-        elevation.text = "25"
-        radius.text = "250"
-        latitude.text = "39"
-        longitude.text = "-74"
+    func loadObserverSettings() {
+        algorithm.selectedSegmentIndex = Int(originalObserver!.algorithm)
+        name.text = originalObserver!.name
+        elevation.text = String(originalObserver!.elevation)
+        radius.text = String(originalObserver!.radius)
+        latitude.text = String(originalObserver!.latitude)
+        longitude.text = String(originalObserver!.longitude)
     }
     
     
     func alertUser(message: String) {
-        //let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
         let alertController = UIAlertController(title: "Observer Settings Error", message: message, preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
