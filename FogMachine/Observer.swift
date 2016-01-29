@@ -52,6 +52,12 @@ class Observer: NSObject {
 
     }
     
+    //Once the HGT file is part of the Entity, this process can be improved. 
+    func setHgtGridLocation(hgtCoordinate: CLLocationCoordinate2D) {
+        self.yCoord = Int((coordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
+        self.xCoord = Srtm3.MAX_SIZE - Int((coordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
+    }
+    
     
     func getObserverLocation() -> CLLocationCoordinate2D {
             return coordinate

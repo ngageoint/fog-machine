@@ -453,7 +453,7 @@
                                                 <rect key="frame" x="251" y="309" width="98" height="30"/>
                                                 <state key="normal" title="Run Viewshed"/>
                                                 <connections>
-                                                    <segue destination="zPC-SU-HQn" kind="unwind" unwindAction="runSelectedFogViewshed:" id="onP-uX-h2v"/>
+                                                    <segue destination="zPC-SU-HQn" kind="unwind" identifier="runSelectedFogViewshed" unwindAction="runSelectedFogViewshed:" id="onP-uX-h2v"/>
                                                 </connections>
                                             </button>
                                         </subviews>

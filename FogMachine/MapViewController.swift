@@ -26,6 +26,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     var allObservers = [ObserverEntity]()
     var model = ObserverFacade()
+    var settingsObserver = Observer() //Only use for segue from ObserverSettings
     
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
@@ -545,14 +546,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
-        
-        
-        
-        //initiateFogViewshed()
-        
-        
-        
-        
+        redrawMap()
+        settingsObserver.setHgtGridLocation(self.hgt.coordinate)
+        initiateFogViewshed(settingsObserver)
     }
     
     

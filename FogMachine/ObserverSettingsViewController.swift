@@ -60,6 +60,11 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
             saveObserverSettings()
         } else if segue.identifier == "removePinFromSettings" {
             model.deleteObserver(originalObserver!)
+        } else if segue.identifier == "runSelectedFogViewshed" {
+            storeObserverSettings()
+            saveObserverSettings()
+            let mapViewController = segue.destinationViewController as! MapViewController
+            mapViewController.settingsObserver = editedObserver
         }
     }
     
