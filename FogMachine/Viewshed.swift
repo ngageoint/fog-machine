@@ -31,10 +31,10 @@ public class Viewshed: NSObject {
     //        Given a terrain T represented by an n × n elevation matrix M, a point p on T , a radius
     //        of interest r, and a height h above the local terrain for the observer and target, this
     //        algorithm computes the viewshed of p within a distance r of p, as follows:
-    public func viewshed() -> [[Int]] {
+    public func viewshed(maxSize: Int = Srtm3.MAX_SIZE) -> [[Int]] {
         
         // Initialize results array as all un-viewable
-        var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+        var viewshedMatrix = [[Int]](count:maxSize, repeatedValue:[Int](count:maxSize, repeatedValue:0))
         
         // 1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
         
@@ -67,7 +67,7 @@ public class Viewshed: NSObject {
             for (x2, y2) in bresResults {
                 
                 //hgt elevation is 1201 x 1201, so skip anything outside those bounds
-                if (x2 > 0 && y2 > 0) && (x2 < Srtm3.MAX_SIZE && y2 < Srtm3.MAX_SIZE) {
+                if (x2 > 0 && y2 > 0) && (x2 < maxSize && y2 < maxSize) {
                     // print("Finding angle to: x, y: \(x2),   \(y2)")
                     
                     // i. For each point qi, compute mi.

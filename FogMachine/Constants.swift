@@ -58,6 +58,14 @@ struct Srtm3 {
 
 }
 
+// Position in 2x2 grid
+enum GridPosition: String {
+    case UpperRight = "upperRight",
+    UpperLeft = "upperLeft",
+    LowerRight = "lowerRight",
+    LowerLeft = "lowerLeft"
+}
+
 enum MapType: Int {
     case Standard = 0
     case Hybrid
