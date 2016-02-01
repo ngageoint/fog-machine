@@ -12,27 +12,14 @@ import MapKit
 class Hgt: NSObject {
     
     var coordinate:CLLocationCoordinate2D!
-    var elevation:[[Int]]!
     var filename:String!
-    
-    init(filename: String) {
-        super.init()
-        self.filename = filename
-        self.coordinate = parseCoordinate()
-        self.elevation = parseElevation()
-    }
-    
-
-    func getElevation() -> [[Int]] {
-        return elevation
-    }
-    
+        
     // Height files have the extension .HGT and are signed two byte integers. The
     // bytes are in Motorola "big-endian" order with the most significant byte first
     // Data voids are assigned the value -32768 and are ignored (no special processing is done)
     // SRTM3 files contain 1201 lines and 1201 samples
-    func parseElevation() -> [[Int]] {
-        let path = NSBundle.mainBundle().pathForResource(filename, ofType: "hgt")
+    lazy var elevation: [[Int]] = {
+        let path = NSBundle.mainBundle().pathForResource(self.filename, ofType: "hgt")
         //let path = NSBundle.mainBundle().resourcePath! + "/" + filename + ".hgt"
         let url = NSURL(fileURLWithPath: path!)
         let data = NSData(contentsOfURL: url)!
@@ -63,8 +50,20 @@ class Hgt: NSObject {
         }
         
         return elevationMatrix
+    }()
+    
+    
+    init(filename: String) {
+        super.init()
+        self.filename = filename
+        self.coordinate = parseCoordinate()
     }
     
+    
+    func getElevation() -> [[Int]] {
+        return elevation
+    }
+
 
     func getCoordinate() -> CLLocationCoordinate2D {
         return coordinate
