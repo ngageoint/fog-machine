@@ -39,6 +39,12 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         mapView.delegate = self
         getHgtFileInfo()
         getTheMap()
+        
+        let lpgr = UILongPressGestureRecognizer(target: self, action:"handleLongPress:")
+        lpgr.minimumPressDuration = 0.5
+        lpgr.delaysTouchesBegan = true
+        lpgr.delegate = self
+        self.mapView.addGestureRecognizer(lpgr)
     }
     
     override func didReceiveMemoryWarning() {
@@ -58,7 +64,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         return pickerData.count
     }
     
-    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let currentCell = tableView.cellForRowAtIndexPath(indexPath)! as UITableViewCell
         let selectedHGTFile = currentCell.textLabel!.text!
         if let aTmpStr:String = selectedHGTFile {
@@ -109,8 +115,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
                     break
                 }
             }
-        } catch {
-            // failed to read directory – bad permissions, perhaps?
+        } catch let error as NSError  {
+            print("Could get the HGT files: \(error.userInfo)")
         }
     }
     
@@ -144,7 +150,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
             return polygonView
         }
         if overlay is MKPolyline {
-            var polylineRenderer = MKPolylineRenderer(overlay: overlay)
+            let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             polylineRenderer.strokeColor = UIColor.blackColor()
             polylineRenderer.lineWidth = 0.4
             return polylineRenderer
@@ -154,14 +160,57 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     
     func addRectBoundry(latitude: Double, longitude: Double) {
         var points = [
-            CLLocationCoordinate2DMake(latitude-1, longitude+1),
+            CLLocationCoordinate2DMake(latitude-1, longitude),
             CLLocationCoordinate2DMake(latitude-1, longitude-1),
-            CLLocationCoordinate2DMake(latitude+1, longitude-1),
-            CLLocationCoordinate2DMake(latitude+1, longitude+1)
+            CLLocationCoordinate2DMake(latitude, longitude-1),
+            CLLocationCoordinate2DMake(latitude, longitude)
         ]
         polygonOverlay = MKPolygon(coordinates: &points, count: points.count)
         mapView.addOverlay(polygonOverlay)
     }
     
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        var view : MKAnnotationView! = nil
+        //print("annotation.title \(annotation.title)")
+        let t: String = String(annotation.title)
+        if (t.containsString("Download")) {
+            let identifier = "greenPin"
+            view = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
+            if view == nil {
+                _ = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
+                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.canShowCallout = true
+                view.calloutOffset = CGPoint(x: -5, y: 5)
+                let image = UIImage(named:"Download")
+                let button = UIButton(type: UIButtonType.DetailDisclosure)
+                button.setImage(image, forState: UIControlState.Normal)
+                view!.leftCalloutAccessoryView = button as UIView
+            }
+        }
+        return view
+    }
+
+    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
+        if gestureReconizer.state != UIGestureRecognizerState.Ended {
+            touchLocation = gestureReconizer.locationInView(mapView)
+            let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
+            mapView.removeAnnotations(mapView.annotations)
+      
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = locationCoordinate
+            annotation.title = "Download?"
+            annotation.subtitle = "lat: \(String(format:"%.4f", locationCoordinate.latitude)) long: \(String(format:"%.4f", locationCoordinate.longitude))"
+            mapView.addAnnotation(annotation)
+            let latDelta: CLLocationDegrees = 10
+            let lonDelta: CLLocationDegrees = 10
+            let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
+            let region: MKCoordinateRegion = MKCoordinateRegionMake(locationCoordinate, span)
+            self.mapView.setRegion(region, animated: true)
+            return
+        }
+        if gestureReconizer.state != UIGestureRecognizerState.Began {
+            return
+        }
+    }
 }
 
