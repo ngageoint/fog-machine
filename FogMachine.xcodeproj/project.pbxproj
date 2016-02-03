@@ -70,6 +70,7 @@
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
 		9BD5C1061C05ECF3004A37B6 /* N40W110.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */; };
 		9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */; };
+		9BF49E021C5FDB89005069FC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF49E011C5FDB89005069FC /* Downloader.swift */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
 		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
@@ -161,6 +162,7 @@
 		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
 		9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W110.hgt; path = HGT/N40W110.hgt; sourceTree = "<group>"; };
 		9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
+		9BF49E011C5FDB89005069FC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		D18A74A424D7E9AE3C3F046F /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9BF49E011C5FDB89005069FC /* Downloader.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,
@@ -609,6 +612,7 @@
 				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
 				758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
+				9BF49E021C5FDB89005069FC /* Downloader.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
