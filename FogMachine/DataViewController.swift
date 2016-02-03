@@ -48,6 +48,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -117,10 +118,10 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     func manageHgtDataArray(docDirItem: String) {
         let hgFileName = NSURL(fileURLWithPath: docDirItem).URLByDeletingPathExtension?.lastPathComponent
         self.hgtCoordinate = self.parseCoordinate(hgFileName!)
-        let addPickerItem = "\(docDirItem) (Lat:\(self.hgtCoordinate.latitude) Lng:\(self.hgtCoordinate.longitude))"
+        let tableCellItem = "\(docDirItem) (Lat:\(self.hgtCoordinate.latitude) Lng:\(self.hgtCoordinate.longitude))"
         
-        if (!pickerData.contains(addPickerItem)) {
-            self.pickerData.append(addPickerItem)
+        if (!pickerData.contains(tableCellItem)) {
+            self.pickerData.append(tableCellItem)
         }
     }
     
@@ -215,38 +216,63 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         if (lng < 0) {
             lonPref = "W"
         }
+        // round the lat & long to the closest integer value..
+        lat = round(lat)
+        lng = round(lng)
         
         let hgtFileName = (String(format:"%@%02d%@%03d%@", latPref, abs(Int(lat)), lonPref, abs(Int(lng)), ".hgt"))
-        self.downloadComplete = false
-        let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
-        let ok = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-            print("Ok Button Pressed")
-            for var srtmDataRegion: String in self.srtmDataRegions {
-                if (!self.downloadComplete) {
-                    let temp: String = self.srtmDataLocation + srtmDataRegion + "/" + hgtFileName
-                    print(temp)
-                    let url = NSURL(string: temp)
-                    Downloader(dataViewController: self).download(url!)
+        let tableCellItem2Add = "\(hgtFileName) (Lat:\(lat) Lng:\(lng))"
+
+        // check if the data already downloaded and exists in the table..
+        // don't download if its there already
+        if (pickerData.contains(tableCellItem2Add)) {
+            let alertController = UIAlertController(title: hgtFileName, message: "File Already Exists..", preferredStyle: .Alert)
+            let ok = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+            })
+            alertController.addAction(ok)
+            presentViewController(alertController, animated: true, completion: nil)
+        } else{
+            self.downloadComplete = false
+            let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
+            let ok = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+                for var srtmDataRegion: String in self.srtmDataRegions {
+                    if (!self.downloadComplete) {
+                        let temp: String = self.srtmDataLocation + srtmDataRegion + "/" + hgtFileName
+                        print(temp)
+                        let url = NSURL(string: temp)
+                        Downloader(dataViewController: self).download(url!)
+                    }
                 }
+            })
+            let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) -> Void in
+                print("Download cancelled!")
             }
-        })
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) -> Void in
-            //print("Cancel Button Pressed")
+            alertController.addAction(ok)
+            alertController.addAction(cancel)
+            presentViewController(alertController, animated: true, completion: nil)
         }
-        alertController.addAction(ok)
-        alertController.addAction(cancel)
-        presentViewController(alertController, animated: true, completion: nil)
     }
     
     func downloadComplete(downloadedFilePath: String) {
         downloadComplete = true
-        //print(downloadedFilePath + "->Download Completed!!")
-        let fileName = NSURL(fileURLWithPath: downloadedFilePath).lastPathComponent!
-        self.manageHgtDataArray (fileName)
-        self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude)
-        self.refresh()
+        print("Download Completed!!")
+
+        dispatch_async(dispatch_get_main_queue()) {
+            () -> Void in
+            //print(downloadedFilePath + "->Download Completed!!")
+            let fileName = NSURL(fileURLWithPath: downloadedFilePath).lastPathComponent!
+            // add the downloaded file to the array of file names...
+            self.manageHgtDataArray (fileName)
+            // draw the rectangle boundary on the map for the dowloaded data
+             self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude)
+            print(self.hgtCoordinate)
+            // refresh the table with the latest array data
+            self.refresh()
+        }
+
     }
     
+    /*
     func downloadComplete(annotationView view: MKAnnotationView) {
         let annotation = view.annotation!
         let placeName = annotation.title
@@ -256,6 +282,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
         presentViewController(ac, animated: true, completion: nil)
     }
+    */
     
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
         if gestureReconizer.state != UIGestureRecognizerState.Ended {

@@ -24,9 +24,12 @@ class Downloader : NSObject, NSURLSessionDownloadDelegate {
         let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
         let destinationUrl = documentsUrl!.URLByAppendingPathComponent(remoteURL!.lastPathComponent!)
         let dataFromURL = NSData(contentsOfURL: location)
-        dataFromURL!.writeToURL(destinationUrl, atomically: true)
-        //now it is time to do what is needed to be done after the download
-        dataViewController!.downloadComplete(String(destinationUrl))
+        
+        if (dataFromURL != nil) {
+            dataFromURL!.writeToURL(destinationUrl, atomically: true)
+            //now it is time to do what is needed to be done after the download
+            dataViewController!.downloadComplete(String(destinationUrl))
+        }
     }
     
     //this is to track progress
