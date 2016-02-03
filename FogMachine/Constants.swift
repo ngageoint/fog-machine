@@ -75,3 +75,8 @@ enum ViewshedAlgorithm: Int {
     case FranklinRay = 0
     case VanKreveld = 1
 }
+
+struct SRTM {
+    static let DOWNLOAD_SERVER = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
+    static let SERVER_REGIONS: [String] = ["North_America", "South_America", "Eurasia", "Africa", "Australia", "Islands"]
+}

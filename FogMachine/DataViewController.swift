@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import CoreData
 
 class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource,
 MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
@@ -25,14 +24,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     var manager = CLLocationManager()
     var polygonOverlay:MKPolygon!
     var touchLocation: CGPoint!
-    let srtmDataLocation: String = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
-    let srtmDataRegions: [String] = ["North_America", "South_America", "Eurasia", "Africa", "Australia", "Islands"]
     var downloadComplete: Bool = false
-    
-    var managedContext: NSManagedObjectContext {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext!
-    }
-    
+       
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -48,7 +41,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -99,7 +91,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     }
     
     func getHgtFiles() {
-        print("Picker Data: \(pickerData)")
+        //print("Picker Data: \(pickerData)")
         do {
             let fm = NSFileManager.defaultManager()
             let documentDirPath:NSURL =  try! fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
@@ -235,9 +227,9 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
             self.downloadComplete = false
             let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
             let ok = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-                for var srtmDataRegion: String in self.srtmDataRegions {
+                for var srtmDataRegion: String in SRTM.SERVER_REGIONS {
                     if (!self.downloadComplete) {
-                        let temp: String = self.srtmDataLocation + srtmDataRegion + "/" + hgtFileName
+                        let temp: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName
                         print(temp)
                         let url = NSURL(string: temp)
                         Downloader(dataViewController: self).download(url!)
@@ -269,20 +261,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
             // refresh the table with the latest array data
             self.refresh()
         }
-
     }
-    
-    /*
-    func downloadComplete(annotationView view: MKAnnotationView) {
-        let annotation = view.annotation!
-        let placeName = annotation.title
-        let subtitle = annotation.subtitle
-        
-        let ac = UIAlertController(title: placeName!, message: subtitle!, preferredStyle: .Alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        presentViewController(ac, animated: true, completion: nil)
-    }
-    */
     
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
         if gestureReconizer.state != UIGestureRecognizerState.Ended {
@@ -308,7 +287,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
             return
         }
     }
-    
     
 }
 
