@@ -22,6 +22,7 @@ class ViewshedWork: Work {
     let radius:Int
     let latitude: Double
     let longitude: Double
+    let algorithm: Int
     
     
     override var mpcSerialized : NSData {
@@ -30,12 +31,13 @@ class ViewshedWork: Work {
                 FogViewshed.WHICH_QUADRANT: whichQuadrant,
                 //FogViewshed.OBSERVER: observer,
                 FogViewshed.NAME: name,
-                FogViewshed.X: xCoord,
-                FogViewshed.Y: yCoord,
+                FogViewshed.XCOORD: xCoord,
+                FogViewshed.YCOORD: yCoord,
                 FogViewshed.ELEVATION: elevation,
                 FogViewshed.RADIUS: radius,
                 FogViewshed.LATITUDE: latitude,
-                FogViewshed.LONGITUDE: longitude])
+                FogViewshed.LONGITUDE: longitude,
+                FogViewshed.ALGORITHM: algorithm])
         
         return result
     }
@@ -52,6 +54,7 @@ class ViewshedWork: Work {
         self.radius = observer.radius
         self.latitude = observer.coordinate.latitude
         self.longitude = observer.coordinate.longitude
+        self.algorithm = observer.algorithm.rawValue
         super.init()
     }
     
@@ -67,12 +70,13 @@ class ViewshedWork: Work {
         whichQuadrant = dict[FogViewshed.WHICH_QUADRANT] as! Int
         //observer = NSKeyedUnarchiver.unarchiveObjectWithData(dict[FogViewshed.OBSERVER] as! NSData) as! Observer
         name = dict[FogViewshed.NAME] as! String
-        xCoord = dict[FogViewshed.X] as! Int
-        yCoord = dict[FogViewshed.Y] as! Int
+        xCoord = dict[FogViewshed.XCOORD] as! Int
+        yCoord = dict[FogViewshed.YCOORD] as! Int
         elevation = dict[FogViewshed.ELEVATION] as! Int
         radius = dict[FogViewshed.RADIUS] as! Int
         latitude = dict[FogViewshed.LATITUDE] as! Double
         longitude = dict[FogViewshed.LONGITUDE] as! Double
+        algorithm = dict[FogViewshed.ALGORITHM] as! Int
         super.init(mpcSerialized: mpcSerialized)
     }
 }

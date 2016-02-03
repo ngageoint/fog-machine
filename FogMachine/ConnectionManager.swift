@@ -18,7 +18,7 @@ protocol MPCSerializable {
 
 struct ConnectionManager {
     
-    static var hasReceivedResponse:[String:[String:[String:Bool]]] = ["sender": ["event":["peer":true]]] //better way to do this?
+    static var hasReceivedResponse:[String:[String:[String:Bool]]] = ["sender": ["event":["peer":true]]]
     static private let serialQueue = dispatch_queue_create("mil.nga.magic.fog", DISPATCH_QUEUE_SERIAL)
     
     // MARK: Properties

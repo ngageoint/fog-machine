@@ -8,63 +8,152 @@
 
 import Foundation
 import UIKit
-import CoreData
+import MapKit
 
-class ObserverSettingsViewController: UIViewController {
+class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
-    let defaults = NSUserDefaults.standardUserDefaults()
     
-    @IBOutlet weak var algorithm: UISegmentedControl!
+    // MARK: Variables
+    
+    
+    var originalObserver : ObserverEntity?
+    var editedObserver = Observer()
+    var model = ObserverFacade()
+    
+    enum Warning: String {
+        case POSITIVE_INTEGER = "positive integer",
+        DECIMAL = "decimal"
+    }
+    
+    
+    // MARK: IBOutlets
+    
+    
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var algorithm: UISegmentedControl!
+    @IBOutlet weak var name: UITextField!
+    @IBOutlet weak var elevation: UITextField!
+    @IBOutlet weak var radius: UITextField!
+    @IBOutlet weak var latitude: UITextField!
+    @IBOutlet weak var longitude: UITextField!
+    
+    
+    // MARK: IBActions
+    
     
     @IBAction func hideKeyboard(sender: AnyObject) {
         scrollView.endEditing(true)
     }
     
+    
     @IBAction func resetSettings(sender: AnyObject) {
-        loadObserverDefaults()
+        loadObserverSettings()
     }
     
-    @IBAction func applySettings(sender: AnyObject) {
-        saveUserSettings()
+    
+    // MARK: Functions
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "applyObserverSettings" {
+            storeObserverSettings()
+            saveObserverSettings()
+        } else if segue.identifier == "removePinFromSettings" {
+            model.deleteObserver(originalObserver!)
+        }
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadUserSettings()
+        elevation.delegate = self
+        radius.delegate = self
+        latitude.delegate = self
+        longitude.delegate = self
         
+        elevation.keyboardType = UIKeyboardType.NumbersAndPunctuation
+        radius.keyboardType = UIKeyboardType.NumbersAndPunctuation
+        latitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
+        longitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
+        
+        loadObserverSettings()
     }
     
     
-    func saveUserSettings() {
-        defaults.setInteger(algorithm.selectedSegmentIndex, forKey: FogViewshed.ALGORITHM)
+    func saveObserverSettings() {
+        model.deleteObserver(originalObserver!)
+        model.addObserver(editedObserver)
     }
     
     
-    func loadUserSettings() {
-        loadObserverDefaults()
+    func storeObserverSettings() -> Bool {
+        var hasSuccess = false
+        editedObserver.algorithm = ViewshedAlgorithm(rawValue: algorithm.selectedSegmentIndex)!
+        editedObserver.name = name.text!
+
+        let elevationValue = getIntegerValue(FogViewshed.ELEVATION, value: elevation.text, warningMessage: Warning.POSITIVE_INTEGER)
+        let radiusValue = getIntegerValue(FogViewshed.RADIUS, value: radius.text, warningMessage: Warning.POSITIVE_INTEGER)
+        let latitudeValue = getDoubleValue(FogViewshed.LATITUDE, value: latitude.text, warningMessage: Warning.DECIMAL)
+        let longitudeValue = getDoubleValue(FogViewshed.LONGITUDE, value: longitude.text, warningMessage: Warning.DECIMAL)
         
-        //Pull any saved settings from User Details
-        if let userDefaultAlgorithm: Int = defaults.integerForKey(FogViewshed.ALGORITHM) {
-            algorithm.selectedSegmentIndex = userDefaultAlgorithm
+        if elevationValue != nil && radiusValue != nil && latitudeValue != nil && longitudeValue != nil {
+            editedObserver.elevation = elevationValue!
+            editedObserver.radius = radiusValue!
+            editedObserver.coordinate = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
+            hasSuccess = true
         }
         
+        return hasSuccess
     }
     
     
-    func loadObserverDefaults() {
-        algorithm.selectedSegmentIndex = 0
+    func getDoubleValue(key: String, value: String?, warningMessage: Warning) -> Double? {
+        guard let doubleValue = Double(value!) else {
+            alertUser("The \(key) requires a \(warningMessage.rawValue).")
+            return nil
+        }
         
-        //Need to hook in the following
-        
-        //Radius
-        //Observer Name
-        //Observer latitude
-        //Observer longitude
-        //Observer elevation
+        return doubleValue
     }
     
+    
+    func getIntegerValue(key: String, value: String?, warningMessage: Warning) -> Int? {
+        guard let integerValue = Int(value!) else {
+            alertUser("The \(key) requires a \(warningMessage.rawValue).")
+            return nil
+        }
+        
+        guard integerValue > 0 else {
+            alertUser("The \(key) requires a \(warningMessage.rawValue).")
+            return nil
+        }
+        
+        return integerValue
+    }
+    
+    
+    func loadObserverSettings() {
+        algorithm.selectedSegmentIndex = Int(originalObserver!.algorithm)
+        name.text = originalObserver!.name
+        elevation.text = String(originalObserver!.elevation)
+        radius.text = String(originalObserver!.radius)
+        latitude.text = String(originalObserver!.latitude)
+        longitude.text = String(originalObserver!.longitude)
+    }
+    
+    
+    func alertUser(message: String) {
+        let alertController = UIAlertController(title: "Observer Settings Error", message: message, preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+            //print(action)
+        }
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true) {
+            // ...
+        }
+    }
 
     
 }
