@@ -13,165 +13,115 @@ import UIKit
 
 class ViewshedPalette: NSObject {
     
-    var observerHgt: Hgt!
+    private var observerHgtGrid: HgtGrid!
     lazy var viewshedResults = [[Int]]()
     var viewshedImage: UIImage!
+
     
-    
-    func testForMultiHgtFiles(observer: Observer, currHgt: Hgt) -> ViewshedOverlay {
-        
-        var viewshedOverlay: ViewshedOverlay!
-        observer.radius = 750
-        observer.elevation = 10
-        
-        // Detect where the pin was dropped
-        // Check for HGT file
+    func setupNewPalette(observer: Observer) {
         if checkForHgtFile(observer.coordinate) {
+            observerHgtGrid = generateHgtGrid(observer)
+        }
+    }
+    
+   
+    func generateHgtGrid(observer: Observer) -> HgtGrid {
+
+        var observerPosition: GridPosition = GridPosition.UpperLeft
+        let observersHgtCoordinate = observer.getObserversHgtCoordinate()
+        let observerHgt = getHgtFile(observersHgtCoordinate.latitude, longitude: observersHgtCoordinate.longitude)
+        
+        let hgtGrid = HgtGrid(singleHgt: observerHgt)
+        
+        if !checkRadiusInOneHgt(observer) {
             
-            // Check radius specified
-            if checkRadiusInOneHgt(observer) {
-                // Do viewshed as normal
-                let obsViewshed = Viewshed(elevation: currHgt.getElevation(), observer: observer)
-                let obsResults:[[Int]] = obsViewshed.viewshed()
-                //self.pinObserverLocation(observer)
-                
-                let image = self.generateViewshedImage(obsResults)
-                viewshedOverlay = self.addOverlay(image, imageLocation: currHgt.getCoordinate())
-                
+            var upperLeftHgt: Hgt!
+            var lowerLeftHgt: Hgt!
+            var upperRightHgt: Hgt!
+            var lowerRightHgt: Hgt!
+            
+            //Determine which side radius is past the currHgt file
+            // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
+            let topOverlap = observer.xCoord - observer.radius
+            let leftOverlap = observer.yCoord - observer.radius
+            let bottomOverlap = observer.xCoord + observer.radius
+            let rightOverlap = observer.yCoord + observer.radius
+            
+            var left = false
+            var top = false
+            var right = false
+            var bottom = false
+            
+            if leftOverlap < 0 {
+                left = true
+            }
+            
+            if topOverlap < 0 {
+                top = true
+            }
+            
+            if rightOverlap > Srtm3.MAX_SIZE {
+                right = true
+            }
+            
+            if bottomOverlap > Srtm3.MAX_SIZE {
+                bottom = true
+            }
+            
+            if right && bottom {
+                upperLeftHgt = observerHgt
+                lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+                upperRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
+                lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
+                observerPosition = GridPosition.UpperLeft
+            } else if right && top {
+                upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+                lowerLeftHgt = observerHgt
+                upperRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
+                lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
+                observerPosition = GridPosition.LowerLeft
+            } else if left && bottom {
+                upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
+                lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
+                upperRightHgt = observerHgt
+                lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+                observerPosition = GridPosition.UpperRight
+            } else if left && top {
+                upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude - 1)
+                lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
+                upperRightHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude)
+                lowerRightHgt = observerHgt
+                observerPosition = GridPosition.LowerRight
             } else {
-                // Check for additional HGT files if radius overlaps other HGT regions
-                // Create HgtGrid if needed, otherwise use Hgt
-                let hgtGrid = generateHgtGrid(observer, currentHgt: currHgt)
                 
-                // Adjust Observer xCoord and yCoord for HgtGrid
-                observer.setHgtGridLocation(hgtGrid.upperLeftHgt.getCoordinate())
-                
-                
-                // Do viewshed!
-                let obsViewshed = ViewshedFog(elevation: hgtGrid.getElevation(), observer: observer, numberOfQuadrants: 1, whichQuadrant: 1)
-                let obsResults:[[Int]] = obsViewshed.viewshedParallel(Srtm3.MAX_SIZE * 2)
-                //self.pinObserverLocation(observer)
-                
-                let image = self.generateViewshedImage(obsResults)
-                viewshedOverlay = self.addOverlay(image, imageLocation: hgtGrid.upperLeftHgt.getCoordinate(), hgtGridSize: 1.0)
-                
-                
-            }
-        }
-        
-        return viewshedOverlay
-    }
-    
-    
-    func singleTest() {
-        let upperLeftHgt = Hgt(filename: "N39W076")
-        let lowerLeftHgt = Hgt(filename:"N38W076")
-        let upperRightHgt = Hgt(filename:"N39W075")
-        let lowerRightHgt = Hgt(filename:"N38W075")
-        let grid = HgtGrid(upperLeftHgt: upperLeftHgt, lowerLeftHgt: lowerLeftHgt, upperRightHgt: upperRightHgt, lowerRightHgt: lowerRightHgt, observersHgt: GridPosition.UpperLeft)
-        
-        let x = 1201//1371
-        let y = 1201//1431
-        let radius = 100//300
-        
-        
-        let observer = Observer(name: "Cubed", xCoord: x, yCoord: y, elevation: 20, radius: radius, coordinate: CLLocationCoordinate2DMake(0,0))//39.8605328892589, -74.8089092422981))
-        observer.generateCoordiantesFromXY(grid.upperLeftHgt.getCoordinate())
-        
-        let obsViewshed = Viewshed(elevation: grid.getElevation(), observer: observer)
-        let obsResults:[[Int]] = obsViewshed.viewshed(Srtm3.MAX_SIZE * 2)
-        //self.pinObserverLocation(observer)
-        
-        let image = self.generateViewshedImage(obsResults)
-        self.addOverlay(image, imageLocation: grid.upperLeftHgt.getCoordinate(), hgtGridSize: 1.0)
-    }
-    
-    
-    func generateHgtGrid(observer: Observer, currentHgt: Hgt) -> HgtGrid {
-        
-        var observerHgt: GridPosition!
-        var upperLeftHgt: Hgt!
-        var lowerLeftHgt: Hgt!
-        var upperRightHgt: Hgt!
-        var lowerRightHgt: Hgt!
-        
-        //Determine which side radius is past the currHgt file
-        // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
-        let topOverlap = observer.xCoord - observer.radius
-        let leftOverlap = observer.yCoord - observer.radius
-        let bottomOverlap = observer.xCoord + observer.radius
-        let rightOverlap = observer.yCoord + observer.radius
-        
-        var left = false
-        var top = false
-        var right = false
-        var bottom = false
-        
-        if leftOverlap < 0 {
-            left = true
-        }
-        
-        if topOverlap < 0 {
-            top = true
-        }
-        
-        if rightOverlap > Srtm3.MAX_SIZE {
-            right = true
-        }
-        
-        if bottomOverlap > Srtm3.MAX_SIZE {
-            bottom = true
-        }
-        
-        if right && bottom {
-            upperLeftHgt = currentHgt
-            lowerLeftHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude)
-            upperRightHgt = getHgtFile(currentHgt.coordinate.latitude, longitude: currentHgt.coordinate.longitude + 1)
-            lowerRightHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude + 1)
-            observerHgt = GridPosition.UpperLeft
-        } else if right && top {
-            upperLeftHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude)
-            lowerLeftHgt = currentHgt
-            upperRightHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude + 1)
-            lowerRightHgt = getHgtFile(currentHgt.coordinate.latitude, longitude: currentHgt.coordinate.longitude + 1)
-            observerHgt = GridPosition.LowerLeft
-        } else if left && bottom {
-            upperLeftHgt = getHgtFile(currentHgt.coordinate.latitude, longitude: currentHgt.coordinate.longitude - 1)
-            lowerLeftHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude - 1)
-            upperRightHgt = currentHgt
-            lowerRightHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude)
-            observerHgt = GridPosition.UpperRight
-        } else if left && top {
-            upperLeftHgt = getHgtFile(currentHgt.coordinate.latitude + 1, longitude: currentHgt.coordinate.longitude - 1)
-            lowerLeftHgt = getHgtFile(currentHgt.coordinate.latitude, longitude: currentHgt.coordinate.longitude - 1)
-            upperRightHgt = getHgtFile(currentHgt.coordinate.latitude + 1, longitude: currentHgt.coordinate.longitude)
-            lowerRightHgt = currentHgt
-            observerHgt = GridPosition.LowerRight
-        } else {
-            //only one side is an overlap, so force it to be a 2x2
-            if top || bottom {
-                upperLeftHgt = getHgtFile(currentHgt.coordinate.latitude, longitude: currentHgt.coordinate.longitude - 1)
-                lowerLeftHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude - 1)
-                upperRightHgt = currentHgt
-                lowerRightHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude)
-                observerHgt = GridPosition.UpperRight
-                print("THIS IS A HACK forcing to upperRight")
-                
-            } else if left || right {
-                upperLeftHgt = getHgtFile(currentHgt.coordinate.latitude, longitude: currentHgt.coordinate.longitude - 1)
-                lowerLeftHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude - 1)
-                upperRightHgt = currentHgt
-                lowerRightHgt = getHgtFile(currentHgt.coordinate.latitude - 1, longitude: currentHgt.coordinate.longitude)
-                observerHgt = GridPosition.UpperRight
-                print("THIS IS A HACK force upperRight")
+                //only one side is an overlap, so force it to be a 2x2
+                if top || bottom {
+                    upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
+                    lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
+                    upperRightHgt = observerHgt
+                    lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+                    observerPosition = GridPosition.UpperRight
+                    printOut("THIS IS A HACK forcing to upperRight")
+                    
+                } else if left || right {
+                    upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
+                    lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
+                    upperRightHgt = observerHgt
+                    lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+                    observerPosition = GridPosition.UpperRight
+                    printOut("THIS IS A HACK force upperRight")
+                    
+                }
                 
             }
             
+            hgtGrid.configureGrid(upperLeftHgt, lowerLeftHgt: lowerLeftHgt, upperRightHgt: upperRightHgt, lowerRightHgt: lowerRightHgt, observerPosition: observerPosition)
+            
+            if observer.xCoord <= Srtm3.MAX_SIZE && observer.yCoord <= Srtm3.MAX_SIZE {
+                // Adjust Observer grid's xCoord and yCoord for HgtGrid
+                observer.updateXYLocationForGrid(hgtGrid)
+            }
         }
-        
-        print(observerHgt.rawValue)
-        
-        let hgtGrid = HgtGrid(upperLeftHgt: upperLeftHgt, lowerLeftHgt: lowerLeftHgt, upperRightHgt: upperRightHgt, lowerRightHgt: lowerRightHgt, observersHgt: observerHgt)
         
         return hgtGrid
     }
@@ -190,12 +140,12 @@ class ViewshedPalette: NSObject {
                 let hgtCoordinate = tempHgt.getCoordinate()
                 if neededCoordinate.latitude == hgtCoordinate.latitude && neededCoordinate.longitude == hgtCoordinate.longitude {
                     foundHgt = tempHgt
-                    print("\(file) (Lat:\(hgtCoordinate.latitude) Lon:\(hgtCoordinate.longitude))")
+                    //printOut("\(file) (Lat:\(hgtCoordinate.latitude) Lon:\(hgtCoordinate.longitude))")
                     break
                 }
             }
         } catch let error as NSError {
-            print("Error getting HGT file " + " \(error): \(error.userInfo)")
+            printOut("Error getting HGT file " + " \(error): \(error.userInfo)")
         }
         
         return foundHgt
@@ -204,10 +154,12 @@ class ViewshedPalette: NSObject {
     
     func checkRadiusInOneHgt(observer: Observer) -> Bool {
         var isRadiusWithinHgt = true
-        let leftOverlap = observer.xCoord - observer.radius
-        let topOverlap = observer.yCoord - observer.radius
-        let rightOverlap = observer.xCoord + observer.radius
-        let bottomOverlap = observer.yCoord + observer.radius
+        //Determine which side radius is past the currHgt file
+        // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
+        let topOverlap = observer.xCoord - observer.radius
+        let leftOverlap = observer.yCoord - observer.radius
+        let bottomOverlap = observer.xCoord + observer.radius
+        let rightOverlap = observer.yCoord + observer.radius
         
         if leftOverlap < 0 ||
             topOverlap < 0 ||
@@ -218,7 +170,6 @@ class ViewshedPalette: NSObject {
         
         return isRadiusWithinHgt
     }
-    
     
     // Add to HGT.swift
     func checkForHgtFile(checkCoordinate: CLLocationCoordinate2D) -> Bool {
@@ -231,21 +182,21 @@ class ViewshedPalette: NSObject {
                 let name = file.componentsSeparatedByString(".")[0]
                 let tempHgt = Hgt(filename: name)
                 let hgtCoordinate = tempHgt.getCoordinate()
-                if coordinateInHgt(checkCoordinate, hgtCoordinate: hgtCoordinate) {
+                if isCoordinateInHgt(checkCoordinate, hgtCoordinate: hgtCoordinate) {
                     haveHgtForCoordinate = true
-                    print("\(file) (Lat:\(hgtCoordinate.latitude) Lon:\(hgtCoordinate.longitude))")
+                    //printOut("\(file) (Lat:\(hgtCoordinate.latitude) Lon:\(hgtCoordinate.longitude))")
                     break
                 }
             }
         } catch let error as NSError {
-            print("Error checking HGT files " + " \(error): \(error.userInfo)")
+            printOut("Error checking HGT files " + " \(error): \(error.userInfo)")
         }
         
         return haveHgtForCoordinate
     }
     
     //Add to HGT.swift
-    func coordinateInHgt(checkCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) -> Bool {
+    func isCoordinateInHgt(checkCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) -> Bool {
         var inHgt = false
         
         if checkCoordinate.latitude < hgtCoordinate.latitude + 1 &&
@@ -258,42 +209,16 @@ class ViewshedPalette: NSObject {
         return inHgt
     }
     
-    //Make HGT file lazy load elevation and use it's parseCoordinate
-//    func parseCoordinate(filename: String) -> CLLocationCoordinate2D {
-//        
-//        let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
-//        let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
-//        let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
-//        let longitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(4),end: filename.endIndex))
-//        
-//        var latitude:Double = Double(latitudeValue)!
-//        var longitude:Double = Double(longitudeValue)!
-//        
-//        if (northSouth.uppercaseString == "S") {
-//            latitude = latitude * -1.0
-//        }
-//        
-//        if (westEast.uppercaseString == "W") {
-//            longitude = longitude * -1.0
-//        }
-//        
-//        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-//    }
+    
+    func getElevation() -> [[Int]] {
+        return self.observerHgtGrid.getElevation()
+    }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    func addOverlay(image: UIImage, imageLocation: CLLocationCoordinate2D, hgtGridSize: Double = 0.0) -> ViewshedOverlay {
+    func addOverlay(image: UIImage) -> ViewshedOverlay {
+        
+        let imageLocation = observerHgtGrid.getHgtCoordinate()
+        let hgtGridSize = observerHgtGrid.getHgtGridSize()
         
         var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(
             latitude: imageLocation.latitude + 1.0,
@@ -336,9 +261,9 @@ class ViewshedPalette: NSObject {
     }
 
     
-    func viewshedOverlay(hgtGridSize: Double = 0.0) -> ViewshedOverlay {
+    func getViewshedOverlay() -> ViewshedOverlay {
         self.viewshedImage = generateViewshedImage(self.viewshedResults)
-        return addOverlay(viewshedImage, imageLocation: self.observerHgt.getCoordinate(), hgtGridSize: hgtGridSize)
+        return addOverlay(viewshedImage)
     }
     
     
@@ -416,6 +341,10 @@ class ViewshedPalette: NSObject {
     }
 
     
-    
+    func printOut(output: String) {
+        dispatch_async(dispatch_get_main_queue()) {
+            print(output)
+        }
+    }
 
 }

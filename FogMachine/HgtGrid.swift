@@ -11,22 +11,57 @@ import MapKit
 
 class HgtGrid: NSObject {
     
-    var observersHgt: GridPosition!
+    var observerPosition: GridPosition!
     var elevationCube: [[Int]]!
     var upperLeftHgt: Hgt!
     var lowerLeftHgt: Hgt!
     var upperRightHgt: Hgt!
     var lowerRightHgt: Hgt!
+    var isSingleHgt: Bool = false
     
     
-    init(upperLeftHgt: Hgt, lowerLeftHgt: Hgt, upperRightHgt: Hgt, lowerRightHgt: Hgt, observersHgt: GridPosition) {
+    init(singleHgt: Hgt) {
         super.init()
+        self.isSingleHgt = true
+        self.upperLeftHgt = singleHgt
+        self.lowerLeftHgt = singleHgt
+        self.upperRightHgt = singleHgt
+        self.lowerRightHgt = singleHgt
+        self.observerPosition = GridPosition.UpperLeft
+        self.elevationCube = singleHgt.getElevation()
+    }
+    
+    
+    init(upperLeftHgt: Hgt, lowerLeftHgt: Hgt, upperRightHgt: Hgt, lowerRightHgt: Hgt, observerPosition: GridPosition) {
+        super.init()
+        self.isSingleHgt = false
         self.upperLeftHgt = upperLeftHgt
         self.lowerLeftHgt = lowerLeftHgt
         self.upperRightHgt = upperRightHgt
         self.lowerRightHgt = lowerRightHgt
-        self.observersHgt = observersHgt
+        self.observerPosition = observerPosition
         self.elevationCube = combineElevations()
+    }
+    
+    
+    func configureGrid(upperLeftHgt: Hgt, lowerLeftHgt: Hgt, upperRightHgt: Hgt, lowerRightHgt: Hgt, observerPosition: GridPosition) {
+        self.isSingleHgt = false
+        self.upperLeftHgt = upperLeftHgt
+        self.lowerLeftHgt = lowerLeftHgt
+        self.upperRightHgt = upperRightHgt
+        self.lowerRightHgt = lowerRightHgt
+        self.observerPosition = observerPosition
+        self.elevationCube = combineElevations()
+    }
+    
+    
+    func getHgtGridSize() -> Double {
+        var hgtGridSize = 1.0
+        if isSingleHgt {
+            hgtGridSize = 0.0
+        }
+        
+        return hgtGridSize
     }
     
     
@@ -35,7 +70,7 @@ class HgtGrid: NSObject {
     }
     
     
-    func combineElevations() -> [[Int]] {
+    private func combineElevations() -> [[Int]] {
         var newElevationCube = [[Int]](count:Srtm3.MAX_SIZE * 2, repeatedValue:[Int](count:Srtm3.MAX_SIZE * 2, repeatedValue:0))
         
         var row = 0
@@ -72,5 +107,9 @@ class HgtGrid: NSObject {
         return newElevationCube
     }
     
+    
+    func getHgtCoordinate() -> CLLocationCoordinate2D {
+        return upperLeftHgt.getCoordinate()
+    }
     
 }

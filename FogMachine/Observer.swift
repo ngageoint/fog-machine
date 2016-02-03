@@ -42,7 +42,9 @@ class Observer: NSObject {
     }
     
     //Will generate new xCoord, yCoord, and coordinates based on the passed in values.
-    func setNewCoordinates(newCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) {
+    func setNewCoordinates(newCoordinate: CLLocationCoordinate2D) {
+        let hgtCoordinate = CLLocationCoordinate2DMake(floor(newCoordinate.latitude), floor(newCoordinate.longitude))
+        
         self.yCoord = Int((newCoordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
         self.xCoord = Srtm3.MAX_SIZE - Int((newCoordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
 
@@ -53,17 +55,18 @@ class Observer: NSObject {
         print("\(xCoord)  \(yCoord)  \(coordinate)")
     }
     
-    //Once the HGT file is part of the Entity, this process can be improved. 
-    func setHgtGridLocation(hgtCoordinate: CLLocationCoordinate2D) {
+    //Update the xCoord and yCoord based on lat/lon
+    func updateXYLocation() {
+        let hgtCoordinate = self.getObserversHgtCoordinate()
         self.yCoord = Int((coordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
         self.xCoord = Srtm3.MAX_SIZE - Int((coordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
     }
     
-    //Once the HGT file is part of the Entity, this method can be refactored
-    func generateCoordiantesFromXY(hgtGridCoordinate: CLLocationCoordinate2D) {
-        let latitudeY = hgtGridCoordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(xCoord)) - Srtm3.LATITUDE_CELL_CENTER
-        let longitudeX = hgtGridCoordinate.longitude + (Srtm3.CELL_SIZE * Double(yCoord) + Srtm3.LONGITUDE_CELL_CENTER)
-        self.coordinate = CLLocationCoordinate2DMake(latitudeY, longitudeX)
+    //Update the xCoord and yCoord based on passed in HgtGrid lat/lon
+    func updateXYLocationForGrid(hgtGrid: HgtGrid) {
+        let hgtCoordinate = hgtGrid.upperLeftHgt.getCoordinate()
+        self.yCoord = Int((coordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
+        self.xCoord = Srtm3.MAX_SIZE - Int((coordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
     }
     
     
@@ -81,6 +84,11 @@ class Observer: NSObject {
         entity.latitude = coordinate.latitude
         entity.longitude = coordinate.longitude
         entity.algorithm = Int16(algorithm.rawValue)
+    }
+    
+    
+    func getObserversHgtCoordinate() -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2DMake(floor(coordinate.latitude), floor(coordinate.longitude))
     }
 
 }

@@ -31,8 +31,8 @@ public class ViewshedFog: NSObject {
     }
     
     
-    public func viewshedParallel(maxSize: Int = Srtm3.MAX_SIZE) -> [[Int]] {
-        
+    public func viewshedParallel() -> [[Int]] {
+        let maxSize = self.elevation.count
         var viewshedMatrix = [[Int]](count:maxSize, repeatedValue:[Int](count:maxSize, repeatedValue:0))
         
         let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(obsX, inY: obsY, radius: viewRadius,
