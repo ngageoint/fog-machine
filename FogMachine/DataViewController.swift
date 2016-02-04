@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource,
-MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
+MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDownloadMgrDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var tableView: UITableView!
@@ -30,9 +30,10 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.tableView.backgroundColor = UIColor.clearColor();
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         mapView.delegate = self
+
         getHgtFiles()
         getTheMap()
         
@@ -141,7 +142,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
         if overlay is MKPolygon {
             let polygonView = MKPolygonRenderer(overlay: overlay)
-            polygonView.fillColor = UIColor.redColor().colorWithAlphaComponent(0.08)
+            polygonView.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.5) //UIColor.yellowColor().colorWithAlphaComponent(0.08)
             polygonView.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.5)
             polygonView.lineWidth = 0.4
             return polygonView
@@ -189,7 +190,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("*** Download Map data *** ")
+        //print("*** Download Map data *** ")
         //let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
         //print("mapView at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
         let annotation = view.annotation!
@@ -226,17 +227,21 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         } else{
             self.downloadComplete = false
             let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
-            let ok = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-                for var srtmDataRegion: String in SRTM.SERVER_REGIONS {
+            let ok = UIAlertAction(title: "OK", style: .Default, handler: {
+                (action) -> Void in
+                for var srtmDataRegion in SRTM.SERVER_REGIONS {
                     if (!self.downloadComplete) {
-                        let temp: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName
-                        print(temp)
-                        let url = NSURL(string: temp)
-                        Downloader(dataViewController: self).download(url!)
+                        let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName
+                        //print("HGT Data File Path: " + hgtFilePath)
+                        let url = NSURL(string: hgtFilePath)
+                        let hgtDownloadMgr = HgtDownloadMgr()
+                        hgtDownloadMgr.delegate = self
+                        hgtDownloadMgr.downloadHgtFile(url!)
                     }
                 }
             })
-            let cancel = UIAlertAction(title: "Cancel", style: .Cancel) { (action) -> Void in
+            let cancel = UIAlertAction(title: "Cancel", style: .Cancel) {
+                (action) -> Void in
                 print("Download cancelled!")
             }
             alertController.addAction(ok)
@@ -245,22 +250,37 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
         }
     }
     
-    func downloadComplete(downloadedFilePath: String) {
+    func didReceiveResponse(destinationPath: String) {
         downloadComplete = true
-        print("Download Completed!!")
-
-        dispatch_async(dispatch_get_main_queue()) {
-            () -> Void in
-            //print(downloadedFilePath + "->Download Completed!!")
-            let fileName = NSURL(fileURLWithPath: downloadedFilePath).lastPathComponent!
-            // add the downloaded file to the array of file names...
-            self.manageHgtDataArray (fileName)
-            // draw the rectangle boundary on the map for the dowloaded data
-             self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude)
-            print(self.hgtCoordinate)
-            // refresh the table with the latest array data
-            self.refresh()
+        //print("Download Completed!! \t\(destinationPath)")
+        if (destinationPath.isEmpty || destinationPath.containsString("Error")) {
+            let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable...Try later.", preferredStyle: .Alert)
+            let ok = UIAlertAction(title: "OK", style: .Default, handler: {
+                (action) -> Void in
+            })
+            alertController.addAction(ok)
+            presentViewController(alertController, animated: true, completion: nil)
+        } else {
+            dispatch_async(dispatch_get_main_queue()) {
+                () -> Void in
+                //print(downloadedFilePath + "->Download Completed!!")
+                let fileName = NSURL(fileURLWithPath: destinationPath).lastPathComponent!
+                // add the downloaded file to the array of file names...
+                self.manageHgtDataArray (fileName)
+                // draw the rectangle boundary on the map for the dowloaded data
+                self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude)
+                // refresh the table with the latest array data
+                self.refresh()
+            }
         }
+    }
+    func didFailToReceieveResponse(error: String) {
+        let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable...Try later.", preferredStyle: .Alert)
+        let ok = UIAlertAction(title: "OK", style: .Default, handler: {
+            (action) -> Void in
+        })
+        alertController.addAction(ok)
+        presentViewController(alertController, animated: true, completion: nil)
     }
     
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
@@ -287,6 +307,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
             return
         }
     }
-    
 }
+
 

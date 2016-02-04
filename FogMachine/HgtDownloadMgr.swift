@@ -8,14 +8,20 @@
 
 import Foundation
 import SSZipArchive
+import UIKit
 
-class Downloader : NSObject, NSURLSessionDownloadDelegate {
+@objc protocol HgtDownloadMgrDelegate {
+    optional func didReceiveResponse(destinationPath: String)
+    optional func didFailToReceieveResponse(error: String)
+}
+
+class HgtDownloadMgr: NSObject, NSURLSessionDownloadDelegate {
     var remoteURL : NSURL?
-    // will be used to do whatever is needed once download is complete
-    var dataViewController : DataViewController?
+    var delegate: HgtDownloadMgrDelegate?
+    var downloadComplete:Bool = false
     
-    init(dataViewController : DataViewController) {
-        self.dataViewController = dataViewController
+    override init() {
+        super.init()
     }
     
     //is called once the download is complete
@@ -25,11 +31,15 @@ class Downloader : NSObject, NSURLSessionDownloadDelegate {
         let destinationUrl = documentsUrl!.URLByAppendingPathComponent(remoteURL!.lastPathComponent!)
         let dataFromURL = NSData(contentsOfURL: location)
         
-        if (dataFromURL != nil) {
+        if (dataFromURL != nil && !downloadComplete) {
+            downloadComplete = true
             dataFromURL!.writeToURL(destinationUrl, atomically: true)
             //now it is time to do what is needed to be done after the download
-            dataViewController!.downloadComplete(String(destinationUrl))
+            self.delegate?.didReceiveResponse!(destinationUrl.path!)
         }
+    }
+    
+    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
     }
     
     //this is to track progress
@@ -39,19 +49,24 @@ class Downloader : NSObject, NSURLSessionDownloadDelegate {
     // if there is an error during download this will be called
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         if(error != nil) {
-            print("Download completed with error: \(error!.localizedDescription)");
+            print("Download with error: \(error!.localizedDescription)");
+            self.delegate?.didFailToReceieveResponse!("Error \(error!.localizedDescription)")
         }
     }
     
     //method to be called to download
-    func download(remoteURL: NSURL) {
+    func downloadHgtFile(remoteURL: NSURL) {
         self.remoteURL = remoteURL
         //download identifier can be customized. I used the "ulr.absoluteString"
+        
         let sessionConfig = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(remoteURL.absoluteString)
         let session = NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
         let task = session.downloadTaskWithURL(remoteURL)
         task.resume()
     }
-   
 }
+
+
+
+
 

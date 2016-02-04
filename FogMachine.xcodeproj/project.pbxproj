@@ -60,6 +60,7 @@
 		9B09C7E51C32F33400C08D7C /* N42W114.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7CF1C32F33400C08D7C /* N42W114.hgt */; };
 		9B09C7E61C32F33400C08D7C /* N43W109.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7D01C32F33400C08D7C /* N43W109.hgt */; };
 		9B09C7E71C32F33400C08D7C /* N43W110.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7D11C32F33400C08D7C /* N43W110.hgt */; };
+		9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */; };
 		9B77FAB61C31C886007F2E4F /* N49W111.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAB11C31C886007F2E4F /* N49W111.hgt */; };
 		9B77FAB71C31C886007F2E4F /* N69W144.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B77FAB21C31C886007F2E4F /* N69W144.hgt */; };
 		9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F01C05E51E004A37B6 /* DemData.swift */; };
@@ -72,7 +73,6 @@
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
 		9BD5C1061C05ECF3004A37B6 /* N40W110.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */; };
 		9BD5C1081C060BAB004A37B6 /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */; };
-		9BF49E021C5FDB89005069FC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF49E011C5FDB89005069FC /* Downloader.swift */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
 		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
@@ -154,6 +154,7 @@
 		9B09C7CF1C32F33400C08D7C /* N42W114.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N42W114.hgt; path = HGT/N42W114.hgt; sourceTree = "<group>"; };
 		9B09C7D01C32F33400C08D7C /* N43W109.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N43W109.hgt; path = HGT/N43W109.hgt; sourceTree = "<group>"; };
 		9B09C7D11C32F33400C08D7C /* N43W110.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N43W110.hgt; path = HGT/N43W110.hgt; sourceTree = "<group>"; };
+		9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtDownloadMgr.swift; sourceTree = "<group>"; };
 		9B77FAB11C31C886007F2E4F /* N49W111.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N49W111.hgt; path = HGT/N49W111.hgt; sourceTree = "<group>"; };
 		9B77FAB21C31C886007F2E4F /* N69W144.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N69W144.hgt; path = HGT/N69W144.hgt; sourceTree = "<group>"; };
 		9BD5C0F01C05E51E004A37B6 /* DemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemData.swift; sourceTree = "<group>"; };
@@ -166,7 +167,6 @@
 		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
 		9BD5C1051C05ECF3004A37B6 /* N40W110.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W110.hgt; path = HGT/N40W110.hgt; sourceTree = "<group>"; };
 		9BD5C1071C060BAB004A37B6 /* OptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
-		9BF49E011C5FDB89005069FC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		D18A74A424D7E9AE3C3F046F /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9BF49E011C5FDB89005069FC /* Downloader.swift */,
+				9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,
@@ -620,7 +620,6 @@
 				758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */,
 				7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
-				9BF49E021C5FDB89005069FC /* Downloader.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
@@ -635,6 +634,7 @@
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
 				754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */,
 				E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */,
+				9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */,
 				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
