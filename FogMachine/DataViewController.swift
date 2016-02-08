@@ -95,9 +95,9 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         //print("Picker Data: \(pickerData)")
         do {
             let fm = NSFileManager.defaultManager()
-            let documentDirPath:NSURL =  try! fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
+            let documentDirPath:NSURL =  try fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
             let docDirItems = try! fm.contentsOfDirectoryAtPath(documentDirPath.path!)
-            for var docDirItem in docDirItems {
+            for docDirItem in docDirItems {
                 if docDirItem.hasSuffix(".hgt") {
                     manageHgtDataArray(docDirItem)
                     self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude)
@@ -139,7 +139,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
     
-    func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+        let defaultOverlay = MKPolygonRenderer()
         if overlay is MKPolygon {
             let polygonView = MKPolygonRenderer(overlay: overlay)
             polygonView.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.5) //UIColor.yellowColor().colorWithAlphaComponent(0.08)
@@ -153,7 +154,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             polylineRenderer.lineWidth = 0.4
             return polylineRenderer
         }
-        return nil
+        return defaultOverlay
     }
     
     func addRectBoundry(latitude: Double, longitude: Double) {
@@ -194,7 +195,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         //let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
         //print("mapView at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
         let annotation = view.annotation!
-        let annotName = annotation.title
         let annotLatLng = annotation.subtitle
         
         let latLng = annotLatLng!!.componentsSeparatedByString(";") // added the ';' delimeter in the annotation subtitle in the handleLongPress
@@ -229,7 +229,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
-                for var srtmDataRegion in SRTM.SERVER_REGIONS {
+                for srtmDataRegion in SRTM.SERVER_REGIONS {
                     if (!self.downloadComplete) {
                         let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName
                         //print("HGT Data File Path: " + hgtFilePath)

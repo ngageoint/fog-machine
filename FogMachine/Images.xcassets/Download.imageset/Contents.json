@@ -13,10 +13,6 @@
     {
       "idiom" : "universal",
       "scale" : "3x"
-    },
-    {
-      "idiom" : "download",
-      "scale" : "3x"
     }
   ],
   "info" : {
