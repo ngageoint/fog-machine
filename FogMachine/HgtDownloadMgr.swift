@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SSZipArchive
 import UIKit
 
 @objc protocol HgtDownloadMgrDelegate {
