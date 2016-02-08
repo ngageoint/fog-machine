@@ -159,10 +159,10 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     
     func addRectBoundry(latitude: Double, longitude: Double) {
         var points = [
-            CLLocationCoordinate2DMake(latitude-1, longitude),
-            CLLocationCoordinate2DMake(latitude-1, longitude-1),
-            CLLocationCoordinate2DMake(latitude, longitude-1),
-            CLLocationCoordinate2DMake(latitude, longitude)
+            CLLocationCoordinate2DMake(latitude, longitude),
+            CLLocationCoordinate2DMake(latitude+1, longitude),
+            CLLocationCoordinate2DMake(latitude+1, longitude+1),
+            CLLocationCoordinate2DMake(latitude, longitude+1)
         ]
         polygonOverlay = MKPolygon(coordinates: &points, count: points.count)
         mapView.addOverlay(polygonOverlay)
@@ -210,10 +210,11 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             lonPref = "W"
         }
         // round the lat & long to the closest integer value..
-        lat = round(lat)
-        lng = round(lng)
+        lat = floor(lat)
+        lng = floor(lng)
         
         let hgtFileName = (String(format:"%@%02d%@%03d%@", latPref, abs(Int(lat)), lonPref, abs(Int(lng)), ".hgt"))
+        self.hgtCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
         let tableCellItem2Add = "\(hgtFileName) (Lat:\(lat) Lng:\(lng))"
 
         // check if the data already downloaded and exists in the table..
