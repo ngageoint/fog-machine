@@ -17,7 +17,6 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     
     var originalObserver : ObserverEntity?
-    var editedObserver = Observer()
     var model = ObserverFacade()
     
     enum Warning: String {
@@ -56,10 +55,15 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "applyObserverSettings" {
-            storeObserverSettings()
-            saveObserverSettings()
+            let editedObserver = createObserverFromSettings()
+            saveObserverSettings(editedObserver)
         } else if segue.identifier == "removePinFromSettings" {
             model.deleteObserver(originalObserver!)
+        } else if segue.identifier == "runSelectedFogViewshed" {
+            let editedObserver = createObserverFromSettings()
+            saveObserverSettings(editedObserver)
+            let mapViewController = segue.destinationViewController as! MapViewController
+            mapViewController.settingsObserver = editedObserver
         }
     }
     
@@ -81,14 +85,15 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    func saveObserverSettings() {
+    func saveObserverSettings(editedObserver: Observer) {
         model.deleteObserver(originalObserver!)
         model.addObserver(editedObserver)
     }
     
     
-    func storeObserverSettings() -> Bool {
-        var hasSuccess = false
+    func createObserverFromSettings() -> Observer {
+        let editedObserver = Observer()
+        
         editedObserver.algorithm = ViewshedAlgorithm(rawValue: algorithm.selectedSegmentIndex)!
         editedObserver.name = name.text!
 
@@ -101,10 +106,11 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
             editedObserver.elevation = elevationValue!
             editedObserver.radius = radiusValue!
             editedObserver.coordinate = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
-            hasSuccess = true
         }
         
-        return hasSuccess
+        editedObserver.updateXYLocation()
+        
+        return editedObserver
     }
     
     

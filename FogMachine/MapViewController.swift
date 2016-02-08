@@ -26,13 +26,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     var allObservers = [ObserverEntity]()
     var model = ObserverFacade()
+    var settingsObserver = Observer() //Only use for segue from ObserverSettings
+    var viewshedPalette: ViewshedPalette!
     
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
     var elapsedTime: CFAbsoluteTime!
-    var hgt: Hgt!
-    var viewshedResults: [[Int]]!
-    
+
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
     
@@ -44,22 +44,24 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         gesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(gesture)
         
-        
-        //Start use for one Observer
-        let hgtFilename = "N39W075"//"N39W075"//"N38W077"
         metricsOutput = ""
-        
         logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
         logBox.editable = false
-        
-        hgt = Hgt(filename: hgtFilename)
-        //End of use for one Observer
         
         allObservers = model.getObservers()
         displayObservations()
         
+        viewshedPalette = ViewshedPalette()
         
-        self.centerMapOnLocation(self.hgt.getCenterLocation())
+        if allObservers.count > 0 {
+            //Center on the last observer
+            self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
+        } else {
+            let defaultHgtFilename = "N39W075"//"N39W075"//"N38W077"
+            let defaultHgt = Hgt(filename: defaultHgtFilename)
+            self.centerMapOnLocation(defaultHgt.getCenterLocation())
+        }
+        
         setupFogEvents()
     }
     
@@ -68,7 +70,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     
     // MARK: Display Manipulations
     
@@ -79,121 +81,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
-    
-    func addOverlay(image: UIImage, imageLocation: CLLocationCoordinate2D) {
-        
-        var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(
-            latitude: imageLocation.latitude + 1.0,
-            longitude: imageLocation.longitude)
-        var overlayTopRightCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
-            latitude: imageLocation.latitude + 1.0,
-            longitude: imageLocation.longitude + 1.0)
-        var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
-            latitude: imageLocation.latitude,
-            longitude: imageLocation.longitude)
-        
-        var overlayBottomRightCoordinate: CLLocationCoordinate2D {
-            get {
-                return CLLocationCoordinate2DMake(overlayBottomLeftCoordinate.latitude,
-                    overlayTopRightCoordinate.longitude)
-            }
-        }
-        
-        var overlayBoundingMapRect: MKMapRect {
-            get {
-                let topLeft = MKMapPointForCoordinate(overlayTopLeftCoordinate)
-                let topRight = MKMapPointForCoordinate(overlayTopRightCoordinate)
-                let bottomLeft = MKMapPointForCoordinate(overlayBottomLeftCoordinate)
-                
-                return MKMapRectMake(topLeft.x,
-                    topLeft.y,
-                    fabs(topLeft.x-topRight.x),
-                    fabs(topLeft.y - bottomLeft.y))
-            }
-        }
-        
-        let imageMapRect = overlayBoundingMapRect
-        let overlay = ViewshedOverlay(midCoordinate: imageLocation, overlayBoundingMapRect: imageMapRect, viewshedImage: image)
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            self.mapView.addOverlay(overlay)
-        }
-    }
-    
-    
-    func generateViewshedImage(viewshed: [[Int]], hgtLocation: CLLocationCoordinate2D) -> UIImage {
-        
-        let width = viewshed[0].count
-        let height = viewshed.count
-        var data: [Pixel] = []
-        
-        // CoreGraphics expects pixel data as rows, not columns.
-        for(var y = 0; y < width; y++) {
-            for(var x = 0; x < height; x++) {
-                
-                let cell = viewshed[y][x]
-                if(cell == 0) {
-                    data.append(Pixel(alpha: 15, red: 0, green: 0, blue: 0))
-                } else if (cell == -1){
-                    data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
-                } else {
-                    data.append(Pixel(alpha: 50, red: 0, green: 255, blue: 0))
-                }
-            }
-        }
-        
-        let image = imageFromArgb32Bitmap(data, width: width, height: height)
-        
-        return image
-        
-    }
-    
-    
-    func mergeViewshedResults(viewshedOne: [[Int]], viewshedTwo: [[Int]]) -> [[Int]] {
-        var viewshedResult = viewshedOne
-        
-        for (var row = 0; row < viewshedOne.count; row++) {
-            for (var column = 0; column < viewshedOne[row].count; column++) {
-                if (viewshedTwo[row][column] == 1) {
-                    viewshedResult[row][column] = 1
-                }
-            }
-        }
-        
-        return viewshedResult
-    }
-    
-    
-    func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
-        
-        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo:CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-        let bitsPerComponent:Int = 8
-        let bitsPerPixel:Int = 32
-        let bytesPerRow = width * Int(sizeof(Pixel))
-        
-        // assert(pixels.count == Int(width * height))
-        
-        var data = pixels // Copy to mutable []
-        let length = data.count * sizeof(Pixel)
-        let providerRef = CGDataProviderCreateWithCFData(NSData(bytes: &data, length: length))
-        
-        let cgImage = CGImageCreate(
-            width,
-            height,
-            bitsPerComponent,
-            bitsPerPixel,
-            bytesPerRow,
-            rgbColorSpace,
-            bitmapInfo,
-            providerRef,
-            nil,
-            true,
-            CGColorRenderingIntent.RenderingIntentDefault
-        )
-        return UIImage(CGImage: cgImage!)
-    }
-    
     
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
@@ -213,11 +100,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = gestureRecognizer.locationInView(mapView)
             let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            
             let newObserver = Observer()
             newObserver.name = "Observer \(allObservers.count + 1)"
-            newObserver.setHgtCoordinate(newCoordinates, hgtCoordinate: hgt.getCoordinate())
-
+            newObserver.setNewCoordinates(newCoordinates)
+         
             model.populateEntity(newObserver)
             
             //Repopulate allObservers with new Observer
@@ -283,7 +169,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if control == view.rightCalloutAccessoryView {
                 performSegueWithIdentifier("observerSettings", sender: selectedObserver)
             } else if control == view.leftCalloutAccessoryView {
-                initiateFogViewshed(selectedObserver.getObserver())
+                dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+                    self.initiateFogViewshed(selectedObserver.getObserver())
+                }
             }
         } else {
             print("Observer not found for \((view.annotation?.coordinate)!)")
@@ -336,8 +224,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 // ...
             }
         } else {
-            viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
-            logBox.text = ""
+            //viewshedPalette.viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+            dispatch_async(dispatch_get_main_queue()) {
+                self.logBox.text = ""
+            }
             self.startTimer()
             startFogViewshedFramework(observer)
         }
@@ -347,14 +237,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
         
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
+        self.viewshedPalette.setupNewPalette(observer)
         var obsResults:[[Int]]!
-        
+
         if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
-            let obsViewshed = ViewshedFog(elevation: self.hgt.getElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
+            let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
             obsResults = obsViewshed.viewshedParallel()
         } else if (observer.algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
-            let demObj: DemData = DemData(demMatrix: self.hgt.getElevation())
+            let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
             //let x: Int = work.getObserver().x
             let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: Double(observer.elevation))
             obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
@@ -379,13 +270,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
             
             if (work.algorithm == ViewshedAlgorithm.FranklinRay.rawValue) {
-                self.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+                self.viewshedPalette.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
             } else if (work.algorithm == ViewshedAlgorithm.VanKreveld.rawValue) {
                 let kreveld: KreveldViewshed = KreveldViewshed()
-                let demObj: DemData = DemData(demMatrix: self.hgt.getElevation())
+                let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
                 //let x: Int = work.getObserver().x
                 let observerPoints: ElevationPoint = ElevationPoint (xCoord: work.getObserver().xCoord, yCoord: work.getObserver().xCoord, h: Double(work.getObserver().elevation))
-                self.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: work.getObserver().radius, numOfPeers: work.numberOfQuadrants, quadrant2Calc: work.whichQuadrant)
+                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: work.getObserver().radius, numOfPeers: work.numberOfQuadrants, quadrant2Calc: work.whichQuadrant)
             }
             
             
@@ -394,13 +285,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             
             self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
-            
-            let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-            self.addOverlay(image, imageLocation: self.hgt.getCoordinate())
+
+            let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.mapView.addOverlay(viewshedOverlay)
+            }
             
             
             //Use if passing UIImage
-            let result = ViewshedResult(viewshedResult: image)//self.viewshedResults)
+            let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
             
             
             self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
@@ -420,14 +313,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         self.printOut("\tResult recieved from \(fromPeerId.displayName).")
                         //   }
                         //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-                        self.addOverlay(result.viewshedResult, imageLocation: self.hgt.getCoordinate())
+                        
+                        let viewshedOverlay = self.viewshedPalette.addOverlay(result.viewshedResult)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.mapView.addOverlay(viewshedOverlay)
+                        }
                     }
                 },
                 completeMethod: {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.printOut("\tAll received")
-                        let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                        self.addOverlay(image, imageLocation: self.hgt.getCoordinate())
+                        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.mapView.addOverlay(viewshedOverlay)
+                        }
                         self.printOut("Viewshed complete.")
                         self.stopTimer()
                     }
@@ -457,12 +356,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             },
             workForSelf: { workerCount in
                 self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-                self.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
+                self.viewshedPalette.viewshedResults = self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
                 
                 if (workerCount < 2) {
                     //if no peers
-                    let image = self.generateViewshedImage(self.viewshedResults, hgtLocation: self.hgt.getCoordinate())
-                    self.addOverlay(image, imageLocation: self.hgt.getCoordinate())
+                    let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.mapView.addOverlay(viewshedOverlay)
+                    }
                     self.stopTimer()
                 }
                 self.printOut("\tFound results locally out of \(workerCount).")
@@ -506,7 +407,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func clear(sender: AnyObject) {
         clearTimer()
         mapView.removeOverlays(mapView.overlays)
-        self.centerMapOnLocation(self.hgt.getCenterLocation())
         self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
     }
     
@@ -545,14 +445,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
-        
-        
-        
-        //initiateFogViewshed()
-        
-        
-        
-        
+        redrawMap()
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+            self.initiateFogViewshed(self.settingsObserver)
+        }
     }
     
     
@@ -570,7 +466,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let name = String(arc4random_uniform(10000) + 1)
         let xCoord = Int(arc4random_uniform(700) + 200)
         let yCoord = Int(arc4random_uniform(700) + 200)
-        return Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: 20, radius: 300, coordinate: self.hgt.getCoordinate())
+        let defaultHgtFilename = "N39W075"
+        let defaultHgt = Hgt(filename: defaultHgtFilename)
+        return Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: 20, radius: 300, coordinate: defaultHgt.getCoordinate())
     }
     
     
@@ -677,6 +575,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var yCoord:Int
         var elevation:Int
         var radius:Int
+        let defaultHgtFilename = "N39W075"
+        let defaultHgt = Hgt(filename: defaultHgtFilename)
         
         self.printOut("Metrics Started for \(numObservers) observer(s).")
         if randomData {
@@ -702,7 +602,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 radius = count + 100 //If the radius grows substantially larger then the parallel threads will finish sequentially
             }
             
-            let observer = Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: elevation, radius: radius, coordinate: self.hgt.getCoordinate())
+            let observer = Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: elevation, radius: radius, coordinate: defaultHgt.getCoordinate())
             self.printOut("\tObserver \(name): x: \(xCoord)\ty: \(yCoord)\theight: \(elevation)\tradius: \(radius)")
             observers.append(observer)
         }
@@ -743,16 +643,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
             
             self.printOut("Starting Parallel Viewshed Processing on \(observer.name).")
-            var obsResults:[[Int]]!
+            
             if (algorithm == ViewshedAlgorithm.FranklinRay) {
-                let obsViewshed = Viewshed(elevation: self.hgt.getElevation(), observer: observer)
-                obsResults = obsViewshed.viewshed()
+                let obsViewshed = Viewshed(elevation: self.viewshedPalette.getElevation(), observer: observer)
+                self.viewshedPalette.viewshedResults = obsViewshed.viewshed()
             } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
                 // running Van Kreveld viewshed.
                 let kreveld: KreveldViewshed = KreveldViewshed()
-                let demObj: DemData = DemData(demMatrix: self.hgt.getElevation())
+                let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
                 let observerPoints: ElevationPoint = ElevationPoint (xCoord:observer.xCoord, yCoord: observer.yCoord)
-                obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 0)
+                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 0)
                 //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
             }
             dispatch_async(dispatch_get_main_queue()) {
@@ -760,8 +660,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.printOut("\tFinished Viewshed Processing on \(observer.name).")
                 
                 self.pinObserverLocation(observer)
-                let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
-                self.addOverlay(image, imageLocation: self.hgt.getCoordinate())
+                let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+                self.mapView.addOverlay(viewshedOverlay)
                 
                 dispatch_group_leave(viewshedGroup)
             }
@@ -773,37 +673,41 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         self.printOut("Starting Serial Viewshed Processing on \(observer.name).")
         
-        var obsResults:[[Int]]!
         if (algorithm == ViewshedAlgorithm.FranklinRay) {
-            let obsViewshed = Viewshed(elevation: self.hgt.getElevation(), observer: observer)
-            obsResults = obsViewshed.viewshed()
+            let obsViewshed = Viewshed(elevation: self.viewshedPalette.getElevation(), observer: observer)
+            self.viewshedPalette.viewshedResults = obsViewshed.viewshed()
         } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
-            let demObj: DemData = DemData(demMatrix: self.hgt.getElevation())
+            let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
             // observer.radius = 200 // default radius 100
             // set the added observer height
             let observerPoints: ElevationPoint = ElevationPoint (xCoord:observer.xCoord, yCoord: observer.yCoord, h: Double(observer.elevation))
-            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 1)
+            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 1)
             //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
         }
         
         self.printOut("\tFinished Viewshed Processing on \(observer.name).")
         
         self.pinObserverLocation(observer)
-        let image = self.generateViewshedImage(obsResults, hgtLocation: self.hgt.getCoordinate())
-        self.addOverlay(image, imageLocation: self.hgt.getCoordinate())
+        
+        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.addOverlay(viewshedOverlay)
+        }
     }
     
     
     func startParallel(algorithm: ViewshedAlgorithm) {
         
+        let defaultHgtFilename = "N39W075"
+        let defaultHgt = Hgt(filename: defaultHgtFilename)
         let viewshedGroup = dispatch_group_create()
         self.startTimer()
         //  dispatch_apply(8, dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { index in
         // let count = Int(index + 1)
         for count in 1...8 {
             
-            let observer = Observer(name: String(count), xCoord: count * 100, yCoord: count * 100, elevation: 20, radius: 600, coordinate: self.hgt.getCoordinate())
+            let observer = Observer(name: String(count), xCoord: count * 100, yCoord: count * 100, elevation: 20, radius: 600, coordinate: defaultHgt.getCoordinate())
             
             self.performParallelViewshed(observer, algorithm: algorithm, viewshedGroup: viewshedGroup)
         }
@@ -816,11 +720,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func startSerial(algorithm: ViewshedAlgorithm) {
         
+        let defaultHgtFilename = "N39W075"
+        let defaultHgt = Hgt(filename: defaultHgtFilename)
         self.startTimer()
         
         for count in 1...8 {
             //let observer = Observer(name: String(count), x: count * 100, y: count * 100, height: 20, radius: options.radius, coordinate: self.hgtCoordinate)
-            let observer = Observer(name: String(count), xCoord: 600, yCoord: 600, elevation: 20, radius: 600, coordinate: self.hgt.getCoordinate())
+            let observer = Observer(name: String(count), xCoord: 600, yCoord: 600, elevation: 20, radius: 600, coordinate: defaultHgt.getCoordinate())
             //let observer = Observer(name: String(count), x: 8 * 100, y: 8 * 100, height: 20, radius: options.radius, coordinate:self.hgtCoordinate)
             self.performSerialViewshed(observer, algorithm: algorithm)
         }

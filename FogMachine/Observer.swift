@@ -41,15 +41,32 @@ class Observer: NSObject {
         self.algorithm = algorithm
     }
     
-    
-    func setHgtCoordinate(newCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) {
+    //Will generate new xCoord, yCoord, and coordinates based on the passed in values.
+    func setNewCoordinates(newCoordinate: CLLocationCoordinate2D) {
+        let hgtCoordinate = CLLocationCoordinate2DMake(floor(newCoordinate.latitude), floor(newCoordinate.longitude))
+        
         self.yCoord = Int((newCoordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
         self.xCoord = Srtm3.MAX_SIZE - Int((newCoordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
 
         self.coordinate = CLLocationCoordinate2DMake(
                         hgtCoordinate.latitude + 1 - (Srtm3.CELL_SIZE * Double(xCoord - 1)) + Srtm3.LATITUDE_CELL_CENTER,
                         hgtCoordinate.longitude + (Srtm3.CELL_SIZE * Double(yCoord - 1) + Srtm3.LONGITUDE_CELL_CENTER))
-
+        
+        print("\(xCoord)  \(yCoord)  \(coordinate)")
+    }
+    
+    //Update the xCoord and yCoord based on lat/lon
+    func updateXYLocation() {
+        let hgtCoordinate = self.getObserversHgtCoordinate()
+        self.yCoord = Int((coordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
+        self.xCoord = Srtm3.MAX_SIZE - Int((coordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
+    }
+    
+    //Update the xCoord and yCoord based on passed in HgtGrid lat/lon
+    func updateXYLocationForGrid(hgtGrid: HgtGrid) {
+        let hgtCoordinate = hgtGrid.upperLeftHgt.getCoordinate()
+        self.yCoord = Int((coordinate.longitude - hgtCoordinate.longitude) / Srtm3.CELL_SIZE) + 1
+        self.xCoord = Srtm3.MAX_SIZE - Int((coordinate.latitude - hgtCoordinate.latitude) / Srtm3.CELL_SIZE) + 2
     }
     
     
@@ -67,6 +84,11 @@ class Observer: NSObject {
         entity.latitude = coordinate.latitude
         entity.longitude = coordinate.longitude
         entity.algorithm = Int16(algorithm.rawValue)
+    }
+    
+    
+    func getObserversHgtCoordinate() -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2DMake(floor(coordinate.latitude), floor(coordinate.longitude))
     }
 
 }
