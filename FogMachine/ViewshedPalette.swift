@@ -20,11 +20,15 @@ class ViewshedPalette: NSObject {
     
     func setupNewPalette(observer: Observer) {
         if checkForHgtFile(observer.coordinate) {
-            observerHgtGrid = generateHgtGrid(observer)
+            if checkObserverCoordsInOneHgt(observer) {
+                observerHgtGrid = generateHgtGrid(observer)
+            } else {
+                observerHgtGrid = generateKnownHgtGrid(observer)
+            }
         }
     }
     
-   
+    // Will generate a 1x1 or 2x2 HgtGrid based on the location and size of the Observer
     func generateHgtGrid(observer: Observer) -> HgtGrid {
 
         var observerPosition: GridPosition = GridPosition.UpperLeft
@@ -126,6 +130,64 @@ class ViewshedPalette: NSObject {
         return hgtGrid
     }
     
+    // Will generate a 2x2 HgtGrid for Observer with a known 2x2 size
+    func generateKnownHgtGrid(observer: Observer) -> HgtGrid {
+        
+        var observerPosition: GridPosition = GridPosition.UpperLeft
+        let observersHgtCoordinate = observer.getObserversHgtCoordinate()
+        let observerHgt = getHgtFile(observersHgtCoordinate.latitude, longitude: observersHgtCoordinate.longitude)
+        
+        let hgtGrid = HgtGrid(singleHgt: observerHgt)
+        
+        var upperLeftHgt: Hgt!
+        var lowerLeftHgt: Hgt!
+        var upperRightHgt: Hgt!
+        var lowerRightHgt: Hgt!
+        
+        //Determine where the xCoord and yCoord are in a 2x2 grid
+        // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
+        var isInsideYRegion = false
+        var isInsideXRegion = false
+        
+        if observer.yCoord < Srtm3.MAX_SIZE {
+            isInsideYRegion = true
+        }
+        
+        if observer.xCoord < Srtm3.MAX_SIZE {
+            isInsideXRegion = true
+        }
+        
+        if isInsideYRegion && isInsideXRegion {
+            upperLeftHgt = observerHgt
+            lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+            upperRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
+            lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
+            observerPosition = GridPosition.UpperLeft
+        } else if isInsideYRegion && !isInsideXRegion {
+            upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+            lowerLeftHgt = observerHgt
+            upperRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
+            lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
+            observerPosition = GridPosition.LowerLeft
+        } else if !isInsideYRegion && isInsideXRegion {
+            upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
+            lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
+            upperRightHgt = observerHgt
+            lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
+            observerPosition = GridPosition.UpperRight
+        } else if !isInsideYRegion && !isInsideXRegion {
+            upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude - 1)
+            lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
+            upperRightHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude)
+            lowerRightHgt = observerHgt
+            observerPosition = GridPosition.LowerRight
+        }
+        
+        hgtGrid.configureGrid(upperLeftHgt, lowerLeftHgt: lowerLeftHgt, upperRightHgt: upperRightHgt, lowerRightHgt: lowerRightHgt, observerPosition: observerPosition)
+        
+        return hgtGrid
+    }
+    
     
     func getHgtFile(latitude: Double, longitude: Double) -> Hgt {
         var foundHgt: Hgt!
@@ -149,6 +211,17 @@ class ViewshedPalette: NSObject {
         }
         
         return foundHgt
+    }
+    
+    
+    func checkObserverCoordsInOneHgt(observer: Observer) -> Bool {
+        var isWithinOneHgt = true
+        
+        if observer.xCoord > Srtm3.MAX_SIZE || observer.yCoord > Srtm3.MAX_SIZE {
+            isWithinOneHgt = false
+        }
+        
+        return isWithinOneHgt
     }
     
     
