@@ -74,8 +74,8 @@ struct ConnectionManager {
         guard (theEvent[sender] != nil) else {
             return
         }
-        hasReceivedResponse[receiver]![event.rawValue]![sender] = true
         
+        hasReceivedResponse[receiver]![event.rawValue]![sender] = true
     }
 
     
@@ -201,8 +201,8 @@ struct ConnectionManager {
     
     
     static func sendEventForEach(event: Event, objectBlock: () -> ([String: MPCSerializable])) {
-        for peer in ConnectionManager.peers {
-            ConnectionManager.sendEvent(event, object: objectBlock(), toPeers: [peer])
+        for peer in peers {
+            sendEvent(event, object: objectBlock(), toPeers: [peer])
         }
     }
     
