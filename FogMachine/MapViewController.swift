@@ -62,7 +62,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             self.centerMapOnLocation(defaultHgt.getCenterLocation())
         }
         
-        setupFogEvents()
+        setupFogViewshedEvents()
     }
     
     
@@ -229,7 +229,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.logBox.text = ""
             }
             self.startTimer()
-            startFogViewshedFramework(observer)
+            startFogViewshed(observer)
         }
     }
     
@@ -260,7 +260,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func setupFogEvents() {
+    func setupFogViewshedEvents() {
         
         ConnectionManager.onEvent(Event.StartViewshed){ fromPeerId, object in
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
@@ -300,6 +300,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             ConnectionManager.sendEventTo(Event.SendViewshedResult, willThrottle: true, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
         }
+        
         ConnectionManager.onEvent(Event.SendViewshedResult) { fromPeerId, object in
             
             var dict = object as! [NSString: NSData]
@@ -337,7 +338,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    func startFogViewshedFramework(observer: Observer) {
+    func startFogViewshed(observer: Observer) {
         printOut("Beginning viewshed on \(Worker.getMe().displayName)")
         
         let selfQuadrant = 1
@@ -347,7 +348,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         ConnectionManager.sendEventToAll(Event.StartViewshed,
             workForPeer: { workerCount in
                 let workDivision = self.getQuadrant(workerCount)
-                print("workDivision : \(workDivision)")
+                //print("workDivision : \(workDivision)")
                 
                 let currentQuadrant = workDivision[count]
                 let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
