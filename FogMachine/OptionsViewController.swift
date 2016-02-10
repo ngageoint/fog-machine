@@ -13,6 +13,7 @@ class OptionsViewController: UIViewController, UITextFieldDelegate {
     
   
     let defaults = NSUserDefaults.standardUserDefaults()
+    @IBOutlet weak var copyDemoFiles: UIButton!
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -60,9 +61,7 @@ class OptionsViewController: UIViewController, UITextFieldDelegate {
             print("Could get the HGT files: \(error.localizedDescription)")
         }
     }
-    
-    
-    @IBOutlet weak var copyDemoFiles: UIButton!
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
