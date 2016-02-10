@@ -34,6 +34,7 @@
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
 		9B09C7D31C32F33400C08D7C /* N38W075.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7BD1C32F33400C08D7C /* N38W075.hgt */; };
 		9B09C7D41C32F33400C08D7C /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7BE1C32F33400C08D7C /* N38W077.hgt */; };
+		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
 		9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */; };
 		9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F01C05E51E004A37B6 /* DemData.swift */; };
 		9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */; };
@@ -99,6 +100,7 @@
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
 		9B09C7BD1C32F33400C08D7C /* N38W075.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W075.hgt; path = HGT/N38W075.hgt; sourceTree = "<group>"; };
 		9B09C7BE1C32F33400C08D7C /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
+		9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtDownloadMgr.swift; sourceTree = "<group>"; };
 		9BD5C0F01C05E51E004A37B6 /* DemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemData.swift; sourceTree = "<group>"; };
 		9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldSweepEventNode.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		E314F6BD1B79023D005B75C6 /* FogMachine */ = {
 			isa = PBXGroup;
 			children = (
+				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
 				753D3D691BEBA59E004E3589 /* HGT */,
 				E3B933E21B7BD0F9007B9444 /* Data */,
 				E3B933DF1B7BAE32007B9444 /* Views */,
@@ -521,6 +524,7 @@
 				9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */,
 				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
+				9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
 				9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */,

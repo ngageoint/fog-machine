@@ -263,6 +263,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
+                ActivityIndicator.show("Downloading..", disableUI: false)
                 for srtmDataRegion in SRTM.SERVER_REGIONS {
                     if (!self.downloadComplete) {
                         let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName
@@ -290,11 +291,13 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
             })
+            ActivityIndicator.hide(success: false, animated: true)
             alertController.addAction(ok)
             presentViewController(alertController, animated: true, completion: nil)
         } else {
             dispatch_async(dispatch_get_main_queue()) {
                 () -> Void in
+                ActivityIndicator.hide(success: true, animated: true)
                 //print(downloadedFilePath + "->Download Completed!!")
                 let fileName = NSURL(fileURLWithPath: destinationPath).lastPathComponent!
                 // add the downloaded file to the array of file names...
@@ -311,6 +314,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         let ok = UIAlertAction(title: "OK", style: .Default, handler: {
             (action) -> Void in
         })
+        ActivityIndicator.hide(success: false, animated: true)
         alertController.addAction(ok)
         presentViewController(alertController, animated: true, completion: nil)
     }
