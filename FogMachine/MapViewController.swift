@@ -298,7 +298,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
             
-            ConnectionManager.sendEventTo(Event.SendViewshedResult, willThrottle: true, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
+            ConnectionManager.sendEventTo(Event.SendViewshedResult, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
         }
         
         ConnectionManager.onEvent(Event.SendViewshedResult) { fromPeerId, object in
@@ -306,7 +306,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             var dict = object as! [NSString: NSData]
             let result = ViewshedResult(mpcSerialized: dict[Event.SendViewshedResult.rawValue]!)
             
-            ConnectionManager.processResult(Event.SendViewshedResult, responseEvent: Event.StartViewshed, sender: fromPeerId.displayName, receiver: Worker.getMe().name, object: [Event.SendViewshedResult.rawValue: result],
+            ConnectionManager.processResult(Event.SendViewshedResult, responseEvent: Event.StartViewshed, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
                     
                     // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {

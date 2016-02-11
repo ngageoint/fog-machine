@@ -18,10 +18,14 @@ protocol MPCSerializable {
 
 struct ConnectionManager {
     
-    static var hasReceivedResponse:[String:[String:[String:Bool]]] = ["sender": ["event":["peer":true]]]
+
     static private let serialQueue = dispatch_queue_create("mil.nga.magic.fog", DISPATCH_QUEUE_SERIAL)
+    static private var receiptAssurance = ReceiptAssurance(sender: Worker.getMe().displayName)
+    
     
     // MARK: Properties
+    
+    
     private static var peers: [MCPeerID] {
         return PeerKit.masterSession.allConnectedPeers() ?? []
     }
@@ -36,13 +40,17 @@ struct ConnectionManager {
     
     
     // MARK: Start
+    
+    
     static func start() {
         NSLog("Transceiving")
         transceiver.startTransceiving(serviceType: Fog.SERVICE_TYPE)
     }
     
     
-    // MAARK: Event handling
+    // MARK: Event handling
+    
+    
     static func onConnect(run: PeerBlock?) {
         NSLog("Connection made")
         PeerKit.onConnect = run
@@ -61,42 +69,9 @@ struct ConnectionManager {
     }
     
     
-    // MARK: Receipt Assurance
-    
-    
-    static func receiving(event: Event, sender: String, receiver: String) {
-        guard let theReceiver = hasReceivedResponse[receiver] else {
-            return
-        }
-        guard let theEvent = theReceiver[event.rawValue] else {
-            return
-        }
-        guard (theEvent[sender] != nil) else {
-            return
-        }
-        
-        hasReceivedResponse[receiver]![event.rawValue]![sender] = true
-    }
-
-    
-    static func allReceived(event: Event, sender: String) -> Bool {
-        guard (hasReceivedResponse[sender] != nil) else {
-            return false
-        }
-        
-        var result = true
-        
-        for (_, value) in hasReceivedResponse[sender]![event.rawValue]! {
-            if (value == false) {
-                result = false
-            }
-        }
-
-        return result
-    }
-    
-    
     // MARK: Sending
+    
+    
     static func sendEvent(event: Event, object: [String: MPCSerializable]? = nil, toPeers peers: [MCPeerID]? =
         PeerKit.masterSession.allConnectedPeers()) {
         var anyObject: [String: NSData]?
@@ -110,26 +85,33 @@ struct ConnectionManager {
     }
     
     
-    static func processResult(event: Event, responseEvent: Event, sender: String, receiver: String, object: [String: MPCSerializable], responseMethod: () -> (), completeMethod: () -> ()) {
-        
+    static func processResult(event: Event, responseEvent: Event, sender: String, object: [String: MPCSerializable], responseMethod: () -> (), completeMethod: () -> ()) {
         //dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
         dispatch_barrier_async(self.serialQueue) {
+        
             responseMethod()
-            
-            receiving(responseEvent, sender: sender, receiver: receiver)
+            printOut("processResult from \(sender)")
+            receiptAssurance.updateForReceipt(responseEvent, receiver: sender)
             
           //  dispatch_async(dispatch_get_main_queue()) {
-                
-                
-                if allReceived(responseEvent, sender: receiver) {
-                    completeMethod()
-                }
+
+            if receiptAssurance.checkAllReceived(responseEvent) {
+                printOut("Running completeMethod()")
+                completeMethod()
+                receiptAssurance.removeAllForEvent(responseEvent)
+            } else if receiptAssurance.checkForTimeouts(responseEvent) {
+                printOut("Timeout found")
+                self.reprocessWork(responseEvent)
+            } else {
+                printOut("Not done and no timeouts yet.")
+            }
+            
          //   }
         }
     }
     
     
-    static func sendEventTo(event: Event, willThrottle: Bool = false, object: [String: MPCSerializable]? = nil, sendTo: String) {
+    static func sendEventTo(event: Event, object: [String: MPCSerializable]? = nil, sendTo: String) {
         var anyObject: [String: NSData]?
         if let object = object {
             anyObject = [String: NSData]()
@@ -141,10 +123,10 @@ struct ConnectionManager {
         for peer in peers {
             if peer.displayName == sendTo {
                 let toPeer:[MCPeerID] = [peer]
-                if willThrottle {
+                //if willThrottle {
                     //This is not currently needed, but keeping it here in case it's used for other testing/debugging
                     //self.throttle()
-                }
+                //}
                 PeerKit.sendEvent(event.rawValue, object: anyObject, toPeers: toPeer)
                 break
             }
@@ -183,7 +165,7 @@ struct ConnectionManager {
 //        }
 //    }
     
-    static func sendEventToAll<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> ()) {
+    static func sendEventToAll<T: Work>(event: Event, timeoutSeconds: Double = 30.0, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> ()) {
         
         workForSelf(allWorkers.count)
         
@@ -191,10 +173,38 @@ struct ConnectionManager {
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
             for peer in peers {
-                hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peer.displayName: false]]
                 let theWork = workForPeer(allWorkers.count)
-                self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peer.displayName)
+                
+                receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
+                
+                self.sendEventTo(event, object: [event.rawValue: theWork], sendTo: peer.displayName)
                 log(peer.displayName)
+            }
+        }
+        receiptAssurance.startTimer(event, timeoutSeconds: timeoutSeconds)
+    }
+    
+    
+    static func checkForTimeouts(responseEvent: Event) {
+        printOut("timer in ConnectionManager")
+        
+        while receiptAssurance.checkForTimeouts(responseEvent) {
+            printOut("detected timed out work")
+            self.reprocessWork(responseEvent)
+        }
+    }
+    
+    
+    static func reprocessWork(responseEvent: Event) {
+        let peer = receiptAssurance.getFinishedPeer(responseEvent)
+        
+        if let finishedPeer = peer {
+            printOut("found peer \(finishedPeer) to finish work")
+            let work = receiptAssurance.getNextTimedOutWork(responseEvent)
+            
+            if let timedOutWork = work {
+                printOut("found work to finish")
+                self.sendEventTo(responseEvent, object: [responseEvent.rawValue: timedOutWork], sendTo: finishedPeer)
             }
         }
     }
@@ -203,6 +213,13 @@ struct ConnectionManager {
     static func sendEventForEach(event: Event, objectBlock: () -> ([String: MPCSerializable])) {
         for peer in peers {
             sendEvent(event, object: objectBlock(), toPeers: [peer])
+        }
+    }
+ 
+    
+    static func printOut(output: String) {
+        dispatch_async(dispatch_get_main_queue()) {
+            //NSLog(output)
         }
     }
     
