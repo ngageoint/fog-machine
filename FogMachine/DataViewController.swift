@@ -44,6 +44,17 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         self.mapView.addGestureRecognizer(lpgr)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // remove the rectangle boundary on the map for the dowloaded data
+        self.removeAllFromMap()
+        // find out if there is a way to remove a selected map overlay..
+        // navigate the data folder and redraw the overlays from the data files..
+        self.getHgtFiles()
+        // refresh the table with the latest array data
+        self.refresh()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
