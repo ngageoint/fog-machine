@@ -264,11 +264,11 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
                 ActivityIndicator.show("Downloading..", disableUI: false)
+                let hgtDownloadMgr = HgtDownloadMgr()
                 for srtmDataRegion in SRTM.SERVER_REGIONS {
                     if (!self.downloadComplete) {
-                        let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName
+                        let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
                         let url = NSURL(string: hgtFilePath)
-                        let hgtDownloadMgr = HgtDownloadMgr()
                         hgtDownloadMgr.delegate = self
                         hgtDownloadMgr.downloadHgtFile(url!)
                     }
@@ -298,12 +298,14 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             dispatch_async(dispatch_get_main_queue()) {
                 () -> Void in
                 ActivityIndicator.hide(success: true, animated: true)
+                
+                //print("*** \(destinationPath) ***" )
                 //print(downloadedFilePath + "->Download Completed!!")
                 let fileName = NSURL(fileURLWithPath: destinationPath).lastPathComponent!
                 // add the downloaded file to the array of file names...
                 self.manageHgtDataArray(fileName, arrayAction: "add")
                 // draw the rectangle boundary on the map for the dowloaded data
-                self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude)
+                self.addRectBoundry(self.hgtCoordinate.latitude, longitude: self.hgtCoordinate.longitude) 
                 // refresh the table with the latest array data
                 self.refresh()
             }

@@ -21,7 +21,7 @@ public struct ActivityIndicator {
         private static var FailIcon = "✘"
         private static var SuccessText = "Success"
         private static var FailText = "Failure"
-        private static var SuccessColor = UIColor.greenColor()
+        private static var SuccessColor = UIColor(red: 0/255, green: 155/255, blue: 69/255, alpha: 1.0)  //UIColor.greenColor()
         private static var FailColor = UIColor.redColor()
         private static var ActivityWidth = UIScreen.ScreenWidth / Settings.WidthDivision
         private static var ActivityHeight = ActivityWidth / 5

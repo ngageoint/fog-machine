@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import SSZipArchive
+
 
 @objc protocol HgtDownloadMgrDelegate {
     optional func didReceiveResponse(destinationPath: String)
@@ -25,16 +27,40 @@ class HgtDownloadMgr: NSObject, NSURLSessionDownloadDelegate {
     
     //is called once the download is complete
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        //copy downloaded data to your documents directory with same names as source file
-        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
-        let destinationUrl = documentsUrl!.URLByAppendingPathComponent(remoteURL!.lastPathComponent!)
-        let dataFromURL = NSData(contentsOfURL: location)
-        
-        if (dataFromURL != nil && !downloadComplete) {
-            downloadComplete = true
-            dataFromURL!.writeToURL(destinationUrl, atomically: true)
-            //now it is time to do what is needed to be done after the download
-            self.delegate?.didReceiveResponse!(destinationUrl.path!)
+        let response = downloadTask.response as! NSHTTPURLResponse
+        let statusCode = response.statusCode
+        // URL not found.. donot proceed.
+        if (statusCode == 200) {
+            //copy downloaded data to your documents directory with same names as source file
+            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
+            let destinationUrl = documentsUrl!.URLByAppendingPathComponent(remoteURL!.lastPathComponent!)
+            let dataFromURL:NSData = NSData(contentsOfURL: location)!
+            if (dataFromURL.writeToURL(destinationUrl, atomically: true)) {
+                let retFileName = self.unzipDownloadedFile(destinationUrl.path!, hgtFilePath: documentsUrl!.path!)
+                //now it is time to do what is needed to be done after the download
+                self.delegate?.didReceiveResponse!(retFileName)
+            }
+        }
+    }
+    
+    func unzipDownloadedFile(strHgtZipFileWithPath: String, hgtFilePath: String) -> String {
+        var strRet: String = String()
+        //let hgtFilePath = documentsUrl!.path
+        if (SSZipArchive.unzipFileAtPath(strHgtZipFileWithPath, toDestination: hgtFilePath)) {
+            deleteHgtZipFile(strHgtZipFileWithPath)
+            let range = strHgtZipFileWithPath.startIndex.advancedBy(0)..<strHgtZipFileWithPath.endIndex.advancedBy(-4)
+            strRet = strHgtZipFileWithPath.substringWithRange(range)
+        }
+        return strRet
+    }
+    
+    func deleteHgtZipFile(hgtZipFileName: String) {
+        let fileManager = NSFileManager.defaultManager()
+        do {
+            try fileManager.removeItemAtPath(hgtZipFileName)
+        }
+        catch let error as NSError {
+            print("Error Delete the zip file: " + hgtZipFileName + ": \(error)")
         }
     }
     
@@ -57,13 +83,14 @@ class HgtDownloadMgr: NSObject, NSURLSessionDownloadDelegate {
     func downloadHgtFile(remoteURL: NSURL) {
         self.remoteURL = remoteURL
         //download identifier can be customized. I used the "ulr.absoluteString"
-        
         let sessionConfig = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(remoteURL.absoluteString)
         let session = NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
         let task = session.downloadTaskWithURL(remoteURL)
         task.resume()
     }
 }
+
+
 
 
 

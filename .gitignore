@@ -47,3 +47,19 @@ xcuserdata
 # Carthage/Checkouts
 
 Carthage/Build
+Pods/Target Support Files/PeerKit/Info.plist
+Pods/Target Support Files/PeerKit/PeerKit-dummy.m
+Pods/Target Support Files/PeerKit/PeerKit-prefix.pch
+Pods/Target Support Files/PeerKit/PeerKit-umbrella.h
+Pods/Target Support Files/PeerKit/PeerKit.modulemap
+Pods/Target Support Files/PeerKit/PeerKit.xcconfig
+Pods/Target Support Files/Pods-FogMachine/Info.plist
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-acknowledgements.markdown
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-acknowledgements.plist
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-dummy.m
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-frameworks.sh
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-resources.sh
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-umbrella.h
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.modulemap
+Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig

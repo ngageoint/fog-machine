@@ -4,6 +4,7 @@ use_frameworks!
 
 target 'FogMachine' do
 	pod 'PeerKit', '~> 1.1'
+	pod 'SSZipArchive', '~> 1.1'
 end
 
 target 'FogMachineTests' do
