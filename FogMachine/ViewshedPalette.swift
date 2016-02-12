@@ -352,7 +352,7 @@ class ViewshedPalette: NSObject {
                 
                 let cell = viewshed[y][x]
                 if(cell == 0) {
-                    data.append(Pixel(alpha: 15, red: 0, green: 0, blue: 0))
+                    data.append(Pixel(alpha:0, red: 0, green: 0, blue: 0))
                 } else if (cell == -1){
                     data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
