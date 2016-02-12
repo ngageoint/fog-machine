@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 
+
 class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource,
 MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDownloadMgrDelegate {
     
@@ -104,6 +105,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     
     func getHgtFiles() {
         do {
+            pickerData.removeAll()
             let fm = NSFileManager.defaultManager()
             let documentDirPath:NSURL =  try fm.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
             let docDirItems = try! fm.contentsOfDirectoryAtPath(documentDirPath.path!)
@@ -274,15 +276,24 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
-                ActivityIndicator.show("Downloading..", disableUI: false)
-                let hgtDownloadMgr = HgtDownloadMgr()
-                for srtmDataRegion in SRTM.SERVER_REGIONS {
-                    if (!self.downloadComplete) {
-                        let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
-                        let url = NSURL(string: hgtFilePath)
-                        hgtDownloadMgr.delegate = self
-                        hgtDownloadMgr.downloadHgtFile(url!)
-                    }
+                
+                let srtmDataRegion = self.getHgtRegion(hgtFileName)
+                if (srtmDataRegion.isEmpty) {
+                    let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable. Try someother location.", preferredStyle: .Alert)
+                    let ok = UIAlertAction(title: "OK", style: .Default, handler: {
+                        (action) -> Void in
+                    })
+                    ActivityIndicator.hide(success: false, animated: true)
+                    alertController.addAction(ok)
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                } else {
+                    
+                    ActivityIndicator.show("Downloading", disableUI: false)
+                    let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
+                    let url = NSURL(string: hgtFilePath)
+                    let hgtDownloadMgr = HgtDownloadMgr()
+                    hgtDownloadMgr.delegate = self
+                    hgtDownloadMgr.downloadHgtFile(url!)
                 }
             })
             let cancel = UIAlertAction(title: "Cancel", style: .Cancel) {
@@ -295,10 +306,28 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         }
     }
     
+    func getHgtRegion(hgtFileName: String) -> String {
+        let tmpHgtZipName = hgtFileName + ".zip"
+        if (NORTH_AMERICA_REGION_DATA.contains(tmpHgtZipName)) {
+            return SRTM.REGION_NORTH_AMERICA
+        } else if (ISLANDS_REGION_DATA.contains(tmpHgtZipName)) {
+            return SRTM.REGION_ISLANDS
+        } else if (EURASIA_REGION_DATA.contains(tmpHgtZipName)) {
+            return SRTM.REGION_EURASIA
+        } else if (AUSTRALIA_REGION_DATA.contains(tmpHgtZipName)) {
+            return SRTM.REGION_AUSTRALIA
+        } else if (AFRICA_REGION_DATA.contains(tmpHgtZipName)) {
+            return SRTM.REGION_AFRICA
+        } else if (SOUTH_AMERICA_REGION_DATA.contains(tmpHgtZipName)) {
+            return SRTM.REGION_SOUTH_AMERICA
+        }
+        return ""
+    }
+    
     func didReceiveResponse(destinationPath: String) {
         downloadComplete = true
         if (destinationPath.isEmpty || destinationPath.containsString("Error")) {
-            let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable...Try later.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable. Try someother location.", preferredStyle: .Alert)
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
             })
@@ -323,7 +352,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         }
     }
     func didFailToReceieveResponse(error: String) {
-        let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable...Try later.", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable. Try someother location.", preferredStyle: .Alert)
         let ok = UIAlertAction(title: "OK", style: .Default, handler: {
             (action) -> Void in
         })
@@ -345,8 +374,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             //annotation.subtitle = "lat: \(String(format:"%.4f", locationCoordinate.latitude)) long: \(String(format:"%.4f", locationCoordinate.longitude))"
             annotation.subtitle = "\(String(format:"%.4f", locationCoordinate.latitude));\(String(format:"%.4f", locationCoordinate.longitude))"
             self.mapView.addAnnotation(annotation)
-            let latDelta: CLLocationDegrees = 10
-            let lonDelta: CLLocationDegrees = 10
+            let latDelta: CLLocationDegrees = 20
+            let lonDelta: CLLocationDegrees = 20
             let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
             let region: MKCoordinateRegion = MKCoordinateRegionMake(locationCoordinate, span)
             self.mapView.setRegion(region, animated: true)

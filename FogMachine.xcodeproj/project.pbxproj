@@ -34,6 +34,7 @@
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
 		9B09C7D31C32F33400C08D7C /* N38W075.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7BD1C32F33400C08D7C /* N38W075.hgt */; };
 		9B09C7D41C32F33400C08D7C /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7BE1C32F33400C08D7C /* N38W077.hgt */; };
+		9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */; };
 		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
 		9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */; };
 		9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F01C05E51E004A37B6 /* DemData.swift */; };
@@ -100,6 +101,7 @@
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
 		9B09C7BD1C32F33400C08D7C /* N38W075.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W075.hgt; path = HGT/N38W075.hgt; sourceTree = "<group>"; };
 		9B09C7BE1C32F33400C08D7C /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
+		9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtRegions.swift; sourceTree = "<group>"; };
 		9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtDownloadMgr.swift; sourceTree = "<group>"; };
 		9BD5C0F01C05E51E004A37B6 /* DemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemData.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				E314F6C91B79023D005B75C6 /* Images.xcassets */,
 				E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */,
 				E314F6BE1B79023D005B75C6 /* Supporting Files */,
+				9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */,
 			);
 			path = FogMachine;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 				E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */,
 				9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */,
 				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
+				9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */,
 				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
 				758FB7851C0D170000A193A7 /* WorkArray.swift in Sources */,
 				7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */,

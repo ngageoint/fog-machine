@@ -86,5 +86,11 @@ enum ViewshedAlgorithm: Int {
 
 struct SRTM {
     static let DOWNLOAD_SERVER = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
-    static let SERVER_REGIONS: [String] = ["North_America", "South_America", "Eurasia", "Africa", "Australia", "Islands"]
+    static let REGION_NORTH_AMERICA = "North_America"
+    static let REGION_SOUTH_AMERICA = "South_America"
+    static let REGION_EURASIA = "Eurasia"
+    static let REGION_AFRICA = "Africa"
+    static let REGION_AUSTRALIA = "Australia"
+    static let REGION_ISLANDS = "Islands"
+    
 }
