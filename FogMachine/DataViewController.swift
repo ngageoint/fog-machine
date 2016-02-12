@@ -432,8 +432,3 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         presentViewController(alertController, animated: true, completion: nil)
     }
 }
-
-
-
-
-
