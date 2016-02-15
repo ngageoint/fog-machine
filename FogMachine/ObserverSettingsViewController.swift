@@ -104,7 +104,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         
         if elevationValue != nil && radiusValue != nil && latitudeValue != nil && longitudeValue != nil {
             editedObserver.elevation = elevationValue!
-            editedObserver.radius = radiusValue!
+            editedObserver.setRadius(radiusValue!)
             editedObserver.coordinate = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
         }
         

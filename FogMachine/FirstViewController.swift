@@ -135,7 +135,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        NSLog("selected a cell")
+    
     }
     
     

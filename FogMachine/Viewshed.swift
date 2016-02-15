@@ -23,7 +23,7 @@ public class Viewshed: NSObject {
         self.obsX = observer.xCoord
         self.obsY = observer.yCoord
         self.obsElevation = observer.elevation
-        self.viewRadius = observer.radius
+        self.viewRadius = observer.getViewshedSrtm3Radius()
     }
     
    

@@ -51,7 +51,7 @@ class ViewshedWork: Work {
         self.xCoord = observer.xCoord
         self.yCoord = observer.yCoord
         self.elevation = observer.elevation
-        self.radius = observer.radius
+        self.radius = observer.getRadius()
         self.latitude = observer.coordinate.latitude
         self.longitude = observer.coordinate.longitude
         self.algorithm = observer.algorithm.rawValue

@@ -47,7 +47,7 @@ struct FogViewshed {
     
 }
 
-//SRTM = Shuttle Radar Topography Mission
+//SRTM = Shuttle Radar Topography Mission sampled at three arc-seconds
 struct Srtm3 {
     static let MAX_SIZE = 1201
     static let CENTER_OFFSET = 0.5
@@ -55,6 +55,7 @@ struct Srtm3 {
     static let LATITUDE_CELL_CENTER = 3.0 * (Srtm3.CELL_SIZE * Srtm3.CENTER_OFFSET)
     static let LONGITUDE_CELL_CENTER = Srtm3.CELL_SIZE * Srtm3.CENTER_OFFSET
     static let DISPLAY_DIAMETER = 100000.0 * 1.5
+    static let EXTENT_METERS = 90.0
 
 }
 

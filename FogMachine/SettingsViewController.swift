@@ -1,5 +1,5 @@
 //
-//  OptionsViewController.swift
+//  SettingsViewController.swift
 //  FogMachineSearch
 //
 //  Created by Ram Subramaniam on 11/25/15.
@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class OptionsViewController: UIViewController, UITextFieldDelegate {
+class SettingsViewController: UIViewController, UITextFieldDelegate {
     
   
     let defaults = NSUserDefaults.standardUserDefaults()

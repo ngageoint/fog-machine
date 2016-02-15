@@ -16,7 +16,7 @@ class Observer: NSObject {
     var xCoord:Int
     var yCoord:Int
     var elevation:Int
-    var radius:Int
+    private var radius:Int
     var coordinate: CLLocationCoordinate2D
     var algorithm: ViewshedAlgorithm
 
@@ -25,7 +25,7 @@ class Observer: NSObject {
         self.xCoord = 1
         self.yCoord = 1
         self.elevation = 1
-        self.radius = 250
+        self.radius = 16093 //approximately 10 miles
         self.coordinate = CLLocationCoordinate2DMake(1, 1)
         self.algorithm = ViewshedAlgorithm.FranklinRay
         super.init()
@@ -91,4 +91,19 @@ class Observer: NSObject {
         return CLLocationCoordinate2DMake(floor(coordinate.latitude), floor(coordinate.longitude))
     }
 
+    
+    func getRadius() -> Int {
+        return self.radius
+    }
+    
+    
+    func setRadius(radius: Int) {
+        self.radius = radius
+    }
+    
+    
+    func getViewshedSrtm3Radius() -> Int {
+        return Int(ceil(Double(self.radius) / Srtm3.EXTENT_METERS))
+    }
+    
 }

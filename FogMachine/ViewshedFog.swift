@@ -25,7 +25,7 @@ public class ViewshedFog: NSObject {
         self.obsX = observer.xCoord
         self.obsY = observer.yCoord
         self.obsElevation = observer.elevation
-        self.viewRadius = observer.radius
+        self.viewRadius = observer.getViewshedSrtm3Radius()
         self.numberOfQuadrants = numberOfQuadrants
         self.whichQuadrant = whichQuadrant
     }

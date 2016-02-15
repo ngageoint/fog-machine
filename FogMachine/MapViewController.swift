@@ -157,7 +157,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             view!.leftCalloutAccessoryView = button as UIView
             view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIView
-            view?.pinColor = MKPinAnnotationColor.Purple
         }
         
         return view
@@ -248,13 +247,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
             //let x: Int = work.getObserver().x
             let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: Double(observer.elevation))
-            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
+            obsResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
             
         }
         
         printOut("\tFinished Viewshed Processing on \(observer.name).")
         
-        //self.pinObserverLocation(observer)
+        self.pinObserverLocation(observer)
         
         return obsResults
     }
@@ -269,15 +268,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
             
-            if (work.algorithm == ViewshedAlgorithm.FranklinRay.rawValue) {
-                self.viewshedPalette.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-            } else if (work.algorithm == ViewshedAlgorithm.VanKreveld.rawValue) {
-                let kreveld: KreveldViewshed = KreveldViewshed()
-                let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
-                //let x: Int = work.getObserver().x
-                let observerPoints: ElevationPoint = ElevationPoint (xCoord: work.getObserver().xCoord, yCoord: work.getObserver().xCoord, h: Double(work.getObserver().elevation))
-                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: work.getObserver().radius, numOfPeers: work.numberOfQuadrants, quadrant2Calc: work.whichQuadrant)
-            }
+            self.viewshedPalette.viewshedResults = self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
             
             
             //Uncomment if passing [[Int]]
@@ -653,7 +644,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let kreveld: KreveldViewshed = KreveldViewshed()
                 let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getElevation())
                 let observerPoints: ElevationPoint = ElevationPoint (xCoord:observer.xCoord, yCoord: observer.yCoord)
-                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 0)
+                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: 1, quadrant2Calc: 0)
                 //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
             }
             dispatch_async(dispatch_get_main_queue()) {
@@ -683,7 +674,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             // observer.radius = 200 // default radius 100
             // set the added observer height
             let observerPoints: ElevationPoint = ElevationPoint (xCoord:observer.xCoord, yCoord: observer.yCoord, h: Double(observer.elevation))
-            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.radius, numOfPeers: 1, quadrant2Calc: 1)
+            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: 1, quadrant2Calc: 1)
             //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
         }
         
