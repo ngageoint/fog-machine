@@ -233,7 +233,6 @@
 		E314F6BD1B79023D005B75C6 /* FogMachine */ = {
 			isa = PBXGroup;
 			children = (
-				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
 				753D3D691BEBA59E004E3589 /* HGT */,
 				E3B933E21B7BD0F9007B9444 /* Data */,
 				E3B933DF1B7BAE32007B9444 /* Views */,
@@ -246,7 +245,6 @@
 				E314F6C91B79023D005B75C6 /* Images.xcassets */,
 				E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */,
 				E314F6BE1B79023D005B75C6 /* Supporting Files */,
-				9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */,
 			);
 			path = FogMachine;
 			sourceTree = "<group>";
@@ -301,7 +299,7 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */,
+				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,
@@ -309,7 +307,9 @@
 				7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */,
 				7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */,
 				753D3D7B1BFBCF66004E3589 /* Hgt.swift */,
+				9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */,
 				7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */,
+				9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */,
 				758FB77E1C0A3A2600A193A7 /* VanKreveld */,
 				75D5A93B1C051BF300B7B246 /* FogModels */,
 			);
