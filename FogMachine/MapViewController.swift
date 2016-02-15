@@ -500,10 +500,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
-            //Can easily change this to print out to a file without modifying the rest of the code.
-            print(output)
-            //metricsOutput = metricsOutput + "\n" + output
-            self.logBox.text = self.logBox.text + "\n" + output
+            let range = NSMakeRange(0, (output as NSString).length)
+            if let regex = try? NSRegularExpression(pattern: "😺[0-9]*", options: .CaseInsensitive) {
+                let printableOutput = regex.stringByReplacingMatchesInString(output, options: .WithTransparentBounds, range: range, withTemplate: "")
+                //Can easily change this to print out to a file without modifying the rest of the code.
+                print(printableOutput)
+                //metricsOutput = metricsOutput + "\n" + output
+                self.logBox.text = self.logBox.text + "\n" + printableOutput
+            }
         }
     }
     

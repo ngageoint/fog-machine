@@ -128,7 +128,11 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         let cell:ConnectionCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell") as! ConnectionCell
         // set cell label
         if indexPath.row < ConnectionManager.allWorkers.count {
-            cell.label.text = ConnectionManager.allWorkers[indexPath.row].displayName.componentsSeparatedByString("😺").joinWithSeparator("-")
+            let range = NSMakeRange(0, (ConnectionManager.allWorkers[indexPath.row].displayName as NSString).length)
+            if let regex = try? NSRegularExpression(pattern: "😺[0-9]*", options: .CaseInsensitive) {
+                let printableOutput = regex.stringByReplacingMatchesInString(ConnectionManager.allWorkers[indexPath.row].displayName, options: .WithTransparentBounds, range: range, withTemplate: "")
+                cell.label.text = printableOutput
+            }
         }
         return cell
     }
