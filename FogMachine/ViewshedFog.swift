@@ -47,7 +47,7 @@ public class ViewshedFog: NSObject {
             
             for (x2, y2) in bresResults {
                 
-                if (x2 > 0 && y2 > 0) && (x2 < maxSize && y2 < maxSize) {
+                if (x2 >= 0 && y2 >= 0) && (x2 < maxSize && y2 < maxSize) {
                     let zk:Int = elevation[obsX][obsY]
                     let zi:Int = elevation[x2][y2]
                     
@@ -57,11 +57,11 @@ public class ViewshedFog: NSObject {
                     
                     if (angle < greatestSlope) {
                         //hidden
-                        viewshedMatrix[x2 - 1][y2 - 1] = 0
+                        viewshedMatrix[x2][y2] = 0
                     } else {
                         greatestSlope = angle
                         //visible
-                        viewshedMatrix[x2 - 1][y2 - 1] = 1
+                        viewshedMatrix[x2][y2] = 1
                     }
                 }
                 
@@ -69,7 +69,7 @@ public class ViewshedFog: NSObject {
             
         }
         
-        viewshedMatrix[obsX - 1][obsY - 1] = -1 // mark observer cell as unique
+        viewshedMatrix[obsX][obsY] = -1 // mark observer cell as unique
         
         return viewshedMatrix
         

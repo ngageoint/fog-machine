@@ -364,7 +364,7 @@ class ViewshedPalette: NSObject {
                 }
             }
         }
-        _ = [Bit]()
+
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
         
         return image

@@ -76,11 +76,6 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         latitude.delegate = self
         longitude.delegate = self
         
-        elevation.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        radius.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        latitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        longitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        
         loadObserverSettings()
     }
     

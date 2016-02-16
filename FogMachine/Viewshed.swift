@@ -67,7 +67,7 @@ public class Viewshed: NSObject {
             for (x2, y2) in bresResults {
                 
                 //hgt elevation is 1201 x 1201, so skip anything outside those bounds
-                if (x2 > 0 && y2 > 0) && (x2 < maxSize && y2 < maxSize) {
+                if (x2 >= 0 && y2 >= 0) && (x2 < maxSize && y2 < maxSize) {
                     // print("Finding angle to: x, y: \(x2),   \(y2)")
                     
                     // i. For each point qi, compute mi.
@@ -88,11 +88,11 @@ public class Viewshed: NSObject {
                     // iii. Otherwise, mark qi as being in the viewshed, and update µ = mi.
                     if (angle < greatestSlope) {
                         //hidden
-                        viewshedMatrix[x2 - 1][y2 - 1] = 0 //used -1 for zero based indexing
+                        viewshedMatrix[x2][y2] = 0 //used -1 for zero based indexing
                     } else {
                         greatestSlope = angle
                         //visible
-                        viewshedMatrix[x2 - 1][y2 - 1] = 1 //used -1 for zero based indexing
+                        viewshedMatrix[x2][y2] = 1 //used -1 for zero based indexing
                     }
                 }
                 
@@ -100,7 +100,7 @@ public class Viewshed: NSObject {
             
         }
         
-        viewshedMatrix[obsX - 1][obsY - 1] = -1 // mark observer cell as unique
+        viewshedMatrix[obsX][obsY] = -1 // mark observer cell as unique
         
         return viewshedMatrix
         
