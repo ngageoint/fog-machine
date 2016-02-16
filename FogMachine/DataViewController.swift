@@ -16,7 +16,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         var latitudePrefix: String
         var longitudePrefix: String
     }
-    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,8 +23,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     var pickerData: [String] = [String]()
     var hgtFilename:String = String()
     var downloadComplete: Bool = false
-    var selectedCoordinates: String = String()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -81,8 +79,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
                 //annotation.coordinate = self.hgtCoordinate
                 annotation.coordinate = CLLocationCoordinate2D(latitude: self.hgtCoordinate.latitude+0.5, longitude: self.hgtCoordinate.longitude+0.5)
                 annotation.title = "Delete " + hgtFilename + ".hgt" + "?"
-                selectedCoordinates = "\(String(format:"%.4f", self.hgtCoordinate.latitude));\(String(format:"%.4f", self.hgtCoordinate.longitude))"
-                //annotation.subtitle = "\(String(format:"%.4f", self.hgtCoordinate.latitude));\(String(format:"%.4f", self.hgtCoordinate.longitude))"
+                annotation.subtitle =  "\(String(format:"%.4f", self.hgtCoordinate.latitude));\(String(format:"%.4f", self.hgtCoordinate.longitude))"
                 mapView.addAnnotation(annotation)
                 let latDelta: CLLocationDegrees = 20
                 let lonDelta: CLLocationDegrees = 20
@@ -129,7 +126,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         }
     }
     
-    // latitude and 105 degrees west longitude
     func parseCoordinate(filename : String) -> CLLocationCoordinate2D {
         
         let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
@@ -143,7 +139,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         if (northSouth.uppercaseString == "S") {
             latitude = latitude * -1.0
         }
-        
         if (westEast.uppercaseString == "W") {
             longitude = longitude * -1.0
         }
@@ -154,7 +149,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         let defaultOverlay = MKPolygonRenderer()
         if overlay is MKPolygon {
             let polygonView = MKPolygonRenderer(overlay: overlay)
-            polygonView.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.5) //UIColor.yellowColor().colorWithAlphaComponent(0.08)
+            polygonView.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.5)
             polygonView.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.5)
             polygonView.lineWidth = 0.4
             return polygonView
@@ -192,6 +187,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             view = self.mapViewCalloutAccessoryAction("Download", annotation: annotation, identifier: identifier)
         } else {
             let identifier = "deleteFile"
+            
             view = self.mapViewCalloutAccessoryAction("Delete", annotation: annotation, identifier: identifier)
         }
         return view
@@ -217,19 +213,10 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         let annotation = view.annotation!
         let annotLatLng = annotation.subtitle
         // added the ';' delimeter in the annotation subtitle in the handleLongPress
-        let latLng = annotLatLng!!.componentsSeparatedByString(";")         //let latLng = selectedCoordinates.componentsSeparatedByString(";")
+        let latLng = annotLatLng!!.componentsSeparatedByString(";")
         var lat: Double! = Double(latLng[0])
         var lng: Double! = Double(latLng[1])
-        /*
-        var latPref = "N"
-        if (lat < 0) {
-            latPref = "S"
-        }
-        var lonPref = "E"
-        if (lng < 0) {
-            lonPref = "W"
-        }
-*/
+
         let tempHgtLatLngPrefix = getHgtLatLngPrefix(lat, longitude: lng)
         // round the lat & long to the closest integer value..
         lat = floor(lat)
@@ -348,16 +335,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let touchLocation:CGPoint = gestureReconizer.locationInView(mapView)
             self.mapView.removeAnnotations(mapView.annotations)
             let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
-            /*
-            var latPref = "N"
-            if (locationCoordinate.latitude < 0) {
-                latPref = "S"
-            }
-            var lonPref = "E"
-            if (locationCoordinate.longitude < 0) {
-                lonPref = "W"
-            }
-            */
             let tempHgtLatLngPrefix = getHgtLatLngPrefix(locationCoordinate.latitude, longitude: locationCoordinate.longitude)
             
             // round the lat & long to the closest integer value..
@@ -428,7 +405,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         if (latitude < 0) {
             tempHgtLatLngPrefix.longitudePrefix = "S"
         }
-        if (latitude < 0) {
+        if (longitude < 0) {
             tempHgtLatLngPrefix.longitudePrefix = "W"
         }
         return tempHgtLatLngPrefix
