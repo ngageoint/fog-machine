@@ -396,13 +396,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     
-    @IBAction func clear(sender: AnyObject) {
-        clearTimer()
-        mapView.removeOverlays(mapView.overlays)
-        self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
-    }
-    
-    
     // MARK: Segue
     
     
@@ -424,6 +417,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
        
     }
     
+
+    @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
+        mapView.removeOverlays(mapView.overlays)
+        self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
+    }
+
     
     @IBAction func removePinFromSettings(segue: UIStoryboardSegue) {
         redrawMap()

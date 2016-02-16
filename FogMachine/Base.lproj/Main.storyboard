@@ -264,11 +264,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="U46-Hx-SEf">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="trash" id="Vhq-x7-MPV">
-                            <connections>
-                                <action selector="clear:" destination="pEj-gH-Hgf" id="NBY-W6-Hb2"/>
-                            </connections>
-                        </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="nzQ-pP-oJH">
                             <rect key="frame" x="185" y="6.5" width="230" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -618,31 +613,41 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUU-dh-4tg" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
-                                                <rect key="frame" x="252" y="20" width="97" height="30"/>
-                                                <state key="normal" title="Delete all Pins"/>
-                                                <connections>
-                                                    <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-7f-qtz">
-                                                <rect key="frame" x="242" y="70" width="116" height="30"/>
+                                                <rect key="frame" x="242" y="120" width="116" height="30"/>
                                                 <state key="normal" title="Copy Demo Files"/>
                                                 <connections>
                                                     <action selector="copyDemoFilesAction:" destination="V4j-6L-7be" eventType="touchUpInside" id="xv4-t5-5mQ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycn-C8-Bk3">
-                                                <rect key="frame" x="209" y="120" width="183" height="30"/>
+                                                <rect key="frame" x="209" y="170" width="183" height="30"/>
                                                 <state key="normal" title="Pre-Load Demo Observers"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTT-Lj-IHi">
+                                                <rect key="frame" x="229" y="20" width="142" height="30"/>
+                                                <state key="normal" title="Delete all Viewsheds"/>
+                                                <connections>
+                                                    <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="removeViewshedFromSettings:" id="zcX-zX-NtR"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
+                                                <rect key="frame" x="252" y="70" width="97" height="30"/>
+                                                <state key="normal" title="Delete all Pins"/>
+                                                <connections>
+                                                    <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="GjH-8i-ueK"/>
+                                            <constraint firstItem="wfz-Ba-OPZ" firstAttribute="top" secondItem="sTT-Lj-IHi" secondAttribute="bottom" constant="20" id="M9f-cv-1JD"/>
+                                            <constraint firstItem="sTT-Lj-IHi" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="20" id="Ppe-KP-Upl"/>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="top" secondItem="wfz-Ba-OPZ" secondAttribute="bottom" constant="20" id="R2I-ux-eQ7"/>
                                             <constraint firstItem="wfz-Ba-OPZ" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="XEu-cZ-SvL"/>
                                             <constraint firstItem="ycn-C8-Bk3" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="XVN-df-CZh"/>
                                             <constraint firstItem="wfz-Ba-OPZ" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="20" id="YUN-CD-D9c"/>
+                                            <constraint firstItem="sTT-Lj-IHi" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="b4y-RR-0a1"/>
                                             <constraint firstAttribute="height" constant="428" id="dO5-Rc-ngr"/>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="trailing" secondItem="wfz-Ba-OPZ" secondAttribute="trailing" id="kUg-3E-WQi"/>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="62" id="pKM-oF-Qk3"/>
@@ -650,6 +655,7 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="YUN-CD-D9c"/>
                                                 <exclude reference="kUg-3E-WQi"/>
                                                 <exclude reference="pKM-oF-Qk3"/>
                                             </mask>
