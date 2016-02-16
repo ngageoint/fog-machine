@@ -23,7 +23,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     var pickerData: [String] = [String]()
     var hgtFilename:String = String()
     var downloadComplete: Bool = false
-
+    var locationManager: CLLocationManager!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -38,8 +39,28 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)
+        
+        self.locationManager = CLLocationManager()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.delegate = self;
+        //self.mapView.userLocation.title = "Download";
+        //self.hgtCoordinate = self.mapView.userLocation.coordinate
+        //self.mapView.userLocation.subtitle = "\(String(format:"%.4f", self.hgtCoordinate.latitude));\(String(format:"%.4f", self.hgtCoordinate.longitude))"
+        let status = CLLocationManager.authorizationStatus()
+        if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
+            // present an alert indicating location authorization required
+            // and offer to take the user to Settings for the app via
+            // UIApplication -openUrl: and UIApplicationOpenSettingsURLString
+            self.locationManager.requestAlwaysAuthorization()
+            self.locationManager.requestWhenInUseAuthorization()
+        }
+        self.locationManager.startUpdatingLocation()
+        //self.locationManager.startUpdatingHeading()
+        self.mapView.showsUserLocation = true
+        //self.mapView.mapType = MKMapType(rawValue: 0)!
+        //self.mapView.setUserTrackingMode(MKUserTrackingMode.Follow, animated: true);
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         // remove the rectangle boundary on the map for the dowloaded data
@@ -50,13 +71,26 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         // refresh the table with the latest array data
         self.refresh()
     }
-
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-         mapView.mapType = MKMapType(rawValue: 0)!
+        // Dispose of any resources that can be recreated.
     }
- 
+    
+    // MARK: - Location Delegate Methods
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last
+        
+        let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+        self.mapView.setRegion(region, animated: true)
+        self.locationManager.stopUpdatingLocation()
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error: " + error.localizedDescription)
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let dataCell = tableView.dequeueReusableCellWithIdentifier("dataCell", forIndexPath: indexPath)
         dataCell.textLabel!.text = self.pickerData[indexPath.row]
@@ -73,7 +107,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         if let aTmpStr:String = selectedHGTFile {
             if !aTmpStr.isEmpty {
                 self.hgtFilename = aTmpStr[aTmpStr.startIndex.advancedBy(0)...aTmpStr.startIndex.advancedBy(6)]
-                mapView.removeAnnotations(mapView.annotations)
+                self.mapView.removeAnnotations(mapView.annotations)
                 self.hgtCoordinate = parseCoordinate(hgtFilename)
                 let annotation = MKPointAnnotation()
                 //annotation.coordinate = self.hgtCoordinate
@@ -112,7 +146,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     
     func manageHgtDataArray(docDirItem: String, arrayAction: String) {
-        
         let hgFileName = NSURL(fileURLWithPath: docDirItem).URLByDeletingPathExtension?.lastPathComponent
         self.hgtCoordinate = self.parseCoordinate(hgFileName!)
         let tableCellItem = "\(docDirItem) (Lat:\(self.hgtCoordinate.latitude) Lng:\(self.hgtCoordinate.longitude))"
@@ -127,7 +160,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     
     func parseCoordinate(filename : String) -> CLLocationCoordinate2D {
-        
         let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
         let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
         let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
@@ -135,7 +167,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         
         var latitude:Double = Double(latitudeValue)!
         var longitude:Double = Double(longitudeValue)!
-        
         if (northSouth.uppercaseString == "S") {
             latitude = latitude * -1.0
         }
@@ -182,6 +213,11 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         var view : MKAnnotationView! = nil
         let t: String = String(annotation.title)
+        if (annotation is MKUserLocation) {
+            //if annotation is not an MKPointAnnotation (eg. MKUserLocation),
+            //return nil so map draws default view for it (eg. blue dot)...
+            return nil
+        }
         if (t.containsString("Download")) {
             let identifier = "downloadFile"
             view = self.mapViewCalloutAccessoryAction("Download", annotation: annotation, identifier: identifier)
@@ -216,13 +252,12 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         let latLng = annotLatLng!!.componentsSeparatedByString(";")
         var lat: Double! = Double(latLng[0])
         var lng: Double! = Double(latLng[1])
-
+        
         let tempHgtLatLngPrefix = getHgtLatLngPrefix(lat, longitude: lng)
         // round the lat & long to the closest integer value..
         lat = floor(lat)
         lng = floor(lng)
         
-        //let strFileName = (String(format:"%@%02d%@%03d%@", latPref, abs(Int(lat)), lonPref, abs(Int(lng)), ".hgt"))
         let strFileName = (String(format:"%@%02d%@%03d%@", tempHgtLatLngPrefix.latitudePrefix, abs(Int(lat)), tempHgtLatLngPrefix.longitudePrefix, abs(Int(lng)), ".hgt"))
         self.hgtCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
         let strTableCellItem = "\(strFileName) (Lat:\(lat) Lng:\(lng))"
@@ -400,7 +435,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     
     func getHgtLatLngPrefix(latitude: Double, longitude: Double) -> hgtLatLngPrefix {
-
+        
         var tempHgtLatLngPrefix = hgtLatLngPrefix(latitudePrefix: "N", longitudePrefix: "E")
         if (latitude < 0) {
             tempHgtLatLngPrefix.longitudePrefix = "S"
