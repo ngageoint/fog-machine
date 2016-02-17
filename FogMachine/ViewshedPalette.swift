@@ -46,10 +46,10 @@ class ViewshedPalette: NSObject {
             
             //Determine which side radius is past the currHgt file
             // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
-            let topOverlap = observer.xCoord - observer.radius
-            let leftOverlap = observer.yCoord - observer.radius
-            let bottomOverlap = observer.xCoord + observer.radius
-            let rightOverlap = observer.yCoord + observer.radius
+            let topOverlap = observer.xCoord - observer.getViewshedSrtm3Radius()
+            let leftOverlap = observer.yCoord - observer.getViewshedSrtm3Radius()
+            let bottomOverlap = observer.xCoord + observer.getViewshedSrtm3Radius()
+            let rightOverlap = observer.yCoord + observer.getViewshedSrtm3Radius()
             
             var left = false
             var top = false
@@ -210,6 +210,10 @@ class ViewshedPalette: NSObject {
             printOut("Error getting HGT file " + " \(error): \(error.userInfo)")
         }
         
+        
+        //Need to handle the foundHgt = nil case
+        
+        
         return foundHgt
     }
     
@@ -229,10 +233,10 @@ class ViewshedPalette: NSObject {
         var isRadiusWithinHgt = true
         //Determine which side radius is past the currHgt file
         // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
-        let topOverlap = observer.xCoord - observer.radius
-        let leftOverlap = observer.yCoord - observer.radius
-        let bottomOverlap = observer.xCoord + observer.radius
-        let rightOverlap = observer.yCoord + observer.radius
+        let topOverlap = observer.xCoord - observer.getViewshedSrtm3Radius()
+        let leftOverlap = observer.yCoord - observer.getViewshedSrtm3Radius()
+        let bottomOverlap = observer.xCoord + observer.getViewshedSrtm3Radius()
+        let rightOverlap = observer.yCoord + observer.getViewshedSrtm3Radius()
         
         if leftOverlap < 0 ||
             topOverlap < 0 ||
@@ -360,12 +364,61 @@ class ViewshedPalette: NSObject {
                 }
             }
         }
-        
+
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
         
         return image
         
     }
+    
+    
+    
+    
+//    
+//    func generateViewshedImageRedux(elevationGrid: [[Int]]) -> UIImage {
+//        
+//        // anyone know how tall everest is?  not more than 9000 meters, right?
+//        var maxElevation = 9000
+//        // high stuff is red
+//        var maxElevationColor = Pixel(alpha:50, red: 255, green: 0, blue: 0)
+//        
+//        // anyone know the elevation of death valley ???  prob not less than 100 meters below sea level
+//        var minElevation = -100
+//        // low stuff is green
+//        var minElevationColor = Pixel(alpha:50, red: 0, green: 255, blue: 0)
+//        
+//        var coolImage: [Pixel] = []
+//        
+//        // loop over the elevation data
+//        for(var y = 0; y < elevationGrid[0].count; y++) {
+//            for(var x = 0; x < elevationGrid.count; x++) {
+//                
+//                // this is a number between minElevation and maxElevation
+//                var elevation_at_xy = elevationGrid[y][x]
+//                
+//                var percent_elevation_at_xy = Double(elevation_at_xy / (maxElevation - minElevation))
+//                
+//                // find color between green and red based on percentage
+//                var colorR = (percent_elevation_at_xy * Int(maxElevationColor.red)) + ((1.0 - percent_elevation_at_xy) * minElevationColor.red)
+//                var colorG = (percent_elevation_at_xy * maxElevationColor.green) + ((1.0 - percent_elevation_at_xy)*minElevationColor.green)
+//                var colorB = (percent_elevation_at_xy * maxElevationColor.blue) + ((1.0 - percent_elevation_at_xy) * minElevationColor.blue)
+//                
+//                // da color
+//                var color = Pixel(alpha:50, red: colorR, green: colorG, blue: colorB)
+//                
+//                // projection for UIimage.  these are indexs in an array.  Do you floor or ceil them????
+//                var xprime = lon2x_SphericalMercator(x)
+//                var yprime = lat2y_SphericalMercator(y)
+//                
+//                // maybe this isn't an array anymore?!?  Not sure what utils apple provides for drawing...
+//                coolImage[xprime][yprime] = color
+//            }
+//        }
+//        return imageFromArgb32Bitmap(data, width: width, height: height)
+//    }
+//    
+//    
+    
     
     
     func mergeViewshedResults(viewshedOne: [[Int]], viewshedTwo: [[Int]]) -> [[Int]] {

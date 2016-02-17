@@ -76,11 +76,6 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         latitude.delegate = self
         longitude.delegate = self
         
-        elevation.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        radius.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        latitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        longitude.keyboardType = UIKeyboardType.NumbersAndPunctuation
-        
         loadObserverSettings()
     }
     
@@ -104,7 +99,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         
         if elevationValue != nil && radiusValue != nil && latitudeValue != nil && longitudeValue != nil {
             editedObserver.elevation = elevationValue!
-            editedObserver.radius = radiusValue!
+            editedObserver.setRadius(radiusValue!)
             editedObserver.coordinate = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
         }
         

@@ -18,7 +18,7 @@ class ObserverEntity: NSManagedObject {
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
     @NSManaged var name: String
-    @NSManaged var radius: Int16
+    @NSManaged var radius: Int32
     @NSManaged var xCoord: Int16
     @NSManaged var yCoord: Int16
     

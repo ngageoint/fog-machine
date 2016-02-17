@@ -70,7 +70,7 @@ class ObserverFacade {
             managedObject.setValue(observer.xCoord, forKey: FogViewshed.XCOORD)
             managedObject.setValue(observer.yCoord, forKey: FogViewshed.YCOORD)
             managedObject.setValue(observer.elevation, forKey: FogViewshed.ELEVATION)
-            managedObject.setValue(observer.radius, forKey: FogViewshed.RADIUS)
+            managedObject.setValue(observer.getRadius(), forKey: FogViewshed.RADIUS)
             managedObject.setValue(observer.coordinate.latitude, forKey: FogViewshed.LATITUDE)
             managedObject.setValue(observer.coordinate.longitude, forKey: FogViewshed.LONGITUDE)
             
@@ -87,7 +87,7 @@ class ObserverFacade {
         managedObject.setValue(observer.xCoord, forKey: FogViewshed.XCOORD)
         managedObject.setValue(observer.yCoord, forKey: FogViewshed.YCOORD)
         managedObject.setValue(observer.elevation, forKey: FogViewshed.ELEVATION)
-        managedObject.setValue(observer.radius, forKey: FogViewshed.RADIUS)
+        managedObject.setValue(observer.getRadius(), forKey: FogViewshed.RADIUS)
         managedObject.setValue(observer.coordinate.latitude, forKey: FogViewshed.LATITUDE)
         managedObject.setValue(observer.coordinate.longitude, forKey: FogViewshed.LONGITUDE)
         

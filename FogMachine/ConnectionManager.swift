@@ -123,29 +123,12 @@ struct ConnectionManager {
         for peer in peers {
             if peer.displayName == sendTo {
                 let toPeer:[MCPeerID] = [peer]
-                //if willThrottle {
-                    //This is not currently needed, but keeping it here in case it's used for other testing/debugging
-                    //self.throttle()
-                //}
+
                 PeerKit.sendEvent(event.rawValue, object: anyObject, toPeers: toPeer)
                 break
             }
         }
 
-    }
-    
-    
-    static func throttle() {
-        // I dislike sleep's but this was being used so the Multipeer Connectivity doesn't send events too fast to the same peer. (The events will go *poof* and never get sent if the sleep doesn't throttle them.) Although this does not always work so it might be related to some other unknown issue.
-        let sleepAmount:UInt32 = UInt32(peers.count * 5 + 1)
-        //Output is here as a reminder that there is a sleep
-        NSLog("I NEEDZ NAP FOR \(sleepAmount) SECONDZ")
-        let alignment = "\t\t\t\t\t\t\t\t\t\t\t\t\t"
-        print("\(alignment)           /\\_/\\ ")
-        print("\(alignment)      ____/ o o \\ ")
-        print("\(alignment)    /~____  =ø= /  ")
-        print("\(alignment)   (______)__m_m)  ")
-        sleep(UInt32(arc4random_uniform(sleepAmount) + sleepAmount))
     }
     
     
