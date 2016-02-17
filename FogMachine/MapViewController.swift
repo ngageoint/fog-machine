@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     
     // MARK: IBOutlets
@@ -32,7 +32,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
     var elapsedTime: CFAbsoluteTime!
-
+    var locationManager: CLLocationManager!
+    
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
     
@@ -63,8 +64,30 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         setupFogViewshedEvents()
+        locationManagerSettings()
     }
     
+    func locationManagerSettings() {
+        self.locationManager = CLLocationManager()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.delegate = self
+        
+        let status = CLLocationManager.authorizationStatus()
+        if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
+            // present an alert indicating location authorization required
+            // and offer to take the user to Settings for the app via
+            self.locationManager.requestAlwaysAuthorization()
+            self.locationManager.requestWhenInUseAuthorization()
+        }
+        self.locationManager.startUpdatingLocation()
+        self.mapView.showsUserLocation = true
+    }
+ 
+    
+    func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -81,11 +104,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
-    
-    func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
-        mapView.setRegion(coordinateRegion, animated: true)
+    @IBAction func focusToCurrentLocation(sender: AnyObject) {
+        if let coordinate = mapView.userLocation.location?.coordinate {
+            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+            self.mapView.setRegion(region, animated: true)
+            self.locationManager.stopUpdatingLocation()
+        }
     }
+
     
     
     func pinObserverLocation(observer: Observer) {
