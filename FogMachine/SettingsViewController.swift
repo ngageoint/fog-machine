@@ -11,19 +11,29 @@ import MapKit
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
     
-  
-    let defaults = NSUserDefaults.standardUserDefaults()
-    @IBOutlet weak var copyDemoFiles: UIButton!
     
+    // MARK: Class Variables
+    
+    
+    var isLogShown: Bool!
+    let defaults = NSUserDefaults.standardUserDefaults()
+    
+    
+    // MARK: IBOutlets
+    
+    
+    @IBOutlet weak var copyDemoFiles: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var mapLogSwitch: UISwitch!
+
+    
+    // MARK: IBActions
+    
     
     @IBAction func hideKeyboard(sender: AnyObject) {
         scrollView.endEditing(true)
     }
     
-    @IBAction func resetOptions(sender: AnyObject) {
-        
-    }
     
     @IBAction func copyDemoFilesAction(sender: AnyObject) {
         ActivityIndicator.show("Copying..", disableUI: false)
@@ -65,8 +75,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        applyUserSettings()
+        setMapLogSwitch()
     }
     
     
@@ -75,32 +84,23 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    
-    func applyUserSettings() {
-        //Created as a default
-        //Might not have anything to apply here
-        
-        applyDefaults()
-        
-    }
-    
-    
-    func applyDefaults() {
-        //Created as a default
-        //Might not have anything to apply here
-        
-    }
-    
-    
+
     // MARK: Functions
+
+    
+    func setMapLogSwitch() {
+        guard let isLogShown = self.isLogShown else {
+            return
+        }
+
+        mapLogSwitch.setOn(isLogShown, animated: true)
+    }
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "applyOptions" {
-            // apply Options
-        }
+        let viewController: MapViewController = segue.destinationViewController as! MapViewController
+        viewController.isLogShown = mapLogSwitch.on
     }
-
     
 }
 

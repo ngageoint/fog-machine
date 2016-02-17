@@ -47,8 +47,8 @@
 		9BD5C1001C05E51E004A37B6 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F61C05E51E004A37B6 /* Point.swift */; };
 		9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */; };
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
-		9BE78E791C727D1E00506F11 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE78E781C727D1E00506F11 /* Toast.swift */; };
 		9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */; };
+		9BE78E791C727D1E00506F11 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE78E781C727D1E00506F11 /* Toast.swift */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
 		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
@@ -117,8 +117,8 @@
 		9BD5C0F61C05E51E004A37B6 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftPriorityQueue.swift; sourceTree = "<group>"; };
 		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
-		9BE78E781C727D1E00506F11 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		9BE78E781C727D1E00506F11 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D18A74A424D7E9AE3C3F046F /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -235,7 +235,6 @@
 		E314F6BD1B79023D005B75C6 /* FogMachine */ = {
 			isa = PBXGroup;
 			children = (
-				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
 				753D3D691BEBA59E004E3589 /* HGT */,
 				E3B933E21B7BD0F9007B9444 /* Data */,
 				E3B933DF1B7BAE32007B9444 /* Views */,
@@ -248,8 +247,6 @@
 				E314F6C91B79023D005B75C6 /* Images.xcassets */,
 				E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */,
 				E314F6BE1B79023D005B75C6 /* Supporting Files */,
-				9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */,
-				9BE78E781C727D1E00506F11 /* Toast.swift */,
 			);
 			path = FogMachine;
 			sourceTree = "<group>";
@@ -282,7 +279,9 @@
 		E3B933DF1B7BAE32007B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
 				E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */,
+				9BE78E781C727D1E00506F11 /* Toast.swift */,
 				753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */,
 			);
 			name = Views;
@@ -304,7 +303,6 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,

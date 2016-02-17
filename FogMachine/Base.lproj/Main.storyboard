@@ -213,14 +213,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
-                                <rect key="frame" x="5" y="450" width="590" height="101"/>
+                                <rect key="frame" x="5" y="446.5" width="590" height="104.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="skG-eX-ae4">
-                                <rect key="frame" x="0.0" y="64" width="600" height="386"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="551"/>
                                 <connections>
                                     <outlet property="delegate" destination="pEj-gH-Hgf" id="vRM-Y6-ksd"/>
                                 </connections>
@@ -235,11 +235,13 @@
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="88U-br-EID" secondAttribute="bottom" id="Lsn-QS-6Kq"/>
                             <constraint firstAttribute="trailingMargin" secondItem="skG-eX-ae4" secondAttribute="trailing" constant="-20" id="MBh-Yb-WDT"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="SXy-BA-2Xc"/>
-                            <constraint firstItem="skG-eX-ae4" firstAttribute="height" secondItem="gPy-Q9-cSb" secondAttribute="height" multiplier="0.7" id="aVH-VT-mDq"/>
+                            <constraint firstItem="skG-eX-ae4" firstAttribute="height" secondItem="gPy-Q9-cSb" secondAttribute="height" id="aVH-VT-mDq"/>
+                            <constraint firstItem="88U-br-EID" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="beh-Pt-kOZ"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leadingMargin" constant="-15" id="cuv-LI-FBY"/>
                             <constraint firstItem="skG-eX-ae4" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leading" id="dMh-tm-2Zh"/>
                             <constraint firstItem="88U-br-EID" firstAttribute="leading" secondItem="gPy-Q9-cSb" secondAttribute="leading" constant="5" id="jV2-pz-BdR"/>
                             <constraint firstAttribute="trailing" secondItem="88U-br-EID" secondAttribute="trailing" constant="5" id="jgK-AU-Xjx"/>
+                            <constraint firstItem="88U-br-EID" firstAttribute="height" secondItem="gPy-Q9-cSb" secondAttribute="height" multiplier="0.19" id="jn7-BV-J33"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" constant="123" id="nrC-2f-Etb"/>
                             <constraint firstAttribute="trailingMargin" secondItem="88U-br-EID" secondAttribute="trailing" constant="-15" id="q0r-KS-5Jv"/>
                             <constraint firstItem="nk6-LY-TBR" firstAttribute="top" secondItem="skG-eX-ae4" secondAttribute="bottom" id="qrK-DX-3sW"/>
@@ -253,8 +255,10 @@
                                 <exclude reference="MBh-Yb-WDT"/>
                                 <exclude reference="smb-RS-vRN"/>
                                 <exclude reference="AR9-4w-aZs"/>
+                                <exclude reference="DqO-YU-Jgs"/>
                                 <exclude reference="GgP-Cq-Sw7"/>
                                 <exclude reference="SXy-BA-2Xc"/>
+                                <exclude reference="beh-Pt-kOZ"/>
                                 <exclude reference="cuv-LI-FBY"/>
                                 <exclude reference="q0r-KS-5Jv"/>
                                 <exclude reference="nrC-2f-Etb"/>
@@ -283,7 +287,7 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="zR3-sj-Rfp">
                             <connections>
-                                <segue destination="53Q-pU-Hr3" kind="presentation" id="Hlw-pC-z4X"/>
+                                <segue destination="53Q-pU-Hr3" kind="presentation" identifier="settings" id="Hlw-pC-z4X"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -291,6 +295,7 @@
                         <outlet property="logBox" destination="88U-br-EID" id="3DW-K5-j0S"/>
                         <outlet property="mapTypeSelector" destination="nzQ-pP-oJH" id="d2m-9C-YpP"/>
                         <outlet property="mapView" destination="skG-eX-ae4" id="fWJ-nl-x23"/>
+                        <outlet property="mapViewProportionalHeight" destination="aVH-VT-mDq" id="Xx2-6w-Mxw"/>
                         <segue destination="Z35-Yt-lAb" kind="presentation" identifier="observerSettings" id="PmB-Og-wWT"/>
                     </connections>
                 </viewController>
@@ -633,19 +638,32 @@
                                                 <rect key="frame" x="229" y="20" width="142" height="30"/>
                                                 <state key="normal" title="Delete all Viewsheds"/>
                                                 <connections>
-                                                    <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="removeViewshedFromSettings:" id="zcX-zX-NtR"/>
+                                                    <segue destination="Mfb-3w-qql" kind="unwind" identifier="removeViewshedFromSettings" unwindAction="removeViewshedFromSettings:" id="zcX-zX-NtR"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
                                                 <rect key="frame" x="252" y="70" width="97" height="30"/>
                                                 <state key="normal" title="Delete all Pins"/>
                                                 <connections>
-                                                    <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
+                                                    <segue destination="Mfb-3w-qql" kind="unwind" identifier="deleteAllPins" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Display Map Log" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTx-Dj-7U1">
+                                                <rect key="frame" x="19" y="383" width="133" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="133" id="JJF-xS-on0"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O6b-NL-dLh">
+                                                <rect key="frame" x="527" y="378" width="51" height="31"/>
+                                            </switch>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="GjH-8i-ueK"/>
+                                            <constraint firstAttribute="bottom" secondItem="O6b-NL-dLh" secondAttribute="bottom" constant="19" id="Lcb-rp-zaa"/>
                                             <constraint firstItem="wfz-Ba-OPZ" firstAttribute="top" secondItem="sTT-Lj-IHi" secondAttribute="bottom" constant="20" id="M9f-cv-1JD"/>
                                             <constraint firstItem="sTT-Lj-IHi" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="20" id="Ppe-KP-Upl"/>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="top" secondItem="wfz-Ba-OPZ" secondAttribute="bottom" constant="20" id="R2I-ux-eQ7"/>
@@ -655,7 +673,10 @@
                                             <constraint firstItem="sTT-Lj-IHi" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="b4y-RR-0a1"/>
                                             <constraint firstAttribute="height" constant="428" id="dO5-Rc-ngr"/>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="trailing" secondItem="wfz-Ba-OPZ" secondAttribute="trailing" id="kUg-3E-WQi"/>
+                                            <constraint firstAttribute="bottom" secondItem="aTx-Dj-7U1" secondAttribute="bottom" constant="24" id="naH-uG-1F8"/>
                                             <constraint firstItem="Vbn-7f-qtz" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="62" id="pKM-oF-Qk3"/>
+                                            <constraint firstItem="aTx-Dj-7U1" firstAttribute="leading" secondItem="YUU-dh-4tg" secondAttribute="leading" constant="19" id="paD-4G-g2T"/>
+                                            <constraint firstAttribute="trailing" secondItem="O6b-NL-dLh" secondAttribute="trailing" constant="24" id="rY2-zJ-Rhz"/>
                                             <constraint firstItem="ycn-C8-Bk3" firstAttribute="top" secondItem="Vbn-7f-qtz" secondAttribute="bottom" constant="20" id="uwg-6T-GW7"/>
                                         </constraints>
                                         <variation key="default">
@@ -678,32 +699,13 @@
                                     <outletCollection property="gestureRecognizers" destination="Xiu-cF-GiI" appends="YES" id="Uu0-RP-3nq"/>
                                 </connections>
                             </scrollView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="138-fr-gLW">
-                                <rect key="frame" x="0.0" y="492" width="600" height="44"/>
-                                <items>
-                                    <barButtonItem title="Reset" id="q5v-0K-zdv">
-                                        <connections>
-                                            <action selector="resetOptions:" destination="V4j-6L-7be" id="QDa-QH-KLE"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Kag-N9-vGI"/>
-                                    <barButtonItem title="Apply" id="0z6-Nq-Hh4">
-                                        <connections>
-                                            <segue destination="Mfb-3w-qql" kind="unwind" unwindAction="applyOptions:" id="44N-s0-ik5"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="5ST-rc-8jS" secondAttribute="bottom" id="8bj-hd-hbg"/>
-                            <constraint firstItem="138-fr-gLW" firstAttribute="leading" secondItem="5ST-rc-8jS" secondAttribute="leading" id="EIe-av-Jcz"/>
-                            <constraint firstItem="7go-yd-6eg" firstAttribute="top" secondItem="138-fr-gLW" secondAttribute="bottom" id="GKV-40-ki9"/>
                             <constraint firstItem="5ST-rc-8jS" firstAttribute="leading" secondItem="F3n-HK-FfP" secondAttribute="leading" id="JKX-DD-MzK"/>
-                            <constraint firstItem="138-fr-gLW" firstAttribute="trailing" secondItem="5ST-rc-8jS" secondAttribute="trailing" id="N7k-bQ-zJm"/>
+                            <constraint firstItem="7go-yd-6eg" firstAttribute="top" secondItem="5ST-rc-8jS" secondAttribute="bottom" constant="44" id="MHg-Wn-4KJ"/>
                             <constraint firstItem="5ST-rc-8jS" firstAttribute="top" secondItem="FVE-M6-YJp" secondAttribute="bottom" id="gul-Pk-kdC"/>
-                            <constraint firstItem="138-fr-gLW" firstAttribute="top" secondItem="5ST-rc-8jS" secondAttribute="bottom" id="oxA-D9-6DB"/>
                             <constraint firstItem="YUU-dh-4tg" firstAttribute="width" secondItem="F3n-HK-FfP" secondAttribute="width" id="p9x-pV-RWl"/>
                             <constraint firstAttribute="trailing" secondItem="5ST-rc-8jS" secondAttribute="trailing" id="rY1-jy-jlq"/>
                         </constraints>
@@ -715,7 +717,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="Settings" id="Xjx-Co-rQa">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="lT4-IB-pwF">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="lT4-IB-pwF">
                             <connections>
                                 <segue destination="Mfb-3w-qql" kind="unwind" identifier="cancelAdvancedFilter" unwindAction="unwindFromModal:" id="QWT-C0-oBT"/>
                             </connections>
@@ -723,6 +725,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="copyDemoFiles" destination="Vbn-7f-qtz" id="FRR-cN-aK2"/>
+                        <outlet property="mapLogSwitch" destination="O6b-NL-dLh" id="9uG-xf-dMQ"/>
                         <outlet property="scrollView" destination="5ST-rc-8jS" id="AAO-87-jw7"/>
                     </connections>
                 </viewController>

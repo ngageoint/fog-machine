@@ -13,14 +13,6 @@ import MapKit
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     
-    // MARK: IBOutlets
-
-    
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var mapTypeSelector: UISegmentedControl!
-    @IBOutlet weak var logBox: UITextView!
-
-    
     // MARK: Class Variables
     
     
@@ -28,13 +20,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var model = ObserverFacade()
     var settingsObserver = Observer() //Only use for segue from ObserverSettings
     var viewshedPalette: ViewshedPalette!
-    
+    var isLogShown: Bool!
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
     var elapsedTime: CFAbsoluteTime!
     var locationManager: CLLocationManager!
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
+    
+    
+    // MARK: IBOutlets
+
+    
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapTypeSelector: UISegmentedControl!
+    @IBOutlet weak var logBox: UITextView!
+    @IBOutlet weak var mapViewProportionalHeight: NSLayoutConstraint!
     
     
     override func viewDidLoad() {
@@ -46,6 +47,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.addGestureRecognizer(gesture)
         
         metricsOutput = ""
+        isLogShown = false
         logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
         logBox.editable = false
         
@@ -201,6 +203,39 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         } else {
             print("Observer not found for \((view.annotation?.coordinate)!)")
+        }
+    }
+    
+    
+    func changeMultiplier(constraint: NSLayoutConstraint, multiplier: CGFloat) -> NSLayoutConstraint {
+        let newConstraint = NSLayoutConstraint(
+            item: constraint.firstItem,
+            attribute: constraint.firstAttribute,
+            relatedBy: constraint.relation,
+            toItem: constraint.secondItem,
+            attribute: constraint.secondAttribute,
+            multiplier: multiplier,
+            constant: constraint.constant)
+        
+        newConstraint.priority = constraint.priority
+        
+        NSLayoutConstraint.deactivateConstraints([constraint])
+        NSLayoutConstraint.activateConstraints([newConstraint])
+        
+        return newConstraint
+    }
+    
+    
+    func setMapLogDisplay() {
+        guard let isLogShown = self.isLogShown else {
+            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
+            return
+        }
+        
+        if isLogShown {
+            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.7)
+        } else {
+            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
         }
     }
     
@@ -431,21 +466,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let navController = segue.destinationViewController as! UINavigationController
             let viewController: ObserverSettingsViewController = navController.topViewController as! ObserverSettingsViewController
             viewController.originalObserver = sender as! ObserverEntity?
+        } else if segue.identifier == "settings" {
+            let navController = segue.destinationViewController as! UINavigationController
+            let viewController: SettingsViewController = navController.topViewController as! SettingsViewController
+            viewController.isLogShown = self.isLogShown
         }
     }
     
     
     @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
-        
+        setMapLogDisplay()
     }
     
     
     @IBAction func applyOptions(segue: UIStoryboardSegue) {
        
     }
-    
+
 
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
+        setMapLogDisplay()
         mapView.removeOverlays(mapView.overlays)
         self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
     }
@@ -457,6 +497,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
+        setMapLogDisplay()
         model.clearEntity()
         removeAllFromMap()
     }
