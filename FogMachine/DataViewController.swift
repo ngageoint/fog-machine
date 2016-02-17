@@ -57,6 +57,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         self.locationManager.startUpdatingLocation()
         //self.locationManager.startUpdatingHeading()
         self.mapView.showsUserLocation = true
+        //self.mapView.tintColor = UIColor.blueColor()
         //self.mapView.mapType = MKMapType(rawValue: 0)!
         //self.mapView.setUserTrackingMode(MKUserTrackingMode.Follow, animated: true);
     }
@@ -80,8 +81,16 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     // MARK: - Location Delegate Methods
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations.last
+        
         let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+        let pointAnnotation:MKPointAnnotation = MKPointAnnotation()
+        pointAnnotation.coordinate = location!.coordinate
+        pointAnnotation.title = "Download Current Location?"
+        pointAnnotation.subtitle =  "\(String(format:"%.4f", location!.coordinate.latitude));\(String(format:"%.4f", location!.coordinate.longitude))"
+        self.mapView?.addAnnotation(pointAnnotation)
+        self.mapView?.centerCoordinate = location!.coordinate
+        self.mapView?.selectAnnotation(pointAnnotation, animated: true)
         self.mapView.setRegion(region, animated: true)
         self.locationManager.stopUpdatingLocation()
     }
@@ -215,14 +224,14 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         if (annotation is MKUserLocation) {
             //if annotation is not an MKPointAnnotation (eg. MKUserLocation),
             //return nil so map draws default view for it (eg. blue dot)...
+            //let identifier = "downloadFile"
+            //view = self.mapViewCalloutAccessoryAction("Download", annotation: annotation, identifier: identifier)
             return nil
-        }
-        if (t.containsString("Download")) {
+        } else if (t.containsString("Download")) {
             let identifier = "downloadFile"
             view = self.mapViewCalloutAccessoryAction("Download", annotation: annotation, identifier: identifier)
         } else {
             let identifier = "deleteFile"
-            
             view = self.mapViewCalloutAccessoryAction("Delete", annotation: annotation, identifier: identifier)
         }
         return view
