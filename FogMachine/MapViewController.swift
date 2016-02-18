@@ -24,7 +24,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
     var elapsedTime: CFAbsoluteTime!
-    var locationManager: CLLocationManager!
+    let locationManager: CLLocationManager = CLLocationManager()
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
@@ -66,25 +66,38 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         
         setupFogViewshedEvents()
-        locationManagerSettings()
     }
-    
+
     func locationManagerSettings() {
-        self.locationManager = CLLocationManager()
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        self.locationManager.delegate = self
-        
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        self.mapView.tintColor = UIColor.blueColor()
         let status = CLLocationManager.authorizationStatus()
         if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
             // present an alert indicating location authorization required
             // and offer to take the user to Settings for the app via
-            self.locationManager.requestAlwaysAuthorization()
-            self.locationManager.requestWhenInUseAuthorization()
+            locationManager.requestWhenInUseAuthorization()
         }
-        self.locationManager.startUpdatingLocation()
-        self.mapView.showsUserLocation = true
+        locationManager.startUpdatingLocation()
+        mapView.showsUserLocation = true
     }
  
+    // MARK: - Location Delegate Methods
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last
+        
+        let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+        self.mapView.tintColor = UIColor.blueColor()
+        self.mapView?.centerCoordinate = location!.coordinate
+        self.mapView.setRegion(region, animated: true)
+        self.locationManager.stopUpdatingLocation()
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error: " + error.localizedDescription)
+    }
+    
     
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
@@ -107,11 +120,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
+        locationManagerSettings()
+        
         if let coordinate = mapView.userLocation.location?.coordinate {
             let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
             self.mapView.setRegion(region, animated: true)
-            self.locationManager.stopUpdatingLocation()
         }
     }
 
@@ -172,6 +186,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         var view:MKPinAnnotationView? = nil
         let identifier = "pin"
+        if (annotation is MKUserLocation) {
+            //if annotation is not an MKPointAnnotation (eg. MKUserLocation),
+            //return nil so map draws default view for it (eg. blue bubble)...
+            return nil
+        }
         if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView

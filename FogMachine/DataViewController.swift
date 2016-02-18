@@ -47,12 +47,9 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
             // present an alert indicating location authorization required
             // and offer to take the user to Settings for the app via
-            // UIApplication -openUrl: and UIApplicationOpenSettingsURLString
-            self.locationManager.requestAlwaysAuthorization()
             self.locationManager.requestWhenInUseAuthorization()
         }
         self.locationManager.startUpdatingLocation()
-        //self.locationManager.startUpdatingHeading()
         self.mapView.showsUserLocation = true
     }
 
