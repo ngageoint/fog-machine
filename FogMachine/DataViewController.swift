@@ -43,9 +43,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         self.locationManager = CLLocationManager()
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         self.locationManager.delegate = self;
-        //self.mapView.userLocation.title = "Download";
-        //self.hgtCoordinate = self.mapView.userLocation.coordinate
-        //self.mapView.userLocation.subtitle = "\(String(format:"%.4f", self.hgtCoordinate.latitude));\(String(format:"%.4f", self.hgtCoordinate.longitude))"
         let status = CLLocationManager.authorizationStatus()
         if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
             // present an alert indicating location authorization required
@@ -57,9 +54,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         self.locationManager.startUpdatingLocation()
         //self.locationManager.startUpdatingHeading()
         self.mapView.showsUserLocation = true
-        //self.mapView.tintColor = UIColor.blueColor()
-        //self.mapView.mapType = MKMapType(rawValue: 0)!
-        //self.mapView.setUserTrackingMode(MKUserTrackingMode.Follow, animated: true);
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -351,8 +345,6 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             dispatch_async(dispatch_get_main_queue()) {
                 () -> Void in
                 ActivityIndicator.hide(success: true, animated: true)
-                //print("*** \(destinationPath) ***" )
-                //print(downloadedFilePath + "->Download Completed!!")
                 let fileName = NSURL(fileURLWithPath: destinationPath).lastPathComponent!
                 // add the downloaded file to the array of file names...
                 self.manageHgtDataArray(fileName, arrayAction: "add")
@@ -374,39 +366,40 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
-        if gestureReconizer.state != UIGestureRecognizerState.Ended {
-            let touchLocation:CGPoint = gestureReconizer.locationInView(mapView)
-            self.mapView.removeAnnotations(mapView.annotations)
-            let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
-            let tempHgtLatLngPrefix = getHgtLatLngPrefix(locationCoordinate.latitude, longitude: locationCoordinate.longitude)
-            
-            // round the lat & long to the closest integer value..
-            let lat = floor(locationCoordinate.latitude)
-            let lng = floor(locationCoordinate.longitude)
-            let strFileName = (String(format:"%@%02d%@%03d%@", tempHgtLatLngPrefix.latitudePrefix, abs(Int(lat)), tempHgtLatLngPrefix.longitudePrefix, abs(Int(lng)), ".hgt"))
-            if (!getHgtRegion(strFileName).isEmpty) {
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = locationCoordinate
-                // degree symbol "\u{00B0}"
-                annotation.title = "Download 1\("\u{00B0}") Tile?"
-                annotation.subtitle = "\(String(format:"%.4f", locationCoordinate.latitude));\(String(format:"%.4f", locationCoordinate.longitude))"
-                self.mapView.addAnnotation(annotation)
-                let latDelta: CLLocationDegrees = 20
-                let lonDelta: CLLocationDegrees = 20
-                let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
-                let region: MKCoordinateRegion = MKCoordinateRegionMake(locationCoordinate, span)
-                self.mapView.setRegion(region, animated: true)
-                return
-            } else {
-                var style = ToastStyle()
-                style.messageColor = UIColor.redColor()
-                style.backgroundColor = UIColor.whiteColor()
-                style.titleColor = UIColor.darkTextColor()
-                self.view.makeToast("Data unavailable.", duration: 2.0, position: .Center, style: style)
-                return
-            }
+        if gestureReconizer.state == UIGestureRecognizerState.Began {
+            gestureRecognizerStateBegan(gestureReconizer)
         }
-        if gestureReconizer.state != UIGestureRecognizerState.Began {
+    }
+    
+    func gestureRecognizerStateBegan(gestureReconizer: UILongPressGestureRecognizer) {
+        let touchLocation:CGPoint = gestureReconizer.locationInView(mapView)
+        self.mapView.removeAnnotations(mapView.annotations)
+        let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
+        let tempHgtLatLngPrefix = getHgtLatLngPrefix(locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+        
+        // round the lat & long to the closest integer value..
+        let lat = floor(locationCoordinate.latitude)
+        let lng = floor(locationCoordinate.longitude)
+        let strFileName = (String(format:"%@%02d%@%03d%@", tempHgtLatLngPrefix.latitudePrefix, abs(Int(lat)), tempHgtLatLngPrefix.longitudePrefix, abs(Int(lng)), ".hgt"))
+        if (!getHgtRegion(strFileName).isEmpty) {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = locationCoordinate
+            // degree symbol "\u{00B0}"
+            annotation.title = "Download 1\("\u{00B0}") Tile?"
+            annotation.subtitle = "\(String(format:"%.4f", locationCoordinate.latitude));\(String(format:"%.4f", locationCoordinate.longitude))"
+            self.mapView.addAnnotation(annotation)
+            let latDelta: CLLocationDegrees = 20
+            let lonDelta: CLLocationDegrees = 20
+            let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
+            let region: MKCoordinateRegion = MKCoordinateRegionMake(locationCoordinate, span)
+            self.mapView.setRegion(region, animated: true)
+            return
+        } else {
+            var style = ToastStyle()
+            style.messageColor = UIColor.redColor()
+            style.backgroundColor = UIColor.whiteColor()
+            style.titleColor = UIColor.darkTextColor()
+            self.view.makeToast("Data unavailable", duration: 1.5, position: .Center, style: style)
             return
         }
     }
