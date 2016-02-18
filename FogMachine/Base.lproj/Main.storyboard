@@ -285,7 +285,7 @@
                                 <action selector="mapTypeChanged:" destination="pEj-gH-Hgf" eventType="valueChanged" id="Po3-cI-n25"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="zR3-sj-Rfp">
+                        <barButtonItem key="rightBarButtonItem" image="Settings" id="zR3-sj-Rfp">
                             <connections>
                                 <segue destination="53Q-pU-Hr3" kind="presentation" identifier="settings" id="Hlw-pC-z4X"/>
                             </connections>
@@ -760,8 +760,9 @@
     </scenes>
     <resources>
         <image name="Connections" width="24" height="24"/>
-        <image name="CurrentLocation" width="24" height="25"/>
+        <image name="CurrentLocation" width="24" height="24"/>
         <image name="Data" width="20" height="20"/>
+        <image name="Settings" width="24" height="24"/>
         <image name="Viewshed" width="24" height="24"/>
     </resources>
 </document>
