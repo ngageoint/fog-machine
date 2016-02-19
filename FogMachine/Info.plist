@@ -2,12 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>MapKitPractice wants to use users present location.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>MapKitPractice wants to use users present location.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>HGT - Shuttle Radar Topography Mission (SRTM) File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>mil.nga.giat.fogmachine</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,6 +39,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>MapKitPractice wants to use users present location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>MapKitPractice wants to use users present location.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -57,40 +74,24 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeIconFiles</key>
-			<array/>
-			<key>CFBundleTypeName</key>
-			<string>HGT - Shuttle Radar Topography Mission (SRTM) File</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>$(PRODUCT_BUNDLE_IDENTIFIER).hgt</string>
-			</array>
-		</dict>
-	</array>	
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public-data</string>
+				<string>public.text</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>HGT - Shuttle Radar Topography Mission (SRTM) File</string>
 			<key>UTTypeIdentifier</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).hgt</string>
+			<string>mil.nga.giat.fogmachine</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>HGT</string>
 					<string>hgt</string>
+					<string>HGT</string>
 				</array>
 			</dict>
 		</dict>
@@ -101,21 +102,21 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public-data</string>
+				<string>public.text</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>HGT - Shuttle Radar Topography Mission (SRTM) File</string>
 			<key>UTTypeIdentifier</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).hgt</string>
+			<string>mil.nga.giat.fogmachine</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>HGT</string>
 					<string>hgt</string>
+					<string>HGT</string>
 				</array>
 			</dict>
 		</dict>
-	</array>	
-	
+	</array>
 </dict>
 </plist>

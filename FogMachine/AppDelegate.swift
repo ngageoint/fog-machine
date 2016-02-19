@@ -19,6 +19,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ConnectionManager.start()
         return true
     }
+    
+    // Handle HGT file import from other sources
+    func application(application: UIApplication, openURL hgtUrl: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        if hgtUrl.scheme == "file" {
+            let fileManager = NSFileManager.defaultManager()
+            let documentsFolderPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+            let inboxFolderPath = (documentsFolderPath[0] as NSString).stringByAppendingPathComponent("Inbox")
+            // imported HGT file name
+            let hgtFileName = NSURL(fileURLWithPath: hgtUrl.absoluteString).lastPathComponent!
+
+            // files imported twice into the Fogmachine app named as ex: N38W075-1.hgt ...
+            // so if the file name with anything like "-x" will be stripped
+            let range = hgtFileName.startIndex.advancedBy(0)..<hgtFileName.startIndex.advancedBy(7)
+            
+            let hgtFileWithoutDash = hgtFileName.substringWithRange(range) + ".hgt"
+            if (!fileManager.fileExistsAtPath(documentsFolderPath[0] + "/" + hgtFileWithoutDash)) {
+                do {
+                    // copy the HGT file to Documents Folder
+                    try fileManager.copyItemAtPath(inboxFolderPath + "/" + hgtFileWithoutDash, toPath: documentsFolderPath[0] + "/" + hgtFileWithoutDash)
+                    do {
+                        // delete the import file in the Input folder.
+                        try fileManager.removeItemAtPath(inboxFolderPath + "/" + hgtFileName)
+                    }
+                    catch let error as NSError {
+                        print("Error Deleting the " + hgtFileName + "HGT file after the import: \(error)")
+                    }
+                }
+                catch let error as NSError {
+                    print("Error! Something went wrong: \(error)")
+                }
+            } else {
+                // file already exists in the Documents folder
+                // delete the file without copying it.
+                do {
+                    // delete the import file in the Input folder.
+                    try fileManager.removeItemAtPath(inboxFolderPath + "/" + hgtFileName)
+                }
+                catch let error as NSError {
+                    print("Error Deleting the " + hgtFileName + "HGT file after the import: \(error)")
+                }
+            }
+        }
+        return true
+    }
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
