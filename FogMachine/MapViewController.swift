@@ -24,7 +24,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var metricsOutput:String!
     var startTime: CFAbsoluteTime!//UInt64!//CFAbsoluteTime!
     var elapsedTime: CFAbsoluteTime!
-    let locationManager: CLLocationManager = CLLocationManager()
+    var locationManager: CLLocationManager!
+    var isInitialAuthorizationCheck = false
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
@@ -69,29 +70,40 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     func locationManagerSettings() {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.delegate = self
-        self.mapView.tintColor = UIColor.blueColor()
+        if (self.locationManager == nil) {
+            self.locationManager = CLLocationManager()
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.delegate = self
+        }
         let status = CLLocationManager.authorizationStatus()
-        if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
+        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
             // present an alert indicating location authorization required
             // and offer to take the user to Settings for the app via
-            locationManager.requestWhenInUseAuthorization()
+            self.locationManager.requestWhenInUseAuthorization()
+            self.mapView.tintColor = UIColor.blueColor()
         }
-        locationManager.startUpdatingLocation()
-        mapView.showsUserLocation = true
     }
- 
+    
     // MARK: - Location Delegate Methods
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
+            self.locationManager.startUpdatingLocation()
+            self.isInitialAuthorizationCheck = true
+            self.mapView.showsUserLocation = true
+        }
+    }
+    
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last
         
-        let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
-        self.mapView.tintColor = UIColor.blueColor()
-        self.mapView?.centerCoordinate = location!.coordinate
-        self.mapView.setRegion(region, animated: true)
-        self.locationManager.stopUpdatingLocation()
+        if (self.isInitialAuthorizationCheck) {
+            let location = locations.last
+            let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+            self.mapView.tintColor = UIColor.blueColor()
+            self.mapView?.centerCoordinate = location!.coordinate
+            self.mapView.setRegion(region, animated: true)
+            self.locationManager.stopUpdatingLocation()
+        }
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {

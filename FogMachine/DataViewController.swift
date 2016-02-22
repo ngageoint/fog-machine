@@ -24,6 +24,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     var hgtFilename:String = String()
     var downloadComplete: Bool = false
     var locationManager: CLLocationManager!
+    var isInitialAuthorizationCheck = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,17 +41,18 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)
         
-        self.locationManager = CLLocationManager()
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        self.locationManager.delegate = self;
+        if (self.locationManager == nil) {
+            self.locationManager = CLLocationManager()
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.delegate = self
+        }
         let status = CLLocationManager.authorizationStatus()
-        if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
+        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
             // present an alert indicating location authorization required
             // and offer to take the user to Settings for the app via
             self.locationManager.requestWhenInUseAuthorization()
+            self.mapView.tintColor = UIColor.blueColor()
         }
-        self.locationManager.startUpdatingLocation()
-        self.mapView.showsUserLocation = true
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -70,20 +72,30 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     
     // MARK: - Location Delegate Methods
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
+            self.locationManager.startUpdatingLocation()
+            self.isInitialAuthorizationCheck = true
+            self.mapView.showsUserLocation = true
+        }
+    }
+    
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last
-        
-        let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
-        let pointAnnotation:MKPointAnnotation = MKPointAnnotation()
-        pointAnnotation.coordinate = location!.coordinate
-        pointAnnotation.title = "Download Current Location?"
-        pointAnnotation.subtitle =  "\(String(format:"%.4f", location!.coordinate.latitude));\(String(format:"%.4f", location!.coordinate.longitude))"
-        self.mapView?.addAnnotation(pointAnnotation)
-        self.mapView?.centerCoordinate = location!.coordinate
-        self.mapView?.selectAnnotation(pointAnnotation, animated: true)
-        self.mapView.setRegion(region, animated: true)
-        self.locationManager.stopUpdatingLocation()
+        if (self.isInitialAuthorizationCheck) {
+            let location = locations.last
+            
+            let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+            let pointAnnotation:MKPointAnnotation = MKPointAnnotation()
+            pointAnnotation.coordinate = location!.coordinate
+            pointAnnotation.title = "Download Current Location?"
+            pointAnnotation.subtitle =  "\(String(format:"%.4f", location!.coordinate.latitude));\(String(format:"%.4f", location!.coordinate.longitude))"
+            self.mapView?.addAnnotation(pointAnnotation)
+            self.mapView?.centerCoordinate = location!.coordinate
+            self.mapView?.selectAnnotation(pointAnnotation, animated: true)
+            self.mapView.setRegion(region, animated: true)
+            self.locationManager.stopUpdatingLocation()
+        }
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
