@@ -3,17 +3,18 @@ PODS:
   - SSZipArchive (1.1)
 
 DEPENDENCIES:
-  - PeerKit (from `https://github.com/cwas/PeerKit.git`)
+  - PeerKit (from `https://github.com/cwas/PeerKit.git`, tag `2.0.0`)
   - SSZipArchive (~> 1.1)
 
 EXTERNAL SOURCES:
   PeerKit:
     :git: https://github.com/cwas/PeerKit.git
+    :tag: 2.0.0
 
 CHECKOUT OPTIONS:
   PeerKit:
-    :commit: 11d389d6346ecbcfe77fdc30372f63dcd9470188
     :git: https://github.com/cwas/PeerKit.git
+    :tag: 2.0.0
 
 SPEC CHECKSUMS:
   PeerKit: 7ab365c98a6b72211f280bfd51bae898b1f50f6f

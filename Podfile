@@ -3,7 +3,7 @@
 use_frameworks!
 
 target 'FogMachine' do
-    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git'
+    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.0'
     pod 'SSZipArchive', '~> 1.1'
 end
 
