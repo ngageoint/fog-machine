@@ -369,14 +369,14 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         print("\(error)")
     }
     
-    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
-        if gestureReconizer.state == UIGestureRecognizerState.Began {
-            gestureRecognizerStateBegan(gestureReconizer)
+    func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
+            gestureRecognizerStateBegan(gestureRecognizer)
         }
     }
     
-    func gestureRecognizerStateBegan(gestureReconizer: UILongPressGestureRecognizer) {
-        let touchLocation:CGPoint = gestureReconizer.locationInView(mapView)
+    func gestureRecognizerStateBegan(gestureRecognizer: UILongPressGestureRecognizer) {
+        let touchLocation:CGPoint = gestureRecognizer.locationInView(mapView)
         self.mapView.removeAnnotations(mapView.annotations)
         let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
         let tempHgtLatLngPrefix = getHgtLatLngPrefix(locationCoordinate.latitude, longitude: locationCoordinate.longitude)
