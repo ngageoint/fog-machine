@@ -59,7 +59,7 @@ public struct ActivityIndicator {
     }
     
     /// Returns success status
-    public static func hide(success success: Bool? = nil, animated: Bool = false) -> Bool {
+    public static func hide(success success: Bool? = nil, animated: Bool = false, errorMsg: String) -> Bool {
         guard instance != nil else {
             return false
         }
@@ -70,10 +70,10 @@ public struct ActivityIndicator {
         
         if !NSThread.currentThread().isMainThread {
             dispatch_async(dispatch_get_main_queue()) {
-                instance?.hideLoadingActivity(success: success, animated: animated)
+                instance?.hideLoadingActivity(success: success, animated: animated, errorMsg: errorMsg)
             }
         } else {
-            instance?.hideLoadingActivity(success: success, animated: animated)
+            instance?.hideLoadingActivity(success: success, animated: animated, errorMsg: errorMsg)
         }
         
         return true
@@ -106,6 +106,7 @@ public struct ActivityIndicator {
             textLabel.font = UIFont(name: Settings.FontName, size: 30)
             textLabel.adjustsFontSizeToFitWidth = true
             textLabel.minimumScaleFactor = 0.25
+            textLabel.numberOfLines = 3
             textLabel.textAlignment = NSTextAlignment.Center
             textLabel.text = text
             
@@ -141,7 +142,7 @@ public struct ActivityIndicator {
             return myBezier
         }
         
-        func hideLoadingActivity(success success: Bool?, animated: Bool) {
+        func hideLoadingActivity(success success: Bool?, animated: Bool, errorMsg: String) {
             hidingInProgress = true
             if UIDisabled {
                 UIApplication.sharedApplication().endIgnoringInteractionEvents()
@@ -152,7 +153,7 @@ public struct ActivityIndicator {
                 if success! {
                     animationDuration = 0.5
                 } else {
-                    animationDuration = 1
+                    animationDuration = 1.5
                 }
             }
             
@@ -160,9 +161,9 @@ public struct ActivityIndicator {
             icon.font = UIFont(name: Settings.FontName, size: 60)
             icon.textAlignment = NSTextAlignment.Center
             
-            if animated {
-                textLabel.fadeTransition(animationDuration)
-            }
+            //if animated {
+            //    textLabel.fadeTransition(animationDuration)
+            //}
             
             if success != nil {
                 if success! {
@@ -172,7 +173,7 @@ public struct ActivityIndicator {
                 } else {
                     icon.textColor = Settings.FailColor
                     icon.text = Settings.FailIcon
-                    textLabel.text = Settings.FailText
+                    textLabel.text = "\(errorMsg)"
                 }
             }
             

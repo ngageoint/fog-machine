@@ -74,8 +74,8 @@ class HgtDownloadMgr: NSObject, NSURLSessionDownloadDelegate {
     // if there is an error during download this will be called
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         if(error != nil) {
-            print("Download with error: \(error!.localizedDescription)");
-            self.delegate?.didFailToReceieveResponse!("Error \(error!.localizedDescription)")
+            print("Download error: \(error)");
+            self.delegate?.didFailToReceieveResponse!("Download Error: \(error!.localizedDescription)")
         }
     }
     

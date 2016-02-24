@@ -63,7 +63,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                             }
                         }
                     }
-                    ActivityIndicator.hide(success: true, animated: true)
+                    ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
                     break
                 }
             }

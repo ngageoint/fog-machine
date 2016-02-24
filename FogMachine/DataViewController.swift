@@ -22,9 +22,9 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     var hgtCoordinate:CLLocationCoordinate2D!
     var pickerData: [String] = [String]()
     var hgtFilename:String = String()
-    var downloadComplete: Bool = false
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
+    let zoomLevelDegrees:Double = 5
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +85,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             let location = locations.last
             
             let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: zoomLevelDegrees, longitudeDelta: zoomLevelDegrees))
             let pointAnnotation:MKPointAnnotation = MKPointAnnotation()
             pointAnnotation.coordinate = location!.coordinate
             pointAnnotation.title = "Download Current Location?"
@@ -126,8 +126,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
                 annotation.title = "Delete " + hgtFilename + ".hgt" + "?"
                 annotation.subtitle =  "\(String(format:"%.4f", self.hgtCoordinate.latitude));\(String(format:"%.4f", self.hgtCoordinate.longitude))"
                 mapView.addAnnotation(annotation)
-                let latDelta: CLLocationDegrees = 20
-                let lonDelta: CLLocationDegrees = 20
+                let latDelta: CLLocationDegrees = zoomLevelDegrees
+                let lonDelta: CLLocationDegrees = zoomLevelDegrees
                 let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
                 let region: MKCoordinateRegion = MKCoordinateRegionMake(self.hgtCoordinate, span)
                 self.mapView.setRegion(region, animated: true)
@@ -290,21 +290,20 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             alertController.addAction(ok)
             presentViewController(alertController, animated: true, completion: nil)
         } else{
-            self.downloadComplete = false
             let srtmDataRegion = self.getHgtRegion(hgtFileName)
             if (srtmDataRegion.isEmpty) {
+                ActivityIndicator.hide(success: false, animated: true, errorMsg: "Download Error!!")
                 let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable. Try someother location.", preferredStyle: .Alert)
                 let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                     (action) -> Void in
                 })
-                ActivityIndicator.hide(success: false, animated: true)
                 alertController.addAction(ok)
                 self.presentViewController(alertController, animated: true, completion: nil)
             } else {
                 let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
                 let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                     (action) -> Void in
-                    ActivityIndicator.show("Downloading", disableUI: false)
+                    ActivityIndicator.show("Downloading",  disableUI: false)
                     let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
                     let url = NSURL(string: hgtFilePath)
                     let hgtDownloadMgr = HgtDownloadMgr()
@@ -341,19 +340,20 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     
     func didReceiveResponse(destinationPath: String) {
-        downloadComplete = true
+        
         if (destinationPath.isEmpty || destinationPath.containsString("Error")) {
-            let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable. Try someother location.", preferredStyle: .Alert)
+            // capture and throw a message if anyother error occurs
+            ActivityIndicator.hide(success: false, animated: true, errorMsg: destinationPath)
+            let alertController = UIAlertController(title: "Download Error!!", message: destinationPath, preferredStyle: .Alert)
             let ok = UIAlertAction(title: "OK", style: .Default, handler: {
                 (action) -> Void in
             })
-            ActivityIndicator.hide(success: false, animated: true)
             alertController.addAction(ok)
             presentViewController(alertController, animated: true, completion: nil)
         } else {
             dispatch_async(dispatch_get_main_queue()) {
                 () -> Void in
-                ActivityIndicator.hide(success: true, animated: true)
+                ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
                 let fileName = NSURL(fileURLWithPath: destinationPath).lastPathComponent!
                 // add the downloaded file to the array of file names...
                 self.manageHgtDataArray(fileName, arrayAction: "add")
@@ -365,13 +365,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         }
     }
     func didFailToReceieveResponse(error: String) {
-        let alertController = UIAlertController(title: "Download Error!!", message: "Data unavailable. Try someother location.", preferredStyle: .Alert)
-        let ok = UIAlertAction(title: "OK", style: .Default, handler: {
-            (action) -> Void in
-        })
-        ActivityIndicator.hide(success: false, animated: true)
-        alertController.addAction(ok)
-        presentViewController(alertController, animated: true, completion: nil)
+        ActivityIndicator.hide(success: false, animated: true, errorMsg: error)
+        print("\(error)")
     }
     
     func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
@@ -397,8 +392,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             annotation.title = "Download 1\("\u{00B0}") Tile?"
             annotation.subtitle = "\(String(format:"%.4f", locationCoordinate.latitude));\(String(format:"%.4f", locationCoordinate.longitude))"
             self.mapView.addAnnotation(annotation)
-            let latDelta: CLLocationDegrees = 20
-            let lonDelta: CLLocationDegrees = 20
+            let latDelta: CLLocationDegrees = zoomLevelDegrees
+            let lonDelta: CLLocationDegrees = zoomLevelDegrees
             let span:MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lonDelta)
             let region: MKCoordinateRegion = MKCoordinateRegionMake(locationCoordinate, span)
             self.mapView.setRegion(region, animated: true)
@@ -407,8 +402,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             var style = ToastStyle()
             style.messageColor = UIColor.redColor()
             style.backgroundColor = UIColor.whiteColor()
-            style.titleColor = UIColor.darkTextColor()
-            self.view.makeToast("Data unavailable", duration: 1.5, position: .Center, style: style)
+            style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
+            self.view.makeToast("Data unavailable for this location", duration: 1.5, position: .Center, style: style)
             return
         }
     }

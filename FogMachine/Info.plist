@@ -118,5 +118,16 @@
 			</dict>
 		</dict>
 	</array>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>fogmachine.geointapps.org</key>
+            <dict>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <false/>
+            </dict>
+        </dict>
+    </dict>	
 </dict>
 </plist>
