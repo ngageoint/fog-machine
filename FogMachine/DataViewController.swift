@@ -152,7 +152,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
                 }
             }
         } catch let error as NSError  {
-            print("Could get the HGT files: \(error.localizedDescription)")
+            print("Couldn't find the HGT files: \(error.localizedDescription)")
         }
     }
     
