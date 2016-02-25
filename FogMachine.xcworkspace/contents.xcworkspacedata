@@ -2,13 +2,13 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:LICENSE">
+      location = "group:Demo/FogSearch/FogSearch.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:README.md">
+      location = "group:Demo/FogViewshed/FogViewshed.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:FogMachine.xcodeproj">
+      location = "group:Fog/Fog.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
