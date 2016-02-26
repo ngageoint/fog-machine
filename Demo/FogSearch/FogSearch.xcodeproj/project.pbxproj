@@ -13,6 +13,9 @@
 		75802C9D1C7F390B00DAE8BD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75802C9B1C7F390B00DAE8BD /* Main.storyboard */; };
 		75802C9F1C7F390B00DAE8BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75802C9E1C7F390B00DAE8BD /* Assets.xcassets */; };
 		75802CA21C7F390B00DAE8BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75802CA01C7F390B00DAE8BD /* LaunchScreen.storyboard */; };
+		75802CCB1C80881000DAE8BD /* MonteCristo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CCA1C80881000DAE8BD /* MonteCristo.swift */; };
+		75802CD01C80887000DAE8BD /* SearchWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CCF1C80887000DAE8BD /* SearchWork.swift */; };
+		75802CD21C8088B700DAE8BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CD11C8088B700DAE8BD /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		75802C9E1C7F390B00DAE8BD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75802CA11C7F390B00DAE8BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75802CA31C7F390B00DAE8BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75802CCA1C80881000DAE8BD /* MonteCristo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonteCristo.swift; sourceTree = "<group>"; };
+		75802CCF1C80887000DAE8BD /* SearchWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchWork.swift; sourceTree = "<group>"; };
+		75802CD11C8088B700DAE8BD /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +62,50 @@
 		75802C941C7F390B00DAE8BD /* FogSearch */ = {
 			isa = PBXGroup;
 			children = (
+				75802CC91C80880700DAE8BD /* Data */,
+				75802CCD1C80883A00DAE8BD /* Views */,
+				75802CCE1C80883E00DAE8BD /* Models */,
+				75802CCC1C80883100DAE8BD /* Controllers */,
 				75802C951C7F390B00DAE8BD /* AppDelegate.swift */,
-				75802C971C7F390B00DAE8BD /* FirstViewController.swift */,
-				75802C991C7F390B00DAE8BD /* SecondViewController.swift */,
+				75802CD11C8088B700DAE8BD /* Constants.swift */,
 				75802C9B1C7F390B00DAE8BD /* Main.storyboard */,
 				75802C9E1C7F390B00DAE8BD /* Assets.xcassets */,
 				75802CA01C7F390B00DAE8BD /* LaunchScreen.storyboard */,
 				75802CA31C7F390B00DAE8BD /* Info.plist */,
 			);
 			path = FogSearch;
+			sourceTree = "<group>";
+		};
+		75802CC91C80880700DAE8BD /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				75802CCA1C80881000DAE8BD /* MonteCristo.swift */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		75802CCC1C80883100DAE8BD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				75802C971C7F390B00DAE8BD /* FirstViewController.swift */,
+				75802C991C7F390B00DAE8BD /* SecondViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		75802CCD1C80883A00DAE8BD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		75802CCE1C80883E00DAE8BD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				75802CCF1C80887000DAE8BD /* SearchWork.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +182,9 @@
 				75802C9A1C7F390B00DAE8BD /* SecondViewController.swift in Sources */,
 				75802C961C7F390B00DAE8BD /* AppDelegate.swift in Sources */,
 				75802C981C7F390B00DAE8BD /* FirstViewController.swift in Sources */,
+				75802CCB1C80881000DAE8BD /* MonteCristo.swift in Sources */,
+				75802CD01C80887000DAE8BD /* SearchWork.swift in Sources */,
+				75802CD21C8088B700DAE8BD /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

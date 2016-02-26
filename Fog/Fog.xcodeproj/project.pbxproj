@@ -75,17 +75,33 @@
 		75802C801C7F37AE00DAE8BD /* Fog */ = {
 			isa = PBXGroup;
 			children = (
-				75802CB81C7F449200DAE8BD /* ConnectionManager.swift */,
+				75802CC81C8087D100DAE8BD /* Controllers */,
+				75802CC71C8087B600DAE8BD /* Models */,
 				75802CBE1C7F451800DAE8BD /* Constants.swift */,
-				75802CC01C7F453400DAE8BD /* ReceiptAssurance.swift */,
-				75802CC11C7F453400DAE8BD /* PeerAssurance.swift */,
-				75802CBA1C7F44D200DAE8BD /* Worker.swift */,
-				75802CC41C7F499F00DAE8BD /* WorkArray.swift */,
-				75802CBB1C7F44D200DAE8BD /* Work.swift */,
 				75802C811C7F37AE00DAE8BD /* Fog.h */,
 				75802C831C7F37AE00DAE8BD /* Info.plist */,
 			);
 			path = Fog;
+			sourceTree = "<group>";
+		};
+		75802CC71C8087B600DAE8BD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				75802CC41C7F499F00DAE8BD /* WorkArray.swift */,
+				75802CBA1C7F44D200DAE8BD /* Worker.swift */,
+				75802CBB1C7F44D200DAE8BD /* Work.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		75802CC81C8087D100DAE8BD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				75802CB81C7F449200DAE8BD /* ConnectionManager.swift */,
+				75802CC11C7F453400DAE8BD /* PeerAssurance.swift */,
+				75802CC01C7F453400DAE8BD /* ReceiptAssurance.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 		A3F6200A0272446E4CEF7C25 /* Pods */ = {

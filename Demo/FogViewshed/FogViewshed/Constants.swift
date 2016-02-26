@@ -9,16 +9,6 @@
 import Foundation
 
 
-struct FogSearch {
-    static let LowerBoundKey = "LowerBound"
-    static let UpperBoundKey = "UpperBound"
-    static let SearchTermKey = "SearchTerm"
-    static let AssignedToKey = "AssignedTo"
-    static let SearchResultsKey = "SearchResults"
-    static let SearchInitiatorKey = "SearchInitiator"
-}
-
-
 struct FogViewshed {
     static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
     static let WHICH_QUADRANT = "whichQuadrant"
@@ -64,9 +54,7 @@ enum MapType: Int {
 }
 
 enum Event: String {
-    case StartSearch = "StartSearch",
-    SendSearchResult = "SendSearchResult",
-    StartViewshed = "StartViewshed",
+    case StartViewshed = "StartViewshed",
     SendViewshedResult = "SendViewshedResult"
 }
 

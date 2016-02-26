@@ -14,5 +14,4 @@ public struct Fog {
     // It must be a unique string, at most 15 characters long
     // Note: Devices will only connect to other devices with the same serviceType value.
     static let SERVICE_TYPE = "fog-machine"
-    static let ENTITY = "Observer"
 }

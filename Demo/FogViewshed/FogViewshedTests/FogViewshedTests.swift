@@ -1,6 +1,6 @@
 //
-//  FogMachineSearchTests.swift
-//  FogMachineSearchTests
+//  FogViewshedTests.swift
+//  FogViewshedTests
 //
 //  Created by Tyler Burgett on 8/10/15.
 //  Copyright (c) 2015 NGA. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class FogMachineTests: XCTestCase {
+class FogViewshedTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
