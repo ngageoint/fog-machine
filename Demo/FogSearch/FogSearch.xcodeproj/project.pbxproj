@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		757F7CBC1C80B79F0060AED5 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757F7CBB1C80B79F0060AED5 /* Fog.framework */; };
+		757F7CBD1C80B79F0060AED5 /* Fog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 757F7CBB1C80B79F0060AED5 /* Fog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		75802C961C7F390B00DAE8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C951C7F390B00DAE8BD /* AppDelegate.swift */; };
 		75802C981C7F390B00DAE8BD /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C971C7F390B00DAE8BD /* FirstViewController.swift */; };
 		75802C9A1C7F390B00DAE8BD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C991C7F390B00DAE8BD /* SecondViewController.swift */; };
@@ -16,9 +18,25 @@
 		75802CCB1C80881000DAE8BD /* MonteCristo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CCA1C80881000DAE8BD /* MonteCristo.swift */; };
 		75802CD01C80887000DAE8BD /* SearchWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CCF1C80887000DAE8BD /* SearchWork.swift */; };
 		75802CD21C8088B700DAE8BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CD11C8088B700DAE8BD /* Constants.swift */; };
+		9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		757F7CBE1C80B7A00060AED5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				757F7CBD1C80B79F0060AED5 /* Fog.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		757F7CBB1C80B79F0060AED5 /* Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Fog.framework; path = "/Users/cwasko/Library/Developer/Xcode/DerivedData/FogMachine-dwszhekwuvrywcaaofntynfglvrx/Build/Products/Debug-iphoneos/Fog.framework"; sourceTree = "<absolute>"; };
 		75802C921C7F390B00DAE8BD /* FogSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75802C951C7F390B00DAE8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75802C971C7F390B00DAE8BD /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -30,6 +48,9 @@
 		75802CCA1C80881000DAE8BD /* MonteCristo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonteCristo.swift; sourceTree = "<group>"; };
 		75802CCF1C80887000DAE8BD /* SearchWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchWork.swift; sourceTree = "<group>"; };
 		75802CD11C8088B700DAE8BD /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		97A7E70FA12CE33A93537F4E /* Pods-FogSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogSearch.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogSearch/Pods-FogSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E997FD756F049C84B6268091 /* Pods-FogSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogSearch.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogSearch/Pods-FogSearch.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */,
+				757F7CBC1C80B79F0060AED5 /* Fog.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,8 +69,11 @@
 		75802C891C7F390B00DAE8BD = {
 			isa = PBXGroup;
 			children = (
+				757F7CBB1C80B79F0060AED5 /* Fog.framework */,
 				75802C941C7F390B00DAE8BD /* FogSearch */,
 				75802C931C7F390B00DAE8BD /* Products */,
+				FBA2CC4BD7A15EE11DD9BA7A /* Pods */,
+				A86355D0F2AEBCD24C695256 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -108,6 +134,23 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		A86355D0F2AEBCD24C695256 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FBA2CC4BD7A15EE11DD9BA7A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				97A7E70FA12CE33A93537F4E /* Pods-FogSearch.debug.xcconfig */,
+				E997FD756F049C84B6268091 /* Pods-FogSearch.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -115,9 +158,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75802CA61C7F390B00DAE8BD /* Build configuration list for PBXNativeTarget "FogSearch" */;
 			buildPhases = (
+				269A8201F33D025C3AB2DCF7 /* Check Pods Manifest.lock */,
 				75802C8E1C7F390B00DAE8BD /* Sources */,
 				75802C8F1C7F390B00DAE8BD /* Frameworks */,
 				75802C901C7F390B00DAE8BD /* Resources */,
+				699C768BE72B5A44B53055C0 /* Embed Pods Frameworks */,
+				909E6C25337C90A9C2BDDAF1 /* Copy Pods Resources */,
+				757F7CBE1C80B7A00060AED5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -173,6 +220,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		269A8201F33D025C3AB2DCF7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		699C768BE72B5A44B53055C0 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogSearch/Pods-FogSearch-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		909E6C25337C90A9C2BDDAF1 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogSearch/Pods-FogSearch-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		75802C8E1C7F390B00DAE8BD /* Sources */ = {
@@ -293,6 +388,7 @@
 		};
 		75802CA71C7F390B00DAE8BD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97A7E70FA12CE33A93537F4E /* Pods-FogSearch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FogSearch/Info.plist;
@@ -304,6 +400,7 @@
 		};
 		75802CA81C7F390B00DAE8BD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E997FD756F049C84B6268091 /* Pods-FogSearch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FogSearch/Info.plist;

@@ -21,6 +21,7 @@ end
 target 'FogSearch' do
     platform :ios, '8.4'
     xcodeproj 'Demo/FogSearch/FogSearch.xcodeproj'
+    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.0'
 end
 
 target 'Fog' do
