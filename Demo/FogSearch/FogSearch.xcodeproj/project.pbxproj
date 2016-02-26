@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		757F7CBC1C80B79F0060AED5 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757F7CBB1C80B79F0060AED5 /* Fog.framework */; };
-		757F7CBD1C80B79F0060AED5 /* Fog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 757F7CBB1C80B79F0060AED5 /* Fog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		754D5E531C80D262009B7876 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757F7CBB1C80B79F0060AED5 /* Fog.framework */; };
 		75802C961C7F390B00DAE8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C951C7F390B00DAE8BD /* AppDelegate.swift */; };
 		75802C981C7F390B00DAE8BD /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C971C7F390B00DAE8BD /* FirstViewController.swift */; };
 		75802C9A1C7F390B00DAE8BD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C991C7F390B00DAE8BD /* SecondViewController.swift */; };
@@ -20,20 +19,6 @@
 		75802CD21C8088B700DAE8BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CD11C8088B700DAE8BD /* Constants.swift */; };
 		9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		757F7CBE1C80B7A00060AED5 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				757F7CBD1C80B79F0060AED5 /* Fog.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		757F7CBB1C80B79F0060AED5 /* Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Fog.framework; path = "/Users/cwasko/Library/Developer/Xcode/DerivedData/FogMachine-dwszhekwuvrywcaaofntynfglvrx/Build/Products/Debug-iphoneos/Fog.framework"; sourceTree = "<absolute>"; };
@@ -58,8 +43,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				754D5E531C80D262009B7876 /* Fog.framework in Frameworks */,
 				9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */,
-				757F7CBC1C80B79F0060AED5 /* Fog.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,7 +149,6 @@
 				75802C901C7F390B00DAE8BD /* Resources */,
 				699C768BE72B5A44B53055C0 /* Embed Pods Frameworks */,
 				909E6C25337C90A9C2BDDAF1 /* Copy Pods Resources */,
-				757F7CBE1C80B7A00060AED5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

@@ -23,8 +23,7 @@
 		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
 		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
-		754D5E421C80BC47009B7876 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754D5E411C80BC47009B7876 /* Fog.framework */; };
-		754D5E431C80BC47009B7876 /* Fog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 754D5E411C80BC47009B7876 /* Fog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		754D5E541C80D26C009B7876 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754D5E411C80BC47009B7876 /* Fog.framework */; };
 		7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */; };
 		7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */; };
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
@@ -67,20 +66,6 @@
 			remoteInfo = FogMachineSearch;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		754D5E441C80BC47009B7876 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				754D5E431C80BC47009B7876 /* Fog.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,8 +129,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				754D5E541C80D26C009B7876 /* Fog.framework in Frameworks */,
 				7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */,
-				754D5E421C80BC47009B7876 /* Fog.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +329,6 @@
 				E314F6B91B79023D005B75C6 /* Resources */,
 				082DCADF35E586762BD71722 /* Embed Pods Frameworks */,
 				D66151F748EF8EDB277C83AE /* Copy Pods Resources */,
-				754D5E441C80BC47009B7876 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
