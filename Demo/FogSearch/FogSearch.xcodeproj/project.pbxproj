@@ -69,7 +69,6 @@
 		75802C891C7F390B00DAE8BD = {
 			isa = PBXGroup;
 			children = (
-				757F7CBB1C80B79F0060AED5 /* Fog.framework */,
 				75802C941C7F390B00DAE8BD /* FogSearch */,
 				75802C931C7F390B00DAE8BD /* Products */,
 				FBA2CC4BD7A15EE11DD9BA7A /* Pods */,
@@ -137,6 +136,7 @@
 		A86355D0F2AEBCD24C695256 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				757F7CBB1C80B79F0060AED5 /* Fog.framework */,
 				A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */,
 			);
 			name = Frameworks;
