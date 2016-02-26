@@ -12,6 +12,7 @@ target 'FogViewshed' do
     xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
     pod 'SSZipArchive', '~> 1.1'
     pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.0'
+    pod 'Fog', :path => 'Fog/'
 end
 
 target 'FogViewshedTests' do
@@ -23,6 +24,7 @@ target 'FogSearch' do
     platform :ios, '8.4'
     xcodeproj 'Demo/FogSearch/FogSearch.xcodeproj'
     pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.0'
+    pod 'Fog', :path => 'Fog/'
 end
 
 target 'Fog' do

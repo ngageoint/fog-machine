@@ -1,12 +1,16 @@
 PODS:
+  - Fog (2.0.0)
   - PeerKit (1.1.0)
   - SSZipArchive (1.1)
 
 DEPENDENCIES:
+  - Fog (from `Fog/`)
   - PeerKit (from `https://github.com/cwas/PeerKit.git`, tag `2.0.0`)
   - SSZipArchive (~> 1.1)
 
 EXTERNAL SOURCES:
+  Fog:
+    :path: Fog/
   PeerKit:
     :git: https://github.com/cwas/PeerKit.git
     :tag: 2.0.0
@@ -17,6 +21,7 @@ CHECKOUT OPTIONS:
     :tag: 2.0.0
 
 SPEC CHECKSUMS:
+  Fog: 6f7a615532c5524b50d8ad538d2cd98c1b3f14cc
   PeerKit: 7ab365c98a6b72211f280bfd51bae898b1f50f6f
   SSZipArchive: de3d215ab73f87db627f81f2ce24f1731e3886c3
 

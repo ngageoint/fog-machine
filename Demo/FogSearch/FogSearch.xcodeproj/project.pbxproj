@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		754D5E531C80D262009B7876 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757F7CBB1C80B79F0060AED5 /* Fog.framework */; };
 		75802C961C7F390B00DAE8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C951C7F390B00DAE8BD /* AppDelegate.swift */; };
 		75802C981C7F390B00DAE8BD /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C971C7F390B00DAE8BD /* FirstViewController.swift */; };
 		75802C9A1C7F390B00DAE8BD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C991C7F390B00DAE8BD /* SecondViewController.swift */; };
@@ -21,7 +20,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		757F7CBB1C80B79F0060AED5 /* Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Fog.framework; path = "/Users/cwasko/Library/Developer/Xcode/DerivedData/FogMachine-dwszhekwuvrywcaaofntynfglvrx/Build/Products/Debug-iphoneos/Fog.framework"; sourceTree = "<absolute>"; };
 		75802C921C7F390B00DAE8BD /* FogSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75802C951C7F390B00DAE8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75802C971C7F390B00DAE8BD /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -43,7 +41,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				754D5E531C80D262009B7876 /* Fog.framework in Frameworks */,
 				9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,7 +118,6 @@
 		A86355D0F2AEBCD24C695256 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				757F7CBB1C80B79F0060AED5 /* Fog.framework */,
 				A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */,
 			);
 			name = Frameworks;

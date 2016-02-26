@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		16D00E328E136B5B16B66132 /* Pods_Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BFC6FD4A92B2D9D81EF98F /* Pods_Fog.framework */; };
+		754D5E561C80DCF4009B7876 /* Fog.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 754D5E551C80DCF4009B7876 /* Fog.podspec */; };
 		75802C821C7F37AE00DAE8BD /* Fog.h in Headers */ = {isa = PBXBuildFile; fileRef = 75802C811C7F37AE00DAE8BD /* Fog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75802CB91C7F449200DAE8BD /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CB81C7F449200DAE8BD /* ConnectionManager.swift */; };
 		75802CBC1C7F44D200DAE8BD /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CBA1C7F44D200DAE8BD /* Worker.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		0305FDF3ACF4674AEEA09737 /* Pods-Fog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fog.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Fog/Pods-Fog.debug.xcconfig"; sourceTree = "<group>"; };
 		27BFC6FD4A92B2D9D81EF98F /* Pods_Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		754D5E551C80DCF4009B7876 /* Fog.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fog.podspec; sourceTree = "<group>"; };
 		75802C7E1C7F37AE00DAE8BD /* Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75802C811C7F37AE00DAE8BD /* Fog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fog.h; sourceTree = "<group>"; };
 		75802C831C7F37AE00DAE8BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 		75802C741C7F37AE00DAE8BD = {
 			isa = PBXGroup;
 			children = (
+				754D5E551C80DCF4009B7876 /* Fog.podspec */,
 				75802C801C7F37AE00DAE8BD /* Fog */,
 				75802C7F1C7F37AE00DAE8BD /* Products */,
 				A3F6200A0272446E4CEF7C25 /* Pods */,
@@ -183,6 +186,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				754D5E561C80DCF4009B7876 /* Fog.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
