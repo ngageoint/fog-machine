@@ -1,13 +1,30 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '6.0'
+platform :ios, '8.4'
 use_frameworks!
 
-target 'FogMachine' do
-	pod 'PeerKit', '~> 1.1'
-	pod 'SSZipArchive', '~> 1.1'
+workspace 'FogMachine'
+xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
+xcodeproj 'Demo/FogSearch/FogSearch.xcodeproj'
+xcodeproj 'Fog/Fog.xcodeproj'
+
+target 'FogViewshed' do
+    platform :ios, '8.4'
+    xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
+    pod 'SSZipArchive', '~> 1.1'
 end
 
-target 'FogMachineTests' do
-
+target 'FogViewshedTests' do
+    platform :ios, '8.4'
+    xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
 end
 
+target 'FogSearch' do
+    platform :ios, '8.4'
+    xcodeproj 'Demo/FogSearch/FogSearch.xcodeproj'
+end
+
+target 'Fog' do
+    platform :ios, '8.4'
+    xcodeproj 'Fog/Fog.xcodeproj'
+    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.0'
+end
