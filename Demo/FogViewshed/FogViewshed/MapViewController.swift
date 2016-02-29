@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import Fog
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
     
     // MARK: Class Variables
@@ -42,6 +42,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tabBarController!.delegate = self
         mapView.delegate = self
         let gesture = UILongPressGestureRecognizer(target: self, action: "addAnnotationGesture:")
         gesture.minimumPressDuration = 1.0
@@ -68,7 +69,63 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         setupFogViewshedEvents()
     }
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    // MARK: - TabBarController Delegates
+    
+    
+    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
+        //If the selected viewController is the main mapViewController
+        if viewController == tabBarController.viewControllers?[1] {
+            displayDataRegions()
+        }
+    }
 
+    
+    
+    // MARK: Location Delegate Methods
+    
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
+            self.locationManager.startUpdatingLocation()
+            self.isInitialAuthorizationCheck = true
+            self.mapView.showsUserLocation = true
+        }
+    }
+    
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if (self.isInitialAuthorizationCheck) {
+            let location = locations.last
+            let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+            self.mapView.tintColor = UIColor.blueColor()
+            self.mapView?.centerCoordinate = location!.coordinate
+            self.mapView.setRegion(region, animated: true)
+            self.locationManager.stopUpdatingLocation()
+        }
+    }
+    
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("Error: " + error.localizedDescription)
+    }
+    
+    
+    func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER * 2, Srtm3.DISPLAY_DIAMETER * 2)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+   
+    
     func locationManagerSettings() {
         if (self.locationManager == nil) {
             self.locationManager = CLLocationManager()
@@ -84,45 +141,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
-    // MARK: - Location Delegate Methods
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
-            self.locationManager.startUpdatingLocation()
-            self.isInitialAuthorizationCheck = true
-            self.mapView.showsUserLocation = true
-        }
-    }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        if (self.isInitialAuthorizationCheck) {
-            let location = locations.last
-            let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
-            self.mapView.tintColor = UIColor.blueColor()
-            self.mapView?.centerCoordinate = location!.coordinate
-            self.mapView.setRegion(region, animated: true)
-            self.locationManager.stopUpdatingLocation()
-        }
-    }
-    
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print("Error: " + error.localizedDescription)
-    }
-    
-    
-    func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    
-    // MARK: Display Manipulations
+    // MARK: - Display Manipulations
     
     
     func displayObservations() {
@@ -316,7 +336,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    // MARK: Fog Viewshed
+    // MARK: - Fog Viewshed
     
     
     func initiateFogViewshed(observer: Observer) {
@@ -491,7 +511,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    // MARK: IBActions
+    // MARK: - IBActions
     
     
     @IBAction func mapTypeChanged(sender: AnyObject) {
@@ -546,7 +566,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
-        mapView.removeOverlays(mapView.overlays)
+        redrawMap()
         self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
     }
 
@@ -559,7 +579,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         model.clearEntity()
-        removeAllFromMap()
+        redrawMap()
     }
 
     
