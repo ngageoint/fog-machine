@@ -29,6 +29,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
+    struct hgtLatLngPrefix {
+        var latitudePrefix: String
+        var longitudePrefix: String
+    }
     
     // MARK: IBOutlets
 
@@ -155,19 +159,60 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = gestureRecognizer.locationInView(mapView)
             let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            let newObserver = Observer()
-            newObserver.name = "Observer \(allObservers.count + 1)"
-            newObserver.setNewCoordinates(newCoordinates)
-         
-            model.populateEntity(newObserver)
-            
-            //Repopulate allObservers with new Observer
-            allObservers = model.getObservers()
-            
-            pinObserverLocation(newObserver)
+            if (checkHgtDataAvailability(gestureRecognizer)) {
+                let newObserver = Observer()
+                newObserver.name = "Observer \(allObservers.count + 1)"
+                newObserver.setNewCoordinates(newCoordinates)
+                model.populateEntity(newObserver)
+                //Repopulate allObservers with new Observer
+                allObservers = model.getObservers()
+                pinObserverLocation(newObserver)
+            } else {
+                var style = ToastStyle()
+                style.messageColor = UIColor.redColor()
+                style.backgroundColor = UIColor.whiteColor()
+                style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
+                self.view.makeToast("Data unavailable for this location", duration: 1.5, position: .Center, style: style)
+                return
+            }
         }
     }
     
+    func checkHgtDataAvailability(gestureRecognizer: UIGestureRecognizer) ->Bool {
+        let touchLocation:CGPoint = gestureRecognizer.locationInView(mapView)
+        let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
+        let tempHgtLatLngPrefix = getHgtLatLngPrefix(locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+        
+        // round the lat & long to the closest integer value..
+        let lat = floor(locationCoordinate.latitude)
+        let lng = floor(locationCoordinate.longitude)
+        let strHgtFileName = (String(format:"%@%02d%@%03d%@", tempHgtLatLngPrefix.latitudePrefix, abs(Int(lat)), tempHgtLatLngPrefix.longitudePrefix, abs(Int(lng)), ".hgt"))
+        if (CheckHgtFileDownloaded(strHgtFileName)) {
+            return true
+        }
+        return false
+    }
+    
+    func getHgtLatLngPrefix(latitude: Double, longitude: Double) -> hgtLatLngPrefix {
+        
+        var tempHgtLatLngPrefix = hgtLatLngPrefix(latitudePrefix: "N", longitudePrefix: "E")
+        if (latitude < 0) {
+            tempHgtLatLngPrefix.longitudePrefix = "S"
+        }
+        if (longitude < 0) {
+            tempHgtLatLngPrefix.longitudePrefix = "W"
+        }
+        return tempHgtLatLngPrefix
+    }
+    
+    func CheckHgtFileDownloaded(strHgtFileName: String) -> Bool{
+        let fm = NSFileManager.defaultManager()
+        let documentsFolderPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        if (fm.fileExistsAtPath(documentsFolderPath[0] + "/" + strHgtFileName)) {
+            return true
+        }
+        return false
+    }
     
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var polygonView:MKPolygonRenderer? = nil
@@ -210,7 +255,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view!.canShowCallout = true
             view!.calloutOffset = CGPoint(x: -5, y: 5)
-       
+            
             let image = UIImage(named: "Viewshed")
             let button = UIButton(type: UIButtonType.DetailDisclosure)
             button.setImage(image, forState: UIControlState.Normal)
@@ -331,7 +376,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
         self.viewshedPalette.setupNewPalette(observer)
         var obsResults:[[Int]]!
-
+        
         if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
             obsResults = obsViewshed.viewshedParallel()
@@ -369,7 +414,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             
             self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
-
+            
             let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
             dispatch_async(dispatch_get_main_queue()) {
                 self.mapView.addOverlay(viewshedOverlay)
@@ -456,8 +501,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             log: { peerName in
                 self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
             }//,
-           // selectedWorkersCount: options.selectedPeers.count,
-           // selectedPeers: options.selectedPeers
+            // selectedWorkersCount: options.selectedPeers.count,
+            // selectedPeers: options.selectedPeers
         )
     }
     
@@ -511,16 +556,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     @IBAction func applyOptions(segue: UIStoryboardSegue) {
-       
+        
     }
-
-
+    
+    
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         mapView.removeOverlays(mapView.overlays)
         self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
     }
-
+    
     
     @IBAction func removePinFromSettings(segue: UIStoryboardSegue) {
         redrawMap()
@@ -532,7 +577,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         model.clearEntity()
         removeAllFromMap()
     }
-
+    
     
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
         redrawMap()
