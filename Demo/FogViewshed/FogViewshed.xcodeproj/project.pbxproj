@@ -166,13 +166,10 @@
 		758FB77F1C0A3AE400A193A7 /* Viewshed */ = {
 			isa = PBXGroup;
 			children = (
-				753D3D5E1BEA33CF004E3589 /* MapViewController.swift */,
-				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
 				9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */,
 				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
 				753D3D561BE7A031004E3589 /* Viewshed.swift */,
 				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
-				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 				7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */,
 			);
 			name = Viewshed;
@@ -307,6 +304,9 @@
 			children = (
 				E314F6C21B79023D005B75C6 /* FirstViewController.swift */,
 				E314F6C41B79023D005B75C6 /* DataViewController.swift */,
+				753D3D5E1BEA33CF004E3589 /* MapViewController.swift */,
+				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
+				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 				758FB77F1C0A3AE400A193A7 /* Viewshed */,
 			);
 			name = Controllers;

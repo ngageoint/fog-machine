@@ -54,7 +54,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         allObservers = model.getObservers()
         displayObservations()
-        
+        displayDataRegions()
         viewshedPalette = ViewshedPalette()
         
         if allObservers.count > 0 {
@@ -130,17 +130,36 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             pinObserverLocation(entity.getObserver())
         }
     }
-
-    @IBAction func focusToCurrentLocation(sender: AnyObject) {
-        locationManagerSettings()
-        
-        if let coordinate = mapView.userLocation.location?.coordinate {
-            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
-            self.mapView.setRegion(region, animated: true)
+    
+    
+    func displayDataRegions() {
+        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+     
+        do {
+            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
+            for file in hgtFiles{
+                let name = file!.componentsSeparatedByString(".")[0]
+                let tempHgt = Hgt(filename: name)
+                let hgtCoordinate = tempHgt.getCoordinate()
+                self.addRectBoundry(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
+            }
+        } catch let error as NSError {
+            print("Error displaying HGT file: \(error.localizedDescription)")
         }
     }
-
+    
+    
+    func addRectBoundry(latitude: Double, longitude: Double) {
+        var points = [
+            CLLocationCoordinate2DMake(latitude, longitude),
+            CLLocationCoordinate2DMake(latitude+1, longitude),
+            CLLocationCoordinate2DMake(latitude+1, longitude+1),
+            CLLocationCoordinate2DMake(latitude, longitude+1)
+        ]
+        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
+        self.mapView.addOverlay(polygonOverlay)
+    }
     
     
     func pinObserverLocation(observer: Observer) {
@@ -171,13 +190,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var polygonView:MKPolygonRenderer? = nil
-        //        if overlay is MKPolygon {
-        //            polygonView = MKPolygonRenderer(overlay: overlay)
-        //            polygonView!.lineWidth = 0.1
-        //            polygonView!.strokeColor = UIColor.grayColor()
-        //            polygonView!.fillColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
-        //        } else
-        if overlay is Cell {
+        if overlay is MKPolygon {
+            polygonView = MKPolygonRenderer(overlay: overlay)
+            polygonView!.lineWidth = 0.5
+            polygonView!.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.5)
+        } else if overlay is Cell {
             polygonView = MKPolygonRenderer(overlay: overlay)
             polygonView!.lineWidth = 0.1
             let color:UIColor = (overlay as! Cell).color!
@@ -295,6 +312,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         allObservers = model.getObservers()
         removeAllFromMap()
         displayObservations()
+        displayDataRegions()
     }
     
     
@@ -485,6 +503,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.mapType = MKMapType.Hybrid
         case .Satellite:
             mapView.mapType = MKMapType.Satellite
+        }
+    }
+    
+    
+    @IBAction func focusToCurrentLocation(sender: AnyObject) {
+        locationManagerSettings()
+        
+        if let coordinate = mapView.userLocation.location?.coordinate {
+            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+            self.mapView.setRegion(region, animated: true)
         }
     }
     
