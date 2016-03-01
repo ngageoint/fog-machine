@@ -625,6 +625,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
         setMapLogDisplay()
+        removeDataRegions()
+        isDataRegionDrawn = false
         displayDataRegions()
     }
     
