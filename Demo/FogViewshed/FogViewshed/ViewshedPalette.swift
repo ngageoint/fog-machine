@@ -194,10 +194,11 @@ class ViewshedPalette: NSObject {
         let neededCoordinate = CLLocationCoordinate2DMake(latitude, longitude)
         
         do {
-            let folder = NSBundle.mainBundle().resourcePath! + "/HGT"
-            let files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(folder)
-            for file: String in files {
-                let name = file.componentsSeparatedByString(".")[0]
+            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
+            for file in hgtFiles{
+                let name = file!.componentsSeparatedByString(".")[0]
                 let tempHgt = Hgt(filename: name)
                 let hgtCoordinate = tempHgt.getCoordinate()
                 if neededCoordinate.latitude == hgtCoordinate.latitude && neededCoordinate.longitude == hgtCoordinate.longitude {
@@ -209,7 +210,7 @@ class ViewshedPalette: NSObject {
         } catch let error as NSError {
             printOut("Error getting HGT file " + " \(error): \(error.userInfo)")
         }
-        
+
         
         //Need to handle the foundHgt = nil case
         
@@ -248,15 +249,16 @@ class ViewshedPalette: NSObject {
         return isRadiusWithinHgt
     }
     
-    // Add to HGT.swift
+    
     func checkForHgtFile(checkCoordinate: CLLocationCoordinate2D) -> Bool {
         var haveHgtForCoordinate = false
         
         do {
-            let folder = NSBundle.mainBundle().resourcePath! + "/HGT"
-            let files = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(folder)
-            for file: String in files {
-                let name = file.componentsSeparatedByString(".")[0]
+            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
+            for file in hgtFiles{
+                let name = file!.componentsSeparatedByString(".")[0]
                 let tempHgt = Hgt(filename: name)
                 let hgtCoordinate = tempHgt.getCoordinate()
                 if isCoordinateInHgt(checkCoordinate, hgtCoordinate: hgtCoordinate) {

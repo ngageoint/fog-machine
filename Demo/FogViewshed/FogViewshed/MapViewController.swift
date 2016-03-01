@@ -26,6 +26,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var elapsedTime: CFAbsoluteTime!
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
+    var isDataRegionDrawn = false
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
@@ -87,6 +88,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
+            removeDataRegions()
             displayDataRegions()
         }
     }
@@ -157,19 +159,42 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func displayDataRegions() {
-        let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-     
-        do {
-            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
-            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
-            for file in hgtFiles{
-                let name = file!.componentsSeparatedByString(".")[0]
-                let tempHgt = Hgt(filename: name)
-                let hgtCoordinate = tempHgt.getCoordinate()
-                self.addRectBoundry(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
+        if !isDataRegionDrawn {
+            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            
+            do {
+                let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+                let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
+                for file in hgtFiles{
+                    let name = file!.componentsSeparatedByString(".")[0]
+                    let tempHgt = Hgt(filename: name)
+                    let hgtCoordinate = tempHgt.getCoordinate()
+                    self.addRectBoundry(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
+                }
+            } catch let error as NSError {
+                print("Error displaying HGT file: \(error.localizedDescription)")
             }
-        } catch let error as NSError {
-            print("Error displaying HGT file: \(error.localizedDescription)")
+            isDataRegionDrawn = true
+        }
+    }
+    
+    
+    func removeDataRegions() {
+        var dataRegionOverlays: [MKOverlay]! = nil
+        var isInitialized = false
+        for overlay in mapView.overlays {
+            if overlay is MKPolygon {
+                if !isInitialized {
+                    isInitialized = true
+                    dataRegionOverlays = [overlay]
+                } else {
+                    dataRegionOverlays.append(overlay)
+                }
+            }
+        }
+        if dataRegionOverlays != nil {
+            mapView.removeOverlays(dataRegionOverlays)
+            isDataRegionDrawn = false
         }
     }
     
@@ -370,6 +395,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func removeAllFromMap() {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
+        isDataRegionDrawn = false
     }
     
     
@@ -388,7 +414,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // Check does nothing and is there in case it is needed once the Fog device requirements are specified.
         if (ConnectionManager.allWorkers.count < 0) {
-            let message = "Fog Viewshed requires 1, 2, or 4 connected devices for the algorithms quadrant distribution."
+            let message = "Fog Viewshed requires 1+ connected devices for the algorithms quadrant distribution."
             let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
             
             let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
@@ -399,7 +425,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 // ...
             }
         } else {
-            //viewshedPalette.viewshedResults = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
             dispatch_async(dispatch_get_main_queue()) {
                 self.logBox.text = ""
             }
@@ -409,7 +434,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]]{
+    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) -> [[Int]] {
         
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
         self.viewshedPalette.setupNewPalette(observer)
@@ -511,7 +536,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let selfQuadrant = 1
         var count = 1 //Start at one since initiator is 0-indexed
         
-        
         ConnectionManager.sendEventToAll(Event.StartViewshed.rawValue,
             workForPeer: { workerCount in
                 let workDivision = self.getQuadrant(workerCount)
@@ -601,6 +625,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
         setMapLogDisplay()
+        displayDataRegions()
     }
     
     
