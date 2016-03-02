@@ -192,9 +192,10 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         let defaultOverlay = MKPolygonRenderer()
         if overlay is MKPolygon {
             let polygonView = MKPolygonRenderer(overlay: overlay)
-            polygonView.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.5)
-            polygonView.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.5)
-            polygonView.lineWidth = 0.4
+            polygonView.lineWidth = 0.5
+            polygonView.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.4)
+            polygonView.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.6)
+
             return polygonView
         }
         return defaultOverlay
