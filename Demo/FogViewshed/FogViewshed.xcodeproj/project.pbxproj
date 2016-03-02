@@ -15,7 +15,6 @@
 		753D3D6A1BEBA59E004E3589 /* HGT in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D691BEBA59E004E3589 /* HGT */; };
 		753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */; };
 		753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */; };
-		753D3D741BF6374E004E3589 /* N39W075.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D731BF6374E004E3589 /* N39W075.hgt */; };
 		753D3D761BF65A60004E3589 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D751BF65A60004E3589 /* Constants.swift */; };
 		753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D771BF66EA0004E3589 /* Pixel.swift */; };
 		753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D791BFA3ABA004E3589 /* Observer.swift */; };
@@ -26,13 +25,9 @@
 		7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */; };
 		7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */; };
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
-		7575B3E41C5C1DCA00FE32E9 /* N38W076.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 7575B3E31C5C1DCA00FE32E9 /* N38W076.hgt */; };
-		7575B3E61C5C1DD100FE32E9 /* N39W076.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 7575B3E51C5C1DD100FE32E9 /* N39W076.hgt */; };
 		7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */; };
 		7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
-		9B09C7D31C32F33400C08D7C /* N38W075.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7BD1C32F33400C08D7C /* N38W075.hgt */; };
-		9B09C7D41C32F33400C08D7C /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = 9B09C7BE1C32F33400C08D7C /* N38W077.hgt */; };
 		9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */; };
 		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
 		9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */; };
@@ -54,6 +49,16 @@
 		E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */; };
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
 		E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */; };
+		F9D9E3B41C87A651009710A5 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AA1C87A651009710A5 /* N37W123.hgt */; };
+		F9D9E3B51C87A651009710A5 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AB1C87A651009710A5 /* N38W077.hgt */; };
+		F9D9E3B61C87A651009710A5 /* N38W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AC1C87A651009710A5 /* N38W078.hgt */; };
+		F9D9E3B71C87A651009710A5 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AD1C87A651009710A5 /* N38W123.hgt */; };
+		F9D9E3B81C87A651009710A5 /* N39W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AE1C87A651009710A5 /* N39W077.hgt */; };
+		F9D9E3B91C87A651009710A5 /* N39W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AF1C87A651009710A5 /* N39W078.hgt */; };
+		F9D9E3BA1C87A651009710A5 /* N39W105.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B01C87A651009710A5 /* N39W105.hgt */; };
+		F9D9E3BB1C87A651009710A5 /* N39W106.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B11C87A651009710A5 /* N39W106.hgt */; };
+		F9D9E3BC1C87A651009710A5 /* N40W105.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B21C87A651009710A5 /* N40W105.hgt */; };
+		F9D9E3BD1C87A651009710A5 /* N40W106.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B31C87A651009710A5 /* N40W106.hgt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +125,17 @@
 		E314F6D71B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogViewshedTests.swift; sourceTree = "<group>"; };
 		E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
+		F9D9E3A81C87A4A9009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = FogViewshed/HGT/N37W123.hgt; sourceTree = "<group>"; };
+		F9D9E3AA1C87A651009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = FogViewshed/HGT/N37W123.hgt; sourceTree = "<group>"; };
+		F9D9E3AB1C87A651009710A5 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = FogViewshed/HGT/N38W077.hgt; sourceTree = "<group>"; };
+		F9D9E3AC1C87A651009710A5 /* N38W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W078.hgt; path = FogViewshed/HGT/N38W078.hgt; sourceTree = "<group>"; };
+		F9D9E3AD1C87A651009710A5 /* N38W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W123.hgt; path = FogViewshed/HGT/N38W123.hgt; sourceTree = "<group>"; };
+		F9D9E3AE1C87A651009710A5 /* N39W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W077.hgt; path = FogViewshed/HGT/N39W077.hgt; sourceTree = "<group>"; };
+		F9D9E3AF1C87A651009710A5 /* N39W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W078.hgt; path = FogViewshed/HGT/N39W078.hgt; sourceTree = "<group>"; };
+		F9D9E3B01C87A651009710A5 /* N39W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W105.hgt; path = FogViewshed/HGT/N39W105.hgt; sourceTree = "<group>"; };
+		F9D9E3B11C87A651009710A5 /* N39W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W106.hgt; path = FogViewshed/HGT/N39W106.hgt; sourceTree = "<group>"; };
+		F9D9E3B21C87A651009710A5 /* N40W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W105.hgt; path = FogViewshed/HGT/N40W105.hgt; sourceTree = "<group>"; };
+		F9D9E3B31C87A651009710A5 /* N40W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W106.hgt; path = FogViewshed/HGT/N40W106.hgt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +212,17 @@
 		E314F6B21B79023D005B75C6 = {
 			isa = PBXGroup;
 			children = (
+				F9D9E3AA1C87A651009710A5 /* N37W123.hgt */,
+				F9D9E3AB1C87A651009710A5 /* N38W077.hgt */,
+				F9D9E3AC1C87A651009710A5 /* N38W078.hgt */,
+				F9D9E3AD1C87A651009710A5 /* N38W123.hgt */,
+				F9D9E3AE1C87A651009710A5 /* N39W077.hgt */,
+				F9D9E3AF1C87A651009710A5 /* N39W078.hgt */,
+				F9D9E3B01C87A651009710A5 /* N39W105.hgt */,
+				F9D9E3B11C87A651009710A5 /* N39W106.hgt */,
+				F9D9E3B21C87A651009710A5 /* N40W105.hgt */,
+				F9D9E3B31C87A651009710A5 /* N40W106.hgt */,
+				F9D9E3A81C87A4A9009710A5 /* N37W123.hgt */,
 				E314F6BD1B79023D005B75C6 /* FogViewshed */,
 				E314F6D51B79023D005B75C6 /* FogViewshedTests */,
 				E314F6BC1B79023D005B75C6 /* Products */,
@@ -398,13 +425,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9D9E3B41C87A651009710A5 /* N37W123.hgt in Resources */,
+				F9D9E3B51C87A651009710A5 /* N38W077.hgt in Resources */,
+				F9D9E3B61C87A651009710A5 /* N38W078.hgt in Resources */,
+				F9D9E3B71C87A651009710A5 /* N38W123.hgt in Resources */,
+				F9D9E3B81C87A651009710A5 /* N39W077.hgt in Resources */,
+				F9D9E3B91C87A651009710A5 /* N39W078.hgt in Resources */,
+				F9D9E3BA1C87A651009710A5 /* N39W105.hgt in Resources */,
+				F9D9E3BB1C87A651009710A5 /* N39W106.hgt in Resources */,
+				F9D9E3BC1C87A651009710A5 /* N40W105.hgt in Resources */,
+				F9D9E3BD1C87A651009710A5 /* N40W106.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
-				7575B3E61C5C1DD100FE32E9 /* N39W076.hgt in Resources */,
-				7575B3E41C5C1DCA00FE32E9 /* N38W076.hgt in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
-				9B09C7D31C32F33400C08D7C /* N38W075.hgt in Resources */,
-				753D3D741BF6374E004E3589 /* N39W075.hgt in Resources */,
-				9B09C7D41C32F33400C08D7C /* N38W077.hgt in Resources */,
 				753D3D6A1BEBA59E004E3589 /* HGT in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
 			);

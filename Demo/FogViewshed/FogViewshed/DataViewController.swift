@@ -314,23 +314,12 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
                 alertController.addAction(ok)
                 self.presentViewController(alertController, animated: true, completion: nil)
             } else {
-                let alertController = UIAlertController(title: hgtFileName, message: "Download this data File?", preferredStyle: .Alert)
-                let ok = UIAlertAction(title: "OK", style: .Default, handler: {
-                    (action) -> Void in
-                    ActivityIndicator.show("Downloading",  disableUI: false)
-                    let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
-                    let url = NSURL(string: hgtFilePath)
-                    let hgtDownloadMgr = HgtDownloadMgr()
-                    hgtDownloadMgr.delegate = self
-                    hgtDownloadMgr.downloadHgtFile(url!)
-                })
-                let cancel = UIAlertAction(title: "Cancel", style: .Cancel) {
-                    (action) -> Void in
-                    print("Download cancelled!")
-                }
-                alertController.addAction(ok)
-                alertController.addAction(cancel)
-                presentViewController(alertController, animated: true, completion: nil)
+                ActivityIndicator.show("Downloading",  disableUI: false)
+                let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
+                let url = NSURL(string: hgtFilePath)
+                let hgtDownloadMgr = HgtDownloadMgr()
+                hgtDownloadMgr.delegate = self
+                hgtDownloadMgr.downloadHgtFile(url!)
             }
         }
     }

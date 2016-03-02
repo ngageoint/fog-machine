@@ -17,7 +17,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+
         ConnectionManager.start()
+
+        
+        let prefs = NSUserDefaults.standardUserDefaults()
+
+        // copy the data over to documents dir, if it's never been done.
+        if !prefs.boolForKey("hasCopyData") {
+            let fm = NSFileManager.defaultManager()
+            let sourceDataPath = NSBundle.mainBundle().resourcePath!
+            let targetDir = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+            let targetDirPath:String = "\(targetDir[0])"
+            do {
+                
+                let items = try fm.contentsOfDirectoryAtPath(sourceDataPath)
+                for item: String in items {
+                    if (item == "HGT") {
+                        let hgtFolder = sourceDataPath + "/HGT"
+                        let hgtFiles = try fm.contentsOfDirectoryAtPath(hgtFolder)
+                        for hgFileWithExt: String in hgtFiles {
+                            if hgFileWithExt.hasSuffix(".hgt") {
+                                do {
+                                    let fileNameWithPath = targetDirPath + "/" + hgFileWithExt
+                                    if !(fm.fileExistsAtPath(fileNameWithPath)) {
+                                        try fm.copyItemAtPath(hgtFolder + "/" + hgFileWithExt, toPath: targetDirPath + "/" + hgFileWithExt)
+                                    } else {
+                                        print(hgFileWithExt + " File already exists in this destination...")
+                                    }
+                                }
+                                catch let error as NSError {
+                                    print("Error! Something went wrong: \(error)")
+                                }
+                            }
+                        }
+                        ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
+                        break
+                    }
+                }
+                prefs.setValue(true, forKey: "hasCopyData")
+            } catch let error as NSError  {
+                print("Could get the HGT files: \(error.localizedDescription)")
+            }
+        }
         return true
     }
     

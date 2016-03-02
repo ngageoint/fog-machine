@@ -62,16 +62,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         displayObservations()
         displayDataRegions()
         viewshedPalette = ViewshedPalette()
-        
+
+        locationManagerSettings()
         if allObservers.count > 0 {
             //Center on the last observer
             self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
-        } else {
-            let defaultHgtFilename = "N39W075"//"N39W075"//"N38W077"
-            let defaultHgt = Hgt(filename: defaultHgtFilename)
-            self.centerMapOnLocation(defaultHgt.getCenterLocation())
         }
-        
         setupFogViewshedEvents()
     }
     
@@ -144,6 +140,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             // and offer to take the user to Settings for the app via
             self.locationManager.requestWhenInUseAuthorization()
             self.mapView.tintColor = UIColor.blueColor()
+        }
+        if let coordinate = mapView.userLocation.location?.coordinate {
+            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+            self.mapView.setRegion(region, animated: true)
         }
     }
     
@@ -600,12 +601,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
         locationManagerSettings()
-        
-        if let coordinate = mapView.userLocation.location?.coordinate {
-            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
-            self.mapView.setRegion(region, animated: true)
-        }
     }
     
     

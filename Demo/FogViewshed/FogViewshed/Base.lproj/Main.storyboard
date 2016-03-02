@@ -11,7 +11,7 @@
         <!--Connections-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -24,7 +24,7 @@
                                 <rect key="frame" x="0.0" y="70" width="600" height="481"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="xq4-uh-6nf" style="IBUITableViewCellStyleDefault" id="VGG-ca-GA5" customClass="ConnectionCell" customModule="FogMachine" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="xq4-uh-6nf" style="IBUITableViewCellStyleDefault" id="VGG-ca-GA5" customClass="ConnectionCell" customModule="FogViewshed" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="22" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VGG-ca-GA5" id="ete-q3-Lw9">
@@ -81,7 +81,7 @@
         <!--Data-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
-                <viewController id="8rJ-Kc-sve" customClass="DataViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="8rJ-Kc-sve" customClass="DataViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L7p-HK-0SC"/>
                         <viewControllerLayoutGuide type="bottom" id="Djb-ko-YwX"/>
@@ -203,7 +203,7 @@
         <!--Viewshed-->
         <scene sceneID="XZA-M0-u1n">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="pEj-gH-Hgf" userLabel="Viewshed" customClass="MapViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="pEj-gH-Hgf" userLabel="Viewshed" customClass="MapViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ex2-aV-BLO"/>
                         <viewControllerLayoutGuide type="bottom" id="nk6-LY-TBR"/>
@@ -213,7 +213,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88U-br-EID">
-                                <rect key="frame" x="5" y="446.5" width="590" height="104.5"/>
+                                <rect key="frame" x="5" y="447" width="590" height="104"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
@@ -325,7 +325,7 @@
         <!--Observer Settings-->
         <scene sceneID="d5e-Uy-1d2">
             <objects>
-                <viewController id="4wN-Fl-Gwg" customClass="ObserverSettingsViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="4wN-Fl-Gwg" customClass="ObserverSettingsViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Crf-ce-Ftj"/>
                         <viewControllerLayoutGuide type="bottom" id="a8g-tM-PIT"/>
@@ -608,7 +608,7 @@
         <!--Settings-->
         <scene sceneID="XVf-PL-rON">
             <objects>
-                <viewController id="V4j-6L-7be" customClass="SettingsViewController" customModule="FogMachine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="V4j-6L-7be" customClass="SettingsViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="FVE-M6-YJp"/>
                         <viewControllerLayoutGuide type="bottom" id="7go-yd-6eg"/>
@@ -623,17 +623,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUU-dh-4tg" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbn-7f-qtz">
-                                                <rect key="frame" x="242" y="120" width="116" height="30"/>
-                                                <state key="normal" title="Copy Demo Files"/>
-                                                <connections>
-                                                    <action selector="copyDemoFilesAction:" destination="V4j-6L-7be" eventType="touchUpInside" id="xv4-t5-5mQ"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycn-C8-Bk3">
-                                                <rect key="frame" x="209" y="170" width="183" height="30"/>
-                                                <state key="normal" title="Pre-Load Demo Observers"/>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTT-Lj-IHi">
                                                 <rect key="frame" x="229" y="20" width="142" height="30"/>
                                                 <state key="normal" title="Delete all Viewsheds"/>
@@ -649,41 +638,45 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Display Map Log" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTx-Dj-7U1">
-                                                <rect key="frame" x="19" y="383" width="133" height="21"/>
+                                                <rect key="frame" x="19" y="120" width="133" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="133" id="JJF-xS-on0"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O6b-NL-dLh">
-                                                <rect key="frame" x="527" y="378" width="51" height="31"/>
+                                                <rect key="frame" x="527" y="115" width="51" height="31"/>
                                             </switch>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Vbn-7f-qtz" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="GjH-8i-ueK"/>
+                                            <constraint firstItem="O6b-NL-dLh" firstAttribute="centerY" secondItem="aTx-Dj-7U1" secondAttribute="centerY" id="IxM-Jc-x2h"/>
                                             <constraint firstAttribute="bottom" secondItem="O6b-NL-dLh" secondAttribute="bottom" constant="19" id="Lcb-rp-zaa"/>
                                             <constraint firstItem="wfz-Ba-OPZ" firstAttribute="top" secondItem="sTT-Lj-IHi" secondAttribute="bottom" constant="20" id="M9f-cv-1JD"/>
                                             <constraint firstItem="sTT-Lj-IHi" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="20" id="Ppe-KP-Upl"/>
-                                            <constraint firstItem="Vbn-7f-qtz" firstAttribute="top" secondItem="wfz-Ba-OPZ" secondAttribute="bottom" constant="20" id="R2I-ux-eQ7"/>
+                                            <constraint firstItem="O6b-NL-dLh" firstAttribute="top" secondItem="wfz-Ba-OPZ" secondAttribute="top" constant="20" id="Q3R-mA-Ii8"/>
                                             <constraint firstItem="wfz-Ba-OPZ" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="XEu-cZ-SvL"/>
-                                            <constraint firstItem="ycn-C8-Bk3" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="XVN-df-CZh"/>
                                             <constraint firstItem="wfz-Ba-OPZ" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="20" id="YUN-CD-D9c"/>
+                                            <constraint firstAttribute="trailing" secondItem="O6b-NL-dLh" secondAttribute="trailing" constant="8" id="ZHh-Il-bJH"/>
+                                            <constraint firstItem="aTx-Dj-7U1" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="20" id="ZWc-4X-FFm"/>
                                             <constraint firstItem="sTT-Lj-IHi" firstAttribute="centerX" secondItem="YUU-dh-4tg" secondAttribute="centerX" id="b4y-RR-0a1"/>
                                             <constraint firstAttribute="height" constant="428" id="dO5-Rc-ngr"/>
-                                            <constraint firstItem="Vbn-7f-qtz" firstAttribute="trailing" secondItem="wfz-Ba-OPZ" secondAttribute="trailing" id="kUg-3E-WQi"/>
+                                            <constraint firstItem="aTx-Dj-7U1" firstAttribute="top" secondItem="wfz-Ba-OPZ" secondAttribute="top" constant="50" id="nSZ-pi-GXD"/>
                                             <constraint firstAttribute="bottom" secondItem="aTx-Dj-7U1" secondAttribute="bottom" constant="24" id="naH-uG-1F8"/>
-                                            <constraint firstItem="Vbn-7f-qtz" firstAttribute="top" secondItem="YUU-dh-4tg" secondAttribute="top" constant="62" id="pKM-oF-Qk3"/>
                                             <constraint firstItem="aTx-Dj-7U1" firstAttribute="leading" secondItem="YUU-dh-4tg" secondAttribute="leading" constant="19" id="paD-4G-g2T"/>
                                             <constraint firstAttribute="trailing" secondItem="O6b-NL-dLh" secondAttribute="trailing" constant="24" id="rY2-zJ-Rhz"/>
-                                            <constraint firstItem="ycn-C8-Bk3" firstAttribute="top" secondItem="Vbn-7f-qtz" secondAttribute="bottom" constant="20" id="uwg-6T-GW7"/>
+                                            <constraint firstItem="aTx-Dj-7U1" firstAttribute="leading" secondItem="YUU-dh-4tg" secondAttribute="leading" constant="17" id="u6j-as-5Iy"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="ZWc-4X-FFm"/>
+                                                <exclude reference="naH-uG-1F8"/>
+                                                <exclude reference="u6j-as-5Iy"/>
                                                 <exclude reference="YUN-CD-D9c"/>
-                                                <exclude reference="kUg-3E-WQi"/>
-                                                <exclude reference="pKM-oF-Qk3"/>
+                                                <exclude reference="Lcb-rp-zaa"/>
+                                                <exclude reference="Q3R-mA-Ii8"/>
+                                                <exclude reference="ZHh-Il-bJH"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -724,7 +717,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="copyDemoFiles" destination="Vbn-7f-qtz" id="FRR-cN-aK2"/>
                         <outlet property="mapLogSwitch" destination="O6b-NL-dLh" id="9uG-xf-dMQ"/>
                         <outlet property="scrollView" destination="5ST-rc-8jS" id="AAO-87-jw7"/>
                     </connections>
@@ -760,7 +752,7 @@
     </scenes>
     <resources>
         <image name="Connections" width="24" height="24"/>
-        <image name="CurrentLocation" width="24" height="24"/>
+        <image name="CurrentLocation" width="24" height="25"/>
         <image name="Data" width="20" height="20"/>
         <image name="Settings" width="24" height="24"/>
         <image name="Viewshed" width="24" height="24"/>
