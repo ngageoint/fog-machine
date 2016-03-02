@@ -21,7 +21,7 @@ Software source code previously released under an open source license and then m
 
 ## License
 
-Copyright 2015 BIT Systems
+Copyright 2016 BIT Systems
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
