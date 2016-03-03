@@ -59,7 +59,6 @@
 		75802C741C7F37AE00DAE8BD = {
 			isa = PBXGroup;
 			children = (
-				754D5E551C80DCF4009B7876 /* Fog.podspec */,
 				75802C801C7F37AE00DAE8BD /* Fog */,
 				75802C7F1C7F37AE00DAE8BD /* Products */,
 				A3F6200A0272446E4CEF7C25 /* Pods */,
@@ -110,6 +109,7 @@
 		A3F6200A0272446E4CEF7C25 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				754D5E551C80DCF4009B7876 /* Fog.podspec */,
 				0305FDF3ACF4674AEEA09737 /* Pods-Fog.debug.xcconfig */,
 				AE165CDC20D66FA360E7DD4F /* Pods-Fog.release.xcconfig */,
 			);
