@@ -13,15 +13,13 @@ let KreveldEventTypeCenter:Int = 2
 let KreveldEventTypeExit:Int = 3
 let KreveldEventTypeOther:Int = 0
 
-class KreveldSweepEventNode<T>: Comparable {
-    let state: T
+class KreveldSweepEventNode: Comparable {
     let eventType: Int
     let dataElevPoint, observerViewPt: ElevationPoint
     let angle: Double
     let distance: Double
     
-    init(state: T, eventType: Int, dataElevPoint: ElevationPoint, observerViewPt: ElevationPoint, angle: Double, distance: Double) {
-        self.state = state
+    init(eventType: Int, dataElevPoint: ElevationPoint, observerViewPt: ElevationPoint, angle: Double, distance: Double) {
         self.eventType = eventType
         self.dataElevPoint = dataElevPoint
         self.observerViewPt = observerViewPt
@@ -46,32 +44,36 @@ class KreveldSweepEventNode<T>: Comparable {
     func getPoint() -> ElevationPoint{
         return self.dataElevPoint
     }
-    var hashValue: Int { return (Int) (angle) }
+    var hashValue: Int {
+        return (Int) (angle)
+    }
 }
 
 // compares angle between two sweep events and inserts them accordingly
 // first sorted in the priority queue according to an angle , if these
 // equal according to distance from the starting point and if it is right after Type (EXIT or ENTER)
-func < <T>(lhs: KreveldSweepEventNode<T>, rhs: KreveldSweepEventNode<T>) -> Bool {
+func <  (lhs: KreveldSweepEventNode, rhs: KreveldSweepEventNode) -> Bool {
     //return (lhs.angle) < (rhs.angle)
     if lhs.angle < rhs.angle {
         return true
-    } else if lhs.angle > rhs.angle {
+    }
+    if lhs.angle > rhs.angle {
         return false
     }
     // TODO Commenting the following lines to see if this improves the performace..
-    else if lhs.distance < rhs.distance {
+    if lhs.distance < rhs.distance {
         return true
-    } else if lhs.distance > rhs.distance {
-        return false
-    } else if lhs.eventType == KreveldEventTypeEnter {
+    }
+    if lhs.distance > rhs.distance {
         return false
     }
-    
+    if lhs.eventType == KreveldEventTypeEnter {
+        return false
+    }
     return false
 }
 
-func == <T>(lhs: KreveldSweepEventNode<T>, rhs: KreveldSweepEventNode<T>) -> Bool {
+func == (lhs: KreveldSweepEventNode, rhs: KreveldSweepEventNode) -> Bool {
     // TODO Commenting to see if this improves the performace..
     // stopped comparing the entire object to conserve time!
     // if the angles are equal compare the entire object

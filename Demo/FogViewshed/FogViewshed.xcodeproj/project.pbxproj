@@ -36,7 +36,6 @@
 		9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */; };
 		9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */; };
 		9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */; };
-		9BD5C1001C05E51E004A37B6 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F61C05E51E004A37B6 /* Point.swift */; };
 		9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */; };
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
 		9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */; };
@@ -104,7 +103,6 @@
 		9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldViewshed.swift; sourceTree = "<group>"; };
 		9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationPoint.swift; sourceTree = "<group>"; };
 		9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldActiveBTree.swift; sourceTree = "<group>"; };
-		9BD5C0F61C05E51E004A37B6 /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftPriorityQueue.swift; sourceTree = "<group>"; };
 		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
 		9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -170,7 +168,6 @@
 				9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */,
 				9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */,
 				9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */,
-				9BD5C0F61C05E51E004A37B6 /* Point.swift */,
 			);
 			name = VanKreveld;
 			sourceTree = "<group>";
@@ -501,7 +498,6 @@
 				753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */,
 				7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */,
 				753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */,
-				9BD5C1001C05E51E004A37B6 /* Point.swift in Sources */,
 				7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */,
 				9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */,
 				E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */,

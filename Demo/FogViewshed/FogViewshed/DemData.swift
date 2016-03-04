@@ -8,13 +8,12 @@
 
 import Foundation
 
-public class DemData  {
+public struct DemData  {
     
     private var ncols: Int = 0
     private var nrows: Int = 0
     private var nodata: Double = 0.0
     var noDataValue: Double = 0.0
-    //public static var DEFAULT_INPUT_DATA_TYPE_SRTM = "SRTM"
     
     var demData = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
     
@@ -25,7 +24,7 @@ public class DemData  {
         self.nodata = 0
         self.noDataValue = 0.0
     }
-   
+    
     public func getDem2DMatrix() ->[[Int]] {
         return demData
     }
@@ -47,15 +46,14 @@ public class DemData  {
     
     public func getHeightedPoint(xTemp: Int, yTemp: Int) ->ElevationPoint {
         let hTemp: Int =  self.getHeight (yTemp, y: xTemp)
-        let elevPoint :ElevationPoint =  ElevationPoint(xCoord: xTemp, yCoord: yTemp, h: Double(hTemp))
+        let elevPoint :ElevationPoint =  ElevationPoint(xCoord: xTemp, yCoord: yTemp, h: hTemp)
         return elevPoint
     }
     
-    public  func getHeightedPoint(p: Point) ->ElevationPoint {
+    public  func getHeightedPoint(p: ElevationPoint) ->ElevationPoint {
         let xTemp: Int = p.getXCoord()
         let yTemp: Int = p.getYCoord()
         let elevPoint :ElevationPoint =  self.getHeightedPoint(xTemp, yTemp: yTemp)
         return elevPoint
     }
-
 }

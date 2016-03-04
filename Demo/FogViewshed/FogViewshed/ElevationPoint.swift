@@ -7,31 +7,28 @@
 //
 import Foundation
 
-public class ElevationPoint: Point {
-    
-    var height: Double = 0;
-   
-    override init(xCoord: Int, yCoord: Int) {
-        super.init(xCoord: xCoord, yCoord: yCoord)
-    }
-   
-    init(xCoord: Int, yCoord: Int, h: Double) {
-        self.height = h
-        super.init(xCoord: xCoord, yCoord: yCoord)
-    }
 
-    // alternative to the constructor/init ...???
-    public func elsevationPoint (xCoord :Int, yCoord: Int, h: Double) -> ElevationPoint {
+public struct ElevationPoint {
+    var height: Int = 0
+    var xCoord: Int = 0
+    var yCoord: Int = 0
+    
+    init(xCoord :Int, yCoord: Int) {
         self.xCoord = xCoord
         self.yCoord = yCoord
-        return self
     }
     
-    public func getHeight() -> Double {
+    init(xCoord: Int, yCoord: Int, h: Int) {
+        self.xCoord = xCoord
+        self.yCoord = yCoord
+        self.height = h
+    }
+    
+    public func getHeight() -> Int {
         return self.height;
     }
     
-    public func equalsPosition (p: Point) -> Bool {
+    public func equalsPosition (p: ElevationPoint) -> Bool {
         if (p.getXCoord() == self.getXCoord() &&  p.getYCoord() == self.getYCoord()) {
             return true
         } else {
@@ -40,9 +37,26 @@ public class ElevationPoint: Point {
     }
     
     public func calcSlope (to: ElevationPoint) -> Double {
-        let localHeight: Double = to.getHeight() - self.getHeight()
-        let result: Double = localHeight/calcDistance(to)
+        let localHeight: Int = to.getHeight() - self.getHeight()
+        let result: Double = Double(localHeight)/calcDistance(to)
         return result
     }
-
+    
+    public func getXCoord() -> Int {
+        return self.xCoord
+    }
+    
+    public func getYCoord() -> Int {
+        return self.yCoord
+    }
+    
+    //Calculates the euclidean distance (distance between two points in Euclidean space) to another point in 2D space.
+    //to Other point
+    // return Distance between this point and <tt>to</tt>
+    public func calcDistance(to:ElevationPoint) -> Double {
+        // distance between this (observer) point and the "to point"
+        let distX: Double = Double (self.getXCoord() - to.getXCoord())
+        let distY: Double = Double (self.getYCoord() - to.getYCoord())
+        return sqrt((distX*distX) + (distY*distY))
+    }
 }
