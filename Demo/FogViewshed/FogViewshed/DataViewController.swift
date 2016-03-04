@@ -18,6 +18,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     }
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var gpsButton: UIButton!
     
     var hgtCoordinate:CLLocationCoordinate2D!
     var pickerData: [String] = [String]()
@@ -25,6 +26,8 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
     let zoomLevelDegrees:Double = 5
+    let arrowPressedImg = UIImage(named: "ArrowPressed")! as UIImage
+    let arrowImg = UIImage(named: "Arrow")! as UIImage
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +56,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
             self.locationManager.requestWhenInUseAuthorization()
             self.mapView.tintColor = UIColor.blueColor()
         }
+        gpsButton.setImage(arrowPressedImg, forState: UIControlState.Normal)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -69,6 +73,31 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func focusToCurrentLocation(sender: AnyObject) {
+        gpsButton.setImage(arrowPressedImg, forState: UIControlState.Normal)
+        
+        if let coordinate = mapView.userLocation.location?.coordinate {
+            // Get the span that the mapView is set to by the user.
+            let span = self.mapView.region.span
+            // Now setup the region based on the lat/lon and retain the span that already exists.
+            let region = MKCoordinateRegion(center: coordinate, span: span)
+            //Center the view with some animation.
+            self.mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    func mapView(mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        let view = self.mapView.subviews[0]
+        //  Look through gesture recognizers to determine whether this region change is from user interaction
+        if let gestureRecognizers = view.gestureRecognizers {
+            for recognizer in gestureRecognizers {
+                if( recognizer.state == UIGestureRecognizerState.Began || recognizer.state == UIGestureRecognizerState.Ended ) {
+                    gpsButton.setImage(arrowImg, forState: UIControlState.Normal)
+                }
+            }
+        }
     }
     
     // MARK: - Location Delegate Methods
