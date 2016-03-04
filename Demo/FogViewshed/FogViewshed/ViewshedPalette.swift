@@ -28,6 +28,42 @@ class ViewshedPalette: NSObject {
         }
     }
     
+    
+    func isViewshedPossible(observer: Observer) -> Bool {
+        var isPossible = false
+        let requiredHgtFiles: [Hgt] = getRequiredHgtFiles(observer)
+        
+        var count = 0
+        for hgtFile in requiredHgtFiles {
+            if hasHgtFile(hgtFile) {
+                count++
+            }
+        }
+        
+        // The number of required HGT files are found and at least one file is required
+        if count == requiredHgtFiles.count && requiredHgtFiles.count > 0 {
+            isPossible = true
+        }
+        
+        return isPossible
+    }
+    
+    
+    func getRequiredHgtFiles(observer: Observer) -> [Hgt] {
+        var hgtFiles = [Hgt]()
+        let observersHgtCoordinate = observer.getObserversHgtCoordinate()
+        
+        if hasRadiusInOneHgt(observer) {
+            let singleHgtFile = self.getHgtFile(observersHgtCoordinate.latitude, longitude: observersHgtCoordinate.longitude)
+            hgtFiles = [singleHgtFile]
+        } else {
+            hgtFiles = self.getMultipleHgtFiles(observer)
+        }
+        
+        return hgtFiles
+    }
+    
+    
     // Will generate a 1x1 or 2x2 HgtGrid based on the location and size of the Observer
     func generateHgtGrid(observer: Observer) -> HgtGrid {
 
@@ -37,7 +73,7 @@ class ViewshedPalette: NSObject {
         
         let hgtGrid = HgtGrid(singleHgt: observerHgt)
         
-        if !checkRadiusInOneHgt(observer) {
+        if !hasRadiusInOneHgt(observer) {
             
             var upperLeftHgt: Hgt!
             var lowerLeftHgt: Hgt!
@@ -189,6 +225,31 @@ class ViewshedPalette: NSObject {
     }
     
     
+    
+    
+    // WORK IN PROGRESS
+    
+    
+    func getMultipleHgtFiles(observer: Observer) -> [Hgt] {
+        var multipleHgts = [Hgt]()
+        
+        //get each corner of the radius
+        let boundingBox = BoundingBox()
+        let box = boundingBox.getBoundingBox(observer)
+        
+        //determine which files are needed based on four corner
+        
+        //get each file
+        
+        return multipleHgts
+    }
+    
+    
+    
+    
+    
+    
+    
     func getHgtFile(latitude: Double, longitude: Double) -> Hgt {
         var foundHgt: Hgt!
         let neededCoordinate = CLLocationCoordinate2DMake(latitude, longitude)
@@ -230,7 +291,7 @@ class ViewshedPalette: NSObject {
     }
     
     
-    func checkRadiusInOneHgt(observer: Observer) -> Bool {
+    func hasRadiusInOneHgt(observer: Observer) -> Bool {
         var isRadiusWithinHgt = true
         //Determine which side radius is past the currHgt file
         // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
@@ -272,6 +333,29 @@ class ViewshedPalette: NSObject {
         }
         
         return haveHgtForCoordinate
+    }
+    
+    
+    func hasHgtFile(requiredHgt: Hgt) -> Bool {
+        var haveHgt = false
+        
+        do {
+            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
+            for file in hgtFiles{
+                let name = file!.componentsSeparatedByString(".")[0]
+                let tempHgt = Hgt(filename: name)
+                if requiredHgt.filename == tempHgt.filename {
+                    haveHgt = true
+                    break
+                }
+            }
+        } catch let error as NSError {
+            printOut("Error checking HGT files " + " \(error): \(error.userInfo)")
+        }
+        
+        return haveHgt
     }
     
     //Add to HGT.swift
@@ -333,10 +417,6 @@ class ViewshedPalette: NSObject {
         let overlay = ViewshedOverlay(midCoordinate: imageLocation, overlayBoundingMapRect: imageMapRect, viewshedImage: image)
         
         return overlay
-        
-//        dispatch_async(dispatch_get_main_queue()) {
-//            self.mapView.addOverlay(overlay)
-//        }
     }
 
     

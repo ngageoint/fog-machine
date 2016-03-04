@@ -356,31 +356,31 @@
                                                 </segments>
                                             </segmentedControl>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Algorithm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdI-4t-bmM">
-                                                <rect key="frame" x="8" y="18" width="75" height="21"/>
+                                                <rect key="frame" x="8" y="18" width="75" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Elevation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chq-dY-agV">
-                                                <rect key="frame" x="8" y="101" width="70" height="21"/>
+                                                <rect key="frame" x="8" y="101" width="69.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ugw-0e-yGi">
-                                                <rect key="frame" x="8" y="143" width="52" height="21"/>
+                                                <rect key="frame" x="8" y="142.5" width="52" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxc-WO-twz">
-                                                <rect key="frame" x="8" y="185" width="63" height="21"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxc-WO-twz">
+                                                <rect key="frame" x="8" y="184" width="63" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cWC-8Z-dDT">
-                                                <rect key="frame" x="8" y="61" width="45" height="21"/>
+                                                <rect key="frame" x="8" y="60.5" width="45" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -426,7 +426,7 @@
                                                 <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Meters)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KTL-tW-rzD">
-                                                <rect key="frame" x="87" y="107" width="41" height="12"/>
+                                                <rect key="frame" x="87.5" y="107" width="41" height="12"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -444,7 +444,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Degrees)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ip7-af-thW">
-                                                <rect key="frame" x="89" y="234" width="48" height="12"/>
+                                                <rect key="frame" x="88.5" y="234" width="48" height="12"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -463,8 +463,8 @@
                                                     <segue destination="zPC-SU-HQn" kind="unwind" identifier="runSelectedFogViewshed" unwindAction="runSelectedFogViewshed:" id="onP-uX-h2v"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Longitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="38k-9p-c8a">
-                                                <rect key="frame" x="8" y="228" width="77" height="21"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Longitude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="38k-9p-c8a">
+                                                <rect key="frame" x="8" y="226.5" width="76.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -480,7 +480,7 @@
                                             <constraint firstAttribute="trailing" secondItem="yds-81-aks" secondAttribute="trailing" constant="8" id="Cfp-3z-1E2"/>
                                             <constraint firstAttribute="trailing" secondItem="I1s-0H-aDB" secondAttribute="trailing" constant="8" id="EgA-JQ-4vI"/>
                                             <constraint firstAttribute="trailing" secondItem="WFb-xC-15J" secondAttribute="trailing" constant="8" id="FbH-Cv-NSh"/>
-                                            <constraint firstItem="Ip7-af-thW" firstAttribute="leading" secondItem="38k-9p-c8a" secondAttribute="trailing" constant="5" id="IB7-b9-xvr"/>
+                                            <constraint firstItem="Ip7-af-thW" firstAttribute="leading" secondItem="38k-9p-c8a" secondAttribute="trailing" constant="4" id="IB7-b9-xvr"/>
                                             <constraint firstAttribute="trailing" secondItem="xTl-8d-jWv" secondAttribute="trailing" constant="8" id="Ja1-dj-FoU"/>
                                             <constraint firstItem="cWC-8Z-dDT" firstAttribute="leading" secondItem="dLM-i8-oAa" secondAttribute="leading" constant="8" id="LEC-dM-mZN"/>
                                             <constraint firstItem="Lu5-E1-Xx6" firstAttribute="centerX" secondItem="dLM-i8-oAa" secondAttribute="centerX" id="LF9-pW-4J7"/>
