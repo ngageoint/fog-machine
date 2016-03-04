@@ -7,53 +7,8 @@
 //
 
 import Foundation
-import QuartzCore
-
-public struct Stopwatch {
-    private var startTime: NSTimeInterval
-    
-    /// Initialize with current time as start point.
-    public init() {
-        startTime = CACurrentMediaTime()
-    }
-    
-    /// Reset start point to current time
-    public mutating func reset() {
-        startTime = CACurrentMediaTime()
-    }
-    
-    /// Calculate elapsed time since initialization or last call to `reset()`.
-    ///
-    /// - returns: `NSTimeInterval`
-    public func elapsedTimeInterval() -> NSTimeInterval {
-        return CACurrentMediaTime() - startTime
-    }
-    
-    /// Get elapsed time in textual form.
-    ///
-    /// If elapsed time is less than a second, it will be rendered as milliseconds.
-    /// Otherwise it will be rendered as seconds.
-    ///
-    /// - returns: `String`
-    public func elapsedTimeString() -> String {
-        let interval = elapsedTimeInterval()
-        if interval < 1.0 {
-            return NSString(format:"%.4f ms", Double(interval * 1000)) as String
-        }
-        else {
-            return NSString(format:"%.4f s", Double(interval)) as String
-        }
-    }
-}
-
-extension Stopwatch: CustomStringConvertible {
-    public var description: String {
-        return elapsedTimeString()
-    }
-}
 
 class KreveldViewshed {
-    var stopwatch = Stopwatch()
     
     func parallelKreveld(demData: DemData, observPt: ElevationPoint, radius: Int, numOfPeers: Int, quadrant2Calc: Int) ->[[Int]] {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
@@ -68,7 +23,7 @@ class KreveldViewshed {
     // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
     private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], demData: DemData, var observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
-        let specifiedElevation = observPt.getHeight()
+        //let specifiedElevation = observPt.getHeight()
         
         let KreveldEventTypeEnter:Int = 1
         let KreveldEventTypeCenter:Int = 2
@@ -91,7 +46,6 @@ class KreveldViewshed {
         var isThisObserverPoint: Bool = true
         for (x, y) in cellsInRadius {
             dataCounter++
-            //let elevationAtXandY:Double = Double(demDataMatrix[x][y])
             let elevationAtXandYInt = demDataMatrix[x][y]
             
             
@@ -116,65 +70,52 @@ class KreveldViewshed {
             sweepEventQueue.push(sweepCenterEventList)
         }
         
-        //print("observPt: X: \(observPt.getXCoord()) \t Y: \(observPt.getYCoord()) \t H: \(observPt.getHeight())")
         let elevPoints: [ElevationPoint] = pointsOnLine(demData, viewpoint: observPt, radius: radius, numQuadrants: numQuadrants);
         for elevPoint in elevPoints {
-            //print("elevPoints: X: \(elevPoint.getXCoord()) \t Y: \(elevPoint.getYCoord()) \t H: \(elevPoint.getHeight())")
             kreveldActive.insert(elevPoint);
         }
-        print("============================================")
-        print("Observer Points:  Radius : \(radius*90)\t X: \(observPt.getXCoord())\t Y: \(observPt.getYCoord())\t H: \(specifiedElevation)")
-        print("Queue Building Time: \(stopwatch.elapsedTimeString())")
-        var counterEnter: Int = 0
-        var counterCenter: Int = 0
-        var counterExit: Int = 0
-        var visiblePtCounter: Int = 0
-        var eventCounter: Int = 0
+        //print("============================================")
+        //print("Observer Points:  Radius : \(radius*90)\t X: \(observPt.getXCoord())\t Y: \(observPt.getYCoord())\t H: \(specifiedElevation)")
+        //print("Queue Building Time: \(stopwatch.elapsedTimeString())")
+        //var counterEnter: Int = 0
+        //var counterCenter: Int = 0
+        //var counterExit: Int = 0
+        //var visiblePtCounter: Int = 0
+        //var eventCounter: Int = 0
         
         while !sweepEventQueue.isEmpty {
-        //for value in sweepEventQueue {
             let sweepEvent: KreveldSweepEventNode! = sweepEventQueue.pop()
-            //let sweepEvent: KreveldSweepEventNode! =  value
-            //let eventType: Int = sweepEvent.getEventType()
-            
             
             switch sweepEvent.getEventType() {
             case KreveldEventTypeEnter:
-                //print("\(eventCounter): Insert : X: \(sweepEvent.getDataElevPoint().getXCoord()) \t Y: \(sweepEvent.getDataElevPoint().getYCoord()) \t H: \(sweepEvent.getDataElevPoint().getHeight())")
                 kreveldActive.insert(sweepEvent.getDataElevPoint())
-                counterEnter++
-                eventCounter++
-                //print("->ENTER")
+                //counterEnter++
+                //eventCounter++
             case KreveldEventTypeCenter:
                 
                 if (kreveldActive.isVisible(sweepEvent.getDataElevPoint())) {
-                    //print("\(eventCounter): Visible : X: \(sweepEvent.getDataElevPoint().getXCoord()) \t Y: \(sweepEvent.getDataElevPoint().getYCoord()) \t H: \(sweepEvent.getDataElevPoint().getHeight())")
                     let x: Int = sweepEvent.getDataElevPoint().getXCoord()
                     let y: Int = sweepEvent.getDataElevPoint().getYCoord()
-                    visiblePtCounter++
+                    //visiblePtCounter++
                     viewshedMatrix[x][y] = 1
-                    //print("(\(x), \(y))\t")
                 } else {
                     
                 }
-                counterCenter++
-                eventCounter++
-                //print("**CENTER**")
+                //counterCenter++
+               // eventCounter++
             case KreveldEventTypeExit:
-                //print("\(eventCounter): Delete : X: \(sweepEvent.getDataElevPoint().getXCoord()) \t Y: \(sweepEvent.getDataElevPoint().getYCoord()) \t H: \(sweepEvent.getDataElevPoint().getHeight())")
                 kreveldActive.delete(sweepEvent.getDataElevPoint())
-                counterExit++
-                eventCounter++
-                //print("Delete->")
+                //counterExit++
+                //eventCounter++
             default:
                 let _: Int
             }
             
         }
-        print("Total Kreveld Events: \(eventCounter)")
-        print("VISIBLE POINTS: \(visiblePtCounter)")
-        print("Kreveld Processing Time: \(stopwatch.elapsedTimeString())")
-        print("============================================")
+        //print("Total Kreveld Events: \(eventCounter)")
+        //print("VISIBLE POINTS: \(visiblePtCounter)")
+        //print("Kreveld Processing Time: \(stopwatch.elapsedTimeString())")
+        //print("============================================")
         // should return the updated DEM data...
         return viewshedMatrix
     }

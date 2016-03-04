@@ -163,7 +163,6 @@ public struct KreveldActiveBTree {
     private func getEntry(let p: ElevationPoint) -> StatusEntry? {
         let key: Double = self.reference!.calcDistance(p)
         var t: StatusEntry? = self.root
-        //let nilvar: StatusEntry? = nil
         
         while (t != nil) {
             if (key < t!.key) {
