@@ -7,12 +7,7 @@
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "universal",
       "filename" : "ArrowPressed@2X.png",
-      "unassigned" : true,
       "scale" : "2x"
     }
   ],
