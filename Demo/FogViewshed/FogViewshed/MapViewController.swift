@@ -181,19 +181,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func removeDataRegions() {
-        var dataRegionOverlays: [MKOverlay]! = nil
-        var isInitialized = false
+        var dataRegionOverlays = [MKOverlay]()
         for overlay in mapView.overlays {
             if overlay is MKPolygon {
-                if !isInitialized {
-                    isInitialized = true
-                    dataRegionOverlays = [overlay]
-                } else {
-                    dataRegionOverlays.append(overlay)
-                }
+                dataRegionOverlays.append(overlay)
             }
         }
-        if dataRegionOverlays != nil {
+        
+        if dataRegionOverlays.count > 0 {
             mapView.removeOverlays(dataRegionOverlays)
             isDataRegionDrawn = false
         }
@@ -422,9 +417,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
                 self.startFogViewshed(observer)
             }
-            
+            //self.verifyBoundBox(observer)
         } else {
-            let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing files from the Data Tab."
+            let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
             let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
             
             let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in

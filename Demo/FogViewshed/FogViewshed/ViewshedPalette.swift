@@ -51,10 +51,9 @@ class ViewshedPalette: NSObject {
     
     func getRequiredHgtFiles(observer: Observer) -> [Hgt] {
         var hgtFiles = [Hgt]()
-        let observersHgtCoordinate = observer.getObserversHgtCoordinate()
         
         if hasRadiusInOneHgt(observer) {
-            let singleHgtFile = self.getHgtFile(observersHgtCoordinate.latitude, longitude: observersHgtCoordinate.longitude)
+            let singleHgtFile = Hgt(coordinate: observer.getObserverLocation())
             hgtFiles = [singleHgtFile]
         } else {
             hgtFiles = self.getMultipleHgtFiles(observer)
@@ -225,29 +224,37 @@ class ViewshedPalette: NSObject {
     }
     
     
-    
-    
-    // WORK IN PROGRESS
-    
-    
-    func getMultipleHgtFiles(observer: Observer) -> [Hgt] {
-        var multipleHgts = [Hgt]()
+    func getHgtForBox(box: Box) -> [Hgt] {
+        var filenames = [Hgt]()
         
-        //get each corner of the radius
-        let boundingBox = BoundingBox()
-        let box = boundingBox.getBoundingBox(observer)
+        //get hgt for each of the corners
+        for corner in box.getCorners() {
+            let temptHgt = Hgt(coordinate: corner)
+            filenames.append(temptHgt)
+        }
         
-        //determine which files are needed based on four corner
+        // Remove duplicates
+        filenames = Array(Set(filenames))
         
-        //get each file
-        
-        return multipleHgts
+        return filenames
     }
     
     
+    func getMultipleHgtFiles(observer: Observer) -> [Hgt] {
+
+        let boundingBox = BoundingBox()
+        let box = boundingBox.getBoundingBox(observer)
+        
+        return getHgtForBox(box)
+    }
     
     
-    
+//    func getHgtFile(filename: String) -> Hgt {
+//        let tempHgt = Hgt(filename: filename)
+//        let hgtCoordinate = tempHgt.getCoordinate()
+//        
+//        return getHgtFile(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
+//    }
     
     
     func getHgtFile(latitude: Double, longitude: Double) -> Hgt {

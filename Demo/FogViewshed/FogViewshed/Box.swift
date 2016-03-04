@@ -16,4 +16,10 @@ class Box {
     var lowerRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
     var upperLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
     
+    func getCorners() -> [CLLocationCoordinate2D] {
+        return [lowerLeft,
+                upperLeft,
+                upperRight,
+                lowerRight]
+    }
 }

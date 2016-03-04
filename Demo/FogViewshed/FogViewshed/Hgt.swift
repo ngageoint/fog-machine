@@ -59,6 +59,13 @@ class Hgt: NSObject {
     }
     
     
+    init(coordinate: CLLocationCoordinate2D) {
+        super.init()
+        self.coordinate = CLLocationCoordinate2DMake(floor(coordinate.latitude), floor(coordinate.longitude))
+        self.filename = parseFilename()
+    }
+    
+    
     func getElevation() -> [[Int]] {
         return elevation
     }
@@ -92,11 +99,47 @@ class Hgt: NSObject {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
     
+    // Use the coordinate and create a valid HGT filename
+    func parseFilename() -> String {
+        
+        var filename = ""
+        
+        if coordinate.latitude < 0.0 {
+            filename += "S"
+        } else if coordinate.latitude >= 0.0 {
+            filename += "N"
+        }
+        
+        filename += String(format: "%02d", Int(abs(coordinate.latitude)))
+        
+        if coordinate.longitude < 0.0 {
+            filename += "W"
+        } else if coordinate.longitude >= 0.0 {
+            filename += "E"
+        }
+        
+        filename += String(format: "%03d", Int(abs(coordinate.longitude)))
+        
+        return filename
+    }
+    
     
     func getCenterLocation() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(coordinate.latitude + Srtm3.CENTER_OFFSET,
             coordinate.longitude + Srtm3.CENTER_OFFSET)
     }
-
+    
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        if let object = object as? Hgt {
+            return self.filename == object.filename
+        } else {
+            return false
+        }
+    }
+    
+    override var hash: Int {
+        return filename.hashValue
+    }
     
 }
