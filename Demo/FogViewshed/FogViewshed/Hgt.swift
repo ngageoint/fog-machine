@@ -19,9 +19,8 @@ class Hgt: NSObject {
     // Data voids are assigned the value -32768 and are ignored (no special processing is done)
     // SRTM3 files contain 1201 lines and 1201 samples
     lazy var elevation: [[Int]] = {
-        let path = NSBundle.mainBundle().pathForResource(self.filename, ofType: "hgt")
-        //let path = NSBundle.mainBundle().resourcePath! + "/" + filename + ".hgt"
-        let url = NSURL(fileURLWithPath: path!)
+        var path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        let url = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(self.filename + ".hgt")
         let data = NSData(contentsOfURL: url)!
         
         var elevationMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
