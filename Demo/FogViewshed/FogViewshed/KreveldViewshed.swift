@@ -14,14 +14,10 @@ class KreveldViewshed {
     func parallelKreveld(demData: DemData, observPt: ElevationPoint, radius: Int, numOfPeers: Int, quadrant2Calc: Int) ->[[Int]] {
         var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
         var cellsInRadius:[(x:Int, y:Int)] = []
-        let srtm3Radius = Int(ceil(Double(radius) / Srtm3.EXTENT_METERS))
-        cellsInRadius = getCellsInRadius(observPt.getXCoord(), observerY: observPt.getYCoord(), radius: srtm3Radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
-        viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: srtm3Radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
-
-        //for (x, y) in cellsInRadius {
-        //    viewshedMatrix[x][y] = 1
-        //}
         
+        cellsInRadius = getCellsInRadius(observPt.getXCoord(), observerY: observPt.getYCoord(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
+        viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
+
         return viewshedMatrix
     }
     
