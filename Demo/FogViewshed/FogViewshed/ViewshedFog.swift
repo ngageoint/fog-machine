@@ -32,8 +32,9 @@ public class ViewshedFog: NSObject {
     
     
     public func viewshedParallel() -> [[Int]] {
-        let maxSize = self.elevation.count
-        var viewshedMatrix = [[Int]](count:maxSize, repeatedValue:[Int](count:maxSize, repeatedValue:0))
+        let rowMaxSize = self.elevation.count
+        let columnMaxSize = self.elevation[0].count
+        var viewshedMatrix = [[Int]](count:rowMaxSize, repeatedValue:[Int](count:columnMaxSize, repeatedValue:0))
         
         let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(obsX, inY: obsY, radius: viewRadius,
             numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
@@ -47,7 +48,7 @@ public class ViewshedFog: NSObject {
             
             for (x2, y2) in bresResults {
                 
-                if (x2 >= 0 && y2 >= 0) && (x2 < maxSize && y2 < maxSize) {
+                if (x2 >= 0 && y2 >= 0) && (x2 < rowMaxSize && y2 < columnMaxSize) {
                     let zk:Int = elevation[obsX][obsY]
                     let zi:Int = elevation[x2][y2]
                     

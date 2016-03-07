@@ -11,15 +11,17 @@ import MapKit
 
 class Box {
     
-    var lowerLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
-    var upperRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
-    var lowerRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
     var upperLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+    var upperRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+    var lowerLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+    var lowerRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+
     
-    func getCorners() -> [CLLocationCoordinate2D] {
-        return [lowerLeft,
-                upperLeft,
+    func getOrderedCorners() -> [CLLocationCoordinate2D] {
+        return [upperLeft,
                 upperRight,
+                lowerLeft,
                 lowerRight]
     }
+    
 }

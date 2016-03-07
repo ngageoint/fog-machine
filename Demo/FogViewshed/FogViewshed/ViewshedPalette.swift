@@ -19,13 +19,10 @@ class ViewshedPalette: NSObject {
 
     
     func setupNewPalette(observer: Observer) {
-        if checkForHgtFile(observer.coordinate) {
-            if checkObserverCoordsInOneHgt(observer) {
-                observerHgtGrid = generateHgtGrid(observer)
-            } else {
-                observerHgtGrid = generateKnownHgtGrid(observer)
-            }
-        }
+        let requiredHgtFiles = getRequiredHgtFiles(observer)
+        
+        observerHgtGrid = HgtGrid(hgtFiles: requiredHgtFiles)
+        observer.updateXYLocationForGrid(observerHgtGrid)
     }
     
     
@@ -63,180 +60,18 @@ class ViewshedPalette: NSObject {
     }
     
     
-    // Will generate a 1x1 or 2x2 HgtGrid based on the location and size of the Observer
-    func generateHgtGrid(observer: Observer) -> HgtGrid {
-
-        var observerPosition: GridPosition = GridPosition.UpperLeft
-        let observersHgtCoordinate = observer.getObserversHgtCoordinate()
-        let observerHgt = getHgtFile(observersHgtCoordinate.latitude, longitude: observersHgtCoordinate.longitude)
-        
-        let hgtGrid = HgtGrid(singleHgt: observerHgt)
-        
-        if !hasRadiusInOneHgt(observer) {
-            
-            var upperLeftHgt: Hgt!
-            var lowerLeftHgt: Hgt!
-            var upperRightHgt: Hgt!
-            var lowerRightHgt: Hgt!
-            
-            //Determine which side radius is past the currHgt file
-            // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
-            let topOverlap = observer.xCoord - observer.getViewshedSrtm3Radius()
-            let leftOverlap = observer.yCoord - observer.getViewshedSrtm3Radius()
-            let bottomOverlap = observer.xCoord + observer.getViewshedSrtm3Radius()
-            let rightOverlap = observer.yCoord + observer.getViewshedSrtm3Radius()
-            
-            var left = false
-            var top = false
-            var right = false
-            var bottom = false
-            
-            if leftOverlap < 0 {
-                left = true
-            }
-            
-            if topOverlap < 0 {
-                top = true
-            }
-            
-            if rightOverlap > Srtm3.MAX_SIZE {
-                right = true
-            }
-            
-            if bottomOverlap > Srtm3.MAX_SIZE {
-                bottom = true
-            }
-            
-            if right && bottom {
-                upperLeftHgt = observerHgt
-                lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-                upperRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
-                lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
-                observerPosition = GridPosition.UpperLeft
-            } else if right && top {
-                upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-                lowerLeftHgt = observerHgt
-                upperRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
-                lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
-                observerPosition = GridPosition.LowerLeft
-            } else if left && bottom {
-                upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
-                lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
-                upperRightHgt = observerHgt
-                lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-                observerPosition = GridPosition.UpperRight
-            } else if left && top {
-                upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude - 1)
-                lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
-                upperRightHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude)
-                lowerRightHgt = observerHgt
-                observerPosition = GridPosition.LowerRight
-            } else {
-                
-                //only one side is an overlap, so force it to be a 2x2
-                if top || bottom {
-                    upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
-                    lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
-                    upperRightHgt = observerHgt
-                    lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-                    observerPosition = GridPosition.UpperRight
-                    printOut("THIS IS A HACK forcing to upperRight")
-                    
-                } else if left || right {
-                    upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
-                    lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
-                    upperRightHgt = observerHgt
-                    lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-                    observerPosition = GridPosition.UpperRight
-                    printOut("THIS IS A HACK force upperRight")
-                    
-                }
-                
-            }
-            
-            hgtGrid.configureGrid(upperLeftHgt, lowerLeftHgt: lowerLeftHgt, upperRightHgt: upperRightHgt, lowerRightHgt: lowerRightHgt, observerPosition: observerPosition)
-            
-            if observer.xCoord <= Srtm3.MAX_SIZE && observer.yCoord <= Srtm3.MAX_SIZE {
-                // Adjust Observer grid's xCoord and yCoord for HgtGrid
-                observer.updateXYLocationForGrid(hgtGrid)
-            }
-        }
-        
-        return hgtGrid
-    }
-    
-    // Will generate a 2x2 HgtGrid for Observer with a known 2x2 size
-    func generateKnownHgtGrid(observer: Observer) -> HgtGrid {
-        
-        var observerPosition: GridPosition = GridPosition.UpperLeft
-        let observersHgtCoordinate = observer.getObserversHgtCoordinate()
-        let observerHgt = getHgtFile(observersHgtCoordinate.latitude, longitude: observersHgtCoordinate.longitude)
-        
-        let hgtGrid = HgtGrid(singleHgt: observerHgt)
-        
-        var upperLeftHgt: Hgt!
-        var lowerLeftHgt: Hgt!
-        var upperRightHgt: Hgt!
-        var lowerRightHgt: Hgt!
-        
-        //Determine where the xCoord and yCoord are in a 2x2 grid
-        // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
-        var isInsideYRegion = false
-        var isInsideXRegion = false
-        
-        if observer.yCoord < Srtm3.MAX_SIZE {
-            isInsideYRegion = true
-        }
-        
-        if observer.xCoord < Srtm3.MAX_SIZE {
-            isInsideXRegion = true
-        }
-        
-        if isInsideYRegion && isInsideXRegion {
-            upperLeftHgt = observerHgt
-            lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-            upperRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
-            lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
-            observerPosition = GridPosition.UpperLeft
-        } else if isInsideYRegion && !isInsideXRegion {
-            upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-            lowerLeftHgt = observerHgt
-            upperRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude + 1)
-            lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude + 1)
-            observerPosition = GridPosition.LowerLeft
-        } else if !isInsideYRegion && isInsideXRegion {
-            upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
-            lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude - 1)
-            upperRightHgt = observerHgt
-            lowerRightHgt = getHgtFile(observerHgt.coordinate.latitude - 1, longitude: observerHgt.coordinate.longitude)
-            observerPosition = GridPosition.UpperRight
-        } else if !isInsideYRegion && !isInsideXRegion {
-            upperLeftHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude - 1)
-            lowerLeftHgt = getHgtFile(observerHgt.coordinate.latitude, longitude: observerHgt.coordinate.longitude - 1)
-            upperRightHgt = getHgtFile(observerHgt.coordinate.latitude + 1, longitude: observerHgt.coordinate.longitude)
-            lowerRightHgt = observerHgt
-            observerPosition = GridPosition.LowerRight
-        }
-        
-        hgtGrid.configureGrid(upperLeftHgt, lowerLeftHgt: lowerLeftHgt, upperRightHgt: upperRightHgt, lowerRightHgt: lowerRightHgt, observerPosition: observerPosition)
-        
-        return hgtGrid
-    }
-    
-    
     func getHgtForBox(box: Box) -> [Hgt] {
-        var filenames = [Hgt]()
+        var hgts = [Hgt]()
         
-        //get hgt for each of the corners
-        for corner in box.getCorners() {
+        //get unique hgt for each of the corners
+        for corner in box.getOrderedCorners() {
             let temptHgt = Hgt(coordinate: corner)
-            filenames.append(temptHgt)
+            hgts.append(temptHgt)
         }
         
-        // Remove duplicates
-        filenames = Array(Set(filenames))
+        hgts = getUniqueCorners(hgts)
         
-        return filenames
+        return hgts
     }
     
     
@@ -249,14 +84,49 @@ class ViewshedPalette: NSObject {
     }
     
     
-//    func getHgtFile(filename: String) -> Hgt {
-//        let tempHgt = Hgt(filename: filename)
-//        let hgtCoordinate = tempHgt.getCoordinate()
-//        
-//        return getHgtFile(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
-//    }
+    func getUniqueCorners(corner: [Hgt]) -> [Hgt] {
+        var uniqueCorners = [Hgt]()
+        let upperLeft = corner[0]
+        let upperRight = corner[1]
+        let lowerLeft = corner[2]
+        let lowerRight = corner[3]
+        
+        
+        if isCornerEqual(upperLeft, second: upperRight) && isCornerEqual(upperLeft, second: lowerLeft) && isCornerEqual(upperLeft, second: lowerRight) {
+            // each corner identical
+            uniqueCorners = [upperLeft]
+        } else if isCornerEqual(upperLeft, second: upperRight) && isCornerEqual(lowerLeft, second: lowerRight) {
+            // 2x1
+            uniqueCorners = [upperLeft, lowerLeft]
+        } else if isCornerEqual(upperLeft, second: lowerLeft) && isCornerEqual(upperRight, second: lowerRight) {
+            // 1x2
+            uniqueCorners = [upperLeft, upperRight]
+        } else {
+            //each corner unique
+            uniqueCorners = [upperLeft, upperRight, lowerLeft, lowerRight]
+        }
+        
+        return uniqueCorners
+    }
     
     
+    private func isCornerEqual(first: Hgt, second: Hgt) -> Bool {
+        var isEqual = false
+        if first.getCoordinate().latitude == second.getCoordinate().latitude && first.getCoordinate().longitude == second.getCoordinate().longitude {
+            isEqual = true
+        }
+        return isEqual
+    }
+    
+    // Will crash if requesting a file not found in Documents
+    func getHgtFile(filename: String) -> Hgt {
+        let tempHgt = Hgt(filename: filename)
+        let hgtCoordinate = tempHgt.getCoordinate()
+        
+        return getHgtFile(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
+    }
+    
+    // Will crash if requesting a file not found in Documents
     func getHgtFile(latitude: Double, longitude: Double) -> Hgt {
         var foundHgt: Hgt!
         let neededCoordinate = CLLocationCoordinate2DMake(latitude, longitude)
@@ -281,7 +151,7 @@ class ViewshedPalette: NSObject {
 
         
         //Need to handle the foundHgt = nil case
-        
+
         
         return foundHgt
     }
@@ -365,7 +235,7 @@ class ViewshedPalette: NSObject {
         return haveHgt
     }
     
-    //Add to HGT.swift
+
     func isCoordinateInHgt(checkCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) -> Bool {
         var inHgt = false
         
@@ -387,40 +257,9 @@ class ViewshedPalette: NSObject {
     
     func addOverlay(image: UIImage) -> ViewshedOverlay {
         
-        let imageLocation = observerHgtGrid.getHgtCoordinate()
-        let hgtGridSize = observerHgtGrid.getHgtGridSize()
+        let imageLocation = observerHgtGrid.getHgtMidCoordinate()
+        let imageMapRect = observerHgtGrid.getBoundingMapRect()
         
-        var overlayTopLeftCoordinate: CLLocationCoordinate2D  = CLLocationCoordinate2D(
-            latitude: imageLocation.latitude + 1.0,
-            longitude: imageLocation.longitude)
-        var overlayTopRightCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
-            latitude: imageLocation.latitude + 1.0,
-            longitude: imageLocation.longitude + 1.0 + hgtGridSize)
-        var overlayBottomLeftCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(
-            latitude: imageLocation.latitude - hgtGridSize,
-            longitude: imageLocation.longitude)
-        
-        var overlayBottomRightCoordinate: CLLocationCoordinate2D {
-            get {
-                return CLLocationCoordinate2DMake(overlayBottomLeftCoordinate.latitude,
-                    overlayTopRightCoordinate.longitude)
-            }
-        }
-        
-        var overlayBoundingMapRect: MKMapRect {
-            get {
-                let topLeft = MKMapPointForCoordinate(overlayTopLeftCoordinate)
-                let topRight = MKMapPointForCoordinate(overlayTopRightCoordinate)
-                let bottomLeft = MKMapPointForCoordinate(overlayBottomLeftCoordinate)
-                
-                return MKMapRectMake(topLeft.x,
-                    topLeft.y,
-                    fabs(topLeft.x-topRight.x),
-                    fabs(topLeft.y - bottomLeft.y))
-            }
-        }
-        
-        let imageMapRect = overlayBoundingMapRect
         let overlay = ViewshedOverlay(midCoordinate: imageLocation, overlayBoundingMapRect: imageMapRect, viewshedImage: image)
         
         return overlay
@@ -435,8 +274,9 @@ class ViewshedPalette: NSObject {
     
     func generateViewshedImage(viewshed: [[Int]]) -> UIImage {
         
-        let width = viewshed[0].count
-        let height = viewshed.count
+        // Flip width and height for 1x2 and 2x1 cases because CoreGraphics expects rows.
+        var width = viewshed.count
+        var height = viewshed[0].count
         var data: [Pixel] = []
         
         // CoreGraphics expects pixel data as rows, not columns.
@@ -445,7 +285,7 @@ class ViewshedPalette: NSObject {
                 
                 let cell = viewshed[y][x]
                 if(cell == 0) {
-                    data.append(Pixel(alpha:0, red: 0, green: 0, blue: 0))
+                    data.append(Pixel(alpha: 0, red: 0, green: 0, blue: 0))
                 } else if (cell == -1){
                     data.append(Pixel(alpha: 75, red: 126, green: 0, blue: 126))
                 } else {
@@ -453,7 +293,11 @@ class ViewshedPalette: NSObject {
                 }
             }
         }
-
+        
+        // Actual width and height
+        width = viewshed[0].count
+        height = viewshed.count
+        
         let image = imageFromArgb32Bitmap(data, width: width, height: height)
         
         return image
