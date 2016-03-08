@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 }
                             }
                         }
-                        ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
+                        //ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
                         break
                     }
                 }

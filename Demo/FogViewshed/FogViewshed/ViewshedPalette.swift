@@ -25,7 +25,7 @@ class ViewshedPalette: NSObject {
         observer.updateXYLocationForGrid(observerHgtGrid)
     }
     
-    
+    // Determines if the required HGT files are available for a viewshed calculation
     func isViewshedPossible(observer: Observer) -> Bool {
         var isPossible = false
         let requiredHgtFiles: [Hgt] = getRequiredHgtFiles(observer)
@@ -76,7 +76,6 @@ class ViewshedPalette: NSObject {
     
     
     func getMultipleHgtFiles(observer: Observer) -> [Hgt] {
-
         let boundingBox = BoundingBox()
         let box = boundingBox.getBoundingBox(observer)
         
@@ -148,10 +147,6 @@ class ViewshedPalette: NSObject {
         } catch let error as NSError {
             printOut("Error getting HGT file " + " \(error): \(error.userInfo)")
         }
-
-        
-        //Need to handle the foundHgt = nil case
-
         
         return foundHgt
     }
@@ -250,7 +245,7 @@ class ViewshedPalette: NSObject {
     }
     
     
-    func getElevation() -> [[Int]] {
+    func getHgtElevation() -> [[Int]] {
         return self.observerHgtGrid.getElevation()
     }
     

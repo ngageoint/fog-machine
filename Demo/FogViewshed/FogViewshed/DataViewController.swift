@@ -343,7 +343,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
                 alertController.addAction(ok)
                 self.presentViewController(alertController, animated: true, completion: nil)
             } else {
-                ActivityIndicator.show("Downloading",  disableUI: false)
+                ActivityIndicator.show("Downloading")
                 let hgtFilePath: String = SRTM.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
                 let url = NSURL(string: hgtFilePath)
                 let hgtDownloadMgr = HgtDownloadMgr()
@@ -385,7 +385,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         } else {
             dispatch_async(dispatch_get_main_queue()) {
                 () -> Void in
-                ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
+                ActivityIndicator.hide(success: true, animated: true)
                 self.mapView.removeAnnotations(self.mapView.annotations)
                 let fileName = NSURL(fileURLWithPath: destinationPath).lastPathComponent!
                 // add the downloaded file to the array of file names...
