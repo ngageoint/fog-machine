@@ -30,11 +30,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var hasFogViewshedStarted = false
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
-    
-    struct hgtLatLngPrefix {
-        var latitudePrefix: String
-        var longitudePrefix: String
-    }
+
     
     // MARK: IBOutlets
 
@@ -89,7 +85,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             displayDataRegions()
         }
     }
-
     
     
     // MARK: Location Delegate Methods
@@ -170,8 +165,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 for file in hgtFiles{
                     let name = file!.componentsSeparatedByString(".")[0]
                     let tempHgt = Hgt(filename: name)
-                    let hgtCoordinate = tempHgt.getCoordinate()
-                    self.addRectBoundry(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
+                    self.mapView.addOverlay(tempHgt.getRectangularBoundry())
                 }
             } catch let error as NSError {
                 print("Error displaying HGT file: \(error.localizedDescription)")
@@ -196,18 +190,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    func addRectBoundry(latitude: Double, longitude: Double) {
-        var points = [
-            CLLocationCoordinate2DMake(latitude, longitude),
-            CLLocationCoordinate2DMake(latitude+1, longitude),
-            CLLocationCoordinate2DMake(latitude+1, longitude+1),
-            CLLocationCoordinate2DMake(latitude, longitude+1)
-        ]
-        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
-        self.mapView.addOverlay(polygonOverlay)
-    }
-    
-    
     func pinObserverLocation(observer: Observer) {
         let dropPin = MKPointAnnotation()
         dropPin.coordinate = observer.getObserverLocation()
@@ -220,7 +202,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = gestureRecognizer.locationInView(mapView)
             let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            if (checkHgtDataAvailability(gestureRecognizer)) {
+            let tempHgt = Hgt(coordinate: newCoordinates)
+            if tempHgt.hasHgtFileInDocuments() {
                 let newObserver = Observer()
                 newObserver.name = "Observer \(allObservers.count + 1)"
                 newObserver.setNewCoordinates(newCoordinates)
@@ -238,42 +221,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
     }
-    
-    func checkHgtDataAvailability(gestureRecognizer: UIGestureRecognizer) ->Bool {
-        let touchLocation:CGPoint = gestureRecognizer.locationInView(mapView)
-        let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
-        let tempHgtLatLngPrefix = getHgtLatLngPrefix(locationCoordinate.latitude, longitude: locationCoordinate.longitude)
-        
-        // round the lat & long to the closest integer value..
-        let lat = floor(locationCoordinate.latitude)
-        let lng = floor(locationCoordinate.longitude)
-        let strHgtFileName = (String(format:"%@%02d%@%03d%@", tempHgtLatLngPrefix.latitudePrefix, abs(Int(lat)), tempHgtLatLngPrefix.longitudePrefix, abs(Int(lng)), ".hgt"))
-        if (CheckHgtFileDownloaded(strHgtFileName)) {
-            return true
-        }
-        return false
-    }
-    
-    func getHgtLatLngPrefix(latitude: Double, longitude: Double) -> hgtLatLngPrefix {
-        
-        var tempHgtLatLngPrefix = hgtLatLngPrefix(latitudePrefix: "N", longitudePrefix: "E")
-        if (latitude < 0) {
-            tempHgtLatLngPrefix.longitudePrefix = "S"
-        }
-        if (longitude < 0) {
-            tempHgtLatLngPrefix.longitudePrefix = "W"
-        }
-        return tempHgtLatLngPrefix
-    }
-    
-    func CheckHgtFileDownloaded(strHgtFileName: String) -> Bool{
-        let fm = NSFileManager.defaultManager()
-        let documentsFolderPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        if (fm.fileExistsAtPath(documentsFolderPath[0] + "/" + strHgtFileName)) {
-            return true
-        }
-        return false
-    }
+
     
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var polygonView:MKPolygonRenderer? = nil
@@ -410,40 +358,39 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func initiateFogViewshed(observer: Observer) {
         
         if !self.hasFogViewshedStarted {
-        
-        if (self.viewshedPalette.isViewshedPossible(observer)) {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.logBox.text = ""
+            if (self.viewshedPalette.isViewshedPossible(observer)) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.logBox.text = ""
+                }
+                self.startTimer()
+                ActivityIndicator.show("Calculating Viewshed")
+                dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+                    self.hasFogViewshedStarted = true
+                    self.startFogViewshed(observer)
+                }
+                //self.verifyBoundBox(observer)
+            } else {
+                let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
+                let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
+                
+                let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+                    // Do noting for cancel
+                }
+                alertController.addAction(cancelAction)
+                self.presentViewController(alertController, animated: true) {
+                    // Do nothing
+                }
             }
-            self.startTimer()
-            ActivityIndicator.show("Calculating Viewshed")
-            dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-                self.hasFogViewshedStarted = true
-                self.startFogViewshed(observer)
-            }
-            //self.verifyBoundBox(observer)
-        } else {
-            let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
-            let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-            
-            let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-                //print(action)
-            }
-            alertController.addAction(cancelAction)
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
-        }
         } else {
             let message = "Fog Viewshed is being calculated.\n\nPlease wait for the viewshed to finish before starting another viewshed."
             let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
             
             let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-                //print(action)
+                // Do nothing for cancel
             }
             alertController.addAction(cancelAction)
             self.presentViewController(alertController, animated: true) {
-                // ...
+                // Do nothing
             }
         }
     }
@@ -498,7 +445,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         } else if (observer.algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
             let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
-            //let x: Int = work.getObserver().x
             let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: Double(observer.elevation))
             self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
             

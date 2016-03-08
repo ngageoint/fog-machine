@@ -214,5 +214,4 @@ class HgtGrid: NSObject {
         return overlayBoundingMapRect
     }
     
-    
 }

@@ -32,7 +32,7 @@ class ViewshedPalette: NSObject {
         
         var count = 0
         for hgtFile in requiredHgtFiles {
-            if hasHgtFile(hgtFile) {
+            if hgtFile.hasHgtFileInDocuments() {
                 count++
             }
         }
@@ -47,20 +47,14 @@ class ViewshedPalette: NSObject {
     
     
     func getRequiredHgtFiles(observer: Observer) -> [Hgt] {
-        var hgtFiles = [Hgt]()
+        let boundingBox = BoundingBox()
+        let box = boundingBox.getBoundingBox(observer)
         
-        if hasRadiusInOneHgt(observer) {
-            let singleHgtFile = Hgt(coordinate: observer.getObserverLocation())
-            hgtFiles = [singleHgtFile]
-        } else {
-            hgtFiles = self.getMultipleHgtFiles(observer)
-        }
-        
-        return hgtFiles
+        return getHgtNeededForBox(box)
     }
     
     
-    func getHgtForBox(box: Box) -> [Hgt] {
+    func getHgtNeededForBox(box: Box) -> [Hgt] {
         var hgts = [Hgt]()
         
         //get unique hgt for each of the corners
@@ -73,15 +67,7 @@ class ViewshedPalette: NSObject {
         
         return hgts
     }
-    
-    
-    func getMultipleHgtFiles(observer: Observer) -> [Hgt] {
-        let boundingBox = BoundingBox()
-        let box = boundingBox.getBoundingBox(observer)
-        
-        return getHgtForBox(box)
-    }
-    
+
     
     func getUniqueCorners(corner: [Hgt]) -> [Hgt] {
         var uniqueCorners = [Hgt]()
@@ -115,133 +101,6 @@ class ViewshedPalette: NSObject {
             isEqual = true
         }
         return isEqual
-    }
-    
-    // Will crash if requesting a file not found in Documents
-    func getHgtFile(filename: String) -> Hgt {
-        let tempHgt = Hgt(filename: filename)
-        let hgtCoordinate = tempHgt.getCoordinate()
-        
-        return getHgtFile(hgtCoordinate.latitude, longitude: hgtCoordinate.longitude)
-    }
-    
-    // Will crash if requesting a file not found in Documents
-    func getHgtFile(latitude: Double, longitude: Double) -> Hgt {
-        var foundHgt: Hgt!
-        let neededCoordinate = CLLocationCoordinate2DMake(latitude, longitude)
-        
-        do {
-            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
-            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
-            for file in hgtFiles{
-                let name = file!.componentsSeparatedByString(".")[0]
-                let tempHgt = Hgt(filename: name)
-                let hgtCoordinate = tempHgt.getCoordinate()
-                if neededCoordinate.latitude == hgtCoordinate.latitude && neededCoordinate.longitude == hgtCoordinate.longitude {
-                    foundHgt = tempHgt
-                    //printOut("\(file) (Lat:\(hgtCoordinate.latitude) Lon:\(hgtCoordinate.longitude))")
-                    break
-                }
-            }
-        } catch let error as NSError {
-            printOut("Error getting HGT file " + " \(error): \(error.userInfo)")
-        }
-        
-        return foundHgt
-    }
-    
-    
-    func checkObserverCoordsInOneHgt(observer: Observer) -> Bool {
-        var isWithinOneHgt = true
-        
-        if observer.xCoord > Srtm3.MAX_SIZE || observer.yCoord > Srtm3.MAX_SIZE {
-            isWithinOneHgt = false
-        }
-        
-        return isWithinOneHgt
-    }
-    
-    
-    func hasRadiusInOneHgt(observer: Observer) -> Bool {
-        var isRadiusWithinHgt = true
-        //Determine which side radius is past the currHgt file
-        // xCoord and yCoord are oriented oddly ([x,y] 0,0 is top left and 1200,1 is lower left), so the overlaps's are awkward
-        let topOverlap = observer.xCoord - observer.getViewshedSrtm3Radius()
-        let leftOverlap = observer.yCoord - observer.getViewshedSrtm3Radius()
-        let bottomOverlap = observer.xCoord + observer.getViewshedSrtm3Radius()
-        let rightOverlap = observer.yCoord + observer.getViewshedSrtm3Radius()
-        
-        if leftOverlap < 0 ||
-            topOverlap < 0 ||
-            rightOverlap > Srtm3.MAX_SIZE ||
-            bottomOverlap > Srtm3.MAX_SIZE {
-                isRadiusWithinHgt = false
-        }
-        
-        return isRadiusWithinHgt
-    }
-    
-    
-    func checkForHgtFile(checkCoordinate: CLLocationCoordinate2D) -> Bool {
-        var haveHgtForCoordinate = false
-        
-        do {
-            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
-            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
-            for file in hgtFiles{
-                let name = file!.componentsSeparatedByString(".")[0]
-                let tempHgt = Hgt(filename: name)
-                let hgtCoordinate = tempHgt.getCoordinate()
-                if isCoordinateInHgt(checkCoordinate, hgtCoordinate: hgtCoordinate) {
-                    haveHgtForCoordinate = true
-                    //printOut("\(file) (Lat:\(hgtCoordinate.latitude) Lon:\(hgtCoordinate.longitude))")
-                    break
-                }
-            }
-        } catch let error as NSError {
-            printOut("Error checking HGT files " + " \(error): \(error.userInfo)")
-        }
-        
-        return haveHgtForCoordinate
-    }
-    
-    
-    func hasHgtFile(requiredHgt: Hgt) -> Bool {
-        var haveHgt = false
-        
-        do {
-            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-            let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
-            let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
-            for file in hgtFiles{
-                let name = file!.componentsSeparatedByString(".")[0]
-                let tempHgt = Hgt(filename: name)
-                if requiredHgt.filename == tempHgt.filename {
-                    haveHgt = true
-                    break
-                }
-            }
-        } catch let error as NSError {
-            printOut("Error checking HGT files " + " \(error): \(error.userInfo)")
-        }
-        
-        return haveHgt
-    }
-    
-
-    func isCoordinateInHgt(checkCoordinate: CLLocationCoordinate2D, hgtCoordinate: CLLocationCoordinate2D) -> Bool {
-        var inHgt = false
-        
-        if checkCoordinate.latitude < hgtCoordinate.latitude + 1 &&
-            checkCoordinate.latitude > hgtCoordinate.latitude &&
-            checkCoordinate.longitude > hgtCoordinate.longitude &&
-            checkCoordinate.longitude < hgtCoordinate.longitude + 1 {
-                inHgt = true
-        }
-        
-        return inHgt
     }
     
     

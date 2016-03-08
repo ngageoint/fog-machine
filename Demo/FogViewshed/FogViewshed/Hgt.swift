@@ -13,14 +13,15 @@ class Hgt: NSObject {
     
     var coordinate:CLLocationCoordinate2D!
     var filename:String!
-        
+    var filenameWithExtension:String!
+    
     // Height files have the extension .HGT and are signed two byte integers. The
     // bytes are in Motorola "big-endian" order with the most significant byte first
     // Data voids are assigned the value -32768 and are ignored (no special processing is done)
     // SRTM3 files contain 1201 lines and 1201 samples
     lazy var elevation: [[Int]] = {
         var path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        let url = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(self.filename + ".hgt")
+        let url = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(self.filenameWithExtension)
         let data = NSData(contentsOfURL: url)!
         
         var elevationMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
@@ -55,6 +56,7 @@ class Hgt: NSObject {
     init(filename: String) {
         super.init()
         self.filename = filename
+        self.filenameWithExtension = filename + Srtm.FILE_EXTENSION
         self.coordinate = parseCoordinate()
     }
     
@@ -63,6 +65,7 @@ class Hgt: NSObject {
         super.init()
         self.coordinate = CLLocationCoordinate2DMake(floor(coordinate.latitude), floor(coordinate.longitude))
         self.filename = parseFilename()
+        self.filenameWithExtension = self.filename + Srtm.FILE_EXTENSION
     }
     
     
@@ -78,7 +81,7 @@ class Hgt: NSObject {
     // File names refer to the latitude and longitude of the lower left corner of
     // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
     // latitude and 105 degrees west longitude
-    func parseCoordinate() -> CLLocationCoordinate2D {
+    private func parseCoordinate() -> CLLocationCoordinate2D {
     
         let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
         let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
@@ -127,6 +130,30 @@ class Hgt: NSObject {
     func getCenterLocation() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(coordinate.latitude + Srtm3.CENTER_OFFSET,
             coordinate.longitude + Srtm3.CENTER_OFFSET)
+    }
+    
+    
+    func hasHgtFileInDocuments() -> Bool {
+        let fileManager: NSFileManager = NSFileManager.defaultManager()
+        let documentsPath: String = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let url = NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent(self.filenameWithExtension)
+        
+        return fileManager.fileExistsAtPath(url.path!)
+    }
+    
+    
+    func getRectangularBoundry() -> MKPolygon {
+        let latitude = self.coordinate.latitude
+        let longitude = self.coordinate.longitude
+        var points = [
+            CLLocationCoordinate2DMake(latitude, longitude),
+            CLLocationCoordinate2DMake(latitude+1, longitude),
+            CLLocationCoordinate2DMake(latitude+1, longitude+1),
+            CLLocationCoordinate2DMake(latitude, longitude+1)
+        ]
+        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
+        
+        return polygonOverlay
     }
     
     
