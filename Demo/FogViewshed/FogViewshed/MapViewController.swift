@@ -27,6 +27,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
+    var hasFogViewshedStarted = false
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
     
@@ -408,18 +409,32 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func initiateFogViewshed(observer: Observer) {
         
-        // Check does nothing and is there in case it is needed once the Fog device requirements are specified.
+        if !self.hasFogViewshedStarted {
+        
         if (self.viewshedPalette.isViewshedPossible(observer)) {
             dispatch_async(dispatch_get_main_queue()) {
                 self.logBox.text = ""
             }
             self.startTimer()
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+                self.hasFogViewshedStarted = true
                 self.startFogViewshed(observer)
             }
             //self.verifyBoundBox(observer)
         } else {
             let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
+            let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+                //print(action)
+            }
+            alertController.addAction(cancelAction)
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
+        } else {
+            let message = "Fog Viewshed is being calculated.\n\nPlease wait for the viewshed to finish before starting another viewshed."
             let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
             
             let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
@@ -458,6 +473,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     dispatch_async(dispatch_get_main_queue()) {
                         self.mapView.addOverlay(viewshedOverlay)
                     }
+                    self.hasFogViewshedStarted = false
                     self.stopTimer()
                 }
                 self.printOut("\tFound results locally out of \(workerCount).")
@@ -546,6 +562,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
                         self.mapView.addOverlay(viewshedOverlay)
                         self.printOut("Viewshed complete.")
+                        self.hasFogViewshedStarted = false
                         self.stopTimer()
                     }
             })
