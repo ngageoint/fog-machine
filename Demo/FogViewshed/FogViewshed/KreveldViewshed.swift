@@ -10,19 +10,17 @@ import Foundation
 
 class KreveldViewshed {
     
-    func parallelKreveld(demData: DemData, observPt: ElevationPoint, radius: Int, numOfPeers: Int, quadrant2Calc: Int) ->[[Int]] {
-        var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
-        var cellsInRadius:[(x:Int, y:Int)] = []
-        cellsInRadius = getCellsInRadius(observPt.getXCoord(), observerY: observPt.getYCoord(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
-        viewshedMatrix = calculateViewshed (cellsInRadius, demData: demData, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
+    func parallelKreveld(elevationMatrix: [[Int]], observPt: ElevationPoint, radius: Int, numOfPeers: Int, quadrant2Calc: Int) ->[[Int]] {
+        let cellsInRadius = getCellsInRadius(observPt.getXCoord(), observerY: observPt.getYCoord(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
+        let viewshedMatrix = calculateViewshed (cellsInRadius, elevationMatrix: elevationMatrix, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
         
         return viewshedMatrix
     }
     
     
     // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
-    private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], demData: DemData, var observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
-        var viewshedMatrix = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
+    private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], elevationMatrix: [[Int]], var observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
+        var viewshedMatrix = [[Int]](count:elevationMatrix.count, repeatedValue:[Int](count:elevationMatrix[0].count, repeatedValue:0))
         //let specifiedElevation = observPt.getHeight()
         
         let KreveldEventTypeEnter:Int = 1
@@ -30,12 +28,10 @@ class KreveldViewshed {
         let KreveldEventTypeExit:Int = 3
         let KreveldEventTypeOther:Int = 0 // only be used on creation/initialization
         
-        
-        let observerPtHeight: ElevationPoint = demData.getHeightedPoint(observPt.getXCoord(), yTemp: observPt.getYCoord())
+        let observerPtHeight = elevationMatrix[observPt.getXCoord()][observPt.getYCoord()]
         // observerPtHeight.height is added with the additional height specified by the user ????
-        observPt.height = observerPtHeight.height + observPt.getHeight()
+        observPt.height = observerPtHeight + observPt.getHeight()
         
-        let demDataMatrix: [[Int]] = demData.getDem2DMatrix()
         var kreveldActive: KreveldActiveBTree = KreveldActiveBTree(reference: observPt)
         
         var sweepEventQueue = PriorityQueue(ascending: true, startingValues: [KreveldSweepEventNode(eventType: KreveldEventTypeOther,
@@ -46,7 +42,7 @@ class KreveldViewshed {
         var isThisObserverPoint: Bool = true
         for (x, y) in cellsInRadius {
             dataCounter++
-            let elevationAtXandYInt = demDataMatrix[x][y]
+            let elevationAtXandYInt = elevationMatrix[x][y]
             
             
             let elevPointData: ElevationPoint = ElevationPoint (xCoord: x, yCoord: y , h: elevationAtXandYInt)
@@ -70,7 +66,7 @@ class KreveldViewshed {
             sweepEventQueue.push(sweepCenterEventList)
         }
         
-        let elevPoints: [ElevationPoint] = pointsOnLine(demData, viewpoint: observPt, radius: radius, numQuadrants: numQuadrants);
+        let elevPoints: [ElevationPoint] = pointsOnLine(elevationMatrix, viewpoint: observPt, radius: radius, numQuadrants: numQuadrants);
         for elevPoint in elevPoints {
             kreveldActive.insert(elevPoint);
         }
@@ -308,48 +304,48 @@ class KreveldViewshed {
     
     // Viewpoint starting point , point of observation
     // return All points that lie to the right of the starting point and have the same y-coordinate
-    func pointsOnLine(d: DemData, viewpoint: ElevationPoint, radius: Int, numQuadrants: Int) -> [ElevationPoint] {
+    func pointsOnLine(elevationMatrix:[[Int]], viewpoint: ElevationPoint, radius: Int, numQuadrants: Int) -> [ElevationPoint] {
         let xCoor: Int = viewpoint.getXCoord()
         let yCoor: Int = viewpoint.getYCoord()
         
-        //let maxXcoor: Int = d.getNcols() - 1
         var maxXcoor: Int = 0
         var maxYCoor: Int = 0
         var elevPointOnline: [ElevationPoint] = []
         
         if  (numQuadrants == 1) {
             // radius added to this function to prevent sweep line to go beyond the defined radius
-            if ((viewpoint.getXCoord() + radius) < d.getNcols()) {
+            if ((viewpoint.getXCoord() + radius) < elevationMatrix[0].count) {
                 maxXcoor = viewpoint.getXCoord() + radius
             }
             let iterateCount: Int = xCoor + 1
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxXcoor; i++ {
-                let tmp:ElevationPoint = d.getHeightedPoint(i, yTemp: viewpoint.getYCoord())
+               
+                let tmp:ElevationPoint = ElevationPoint(xCoord: i, yCoord: viewpoint.getYCoord(), h: elevationMatrix[i][viewpoint.getYCoord()])
                 elevPointOnline.append(tmp)
             }
         } else if (numQuadrants == 2) {
             // radius added to this function to prevent sweep line to go beyond the defined radius
-            if ((viewpoint.getYCoord() - radius) < d.getNcols()) {
+            if ((viewpoint.getYCoord() - radius) < elevationMatrix[0].count) {
                 maxYCoor = viewpoint.getYCoord() - radius
             }
             let iterateCount: Int = yCoor + 1
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxYCoor; i++ {
-                let tmp:ElevationPoint = d.getHeightedPoint(viewpoint.getXCoord(), yTemp: i)
+                let tmp:ElevationPoint = ElevationPoint(xCoord: viewpoint.getXCoord(), yCoord: i, h: elevationMatrix[viewpoint.getXCoord()][i])
                 print("\t\(tmp.getXCoord())\t\(tmp.getYCoord())")
                 elevPointOnline.append(tmp)
             }
             
         } else if (numQuadrants == 3) {
             // radius added to this function to prevent sweep line to go beyond the defined radius
-            if ((viewpoint.getXCoord() + radius) < d.getNcols()) {
+            if ((viewpoint.getXCoord() + radius) < elevationMatrix[0].count) {
                 maxXcoor = viewpoint.getXCoord() + radius
             }
             let iterateCount: Int = xCoor + 1
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxXcoor; i++ {
-                let tmp:ElevationPoint = d.getHeightedPoint(i, yTemp: viewpoint.getYCoord())
+                let tmp:ElevationPoint = ElevationPoint(xCoord: i, yCoord: viewpoint.getYCoord(), h: elevationMatrix[i][viewpoint.getYCoord()])
                 elevPointOnline.append(tmp)
             }
         } else if (numQuadrants == 4) {

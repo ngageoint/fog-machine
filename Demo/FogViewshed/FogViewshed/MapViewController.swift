@@ -444,9 +444,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
         } else if (observer.algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
-            let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
+            //let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
             let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: observer.elevation)
-            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
+            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
         }
         
         printOut("\tFinished Viewshed Processing on \(observer.name).")
@@ -825,9 +825,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
                 // running Van Kreveld viewshed.
                 let kreveld: KreveldViewshed = KreveldViewshed()
-                let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
+                //let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
                 let observerPoints: ElevationPoint = ElevationPoint (xCoord:observer.xCoord, yCoord: observer.yCoord)
-                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: 1, quadrant2Calc: 0)
+                self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: 1, quadrant2Calc: 0)
                 //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
             }
             dispatch_async(dispatch_get_main_queue()) {
@@ -853,11 +853,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
         } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
-            let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
+            //let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())
             // observer.radius = 200 // default radius 100
             // set the added observer height
             let observerPoints: ElevationPoint = ElevationPoint (xCoord:observer.xCoord, yCoord: observer.yCoord, h: observer.elevation)
-            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(demObj, observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: 1, quadrant2Calc: 1)
+            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: 1, quadrant2Calc: 1)
             //obsResults = kreveld.calculateViewshed(demObj, observPt: observerPoints, radius: observer.radius, numQuadrants: 0, quadrant2Calc: 0)
         }
         

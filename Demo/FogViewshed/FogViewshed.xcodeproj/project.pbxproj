@@ -32,7 +32,6 @@
 		9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */; };
 		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
 		9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */; };
-		9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F01C05E51E004A37B6 /* DemData.swift */; };
 		9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */; };
 		9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */; };
 		9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */; };
@@ -100,7 +99,6 @@
 		9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtRegions.swift; sourceTree = "<group>"; };
 		9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtDownloadMgr.swift; sourceTree = "<group>"; };
-		9BD5C0F01C05E51E004A37B6 /* DemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemData.swift; sourceTree = "<group>"; };
 		9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldSweepEventNode.swift; sourceTree = "<group>"; };
 		9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldViewshed.swift; sourceTree = "<group>"; };
 		9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationPoint.swift; sourceTree = "<group>"; };
@@ -164,7 +162,6 @@
 		758FB77E1C0A3A2600A193A7 /* VanKreveld */ = {
 			isa = PBXGroup;
 			children = (
-				9BD5C0F01C05E51E004A37B6 /* DemData.swift */,
 				9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */,
 				9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */,
 				9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */,
@@ -496,7 +493,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BD5C0FA1C05E51E004A37B6 /* DemData.swift in Sources */,
 				753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */,
 				753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */,
 				7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */,
