@@ -820,8 +820,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.printOut("Starting Parallel Viewshed Processing on \(observer.name).")
             
             if (algorithm == ViewshedAlgorithm.FranklinRay) {
-                let obsViewshed = Viewshed(elevation: self.viewshedPalette.getHgtElevation(), observer: observer)
-                self.viewshedPalette.viewshedResults = obsViewshed.viewshed()
+                let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: 1, whichQuadrant: 1)
+                self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
             } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
                 // running Van Kreveld viewshed.
                 let kreveld: KreveldViewshed = KreveldViewshed()
@@ -849,8 +849,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.printOut("Starting Serial Viewshed Processing on \(observer.name).")
         
         if (algorithm == ViewshedAlgorithm.FranklinRay) {
-            let obsViewshed = Viewshed(elevation: self.viewshedPalette.getHgtElevation(), observer: observer)
-            self.viewshedPalette.viewshedResults = obsViewshed.viewshed()
+            let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: 1, whichQuadrant: 1)
+            self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
         } else if (algorithm == ViewshedAlgorithm.VanKreveld) {
             let kreveld: KreveldViewshed = KreveldViewshed()
             let demObj: DemData = DemData(demMatrix: self.viewshedPalette.getHgtElevation())

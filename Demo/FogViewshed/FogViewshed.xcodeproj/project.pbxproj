@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
-		753D3D571BE7A031004E3589 /* Viewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D561BE7A031004E3589 /* Viewshed.swift */; };
 		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
 		753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* MapViewController.swift */; };
 		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
@@ -75,7 +74,6 @@
 /* Begin PBXFileReference section */
 		23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
-		753D3D561BE7A031004E3589 /* Viewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Viewshed.swift; sourceTree = "<group>"; };
 		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
 		753D3D5E1BEA33CF004E3589 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		753D3D621BEA7900004E3589 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
@@ -181,7 +179,6 @@
 			children = (
 				9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */,
 				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
-				753D3D561BE7A031004E3589 /* Viewshed.swift */,
 				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
 				7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */,
 			);
@@ -522,7 +519,6 @@
 				758885461C8A116B009AFB06 /* Box.swift in Sources */,
 				758885441C89F93D009AFB06 /* BoundingBox.swift in Sources */,
 				753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */,
-				753D3D571BE7A031004E3589 /* Viewshed.swift in Sources */,
 				9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */,
 				9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */,
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
