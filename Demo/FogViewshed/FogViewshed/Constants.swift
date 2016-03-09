@@ -39,14 +39,6 @@ struct Srtm3 {
 
 }
 
-// Position in 2x2 grid
-enum GridPosition: String {
-    case UpperRight = "upperRight",
-    UpperLeft = "upperLeft",
-    LowerRight = "lowerRight",
-    LowerLeft = "lowerLeft"
-}
-
 enum MapType: Int {
     case Standard = 0
     case Hybrid
@@ -63,7 +55,7 @@ enum ViewshedAlgorithm: Int {
     case VanKreveld = 1
 }
 
-struct SRTM {
+struct Srtm {
     static let DOWNLOAD_SERVER = "https://fogmachine.geointapps.org/version2_1/SRTM3/"
     static let ALTERNATE_DOWNLOAD_SERVER = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
     static let REGION_NORTH_AMERICA = "North_America"
@@ -72,5 +64,6 @@ struct SRTM {
     static let REGION_AFRICA = "Africa"
     static let REGION_AUSTRALIA = "Australia"
     static let REGION_ISLANDS = "Islands"
+    static let FILE_EXTENSION = ".hgt"
     
 }

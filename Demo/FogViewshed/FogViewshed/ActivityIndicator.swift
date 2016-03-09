@@ -40,7 +40,7 @@ public struct ActivityIndicator {
     private static var hidingInProgress = false
     
     /// Disable UI stops users touch actions until DownloadingActivity is hidden. Return success status
-    public static func show(text: String, disableUI: Bool) -> Bool {
+    public static func show(text: String, disableUI: Bool = false) -> Bool {
         guard instance == nil else {
             print("Activity: You still have an active activity, please stop that before creating a new one")
             return false
@@ -59,7 +59,7 @@ public struct ActivityIndicator {
     }
     
     /// Returns success status
-    public static func hide(success success: Bool? = nil, animated: Bool = false, errorMsg: String) -> Bool {
+    public static func hide(success success: Bool? = nil, animated: Bool = false, errorMsg: String = "None.") -> Bool {
         guard instance != nil else {
             return false
         }

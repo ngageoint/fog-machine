@@ -27,6 +27,8 @@
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
 		7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */; };
 		7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */; };
+		758885441C89F93D009AFB06 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885431C89F93D009AFB06 /* BoundingBox.swift */; };
+		758885461C8A116B009AFB06 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885451C8A116B009AFB06 /* Box.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
 		9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */; };
 		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
@@ -92,6 +94,8 @@
 		7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
 		7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtGrid.swift; sourceTree = "<group>"; };
 		7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedPalette.swift; sourceTree = "<group>"; };
+		758885431C89F93D009AFB06 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
+		758885451C8A116B009AFB06 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
 		8B12973A4FECB067D196E0B8 /* Pods-FogViewshed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.release.xcconfig"; sourceTree = "<group>"; };
 		9B09C7BE1C32F33400C08D7C /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
@@ -299,6 +303,8 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				758885431C89F93D009AFB06 /* BoundingBox.swift */,
+				758885451C8A116B009AFB06 /* Box.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
 				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
 				753D3D771BF66EA0004E3589 /* Pixel.swift */,
@@ -513,6 +519,8 @@
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
 				9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */,
 				753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */,
+				758885461C8A116B009AFB06 /* Box.swift in Sources */,
+				758885441C89F93D009AFB06 /* BoundingBox.swift in Sources */,
 				753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */,
 				753D3D571BE7A031004E3589 /* Viewshed.swift in Sources */,
 				9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */,

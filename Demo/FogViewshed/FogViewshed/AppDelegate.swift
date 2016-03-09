@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     if !(fm.fileExistsAtPath(fileNameWithPath)) {
                                         try fm.copyItemAtPath(hgtFolder + "/" + hgFileWithExt, toPath: targetDirPath + "/" + hgFileWithExt)
                                     } else {
-                                        print(hgFileWithExt + " File already exists in this destination...")
+                                        print(hgFileWithExt + " File already exists in this destination.")
                                     }
                                 }
                                 catch let error as NSError {
@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 }
                             }
                         }
-                        ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
+                        //ActivityIndicator.hide(success: true, animated: true, errorMsg: "")
                         break
                     }
                 }

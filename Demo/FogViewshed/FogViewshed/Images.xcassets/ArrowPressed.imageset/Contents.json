@@ -9,6 +9,10 @@
       "idiom" : "universal",
       "filename" : "ArrowPressed@2X.png",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

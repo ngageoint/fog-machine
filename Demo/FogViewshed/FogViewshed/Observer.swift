@@ -65,7 +65,7 @@ class Observer: NSObject {
     
     //Update the xCoord and yCoord based on passed in HgtGrid lat/lon
     func updateXYLocationForGrid(hgtGrid: HgtGrid) {
-        let hgtCoordinate = hgtGrid.upperLeftHgt.getCoordinate()
+        let hgtCoordinate = hgtGrid.getUpperLeftHgtCoordinate()
         self.yCoord = Int((coordinate.longitude - hgtCoordinate.longitude) * Srtm3.CELL_SIZE_DENOMINATOR)
         self.xCoord = Srtm3.MAX_SIZE - Int((coordinate.latitude - hgtCoordinate.latitude) * Srtm3.CELL_SIZE_DENOMINATOR)
     }
