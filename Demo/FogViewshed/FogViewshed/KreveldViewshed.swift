@@ -205,7 +205,7 @@ class KreveldViewshed {
             endSection = perimeter.count
         }
         
-        print("numberOfQuadrants: \(numberOfQuadrants)  size: \(size) sectionSize: \(sectionSize) startSection: \(startSection) endSection: \(endSection) whichQuadrant: \(whichQuadrant)")
+        //print("numberOfQuadrants: \(numberOfQuadrants)  size: \(size) sectionSize: \(sectionSize) startSection: \(startSection) endSection: \(endSection) whichQuadrant: \(whichQuadrant)")
         
         var resultPerimeter: [(x:Int, y:Int)] = []
         
@@ -333,7 +333,7 @@ class KreveldViewshed {
             // TODO - verify & make sure its "less than or equal to"
             for var i = iterateCount; i <= maxYCoor; i++ {
                 let tmp:ElevationPoint = ElevationPoint(xCoord: viewpoint.getXCoord(), yCoord: i, h: elevationMatrix[viewpoint.getXCoord()][i])
-                print("\t\(tmp.getXCoord())\t\(tmp.getYCoord())")
+                //print("\t\(tmp.getXCoord())\t\(tmp.getYCoord())")
                 elevPointOnline.append(tmp)
             }
             
