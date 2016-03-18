@@ -13,7 +13,7 @@ struct FogViewshed {
     static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
     static let WHICH_QUADRANT = "whichQuadrant"
     static let VIEWSHED_RESULT = "viewshedResult"
-    //static let OBSERVER = "observer"
+
     static let ASSIGNED_TO = "assignedTo"
     static let SEARCH_INITIATOR = "searchInitiator"
     

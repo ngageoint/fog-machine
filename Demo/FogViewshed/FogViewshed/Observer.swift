@@ -20,6 +20,7 @@ class Observer: NSObject {
     var coordinate: CLLocationCoordinate2D
     var algorithm: ViewshedAlgorithm
 
+    
     override init() {
         self.name = "Enter Name"
         self.xCoord = 1
@@ -31,6 +32,7 @@ class Observer: NSObject {
         super.init()
     }
     
+    
     init(name: String, xCoord: Int, yCoord: Int, elevation: Int, radius: Int, coordinate: CLLocationCoordinate2D, algorithm: ViewshedAlgorithm = ViewshedAlgorithm.FranklinRay) {
         self.name = name
         self.xCoord = xCoord
@@ -39,7 +41,6 @@ class Observer: NSObject {
         self.radius = radius
         self.coordinate = coordinate
         self.algorithm = algorithm
-        print("init: \(xCoord)  \(yCoord)  \(coordinate)")
     }
     
     //Will generate new xCoord, yCoord, and coordinates based on the passed in values.

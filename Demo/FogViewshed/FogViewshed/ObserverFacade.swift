@@ -110,7 +110,7 @@ class ObserverFacade {
     
     
     func getObservers()-> [ObserverEntity] {
-        let fetchRequest = NSFetchRequest(entityName: "Observer")
+        let fetchRequest = NSFetchRequest(entityName: FogViewshed.ENTITY)
         fetchRequest.returnsObjectsAsFaults = false
         do {
             let fetchResults = try managedContext.executeFetchRequest(fetchRequest) as? [ObserverEntity]
