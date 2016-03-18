@@ -1,5 +1,5 @@
 //
-//  Metrics.swift
+//  MetricSingleDevice.swift
 //  FogViewshed
 //
 //  Created by Chris Wasko on 3/18/16.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-class Metrics {
+class MetricSingleDevice {
     
     
     

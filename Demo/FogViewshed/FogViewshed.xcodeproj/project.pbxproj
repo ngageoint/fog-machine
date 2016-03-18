@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
-		7539D65C1C9C45F4008CCBE0 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7539D65B1C9C45F4008CCBE0 /* Metrics.swift */; };
+		7539D65C1C9C45F4008CCBE0 /* MetricSingleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */; };
 		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
 		753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* MapViewController.swift */; };
 		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
@@ -74,7 +74,7 @@
 /* Begin PBXFileReference section */
 		23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
-		7539D65B1C9C45F4008CCBE0 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
+		7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricSingleDevice.swift; sourceTree = "<group>"; };
 		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
 		753D3D5E1BEA33CF004E3589 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		753D3D621BEA7900004E3589 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
@@ -326,7 +326,7 @@
 				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
 				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 				758FB77F1C0A3AE400A193A7 /* Viewshed */,
-				7539D65B1C9C45F4008CCBE0 /* Metrics.swift */,
+				7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -527,7 +527,7 @@
 				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
 				9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */,
-				7539D65C1C9C45F4008CCBE0 /* Metrics.swift in Sources */,
+				7539D65C1C9C45F4008CCBE0 /* MetricSingleDevice.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BE78E791C727D1E00506F11 /* Toast.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
