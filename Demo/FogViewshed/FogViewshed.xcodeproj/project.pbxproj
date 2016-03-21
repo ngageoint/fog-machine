@@ -22,6 +22,7 @@
 		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
 		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
+		756D3AF41C9C8D9F00094EB8 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756D3AF31C9C8D9F00094EB8 /* Fog.framework */; };
 		7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */; };
 		7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */; };
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
@@ -89,6 +90,7 @@
 		753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
 		754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverSettingsViewController.swift; sourceTree = "<group>"; };
 		754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FogMachine.xcdatamodel; sourceTree = "<group>"; };
+		756D3AF31C9C8D9F00094EB8 /* Fog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fog.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/FogMachine-dwszhekwuvrywcaaofntynfglvrx/Build/Products/Debug-iphoneos/Fog.framework"; sourceTree = "<group>"; };
 		7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverEntity.swift; sourceTree = "<group>"; };
 		7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
 		7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtGrid.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				756D3AF41C9C8D9F00094EB8 /* Fog.framework in Frameworks */,
 				7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -156,6 +159,7 @@
 		401D5B75ECC7ACCCF10B7514 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				756D3AF31C9C8D9F00094EB8 /* Fog.framework */,
 				23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */,
 			);
 			name = Frameworks;
@@ -324,9 +328,9 @@
 				E314F6C41B79023D005B75C6 /* DataViewController.swift */,
 				753D3D5E1BEA33CF004E3589 /* MapViewController.swift */,
 				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
+				7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */,
 				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 				758FB77F1C0A3AE400A193A7 /* Viewshed */,
-				7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";

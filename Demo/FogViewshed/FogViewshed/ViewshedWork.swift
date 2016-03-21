@@ -27,6 +27,7 @@ class ViewshedWork: Work {
     
     
     override var mpcSerialized : NSData {
+        let metricsData = encodeDictionary(metrics)
         let result = NSKeyedArchiver.archivedDataWithRootObject(
             [FogViewshed.NUMBER_OF_QUADRANTS: numberOfQuadrants,
                 FogViewshed.WHICH_QUADRANT: whichQuadrant,
@@ -38,10 +39,14 @@ class ViewshedWork: Work {
                 FogViewshed.RADIUS: radius,
                 FogViewshed.LATITUDE: latitude,
                 FogViewshed.LONGITUDE: longitude,
-                FogViewshed.ALGORITHM: algorithm])
+                FogViewshed.ALGORITHM: algorithm,
+                Fog.METRICS: metricsData])
         
         return result
     }
+    
+    
+
     
 
     init (numberOfQuadrants: Int, whichQuadrant: Int, observer: Observer) {
@@ -66,18 +71,18 @@ class ViewshedWork: Work {
     
     
     required init (mpcSerialized: NSData) {
-        let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        numberOfQuadrants = dict[FogViewshed.NUMBER_OF_QUADRANTS] as! Int
-        whichQuadrant = dict[FogViewshed.WHICH_QUADRANT] as! Int
+        let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
+        numberOfQuadrants = workData[FogViewshed.NUMBER_OF_QUADRANTS] as! Int
+        whichQuadrant = workData[FogViewshed.WHICH_QUADRANT] as! Int
         //observer = NSKeyedUnarchiver.unarchiveObjectWithData(dict[FogViewshed.OBSERVER] as! NSData) as! Observer
-        name = dict[FogViewshed.NAME] as! String
-        xCoord = dict[FogViewshed.XCOORD] as! Int
-        yCoord = dict[FogViewshed.YCOORD] as! Int
-        elevation = dict[FogViewshed.ELEVATION] as! Int
-        radius = dict[FogViewshed.RADIUS] as! Int
-        latitude = dict[FogViewshed.LATITUDE] as! Double
-        longitude = dict[FogViewshed.LONGITUDE] as! Double
-        algorithm = dict[FogViewshed.ALGORITHM] as! Int
+        name = workData[FogViewshed.NAME] as! String
+        xCoord = workData[FogViewshed.XCOORD] as! Int
+        yCoord = workData[FogViewshed.YCOORD] as! Int
+        elevation = workData[FogViewshed.ELEVATION] as! Int
+        radius = workData[FogViewshed.RADIUS] as! Int
+        latitude = workData[FogViewshed.LATITUDE] as! Double
+        longitude = workData[FogViewshed.LONGITUDE] as! Double
+        algorithm = workData[FogViewshed.ALGORITHM] as! Int
         super.init(mpcSerialized: mpcSerialized)
     }
 }

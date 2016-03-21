@@ -67,3 +67,10 @@ struct Srtm {
     static let FILE_EXTENSION = ".hgt"
     
 }
+
+
+struct Metrics {
+    static let EVENT = "Event"
+    static let VIEWSHED = "Viewshed"
+    static let OVERLAY = "Overlay"
+}

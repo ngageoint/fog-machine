@@ -162,11 +162,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             error = error1
             coordinator = nil
             // Report any error we got.
-            var dict = [NSObject : AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data."
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason
-            dict[NSUnderlyingErrorKey] = error
-            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
+            var errorValues = [NSObject : AnyObject]()
+            errorValues[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data."
+            errorValues[NSLocalizedFailureReasonErrorKey] = failureReason
+            errorValues[NSUnderlyingErrorKey] = error
+            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: errorValues)
             // Replace this with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(error), \(error!.userInfo)")

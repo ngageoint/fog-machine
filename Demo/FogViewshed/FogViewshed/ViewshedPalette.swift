@@ -9,11 +9,12 @@
 import Foundation
 import MapKit
 import UIKit
-
+import Fog
 
 class ViewshedPalette: NSObject {
     
     private var observerHgtGrid: HgtGrid!
+    private var metrics = [String: [String: Timer]]()
     lazy var viewshedResults = [[Int]]()
     var viewshedImage: UIImage!
 
@@ -273,6 +274,16 @@ class ViewshedPalette: NSObject {
         return UIImage(CGImage: cgImage!)
     }
 
+    
+    func addMetrics(peer: String, peerMetrics: [String: Timer]) {
+        metrics.updateValue(peerMetrics, forKey: peer)
+    }
+        
+    
+    func displayMetrics() -> [String: [String: Timer]] {
+        return metrics
+    }
+    
     
     func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {

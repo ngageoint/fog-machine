@@ -10,15 +10,17 @@ import Foundation
 import MapKit
 import Fog
 
-class ViewshedResult: MPCSerializable {
+class ViewshedResult: Work {
     
     
     let viewshedResult:UIImage// UIImage//[[Int]]
     
     
-    var mpcSerialized : NSData {
+    override var mpcSerialized : NSData {
+        let metricsData = encodeDictionary(metrics)
         let result = NSKeyedArchiver.archivedDataWithRootObject(
-            [FogViewshed.VIEWSHED_RESULT: viewshedResult])
+            [FogViewshed.VIEWSHED_RESULT: viewshedResult,
+                Fog.METRICS: metricsData])
         
         return result
     }
@@ -26,12 +28,14 @@ class ViewshedResult: MPCSerializable {
     
     init (viewshedResult: UIImage) { //UIImage) { //[[Int]]) {
         self.viewshedResult = viewshedResult
+        super.init()
     }
     
     
     required init (mpcSerialized: NSData) {
-        let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        viewshedResult = dict[FogViewshed.VIEWSHED_RESULT] as! UIImage //UIImage//[[Int]]
+        let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
+        viewshedResult = workData[FogViewshed.VIEWSHED_RESULT] as! UIImage //UIImage//[[Int]]
+        super.init(mpcSerialized: mpcSerialized)
     }
 
 }

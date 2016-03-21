@@ -10,11 +10,6 @@ import Foundation
 import PeerKit
 import MultipeerConnectivity
 
-public protocol MPCSerializable {
-    var mpcSerialized: NSData { get }
-    init(mpcSerialized: NSData)
-}
-
 
 public struct ConnectionManager {
     

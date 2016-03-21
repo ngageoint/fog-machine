@@ -31,13 +31,13 @@ struct SearchWork: MPCSerializable {
     }
     
     init (mpcSerialized: NSData) {
-        let dict = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: String]
-        lowerBound = dict[FogSearch.LowerBoundKey]!
-        upperBound = dict[FogSearch.UpperBoundKey]!
-        searchTerm = dict[FogSearch.SearchTermKey]!
-        assignedTo = dict[FogSearch.AssignedToKey]!
-        searchResults = dict[FogSearch.SearchResultsKey]!
-        searchInitiator = dict[FogSearch.SearchInitiatorKey]!
+        let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: String]
+        lowerBound = workData[FogSearch.LowerBoundKey]!
+        upperBound = workData[FogSearch.UpperBoundKey]!
+        searchTerm = workData[FogSearch.SearchTermKey]!
+        assignedTo = workData[FogSearch.AssignedToKey]!
+        searchResults = workData[FogSearch.SearchResultsKey]!
+        searchInitiator = workData[FogSearch.SearchInitiatorKey]!
     }
 }
 
