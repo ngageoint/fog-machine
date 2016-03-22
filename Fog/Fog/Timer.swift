@@ -22,9 +22,9 @@ public class Timer {
     
     
     public init(decodeTimerDictionary: [String: String]) {
-        self.start = CFAbsoluteTime(decodeTimerDictionary[Metrics.START]!)
-        self.end = CFAbsoluteTime(decodeTimerDictionary[Metrics.END]!)
-        self.elapsed = CFAbsoluteTime(decodeTimerDictionary[Metrics.ELAPSED]!)
+        self.start = CFAbsoluteTime(decodeTimerDictionary[Metric.START]!)
+        self.end = CFAbsoluteTime(decodeTimerDictionary[Metric.END]!)
+        self.elapsed = CFAbsoluteTime(decodeTimerDictionary[Metric.ELAPSED]!)
     }
 
     
@@ -53,9 +53,9 @@ public class Timer {
     public func encodeTimer() -> [String: String] {
         var timerDictionary = [String: String]()
         
-        timerDictionary.updateValue(String(start), forKey: Metrics.START)
-        timerDictionary.updateValue(String(end), forKey: Metrics.END)
-        timerDictionary.updateValue(String(elapsed), forKey: Metrics.ELAPSED)
+        timerDictionary.updateValue(String(start), forKey: Metric.START)
+        timerDictionary.updateValue(String(end), forKey: Metric.END)
+        timerDictionary.updateValue(String(elapsed), forKey: Metric.ELAPSED)
         
         return timerDictionary
     }

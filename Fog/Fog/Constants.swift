@@ -17,7 +17,7 @@ public struct Fog {
     public static let METRICS = "metrics"
 }
 
-public struct Metrics {
+public struct Metric {
     public static let START = "start"
     public static let END = "end"
     public static let ELAPSED = "elapsed"

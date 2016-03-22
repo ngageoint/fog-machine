@@ -69,7 +69,7 @@ struct Srtm {
 }
 
 
-struct Metrics {
+struct Metric {
     static let EVENT = "Event"
     static let VIEWSHED = "Viewshed"
     static let OVERLAY = "Overlay"

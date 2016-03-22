@@ -11,6 +11,7 @@
 		754D5E561C80DCF4009B7876 /* Fog.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 754D5E551C80DCF4009B7876 /* Fog.podspec */; };
 		756D3AF21C9C8BBF00094EB8 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756D3AF11C9C8BBF00094EB8 /* Timer.swift */; };
 		756D3AF81C9C9C6600094EB8 /* MPCSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756D3AF71C9C9C6600094EB8 /* MPCSerializable.swift */; };
+		7579CB5D1CA1A68F009A86F2 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7579CB5C1CA1A68F009A86F2 /* Metrics.swift */; };
 		75802C821C7F37AE00DAE8BD /* Fog.h in Headers */ = {isa = PBXBuildFile; fileRef = 75802C811C7F37AE00DAE8BD /* Fog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75802CB91C7F449200DAE8BD /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CB81C7F449200DAE8BD /* ConnectionManager.swift */; };
 		75802CBC1C7F44D200DAE8BD /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CBA1C7F44D200DAE8BD /* Worker.swift */; };
@@ -27,6 +28,7 @@
 		754D5E551C80DCF4009B7876 /* Fog.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fog.podspec; sourceTree = "<group>"; };
 		756D3AF11C9C8BBF00094EB8 /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		756D3AF71C9C9C6600094EB8 /* MPCSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPCSerializable.swift; sourceTree = "<group>"; };
+		7579CB5C1CA1A68F009A86F2 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		75802C7E1C7F37AE00DAE8BD /* Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75802C811C7F37AE00DAE8BD /* Fog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fog.h; sourceTree = "<group>"; };
 		75802C831C7F37AE00DAE8BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				75802CBB1C7F44D200DAE8BD /* Work.swift */,
 				756D3AF11C9C8BBF00094EB8 /* Timer.swift */,
 				756D3AF71C9C9C6600094EB8 /* MPCSerializable.swift */,
+				7579CB5C1CA1A68F009A86F2 /* Metrics.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 				75802CC21C7F453400DAE8BD /* ReceiptAssurance.swift in Sources */,
 				75802CBD1C7F44D200DAE8BD /* Work.swift in Sources */,
 				75802CBF1C7F451800DAE8BD /* Constants.swift in Sources */,
+				7579CB5D1CA1A68F009A86F2 /* Metrics.swift in Sources */,
 				756D3AF21C9C8BBF00094EB8 /* Timer.swift in Sources */,
 				756D3AF81C9C9C6600094EB8 /* MPCSerializable.swift in Sources */,
 			);

@@ -11,7 +11,7 @@ import Foundation
 
 public class Work: MPCSerializable {
     
-    public var metrics = [String:Timer]()
+    public var metrics = Metrics<String, Timer>()
     
     public var mpcSerialized : NSData {
         let metricsData = encodeDictionary(metrics)
@@ -32,11 +32,11 @@ public class Work: MPCSerializable {
     }
     
     
-    public func encodeDictionary(dictionary: [String: Timer]) -> NSData {
+    public func encodeDictionary(dictionary: Metrics<String, Timer>) -> NSData {
         var jsonData = NSData()
         var encodedDictionary = [String: [String: String]]()
         
-        for (key, value) in dictionary {
+        for (key, value) in dictionary.getValues() {
             encodedDictionary.updateValue(value.encodeTimer(), forKey: key)
         }
         
@@ -50,8 +50,8 @@ public class Work: MPCSerializable {
     }
     
     
-    public func decodeDictionary(json: NSData) -> [String: Timer] {
-        var decoded = [String: Timer]()
+    public func decodeDictionary(json: NSData) -> Metrics<String, Timer> {
+        let decoded = Metrics<String, Timer>()
         do {
             let decodedDictionary = try NSJSONSerialization.JSONObjectWithData(json, options: []) as! [String: [String: String]]
             

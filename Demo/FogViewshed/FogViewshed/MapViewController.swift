@@ -415,7 +415,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 let selfQuadrant = 1
                 let selfWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant, observer: observer)
                 let results = self.processWork(selfWork)
-                self.viewshedPalette.addMetrics(Worker.getMe().displayName, peerMetrics: results.metrics)
+                self.viewshedPalette.addMetrics(Worker.getMe().displayName, workMetrics: results.metrics)
                 
                 if (workerCount < 2) {
                     //if no peers
@@ -457,9 +457,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //Use if passing UIImage
         let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
         eventTime.stopTimer()
-        result.metrics.updateValue(eventTime, forKey: Metrics.EVENT)
-        result.metrics.updateValue(viewshedTime, forKey: Metrics.VIEWSHED)
-        result.metrics.updateValue(overlayTime, forKey: Metrics.OVERLAY)
+        result.metrics.updateValue(eventTime, forKey: Metric.EVENT)
+        result.metrics.updateValue(viewshedTime, forKey: Metric.VIEWSHED)
+        result.metrics.updateValue(overlayTime, forKey: Metric.OVERLAY)
         
         return result
     }
@@ -504,7 +504,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
-                    self.viewshedPalette.addMetrics(fromPeerId.displayName, peerMetrics: result.metrics)
+                    self.viewshedPalette.addMetrics(fromPeerId.displayName, workMetrics: result.metrics)
                     // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.printOut("\tResult recieved from \(fromPeerId.displayName).")
