@@ -28,6 +28,7 @@
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
 		7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */; };
 		7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */; };
+		7579CB5F1CA1CEA2009A86F2 /* ViewshedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */; };
 		758885441C89F93D009AFB06 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885431C89F93D009AFB06 /* BoundingBox.swift */; };
 		758885461C8A116B009AFB06 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885451C8A116B009AFB06 /* Box.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
@@ -95,6 +96,7 @@
 		7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
 		7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtGrid.swift; sourceTree = "<group>"; };
 		7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedPalette.swift; sourceTree = "<group>"; };
+		7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedMetrics.swift; sourceTree = "<group>"; };
 		758885431C89F93D009AFB06 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		758885451C8A116B009AFB06 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
 				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
 				7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */,
+				7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */,
 			);
 			name = Viewshed;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
 				7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */,
 				7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */,
+				7579CB5F1CA1CEA2009A86F2 /* ViewshedMetrics.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,

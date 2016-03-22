@@ -28,7 +28,7 @@ public class Metrics<K: Hashable, V> {
     }
     
     
-    public func getValues() -> [K: V] {
+    public func getMetrics() -> [K: V] {
         return metrics
     }
     

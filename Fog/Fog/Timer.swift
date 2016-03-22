@@ -60,4 +60,24 @@ public class Timer {
         return timerDictionary
     }
     
+    
+    public func printPretty(indent: String = "") -> String {
+        return "\(indent)Start \(start)\n\(indent)End \(end)\n\(indent)Elapsed \(elapsed)"
+    }
+    
+    
+    public func getStart() -> CFAbsoluteTime {
+        return start
+    }
+
+    
+    public func getEnd() -> CFAbsoluteTime {
+        return end
+    }
+
+    
+    public func getElapsed() -> CFAbsoluteTime {
+        return elapsed
+    }
+
 }

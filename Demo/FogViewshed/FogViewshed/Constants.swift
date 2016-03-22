@@ -70,7 +70,13 @@ struct Srtm {
 
 
 struct Metric {
-    static let EVENT = "Event"
-    static let VIEWSHED = "Viewshed"
-    static let OVERLAY = "Overlay"
+    static let WORK = "Process Work"
+    static let VIEWSHED = "Process Viewshed"
+    static let OVERLAY = "Add Overlay"
+    
+    struct Data {
+        static let READING = "Data Reading"
+        static let SENDING = "Data Sending"
+        static let MERGING = "Data Merging"
+    }
 }

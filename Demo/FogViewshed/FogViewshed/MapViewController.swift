@@ -25,7 +25,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
     var hasFogViewshedStarted = false
-    var timer: Timer!
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
 
@@ -47,9 +46,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let gesture = UILongPressGestureRecognizer(target: self, action: "addAnnotationGesture:")
         gesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(gesture)
-        
-        self.timer = Timer()
-        
+
         isLogShown = false
         logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
         logBox.editable = false
@@ -361,7 +358,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 dispatch_async(dispatch_get_main_queue()) {
                     self.logBox.text = ""
                 }
-                self.timer.startTimer()
+                self.viewshedPalette.metricsStart()
                 ActivityIndicator.show("Calculating Viewshed")
                 dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
                     self.hasFogViewshedStarted = true
@@ -457,7 +454,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //Use if passing UIImage
         let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
         eventTime.stopTimer()
-        result.metrics.updateValue(eventTime, forKey: Metric.EVENT)
+        result.metrics.updateValue(eventTime, forKey: Metric.WORK)
         result.metrics.updateValue(viewshedTime, forKey: Metric.VIEWSHED)
         result.metrics.updateValue(overlayTime, forKey: Metric.OVERLAY)
         
@@ -531,8 +528,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.printOut("Viewshed complete.")
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
-        self.printOut("Stop Time: " + String(format: "%.6f", self.timer.stopTimer()))
-        dump(self.viewshedPalette.displayMetrics())
+        self.viewshedPalette.metricsStop()
+        self.printOut(self.viewshedPalette.displayMetrics())
     }
     
     

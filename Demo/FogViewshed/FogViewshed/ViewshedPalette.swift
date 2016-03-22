@@ -14,7 +14,7 @@ import Fog
 class ViewshedPalette: NSObject {
     
     private var observerHgtGrid: HgtGrid!
-    private var metrics = Metrics<String, Metrics<String, Timer>>()
+    private var metrics = ViewshedMetrics()
     lazy var viewshedResults = [[Int]]()
     var viewshedImage: UIImage!
 
@@ -275,13 +275,25 @@ class ViewshedPalette: NSObject {
     }
 
     
+    func metricsStart() {
+        metrics.initialize()
+        metrics.startOverall()
+    }
+    
+    
+    func metricsStop() {
+        metrics.stopOverall()
+    }
+    
+    
     func addMetrics(name: String, workMetrics: Metrics<String, Timer>) {
         metrics.updateValue(workMetrics, forKey: name)
     }
         
     
-    func displayMetrics() -> Metrics<String, Metrics<String, Timer>> {
-        return metrics
+    func displayMetrics() -> String {
+        metrics.processMetrics()
+        return metrics.printPretty()
     }
     
     

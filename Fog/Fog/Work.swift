@@ -36,7 +36,7 @@ public class Work: MPCSerializable {
         var jsonData = NSData()
         var encodedDictionary = [String: [String: String]]()
         
-        for (key, value) in dictionary.getValues() {
+        for (key, value) in dictionary.getMetrics() {
             encodedDictionary.updateValue(value.encodeTimer(), forKey: key)
         }
         
