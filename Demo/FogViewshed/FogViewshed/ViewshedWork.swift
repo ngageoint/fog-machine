@@ -44,10 +44,7 @@ class ViewshedWork: Work {
         
         return result
     }
-    
-    
-
-    
+   
 
     init (numberOfQuadrants: Int, whichQuadrant: Int, observer: Observer) {
         self.numberOfQuadrants = numberOfQuadrants

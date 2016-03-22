@@ -110,7 +110,7 @@ class ViewshedPalette: NSObject {
     }
     
     
-    func addOverlay(image: UIImage) -> ViewshedOverlay {
+    func generateOverlay(image: UIImage) -> ViewshedOverlay {
         
         let imageLocation = observerHgtGrid.getHgtMidCoordinate()
         let imageMapRect = observerHgtGrid.getBoundingMapRect()
@@ -123,7 +123,7 @@ class ViewshedPalette: NSObject {
     
     func getViewshedOverlay() -> ViewshedOverlay {
         self.viewshedImage = generateViewshedImage(self.viewshedResults)
-        return addOverlay(viewshedImage)
+        return generateOverlay(viewshedImage)
     }
     
     

@@ -398,7 +398,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func startFogViewshed(observer: Observer) {
         printOut("Beginning viewshed on \(Worker.getMe().displayName)")
         
-        let selfQuadrant = 1
         var count = 1 //Start at one since initiator is 0-indexed
         
         ConnectionManager.sendEventToAll(Event.StartViewshed.rawValue,
@@ -412,17 +411,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             },
             workForSelf: { workerCount in
                 self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-                self.performFogViewshed(observer, numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant)
+                
+                let selfQuadrant = 1
+                let selfWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant, observer: observer)
+                let results = self.processWork(selfWork)
+                self.viewshedPalette.addMetrics(Worker.getMe().displayName, peerMetrics: results.metrics)
                 
                 if (workerCount < 2) {
                     //if no peers
-                    let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.mapView.addOverlay(viewshedOverlay)
-                    }
-                    self.hasFogViewshedStarted = false
-                    ActivityIndicator.hide(success: true, animated: true)
-                    self.printOut("Stop Time: " + String(format: "%.6f", self.timer.stopTimer()))
+                    self.completeViewshed()
                 }
                 self.printOut("\tFound results locally out of \(workerCount).")
             },
@@ -430,6 +427,41 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
             }
         )
+    }
+    
+    
+    func processWork(work: ViewshedWork) -> ViewshedResult {
+        let eventTime = Timer()
+        eventTime.startTimer()
+        let viewshedTime = Timer()
+        let overlayTime = Timer()
+        
+      
+        self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
+        viewshedTime.startTimer()
+        self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
+        viewshedTime.stopTimer()
+      
+        //Uncomment if passing [[Int]]
+        //let result = ViewshedResult(viewshedResult: self.viewshedResults)
+        
+        self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
+        self.pinObserverLocation(work.getObserver())
+        overlayTime.startTimer()
+        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.addOverlay(viewshedOverlay)
+        }
+        overlayTime.stopTimer()
+        
+        //Use if passing UIImage
+        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
+        eventTime.stopTimer()
+        result.metrics.updateValue(eventTime, forKey: Metrics.EVENT)
+        result.metrics.updateValue(viewshedTime, forKey: Metrics.VIEWSHED)
+        result.metrics.updateValue(overlayTime, forKey: Metrics.OVERLAY)
+        
+        return result
     }
     
     
@@ -448,47 +480,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         
         printOut("\tFinished Viewshed Processing on \(observer.name).")
-        
-        self.pinObserverLocation(observer)
     }
     
     
     func setupFogViewshedEvents() {
         
         ConnectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
-            let eventTime = Timer()
-            eventTime.startTimer()
-            let viewshedTime = Timer()
-            let overlayTime = Timer()
+                       self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
             
-
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
             let workData = object as! [String: NSData]
             let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
-            
-            self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-            viewshedTime.startTimer()
-            self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-            viewshedTime.stopTimer()
-            //Uncomment if passing [[Int]]
-            //let result = ViewshedResult(viewshedResult: self.viewshedResults)
-            
-            self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
-            overlayTime.startTimer()
-            let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
-            dispatch_async(dispatch_get_main_queue()) {
-                self.mapView.addOverlay(viewshedOverlay)
-            }
-            overlayTime.stopTimer()
-            
-            //Use if passing UIImage
-            let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
-            eventTime.stopTimer()
-            result.metrics.updateValue(eventTime, forKey: Metrics.EVENT)
-            result.metrics.updateValue(viewshedTime, forKey: Metrics.VIEWSHED)
-            result.metrics.updateValue(overlayTime, forKey: Metrics.OVERLAY)
-
-            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
+        
+            let result = self.processWork(work)
             
             ConnectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
         }
@@ -507,25 +511,28 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         //   }
                         //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
                         
-                        let viewshedOverlay = self.viewshedPalette.addOverlay(result.viewshedResult)
+                        let viewshedOverlay = self.viewshedPalette.generateOverlay(result.viewshedResult)
                         self.mapView.addOverlay(viewshedOverlay)
                     }
                 },
                 completeMethod: {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.printOut("\tAll received")
-                        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
-                        self.mapView.addOverlay(viewshedOverlay)
-                        dump(self.viewshedPalette.displayMetrics())
-                        self.printOut("Viewshed complete.")
-                        self.hasFogViewshedStarted = false
-                        ActivityIndicator.hide(success: true, animated: true)
-                        self.printOut("Stop Time: " + String(format: "%.6f", self.timer.stopTimer()))
+                        self.completeViewshed()
                     }
             })
             //}
         }
         
+    }
+    
+    
+    func completeViewshed() {
+        self.printOut("Viewshed complete.")
+        self.hasFogViewshedStarted = false
+        ActivityIndicator.hide(success: true, animated: true)
+        self.printOut("Stop Time: " + String(format: "%.6f", self.timer.stopTimer()))
+        dump(self.viewshedPalette.displayMetrics())
     }
     
     
