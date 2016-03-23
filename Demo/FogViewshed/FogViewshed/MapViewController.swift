@@ -25,6 +25,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
     var hasFogViewshedStarted = false
+    var metrics = ViewshedMetrics()
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
 
@@ -358,7 +359,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 dispatch_async(dispatch_get_main_queue()) {
                     self.logBox.text = ""
                 }
-                self.viewshedPalette.metricsStart()
+                self.metrics.initialize()
+                self.metrics.startOverall()
                 ActivityIndicator.show("Calculating Viewshed")
                 dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
                     self.hasFogViewshedStarted = true
@@ -411,8 +413,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
                 let selfQuadrant = 1
                 let selfWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant, observer: observer)
-                let results = self.processWork(selfWork)
-                self.viewshedPalette.addMetrics(Worker.getMe().displayName, workMetrics: results.metrics)
+                let result = self.processWork(selfWork)
+                self.metrics.updateValue(result.metrics, forKey: Worker.getMe().displayName)
                 
                 if (workerCount < 2) {
                     //if no peers
@@ -501,7 +503,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
-                    self.viewshedPalette.addMetrics(fromPeerId.displayName, workMetrics: result.metrics)
+                    self.metrics.updateValue(result.metrics, forKey: fromPeerId.displayName)
                     // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.printOut("\tResult recieved from \(fromPeerId.displayName).")
@@ -528,8 +530,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.printOut("Viewshed complete.")
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
-        self.viewshedPalette.metricsStop()
-        self.printOut(self.viewshedPalette.displayMetrics())
+        self.metrics.stopOverall()
+        self.metrics.processMetrics()
+        self.printOut(self.metrics.getOutput())
     }
     
     

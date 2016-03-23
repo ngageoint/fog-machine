@@ -26,7 +26,7 @@ public class Metrics<K: Hashable, V> {
     public func removeValueForKey(key: K) {
         metrics.removeValueForKey(key)
     }
-    
+   
     
     public func getMetrics() -> [K: V] {
         return metrics

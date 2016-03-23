@@ -11,37 +11,26 @@ import Fog
 
 class ViewshedMetrics {
     
+    // Used for storing the Metrics
     var metrics: Metrics<String, Metrics<String, Timer>>
     var overall: Timer
     var devices: String
-    var totalTimeReadingData: CFAbsoluteTime
-    var totalTimeViewshed: CFAbsoluteTime
-    var totalTimeOverlay: CFAbsoluteTime
-    var totalTimeSendingData: CFAbsoluteTime
-    var totalTimeMergingData: CFAbsoluteTime
-    var totalTimeWork: CFAbsoluteTime
-    var individualTimeReadingData: Metrics<String, CFAbsoluteTime>
-    var individualTimeViewshed: Metrics<String, CFAbsoluteTime>
-    var individualTimeOverlay: Metrics<String, CFAbsoluteTime>
-    var individualTimeSendingData: Metrics<String, CFAbsoluteTime>
-    var individualTimeMergingData: Metrics<String, CFAbsoluteTime>
     
+    // Used for processing the Metrics
+    var totalManager = [String: CFAbsoluteTime]() // [Metric Name : Time]
+    var individualManager = [String: Metrics<String, CFAbsoluteTime>]() // [Metric Name: Metrics<Device Name, Time>]
+    // Update the outputOrder with the order the metrics total/individual times will be displayed
+    let outputOrder = [Metric.VIEWSHED,
+                       Metric.OVERLAY,
+                       Metric.Data.READING,
+                       Metric.Data.SENDING,
+                       Metric.Data.MERGING]
+ 
     
     init() {
         self.metrics = Metrics<String, Metrics<String, Timer>>()
         self.overall = Timer()
         self.devices = "Device(s): \n"
-        self.totalTimeReadingData = 0
-        self.totalTimeViewshed = 0
-        self.totalTimeOverlay = 0
-        self.totalTimeSendingData = 0
-        self.totalTimeMergingData = 0
-        self.totalTimeWork = 0
-        self.individualTimeMergingData = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeSendingData = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeReadingData = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeViewshed = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeOverlay = Metrics<String, CFAbsoluteTime>()
     }
     
     
@@ -69,92 +58,78 @@ class ViewshedMetrics {
         self.metrics = Metrics<String, Metrics<String, Timer>>()
         self.overall = Timer()
         self.devices = "Device(s): \n"
-        self.totalTimeReadingData = 0
-        self.totalTimeViewshed = 0
-        self.totalTimeOverlay = 0
-        self.totalTimeSendingData = 0
-        self.totalTimeMergingData = 0
-        self.totalTimeWork = 0
-        self.individualTimeMergingData = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeSendingData = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeReadingData = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeViewshed = Metrics<String, CFAbsoluteTime>()
-        self.individualTimeOverlay = Metrics<String, CFAbsoluteTime>()
     }
     
     func processMetrics() {
         for (device, metric) in metrics.getMetrics() {
             devices += "\t\t\(device)\n"
             for (event, timer) in metric.getMetrics() {
-                addToTotalTime(event, value: timer.getElapsed())
-                addToIndividualTime(event, value: timer.getElapsed(), name: device)
+                addToTotal(event, value: timer.getElapsed())
+                addToIndividual(event, metricKey: device, metricValue: timer.getElapsed())
             }
         }
     }
     
     
-    func addToTotalTime(key: String, value: CFAbsoluteTime) {
-        if key == Metric.VIEWSHED {
-            totalTimeViewshed += value
-        } else if key == Metric.OVERLAY {
-            totalTimeOverlay += value
-        } else if key == Metric.WORK {
-            totalTimeWork += value
-        } else if key == Metric.Data.READING {
-            totalTimeReadingData += value
-        } else if key == Metric.Data.SENDING {
-            totalTimeSendingData += value
-        } else if key == Metric.Data.MERGING {
-            totalTimeMergingData += value
+    func addToTotal(key: String, value: CFAbsoluteTime) {
+        
+        guard let oldValue = totalManager[key] else {
+            totalManager.updateValue(value, forKey: key)
+            return
         }
+        
+        let newValue = value + oldValue
+        totalManager.updateValue(newValue, forKey: key)
     }
 
     
-    func addToIndividualTime(key: String, value: CFAbsoluteTime, name: String) {
-        if key == Metric.VIEWSHED {
-            individualTimeViewshed.updateValue(value, forKey: name)
-        } else if key == Metric.OVERLAY {
-            individualTimeOverlay.updateValue(value, forKey: name)
-        } else if key == Metric.Data.READING {
-            individualTimeReadingData.updateValue(value, forKey: name)
-        } else if key == Metric.Data.SENDING {
-            individualTimeSendingData.updateValue(value, forKey: name)
-        } else if key == Metric.Data.MERGING {
-            individualTimeMergingData.updateValue(value, forKey: name)
+    func addToIndividual(key: String, metricKey: String, metricValue: CFAbsoluteTime) {
+        guard let updateValue = individualManager[key] else {
+            let newValue = Metrics<String, CFAbsoluteTime>()
+            newValue.updateValue(metricValue, forKey: metricKey)
+            individualManager.updateValue(newValue, forKey: key)
+            return
         }
+        
+        updateValue.updateValue(metricValue, forKey: metricKey)
+        individualManager.updateValue(updateValue, forKey: key)
     }
     
     
-    func printPretty() -> String {
+    func getOutput() -> String {
         var output = "\n"
         output += devices
-        output += printTotalMetric(Metric.WORK, value: totalTimeWork)
-        output += printTotalMetric(Metric.VIEWSHED, value: totalTimeViewshed)
-        output += printIndividualMetric(Metric.VIEWSHED)
-        output += printTotalMetric(Metric.OVERLAY, value: totalTimeOverlay)
-        output += printIndividualMetric(Metric.OVERLAY)
-        output += printTotalMetric(Metric.Data.READING, value: totalTimeReadingData)
-        output += printIndividualMetric(Metric.Data.READING)
-        output += printTotalMetric(Metric.Data.SENDING, value: totalTimeSendingData)
-        output += printIndividualMetric(Metric.Data.SENDING)
-        output += printTotalMetric(Metric.Data.MERGING, value: totalTimeMergingData)
-        output += printIndividualMetric(Metric.Data.MERGING)
-        output += printPrettyOverallTime()
+        output += getTotalTimeForKey(Metric.WORK)
+        
+        for key in outputOrder {
+            output += getTotalTimeForKey(key)
+            output += getIndividualTimesForKey(key)
+        }
+
+        output += getOverallTime()
+        output += "\n"
         
         return output
     }
     
     
-    private func printPrettyOverallTime() -> String {
+    // MARK: Private Functions
+    
+    
+    private func getOverallTime() -> String {
         var output = "Total Overall Time: "
         output += formatTime(self.overall.getElapsed())
-        output += " seconds \n"
+        output += " seconds"
 
         return output
     }
     
     
-    private func printTotalMetric(key: String, value: CFAbsoluteTime) -> String {
+    private func getTotalTimeForKey(key: String) -> String {
+        guard let value = totalManager[key] else {
+            return ""
+        }
+        
         var output = "\t\(key)\t\(formatTime(value)) seconds ("
         output += getPercentage(value, total: self.overall.getElapsed())
         output += " of Overall Time)\n"
@@ -163,41 +138,22 @@ class ViewshedMetrics {
     }
 
     
-    private func printIndividualMetric(key: String) -> String {
+    private func getIndividualTimesForKey(key: String) -> String {
+        guard let value = individualManager[key] else {
+            return ""
+        }
+        guard let totalValue = totalManager[key] else {
+            return ""
+        }
+        
         var output = ""
 
-        if key == Metric.VIEWSHED {
-            for (device, value) in individualTimeViewshed.getMetrics() {
-                output = "\t\t\(device): \(formatTime(value)) seconds  ("
-                output += self.getPercentage(value, total: totalTimeViewshed)
-                output += " of \(key))\n"
-            }
-        } else if key == Metric.OVERLAY {
-            for (device, value) in individualTimeOverlay.getMetrics() {
-                output = "\t\t\(device): \(formatTime(value)) seconds  ("
-                output += self.getPercentage(value, total: totalTimeOverlay)
-                output += " of \(key))\n"
-            }
-        } else if key == Metric.Data.READING {
-            for (device, value) in individualTimeReadingData.getMetrics() {
-                output = "\t\t\(device): \(formatTime(value)) seconds  ("
-                output += self.getPercentage(value, total: totalTimeReadingData)
-                output += " of \(key))\n"
-            }
-        } else if key == Metric.Data.SENDING {
-            for (device, value) in individualTimeSendingData.getMetrics() {
-                output = "\t\t\(device): \(formatTime(value)) seconds  ("
-                output += self.getPercentage(value, total: totalTimeSendingData)
-                output += " of \(key))\n"
-            }
-        } else if key == Metric.Data.MERGING {
-            for (device, value) in individualTimeMergingData.getMetrics() {
-                output = "\t\t\(device): \(formatTime(value)) seconds  ("
-                output += self.getPercentage(value, total: totalTimeMergingData)
-                output += " of \(key))\n"
-            }
+        for (device, time) in value.getMetrics() {
+            output = "\t\t\(device): \(formatTime(time)) seconds  ("
+            output += self.getPercentage(time, total: totalValue)
+            output += " of \(key))\n"
         }
-        output += "\n"
+
         return output
     }
     
