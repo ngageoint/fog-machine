@@ -44,7 +44,7 @@ public class ViewshedFog: NSObject {
         // 1. Let p’s coordinates be (xp, yp, zp). Then the observer O will be at (xp, yp, zp + h).
         
         // 2. Imagine a square in the plane z = 0 of side 2r × 2r centered on (xp, yp, 0).
-        let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(obsX, inY: obsY, radius: viewRadius,
+        let perimeter:[(x:Int, y:Int)] = SquarePerimeter.getAnySizedPerimeter(obsX, inY: obsY, radius: viewRadius,
             numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
         
         // 3. Iterate through the cells c of the square’s perimeter. Each c has coordinates
@@ -56,8 +56,7 @@ public class ViewshedFog: NSObject {
             // (b) Find the points on that line, perhaps using Bresenham’s algorithm. In order
             //  from p to c, let them be q1 = p, q2, ··· qk−1, qk = c. A potential target Di at qi
             //  will have coordinates (xi, yi, zi + h).
-            let bresenham = Bresenham()
-            let bresResults:[(x:Int, y:Int)] = bresenham.findLine(obsX, y1: obsY, x2: x, y2: y)
+            let bresResults:[(x:Int, y:Int)] = Bresenham.findLine(obsX, y1: obsY, x2: x, y2: y)
             
             //  (c) Let mi be the slope of the line from O to Di, that is,
             //   mi = ( zk − zi + p ) / sqrt( (xi − xp)2 + (yi − yp)^2 )
@@ -99,61 +98,7 @@ public class ViewshedFog: NSObject {
         return viewshedMatrix
         
     }
-        
-    // Returns an array of tuple (x,y) for the perimeter of the region based on the observer point and the radius
-    // Supports single, double, or quadriple phones based on the number of quadrants (1, 2, or 4)
-    private func getAnySizedPerimeter(inX: Int, inY: Int, radius: Int, numberOfQuadrants: Int, whichQuadrant: Int) -> [(x:Int,y:Int)] {
-        //Perimeter goes clockwise from the lower left coordinate
-        var perimeter:[(x:Int, y:Int)] = []
-        //These can be combined into less for loops, but it's easier to debug when the
-        //perimeter goes clockwise from the lower left coordinate
-        
-        //lower left to top left
-        for(var a = inX - radius; a <= inX + radius; a++) {
-            perimeter.append((a, inY - radius))
-        }
-        //top left to top right (excludes corners)
-        for(var b = inY - radius + 1; b < inY + radius; b++) {
-            perimeter.append((inX + radius, b))
-        }
-        //top right to lower right
-        for(var a = inX + radius; a >= inX - radius; a--) {
-            perimeter.append((a, inY + radius))
-        }
-        //lower right to lower left (excludes corners)
-        for(var b = inY + radius - 1; b > inY - radius; b--) {
-            perimeter.append((inX - radius, b))
-        }
-        
-        let size = (radius * 2 + 1) * 4 - 4
-        let sectionSize = size / numberOfQuadrants
-        var startSection = sectionSize * (whichQuadrant - 1)
-        if whichQuadrant == 1 {
-            startSection = 0
-        }
-        var endSection = sectionSize * whichQuadrant
-        if endSection > size {
-            endSection = perimeter.count
-        }
 
-        //print("numberOfQuadrants: \(numberOfQuadrants)  size: \(size) sectionSize: \(sectionSize) startSection: \(startSection) endSection: \(endSection) whichQuadrant: \(whichQuadrant)")
-
-        var resultPerimeter: [(x:Int, y:Int)] = []
-        
-        while (startSection < endSection) {
-            resultPerimeter.append(perimeter[startSection])
-            startSection++
-        }
-        
-        return resultPerimeter
-    }
-    
-
-    private func displayMatrix(matrix: [[Int]]) {
-        for x in matrix.reverse() {
-            print("\(x)")
-        }
-    }
     
     
 }

@@ -87,13 +87,13 @@ public struct PriorityQueue<T: Comparable> {
     }
     
     // Based on example from Sedgewick p 316
-    private mutating func sink(var index: Int) {
-        
+    private mutating func sink(index: Int) {
+        var index = index
         while 2 * index + 1 < heap.count {
             
             var j = 2 * index + 1
             
-            if j < (heap.count - 1) && ordered(heap[j], heap[j + 1]) { j++ }
+            if j < (heap.count - 1) && ordered(heap[j], heap[j + 1]) { j += 1 }
             if !ordered(heap[index], heap[j]) { break }
             
             swap(&heap[index], &heap[j])
@@ -102,8 +102,8 @@ public struct PriorityQueue<T: Comparable> {
     }
     
     // Based on example from Sedgewick p 316
-    private mutating func swim(var index: Int) {
-        
+    private mutating func swim(index: Int) {
+        var index = index
         while index > 0 && ordered(heap[(index - 1) / 2], heap[index]) {
             swap(&heap[(index - 1) / 2], &heap[index])
             index = (index - 1) / 2

@@ -20,7 +20,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: "findPeers:", forControlEvents: UIControlEvents.ValueChanged)
+        refreshControl.addTarget(self, action: #selector(FirstViewController.findPeers(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         return refreshControl
     }()

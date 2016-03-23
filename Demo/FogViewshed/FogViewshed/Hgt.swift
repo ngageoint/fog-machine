@@ -33,14 +33,14 @@ class Hgt: NSObject {
         
         var row = 0
         var column = 0
-        for (var cell = 0; cell < data.length; cell+=1) {
+        for cell in 0 ..< data.length {
             elevationMatrix[row][column] = Int(elevation[cell].bigEndian)
             //print(elevationMatrix[row][column])
-            column++
+            column += 1
             
             if column >= Srtm3.MAX_SIZE {
                 column = 0
-                row++
+                row += 1
             }
             
             if row >= Srtm3.MAX_SIZE {
@@ -81,11 +81,23 @@ class Hgt: NSObject {
     // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
     // latitude and 105 degrees west longitude
     private func parseCoordinate() -> CLLocationCoordinate2D {
-    
-        let northSouth = filename.substringWithRange(Range<String.Index>(start: filename.startIndex,end: filename.startIndex.advancedBy(1)))
-        let latitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(1),end: filename.startIndex.advancedBy(3)))
-        let westEast = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(3),end: filename.startIndex.advancedBy(4)))
-        let longitudeValue = filename.substringWithRange(Range<String.Index>(start: filename.startIndex.advancedBy(4),end: filename.endIndex))
+
+        var filenameParse = filename
+        
+        let northSouthIndex = filenameParse.startIndex.advancedBy(1)
+        let northSouth = filenameParse.substringToIndex(northSouthIndex)
+        filenameParse = filenameParse.substringFromIndex(northSouthIndex)
+        
+        
+        let latitudeIndex = filenameParse.startIndex.advancedBy(2)
+        let latitudeValue = filenameParse.substringToIndex(latitudeIndex)
+        filenameParse = filenameParse.substringFromIndex(latitudeIndex)
+        
+        let westEastIndex = filenameParse.startIndex.advancedBy(1)
+        let westEast = filenameParse.substringToIndex(westEastIndex)
+        filenameParse = filenameParse.substringFromIndex(westEastIndex)
+        
+        let longitudeValue = filenameParse
         
         var latitude:Double = Double(latitudeValue)!
         var longitude:Double = Double(longitudeValue)!

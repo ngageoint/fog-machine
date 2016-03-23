@@ -33,7 +33,7 @@ class ViewshedPalette: NSObject {
         var count = 0
         for hgtFile in requiredHgtFiles {
             if hgtFile.hasHgtFileInDocuments() {
-                count++
+                count += 1
             }
         }
         
@@ -134,8 +134,8 @@ class ViewshedPalette: NSObject {
         var data: [Pixel] = []
         
         // CoreGraphics expects pixel data as rows, not columns.
-        for(var y = 0; y < width; y++) {
-            for(var x = 0; x < height; x++) {
+        for y in 0 ..< width {
+            for x in 0 ..< height {
                 
                 let cell = viewshed[y][x]
                 if(cell == 0) {
@@ -231,8 +231,8 @@ class ViewshedPalette: NSObject {
     func mergeViewshedResults(viewshedOne: [[Int]], viewshedTwo: [[Int]]) -> [[Int]] {
         var viewshedResult = viewshedOne
         
-        for (var row = 0; row < viewshedOne.count; row++) {
-            for (var column = 0; column < viewshedOne[row].count; column++) {
+        for row in 0 ..< viewshedOne.count {
+            for column in 0 ..< viewshedOne[row].count {
                 if (viewshedTwo[row][column] == 1) {
                     viewshedResult[row][column] = 1
                 }

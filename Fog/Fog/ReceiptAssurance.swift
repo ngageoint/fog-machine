@@ -147,7 +147,7 @@ public class ReceiptAssurance: NSObject {
     public func startTimer(event: String, timeoutSeconds: Double) {
         //printOut("Starting Timer for \(timeoutSeconds) seconds")
         dispatch_async(dispatch_get_main_queue()) {
-            NSTimer.scheduledTimerWithTimeInterval(timeoutSeconds, target: self, selector: Selector("timerAction:"), userInfo: event, repeats: false)
+            NSTimer.scheduledTimerWithTimeInterval(timeoutSeconds, target: self, selector: #selector(ReceiptAssurance.timerAction(_:)), userInfo: event, repeats: false)
         }
         
     }

@@ -11,7 +11,7 @@ import UIKit
 class Bresenham: NSObject {
 
     
-    private func reverseResults(matrix: [(x:Int,y:Int)]) -> [(x:Int,y:Int)] {
+    private static func reverseResults(matrix: [(x:Int,y:Int)]) -> [(x:Int,y:Int)] {
         var results:[(x:Int,y:Int)] = []
         for (x,y) in matrix.reverse() {
             results.append((x, y))
@@ -21,7 +21,10 @@ class Bresenham: NSObject {
 
     
     //Adopted from http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm#Java
-    internal func findLine(var x1: Int, var y1: Int, x2: Int, y2: Int) -> [(x:Int,y:Int)] {
+    internal static func findLine(x1: Int, y1: Int, x2: Int, y2: Int) -> [(x:Int,y:Int)] {
+        // To substitude for the removal of var in parameters
+        var x1 = x1
+        var y1 = y1
         
         var results:[(x:Int,y:Int)] = []
         let obsX = x1
@@ -40,7 +43,7 @@ class Bresenham: NSObject {
         let iy = y1 < y2 ? 1 : -1;
         
         if (dy <= dx) {
-            for (;;) {
+            while true {
                 if (x1 != obsX || y1 != obsY) { // skip the observer point
                     results.append((x1, y1))
                 }
@@ -55,7 +58,7 @@ class Bresenham: NSObject {
                 }
             }
         } else {
-            for (;;) {
+            while true {
                 if (x1 != obsX || y1 != obsY) { // skip the observer point
                     results.append((x1, y1))
                }

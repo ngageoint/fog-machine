@@ -185,13 +185,13 @@ public struct ActivityIndicator {
                 UIView.animateWithDuration(animationDuration, animations: {
                     self.icon.alpha = 1
                     }, completion: { (value: Bool) in
-                        self.callSelectorAsync("removeFromSuperview", delay: animationDuration)
+                        self.callSelectorAsync(#selector(UIView.removeFromSuperview), delay: animationDuration)
                         instance = nil
                         hidingInProgress = false
                 })
             } else {
                 activityView.stopAnimating()
-                self.callSelectorAsync("removeFromSuperview", delay: animationDuration)
+                self.callSelectorAsync(#selector(UIView.removeFromSuperview), delay: animationDuration)
                 instance = nil
                 hidingInProgress = false
             }

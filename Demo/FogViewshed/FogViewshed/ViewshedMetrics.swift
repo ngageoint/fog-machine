@@ -58,6 +58,8 @@ class ViewshedMetrics {
         self.metrics = Metrics<String, Metrics<String, Timer>>()
         self.overall = Timer()
         self.devices = "Device(s): \n"
+        self.totalManager.removeAll()
+        self.individualManager.removeAll()
     }
     
     func processMetrics() {

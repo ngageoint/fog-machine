@@ -31,6 +31,7 @@
 		7579CB5F1CA1CEA2009A86F2 /* ViewshedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */; };
 		758885441C89F93D009AFB06 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885431C89F93D009AFB06 /* BoundingBox.swift */; };
 		758885461C8A116B009AFB06 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885451C8A116B009AFB06 /* Box.swift */; };
+		75A808831CA345430090792B /* SquarePerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A808821CA345430090792B /* SquarePerimeter.swift */; };
 		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
 		9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */; };
 		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
@@ -99,6 +100,7 @@
 		7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedMetrics.swift; sourceTree = "<group>"; };
 		758885431C89F93D009AFB06 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		758885451C8A116B009AFB06 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		75A808821CA345430090792B /* SquarePerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquarePerimeter.swift; sourceTree = "<group>"; };
 		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
 		8B12973A4FECB067D196E0B8 /* Pods-FogViewshed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.release.xcconfig"; sourceTree = "<group>"; };
 		9B09C7BE1C32F33400C08D7C /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 		E3CB97F61B7975BF006D6961 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				75A808821CA345430090792B /* SquarePerimeter.swift */,
 				758885431C89F93D009AFB06 /* BoundingBox.swift */,
 				758885451C8A116B009AFB06 /* Box.swift */,
 				753D3D621BEA7900004E3589 /* Cell.swift */,
@@ -527,6 +530,7 @@
 				7579CB5F1CA1CEA2009A86F2 /* ViewshedMetrics.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
+				75A808831CA345430090792B /* SquarePerimeter.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
 				9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */,

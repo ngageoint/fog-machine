@@ -47,8 +47,8 @@ public struct KreveldActiveBTree {
         self.fixAfterInsertion(z)
     }
     
-    private mutating func fixAfterInsertion(var xx: StatusEntry?) {
-        
+    private mutating func fixAfterInsertion(xx: StatusEntry?) {
+        var xx = xx
         while xx != nil &&  xx !== self.root && xx!.parent !== nil && xx!.parent!.flag == KreveldActiveBTree.FLAG_FALSE {
             let greatGreatLeft :StatusEntry? = self.leftOf(self.parentOf(self.parentOf(xx)))
             
@@ -313,8 +313,8 @@ public struct KreveldActiveBTree {
         }
     }
     
-    private mutating func fixAfterDeletion(var xx: StatusEntry?) {
-        
+    private mutating func fixAfterDeletion(xx: StatusEntry?) {
+        var xx = xx
         while (xx !== self.root && self.flagOf(xx) == KreveldActiveBTree.FLAG_TRUE) {
             if (xx === self.leftOf(self.parentOf(xx))) {
                 var sib: StatusEntry? = self.rightOf(self.parentOf(xx))

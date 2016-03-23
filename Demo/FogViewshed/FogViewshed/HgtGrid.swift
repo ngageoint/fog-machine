@@ -38,7 +38,7 @@ class HgtGrid: NSObject {
         if hgtFiles.count == 4 {
             newElevation = [[Int]](count:Srtm3.MAX_SIZE * 2, repeatedValue:[Int](count:Srtm3.MAX_SIZE * 2, repeatedValue:0))
             
-            for (var cell = 0; cell < numCells; cell+=1) {
+            for _ in 0 ..< numCells {
                 
                 if column < Srtm3.MAX_SIZE && row < Srtm3.MAX_SIZE {
                     newElevation[row][column] = hgtFiles[0].elevation[row][column]
@@ -53,11 +53,11 @@ class HgtGrid: NSObject {
                     newElevation[row][column] = hgtFiles[3].elevation[row - Srtm3.MAX_SIZE][column - Srtm3.MAX_SIZE]
                 }
                 
-                column++
+                column += 1
                 
                 if column >= Srtm3.MAX_SIZE * 2 {
                     column = 0
-                    row++
+                    row += 1
                 }
                 
                 if row >= Srtm3.MAX_SIZE * 2 {
@@ -71,7 +71,7 @@ class HgtGrid: NSObject {
                 // 1x2
                 newElevation = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE * 2, repeatedValue:0))
                 
-                for (var cell = 0; cell < numCells; cell+=1) {
+                for _ in 0 ..< numCells {
                     
                     if column < Srtm3.MAX_SIZE && row < Srtm3.MAX_SIZE {
                         newElevation[row][column] = hgtFiles[0].elevation[row][column]
@@ -80,11 +80,11 @@ class HgtGrid: NSObject {
                         newElevation[row][column] = hgtFiles[1].elevation[row][column - Srtm3.MAX_SIZE]
                     }
                     
-                    column++
+                    column += 1
                     
                     if column >= Srtm3.MAX_SIZE * 2 {
                         column = 0
-                        row++
+                        row += 1
                     }
                     
                     if row >= Srtm3.MAX_SIZE {
@@ -96,7 +96,7 @@ class HgtGrid: NSObject {
                 // 2x1
                 newElevation = [[Int]](count:Srtm3.MAX_SIZE * 2, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
                 
-                for (var cell = 0; cell < numCells; cell+=1) {
+                for _ in 0 ..< numCells {
                     
                     if column < Srtm3.MAX_SIZE && row < Srtm3.MAX_SIZE {
                         newElevation[row][column] = hgtFiles[0].elevation[row][column]
@@ -105,11 +105,11 @@ class HgtGrid: NSObject {
                         newElevation[row][column] = hgtFiles[1].elevation[row - Srtm3.MAX_SIZE][column]
                     }
                     
-                    column++
+                    column += 1
                     
                     if column >= Srtm3.MAX_SIZE {
                         column = 0
-                        row++
+                        row += 1
                     }
                     
                     if row >= Srtm3.MAX_SIZE * 2 {

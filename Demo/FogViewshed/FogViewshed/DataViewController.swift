@@ -35,7 +35,7 @@ MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, HgtDo
         self.mapView.delegate = self
         self.getHgtFiles()
         
-        let lpgr = UILongPressGestureRecognizer(target: self, action:"handleLongPress:")
+        let lpgr = UILongPressGestureRecognizer(target: self, action:#selector(DataViewController.handleLongPress(_:)))
         lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self

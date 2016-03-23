@@ -19,7 +19,8 @@ class KreveldViewshed {
     
     
     // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
-    private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], elevationMatrix: [[Int]], var observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
+    private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], elevationMatrix: [[Int]], observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
+        var observPt = observPt
         var viewshedMatrix = [[Int]](count:elevationMatrix.count, repeatedValue:[Int](count:elevationMatrix[0].count, repeatedValue:0))
         //let specifiedElevation = observPt.getHeight()
         
@@ -41,7 +42,7 @@ class KreveldViewshed {
         var dataCounter: Int = 0
         var isThisObserverPoint: Bool = true
         for (x, y) in cellsInRadius {
-            dataCounter++
+            dataCounter += 1
             let elevationAtXandYInt = elevationMatrix[x][y]
             
             
@@ -115,107 +116,6 @@ class KreveldViewshed {
         // should return the updated DEM data...
         return viewshedMatrix
     }
-    //Adopted from http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm#Java
-    internal func findLine(var x1: Int, var y1: Int, x2: Int, y2: Int) -> [(x:Int,y:Int)] {
-        
-        var results:[(x:Int,y:Int)] = []
-        let obsX = x1
-        let obsY = y1
-        
-        // delta of exact value and rounded value of the dependant variable
-        var d = 0;
-        
-        let dy = abs(y2 - y1);
-        let dx = abs(x2 - x1);
-        
-        let dy2 = (dy << 1); // slope scaling factors to avoid floating
-        let dx2 = (dx << 1); // point
-        
-        let ix = x1 < x2 ? 1 : -1; // increment direction
-        let iy = y1 < y2 ? 1 : -1;
-        
-        if (dy <= dx) {
-            for (;;) {
-                if (x1 != obsX || y1 != obsY) { // skip the observer point
-                    results.append((x1, y1))
-                }
-                if (x1 == x2) {
-                    break;
-                }
-                x1 += ix;
-                d += dy2;
-                if (d > dx) {
-                    y1 += iy;
-                    d -= dx2;
-                }
-            }
-        } else {
-            for (;;) {
-                if (x1 != obsX || y1 != obsY) { // skip the observer point
-                    results.append((x1, y1))
-                }
-                if (y1 == y2) {
-                    break;
-                }
-                y1 += iy;
-                d += dx2;
-                if (d > dy) {
-                    x1 += ix;
-                    d -= dy2;
-                }
-            }
-        }
-        return results
-    }
-    
-    
-    // Returns an array of tuple (x,y) for the perimeter of the region based on the observer point and the radius
-    // Supports single, double, or quadriple phones based on the number of quadrants (1, 2, or 4)
-    private func getAnySizedPerimeter(inX: Int, inY: Int, radius: Int, numberOfQuadrants: Int, whichQuadrant: Int) -> [(x:Int,y:Int)] {
-        //Perimeter goes clockwise from the lower left coordinate
-        var perimeter:[(x:Int, y:Int)] = []
-        //These can be combined into less for loops, but it's easier to debug when the
-        //perimeter goes clockwise from the lower left coordinate
-        
-        //lower left to top left
-        for(var a = inX - radius; a <= inX + radius; a++) {
-            perimeter.append((a, inY - radius))
-        }
-        //top left to top right (excludes corners)
-        for(var b = inY - radius + 1; b < inY + radius; b++) {
-            perimeter.append((inX + radius, b))
-        }
-        //top right to lower right
-        for(var a = inX + radius; a >= inX - radius; a--) {
-            perimeter.append((a, inY + radius))
-        }
-        //lower right to lower left (excludes corners)
-        for(var b = inY + radius - 1; b > inY - radius; b--) {
-            perimeter.append((inX - radius, b))
-        }
-        
-        let size = (radius * 2 + 1) * 4 - 4
-        let sectionSize = size / numberOfQuadrants
-        var startSection = sectionSize * (whichQuadrant - 1)
-        if whichQuadrant == 1 {
-            startSection = 0
-        }
-        var endSection = sectionSize * whichQuadrant
-        if endSection > size {
-            endSection = perimeter.count
-        }
-        
-        //print("numberOfQuadrants: \(numberOfQuadrants)  size: \(size) sectionSize: \(sectionSize) startSection: \(startSection) endSection: \(endSection) whichQuadrant: \(whichQuadrant)")
-        
-        var resultPerimeter: [(x:Int, y:Int)] = []
-        
-        for (; startSection < endSection; startSection++) {
-            resultPerimeter.append(perimeter[startSection])
-        }
-        
-        
-        return resultPerimeter
-    }
     
     // finds out all the elevation points with in the selected radius
     private func getCellsInRadius(observerX: Int, observerY: Int, radius: Int, numOfPeers: Int, quadrant2Calc:Int ) -> [(x:Int,y:Int)] {
@@ -223,8 +123,8 @@ class KreveldViewshed {
         
         // get all the points inside the radius (all 4 quadrants)
         if (numOfPeers == 1) {
-            for (var a = (observerX - radius); a <= (observerX + radius); a++) {
-                for (var b:Int = (observerY - radius); b <= (observerY + radius); b++) {
+            for a in (observerX - radius)...(observerX + radius) {
+                for b in (observerY - radius)...(observerY + radius) {
                     cellsInRadius.append((a, Int(b)))
                 }
             }
@@ -232,27 +132,27 @@ class KreveldViewshed {
             
             if (quadrant2Calc == 1) {
                 // left of observer - top left
-                for (var a = (observerX - radius); a <= observerX; a++) {
-                    for (var b:Int = (observerY - radius); b <= observerY; b++) {
+                for a in (observerX - radius)...observerX {
+                    for b in (observerY - radius)...observerY {
                         cellsInRadius.append((a, Int(b)))
                     }
                 }
                 // left of observer - bottom left
-                for (var b:Int = observerY; b <= (observerY + radius); b++) {
-                    for (var a = (observerX - radius); a <= observerX; a++) {
+                for b in observerY...(observerY + radius) {
+                    for a in (observerX - radius)...observerX {
                         cellsInRadius.append((b, Int(a)))
                     }
                 }
             } else if (quadrant2Calc == 2) {
                 //  right of observer - bottom right
-                for (var a = observerX; a <= (observerX + radius); a++) {
-                    for (var b:Int = observerY; b <= (observerY + radius); b++) {
+                for a in observerX...(observerX + radius) {
+                    for b in observerY...(observerY + radius) {
                         cellsInRadius.append((a, Int(b)))
                     }
                 }
                 //  right of observer - top right
-                for (var b:Int = observerY; b <= (observerY + radius); b++) {
-                    for (var a = (observerX - radius); a <= observerX; a++) {
+                for b in observerY...(observerY + radius) {
+                    for a in (observerX - radius)...observerX {
                         cellsInRadius.append((a, Int(b)))
                     }
                 }
@@ -260,29 +160,29 @@ class KreveldViewshed {
         } else if (numOfPeers == 4 ) {
             if (quadrant2Calc == 1) {
                 // left of observer - top left
-                for (var a = (observerX - radius); a <= observerX; a++) {
-                    for (var b:Int = (observerY - radius); b <= observerY; b++) {
+                for a in (observerX - radius)...observerX {
+                    for b in (observerY - radius)...observerY {
                         cellsInRadius.append((a, Int(b)))
                     }
                 }
             } else if (quadrant2Calc == 2) {
                 // left of observer - bottom left
-                for (var b:Int = observerY; b <= (observerY + radius); b++) {
-                    for (var a = (observerX - radius); a <= observerX; a++) {
+                for b in observerY...(observerY + radius) {
+                    for a in (observerX - radius)...observerX {
                         cellsInRadius.append((b, Int(a)))
                     }
                 }
             } else if (quadrant2Calc == 3) {
                 // right of observer - bottom right
-                for (var a = observerX; a <= (observerX + radius); a++) {
-                    for (var b:Int = observerY; b <= (observerY + radius); b++) {
+                for a in observerX...(observerX + radius) {
+                    for b in observerY...(observerY + radius) {
                         cellsInRadius.append((a, Int(b)))
                     }
                 }
             } else if (quadrant2Calc == 4) {
                 //  right of observer - top right
-                for (var b:Int = observerY; b <= (observerY + radius); b++) {
-                    for (var a = (observerX - radius); a <= observerX; a++) {
+                for b in observerY...(observerY + radius) {
+                    for a in (observerX - radius)...observerX {
                         cellsInRadius.append((a, Int(b)))
                     }
                 }
@@ -290,10 +190,10 @@ class KreveldViewshed {
         } else if (numOfPeers == 3 || numOfPeers >= 5 ) {
             
             if (quadrant2Calc >= 1) {
-                let perimeter:[(x:Int, y:Int)] = getAnySizedPerimeter(observerX, inY:observerY, radius: radius, numberOfQuadrants: numOfPeers, whichQuadrant: quadrant2Calc)
+                let perimeter:[(x:Int, y:Int)] = SquarePerimeter.getAnySizedPerimeter(observerX, inY:observerY, radius: radius, numberOfQuadrants: numOfPeers, whichQuadrant: quadrant2Calc)
                 
                 for (x, y) in perimeter {
-                    let pointsInLine:[(x:Int, y:Int)] = findLine(observerX, y1: observerY, x2: x, y2: y)
+                    let pointsInLine:[(x:Int, y:Int)] = Bresenham.findLine(observerX, y1: observerY, x2: x, y2: y)
                     cellsInRadius.appendContentsOf(pointsInLine)
                 }
             }
@@ -319,8 +219,7 @@ class KreveldViewshed {
             }
             let iterateCount: Int = xCoor + 1
             // TODO - verify & make sure its "less than or equal to"
-            for var i = iterateCount; i <= maxXcoor; i++ {
-               
+            for i in iterateCount ... maxXcoor {
                 let tmp:ElevationPoint = ElevationPoint(xCoord: i, yCoord: viewpoint.getYCoord(), h: elevationMatrix[i][viewpoint.getYCoord()])
                 elevPointOnline.append(tmp)
             }
@@ -331,7 +230,7 @@ class KreveldViewshed {
             }
             let iterateCount: Int = yCoor + 1
             // TODO - verify & make sure its "less than or equal to"
-            for var i = iterateCount; i <= maxYCoor; i++ {
+            for i in iterateCount ... maxYCoor {
                 let tmp:ElevationPoint = ElevationPoint(xCoord: viewpoint.getXCoord(), yCoord: i, h: elevationMatrix[viewpoint.getXCoord()][i])
                 //print("\t\(tmp.getXCoord())\t\(tmp.getYCoord())")
                 elevPointOnline.append(tmp)
@@ -344,7 +243,7 @@ class KreveldViewshed {
             }
             let iterateCount: Int = xCoor + 1
             // TODO - verify & make sure its "less than or equal to"
-            for var i = iterateCount; i <= maxXcoor; i++ {
+            for i in iterateCount ... maxXcoor {
                 let tmp:ElevationPoint = ElevationPoint(xCoord: i, yCoord: viewpoint.getYCoord(), h: elevationMatrix[i][viewpoint.getYCoord()])
                 elevPointOnline.append(tmp)
             }
@@ -437,21 +336,6 @@ class KreveldViewshed {
         return tmpRet
     }
     
-    // Returns the quadrant where (x,y) is
-    // x and y must be non-zero integers
-    // TODO : need to be done for the DEM matrix data
-    func getQuadrant(x: Int, y: Int, observX: Int, observY: Int) -> Int {
-        if (x <= observX && y <= observY) {
-            return 1
-        } else if (x > observX && y < observY) {
-            return 2
-        } else if (x < observX && y > observY) {
-            return 3
-        } else if (x >= observX && y >= observY) {
-            return 4
-        }
-        return 0 // This should never be reached
-    }
     
     func getCurrentMillis()->Int64{
         return  Int64(NSDate().timeIntervalSince1970 * 1000)

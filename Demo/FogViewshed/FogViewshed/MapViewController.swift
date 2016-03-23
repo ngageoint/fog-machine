@@ -44,7 +44,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         self.tabBarController!.delegate = self
         mapView.delegate = self
-        let gesture = UILongPressGestureRecognizer(target: self, action: "addAnnotationGesture:")
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotationGesture(_:)))
         gesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(gesture)
 
@@ -404,7 +404,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 let workDivision = self.getQuadrant(workerCount)
                 let currentQuadrant = workDivision[count]
                 let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
-                count++
+                count += 1
                 
                 return theWork
             },
@@ -539,7 +539,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     private func getQuadrant(numberOfWorkers: Int) -> [Int] {
         var quadrants:[Int] = []
         
-        for var count = 0; count < numberOfWorkers; count++ {
+        for count in 0 ..< numberOfWorkers {
             quadrants.append(count + 1)
         }
         
