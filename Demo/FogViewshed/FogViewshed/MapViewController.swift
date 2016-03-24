@@ -10,6 +10,13 @@ import UIKit
 import MapKit
 import Fog
 
+
+
+var viewshedMetrics = ViewshedMetrics()
+
+
+
+
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
     
@@ -25,7 +32,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
     var hasFogViewshedStarted = false
-    var metrics = ViewshedMetrics()
     
     private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
 
@@ -116,7 +122,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER * 2, Srtm3.DISPLAY_DIAMETER * 2)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
         mapView.setRegion(coordinateRegion, animated: true)
     }
    
@@ -359,8 +365,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 dispatch_async(dispatch_get_main_queue()) {
                     self.logBox.text = ""
                 }
-                self.metrics.initialize()
-                self.metrics.startOverall()
+                viewshedMetrics.initialize()
+                viewshedMetrics.startOverall()
                 ActivityIndicator.show("Calculating Viewshed")
                 dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
                     self.hasFogViewshedStarted = true
@@ -413,8 +419,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
                 let selfQuadrant = 1
                 let selfWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant, observer: observer)
-                let result = self.processWork(selfWork)
-                self.metrics.updateValue(result.metrics, forKey: Worker.getMe().displayName)
+                self.processWork(selfWork)
                 
                 if (workerCount < 2) {
                     //if no peers
@@ -430,35 +435,33 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func processWork(work: ViewshedWork) -> ViewshedResult {
-        let eventTime = Timer()
-        eventTime.startTimer()
-        let viewshedTime = Timer()
-        let overlayTime = Timer()
-        
-      
+        viewshedMetrics.startForMetric(Metric.WORK)
         self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-        viewshedTime.startTimer()
+
+        viewshedMetrics.startForMetric(Metric.VIEWSHED)
         self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-        viewshedTime.stopTimer()
+        viewshedMetrics.stopForMetric(Metric.VIEWSHED)
       
         //Uncomment if passing [[Int]]
         //let result = ViewshedResult(viewshedResult: self.viewshedResults)
         
         self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
         self.pinObserverLocation(work.getObserver())
-        overlayTime.startTimer()
+        
+        viewshedMetrics.startForMetric(Metric.OVERLAY)
         let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
         dispatch_async(dispatch_get_main_queue()) {
             self.mapView.addOverlay(viewshedOverlay)
         }
-        overlayTime.stopTimer()
+        viewshedMetrics.stopForMetric(Metric.OVERLAY)
         
         //Use if passing UIImage
         let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
-        eventTime.stopTimer()
-        result.metrics.updateValue(eventTime, forKey: Metric.WORK)
-        result.metrics.updateValue(viewshedTime, forKey: Metric.VIEWSHED)
-        result.metrics.updateValue(overlayTime, forKey: Metric.OVERLAY)
+        viewshedMetrics.stopForMetric(Metric.WORK)
+        
+        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+            result.metrics = deviceMetrics
+        }
         
         return result
     }
@@ -485,7 +488,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func setupFogViewshedEvents() {
         
         ConnectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
-                       self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
+            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
             
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
             let workData = object as! [String: NSData]
@@ -503,10 +506,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
-                    self.metrics.updateValue(result.metrics, forKey: fromPeerId.displayName)
+                    viewshedMetrics.updateValue(result.metrics, forKey: fromPeerId.displayName)
                     // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.printOut("\tResult recieved from \(fromPeerId.displayName).")
+                        self.printOut("\tResult received from \(fromPeerId.displayName).")
                         //   }
                         //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
                         
@@ -530,9 +533,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.printOut("Viewshed complete.")
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
-        self.metrics.stopOverall()
-        self.metrics.processMetrics()
-        self.printOut(self.metrics.getOutput())
+        viewshedMetrics.stopOverall()
+        viewshedMetrics.processMetrics()
+        self.printOut(viewshedMetrics.getOutput())
     }
     
     

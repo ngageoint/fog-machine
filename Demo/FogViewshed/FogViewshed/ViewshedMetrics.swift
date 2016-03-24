@@ -12,7 +12,7 @@ import Fog
 class ViewshedMetrics {
     
     // Used for storing the Metrics
-    var metrics: Metrics<String, Metrics<String, Timer>>
+    var storedMetrics: Metrics<String, Metrics<String, Timer>> // [Device Name: Metrics<Metric Name, Time>]
     var overall: Timer
     var devices: String
     
@@ -20,27 +20,46 @@ class ViewshedMetrics {
     var totalManager = [String: CFAbsoluteTime]() // [Metric Name : Time]
     var individualManager = [String: Metrics<String, CFAbsoluteTime>]() // [Metric Name: Metrics<Device Name, Time>]
     // Update the outputOrder with the order the metrics total/individual times will be displayed
-    let outputOrder = [Metric.VIEWSHED,
+    let outputOrder = [Metric.WORK,
+                       Metric.VIEWSHED,
                        Metric.OVERLAY,
                        Metric.Data.READING,
                        Metric.Data.SENDING,
                        Metric.Data.MERGING]
- 
+
     
     init() {
-        self.metrics = Metrics<String, Metrics<String, Timer>>()
+        self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
         self.overall = Timer()
         self.devices = "Device(s): \n"
     }
     
     
+    func initialize() {
+        self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
+        self.overall = Timer()
+        self.devices = "Device(s): \n"
+        self.totalManager.removeAll()
+        self.individualManager.removeAll()
+    }
+    
+    
     func updateValue(value: Metrics<String, Timer>, forKey key: String) {
-        metrics.updateValue(value, forKey: key)
+        guard let deviceMetrics = storedMetrics.getValue(key) else {
+            storedMetrics.updateValue(value, forKey: key)
+            return
+        }
+
+        for (event, timer) in value.getMetrics() {
+            deviceMetrics.updateValue(timer, forKey: event)
+        }
+        
+        storedMetrics.updateValue(deviceMetrics, forKey: key)
     }
     
     
     func removeValueForKey(key: String) {
-        metrics.removeValueForKey(key)
+        storedMetrics.removeValueForKey(key)
     }
     
     
@@ -54,27 +73,99 @@ class ViewshedMetrics {
     }
     
     
-    func initialize() {
-        self.metrics = Metrics<String, Metrics<String, Timer>>()
-        self.overall = Timer()
-        self.devices = "Device(s): \n"
-        self.totalManager.removeAll()
-        self.individualManager.removeAll()
+    func startForMetric(metric: String) {
+        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+            //add new
+            let newMetric = Metrics<String, Timer>()
+            let timer = Timer()
+            timer.startTimer()
+            newMetric.updateValue(timer, forKey: metric)
+            storedMetrics.updateValue(newMetric, forKey: Worker.getMe().displayName)
+            return
+        }
+
+        let timer = Timer()
+        timer.startTimer()
+        deviceMetrics.updateValue(timer, forKey: metric)
+        storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
     }
     
+    
+    func stopForMetric(metric: String) {
+        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+            return
+        }
+        
+        if let timer = deviceMetrics.getValue(metric) {
+            timer.stopTimer()
+            deviceMetrics.updateValue(timer, forKey: metric)
+            storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
+        }
+    }
+    
+    
+//    func getMetric(metric: String) -> Timer? {
+//        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+//            return nil
+//        }
+//        
+//        return deviceMetrics.getValue(metric)
+//    }
+    
+    
+//    func stopAndAddToMetric(metric: String) {
+//        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+//            return
+//        }
+//        
+//        if let timer = deviceMetrics.getValue(metric) {
+//            timer.stopTimer()
+//            print("\(metric): \(timer.getElapsed())")
+//            deviceMetrics.updateValue(timer, forKey: metric)
+//            storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
+//        }
+//    }
+    
+    
     func processMetrics() {
-        for (device, metric) in metrics.getMetrics() {
+        for (device, deviceMetrics) in storedMetrics.getMetrics() {
             devices += "\t\t\(device)\n"
-            for (event, timer) in metric.getMetrics() {
+            for (event, timer) in deviceMetrics.getMetrics() {
                 addToTotal(event, value: timer.getElapsed())
                 addToIndividual(event, metricKey: device, metricValue: timer.getElapsed())
             }
         }
     }
+
     
-    
-    func addToTotal(key: String, value: CFAbsoluteTime) {
+    func getOutput() -> String {
+        var output = "\n"
+        output += devices
         
+        for key in outputOrder {
+            output += getTotalTimeForKey(key)
+            output += getIndividualTimesForKey(key)
+        }
+
+        output += getOverallTime()
+        output += "\n"
+
+        return output
+    }
+    
+    
+    func getMetricsForDevice(device: String) -> Metrics<String, Timer>? {
+        guard let deviceMetrics = storedMetrics.getValue(device) else {
+            return nil
+        }
+        return deviceMetrics
+    }
+    
+    
+    // MARK: Private Functions
+    
+    
+    private func addToTotal(key: String, value: CFAbsoluteTime) {
         guard let oldValue = totalManager[key] else {
             totalManager.updateValue(value, forKey: key)
             return
@@ -83,9 +174,9 @@ class ViewshedMetrics {
         let newValue = value + oldValue
         totalManager.updateValue(newValue, forKey: key)
     }
-
     
-    func addToIndividual(key: String, metricKey: String, metricValue: CFAbsoluteTime) {
+    
+    private func addToIndividual(key: String, metricKey: String, metricValue: CFAbsoluteTime) {
         guard let updateValue = individualManager[key] else {
             let newValue = Metrics<String, CFAbsoluteTime>()
             newValue.updateValue(metricValue, forKey: metricKey)
@@ -96,26 +187,6 @@ class ViewshedMetrics {
         updateValue.updateValue(metricValue, forKey: metricKey)
         individualManager.updateValue(updateValue, forKey: key)
     }
-    
-    
-    func getOutput() -> String {
-        var output = "\n"
-        output += devices
-        output += getTotalTimeForKey(Metric.WORK)
-        
-        for key in outputOrder {
-            output += getTotalTimeForKey(key)
-            output += getIndividualTimesForKey(key)
-        }
-
-        output += getOverallTime()
-        output += "\n"
-        
-        return output
-    }
-    
-    
-    // MARK: Private Functions
     
     
     private func getOverallTime() -> String {
@@ -141,7 +212,7 @@ class ViewshedMetrics {
 
     
     private func getIndividualTimesForKey(key: String) -> String {
-        guard let value = individualManager[key] else {
+        guard let individualMetrics = individualManager[key] else {
             return ""
         }
         guard let totalValue = totalManager[key] else {
@@ -150,8 +221,8 @@ class ViewshedMetrics {
         
         var output = ""
 
-        for (device, time) in value.getMetrics() {
-            output = "\t\t\(device): \(formatTime(time)) seconds  ("
+        for (device, time) in individualMetrics.getMetrics() {
+            output += "\t\t\(device): \(formatTime(time)) seconds  ("
             output += self.getPercentage(time, total: totalValue)
             output += " of \(key))\n"
         }

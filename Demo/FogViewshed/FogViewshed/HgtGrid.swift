@@ -29,7 +29,6 @@ class HgtGrid: NSObject {
     
     // Supports generating 1x1, 2x2, 2x1, or 1x2 elevation
     private func generateElevation() -> [[Int]] {
-        
         var newElevation = [[Int]]()
         var row = 0
         var column = 0

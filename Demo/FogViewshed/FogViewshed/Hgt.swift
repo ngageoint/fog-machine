@@ -20,6 +20,7 @@ class Hgt: NSObject {
     // Data voids are assigned the value -32768 and are ignored (no special processing is done)
     // SRTM3 files contain 1201 lines and 1201 samples
     lazy var elevation: [[Int]] = {
+        viewshedMetrics.startForMetric(Metric.Data.READING)
         var path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
         let url = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(self.filenameWithExtension)
         let data = NSData(contentsOfURL: url)!
@@ -47,7 +48,7 @@ class Hgt: NSObject {
                 break
             }
         }
-        
+        viewshedMetrics.stopForMetric(Metric.Data.READING)
         return elevationMatrix
     }()
     

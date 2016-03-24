@@ -18,6 +18,11 @@ public class Metrics<K: Hashable, V> {
         self.metrics = [K: V]()
     }
     
+    
+    public func getValue(key: K) -> V? {
+        return metrics[key]
+    }
+    
     public func updateValue(value: V, forKey: K) {
         metrics.updateValue(value, forKey: forKey)
     }
