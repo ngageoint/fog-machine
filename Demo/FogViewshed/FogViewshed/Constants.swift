@@ -79,4 +79,12 @@ struct Metric {
         static let SENDING = "Data Sending"
         static let MERGING = "Data Merging"
     }
+
+    // Update with the order the metrics will be displayed
+    static let OUTPUT_ORDER = [Metric.WORK,
+                               Metric.VIEWSHED,
+                               Metric.OVERLAY,
+                               Metric.Data.READING,
+                               Metric.Data.SENDING,
+                               Metric.Data.MERGING]
 }

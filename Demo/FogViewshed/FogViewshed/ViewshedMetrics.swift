@@ -19,13 +19,6 @@ class ViewshedMetrics {
     // Used for processing the Metrics
     var totalManager = [String: CFAbsoluteTime]() // [Metric Name : Time]
     var individualManager = [String: Metrics<String, CFAbsoluteTime>]() // [Metric Name: Metrics<Device Name, Time>]
-    // Update the outputOrder with the order the metrics total/individual times will be displayed
-    let outputOrder = [Metric.WORK,
-                       Metric.VIEWSHED,
-                       Metric.OVERLAY,
-                       Metric.Data.READING,
-                       Metric.Data.SENDING,
-                       Metric.Data.MERGING]
 
     
     init() {
@@ -142,7 +135,7 @@ class ViewshedMetrics {
         var output = "\n"
         output += devices
         
-        for key in outputOrder {
+        for key in Metric.OUTPUT_ORDER {
             output += getTotalTimeForKey(key)
             output += getIndividualTimesForKey(key)
         }
