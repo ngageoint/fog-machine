@@ -95,30 +95,7 @@ class ViewshedMetrics {
             storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
         }
     }
-    
-    
-//    func getMetric(metric: String) -> Timer? {
-//        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
-//            return nil
-//        }
-//        
-//        return deviceMetrics.getValue(metric)
-//    }
-    
-    
-//    func stopAndAddToMetric(metric: String) {
-//        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
-//            return
-//        }
-//        
-//        if let timer = deviceMetrics.getValue(metric) {
-//            timer.stopTimer()
-//            print("\(metric): \(timer.getElapsed())")
-//            deviceMetrics.updateValue(timer, forKey: metric)
-//            storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
-//        }
-//    }
-    
+
     
     func processMetrics() {
         for (device, deviceMetrics) in storedMetrics.getMetrics() {
@@ -134,10 +111,16 @@ class ViewshedMetrics {
     func getOutput() -> String {
         var output = "\n"
         output += devices
+        output += "\n"
         
         for key in Metric.OUTPUT_ORDER {
-            output += getTotalTimeForKey(key)
-            output += getIndividualTimesForKey(key)
+            var metricOutput = ""
+            metricOutput += getTotalTimeForKey(key)
+            metricOutput += getIndividualTimesForKey(key)
+            if metricOutput != "" {
+                output += metricOutput
+                output += "\n"
+            }
         }
 
         output += getOverallTime()
@@ -156,7 +139,7 @@ class ViewshedMetrics {
     
     
     // MARK: Private Functions
-    
+
     
     private func addToTotal(key: String, value: CFAbsoluteTime) {
         guard let oldValue = totalManager[key] else {
@@ -196,7 +179,7 @@ class ViewshedMetrics {
             return ""
         }
         
-        var output = "\t\(key)\t\(formatTime(value)) seconds ("
+        var output = "\t\(key):\n\t\t\t\(formatTime(value))s ("
         output += getPercentage(value, total: self.overall.getElapsed())
         output += " of Overall Time)\n"
         
@@ -215,7 +198,7 @@ class ViewshedMetrics {
         var output = ""
 
         for (device, time) in individualMetrics.getMetrics() {
-            output += "\t\t\(device): \(formatTime(time)) seconds  ("
+            output += "\t\t\(device):\n\t\t\t\(formatTime(time))s ("
             output += self.getPercentage(time, total: totalValue)
             output += " of \(key))\n"
         }

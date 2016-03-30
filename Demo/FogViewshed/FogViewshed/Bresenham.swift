@@ -74,8 +74,6 @@ class Bresenham: NSObject {
             }
         }
         
-        //dump(results)
-        
         return results
     }
     

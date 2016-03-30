@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import Fog
 
 struct FogViewshed {
     static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
@@ -27,6 +27,7 @@ struct FogViewshed {
     static let LONGITUDE = "longitude"
     
     static let ENTITY = "Observer"
+    static let METRICS = "ViewshedMetrics"
 }
 
 //SRTM = Shuttle Radar Topography Mission sampled at three arc-seconds
@@ -70,21 +71,24 @@ struct Srtm {
 
 
 struct Metric {
-    static let WORK = "Process Work"
+    static let WORK = "Process Everything"
     static let VIEWSHED = "Process Viewshed"
     static let OVERLAY = "Add Overlay"
-    
+    static let SETUP_PALETTE = "Setup Palette"
     struct Data {
-        static let READING = "Data Reading"
+        static let READING = "Data Reading for one HGT"
         static let SENDING = "Data Sending"
-        static let MERGING = "Data Merging"
+        static let MERGING = "Data Merging for all HGT"
     }
 
     // Update with the order the metrics will be displayed
     static let OUTPUT_ORDER = [Metric.WORK,
+                               Metric.SETUP_PALETTE,
                                Metric.VIEWSHED,
                                Metric.OVERLAY,
                                Metric.Data.READING,
                                Metric.Data.SENDING,
-                               Metric.Data.MERGING]
+                               Metric.Data.MERGING,
+                               Fog.Metric.SEND,
+                               Fog.Metric.RECEIVE]
 }

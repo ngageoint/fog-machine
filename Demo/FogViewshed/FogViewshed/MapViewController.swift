@@ -365,6 +365,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 dispatch_async(dispatch_get_main_queue()) {
                     self.logBox.text = ""
                 }
+                fogMetrics.initialize()
                 viewshedMetrics.initialize()
                 viewshedMetrics.startOverall()
                 ActivityIndicator.show("Calculating Viewshed")
@@ -460,7 +461,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         viewshedMetrics.stopForMetric(Metric.WORK)
         
         if let deviceMetrics = viewshedMetrics.getMetricsForDevice(Worker.getMe().displayName) {
-            result.metrics = deviceMetrics
+            result.addViewshedMetrics(deviceMetrics)
         }
         
         return result
@@ -470,8 +471,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
         
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
+        viewshedMetrics.startForMetric(Metric.SETUP_PALETTE)
         self.viewshedPalette.setupNewPalette(observer)
-        
+        viewshedMetrics.stopForMetric(Metric.SETUP_PALETTE)
         if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
             self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
@@ -506,7 +508,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
-                    viewshedMetrics.updateValue(result.metrics, forKey: fromPeerId.displayName)
+                    viewshedMetrics.updateValue(result.getViewshedMetrics(), forKey: fromPeerId.displayName)
                     // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.printOut("\tResult received from \(fromPeerId.displayName).")
@@ -534,6 +536,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
         viewshedMetrics.stopOverall()
+        if let fogValue = fogMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+            viewshedMetrics.updateValue(fogValue, forKey: Worker.getMe().displayName)
+        }
         viewshedMetrics.processMetrics()
         self.printOut(viewshedMetrics.getOutput())
     }

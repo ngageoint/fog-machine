@@ -11,10 +11,10 @@ import Foundation
 
 public class Work: MPCSerializable {
     
-    public var metrics = Metrics<String, Timer>()
+    var serializedFogMetrics = Metrics<String, Timer>()
     
     public var mpcSerialized : NSData {
-        let metricsData = encodeDictionary(metrics)
+        let metricsData = encodeDictionary(gatherGlobalFogMetrics())
         let result = NSKeyedArchiver.archivedDataWithRootObject([
             Fog.METRICS: metricsData])
         
@@ -28,7 +28,8 @@ public class Work: MPCSerializable {
     
     public required init (mpcSerialized: NSData) {
         let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        metrics = decodeDictionary(workData[Fog.METRICS] as! NSData)
+        serializedFogMetrics = decodeDictionary(workData[Fog.METRICS] as! NSData)
+        fogMetrics.mergeValueWithExisting(serializedFogMetrics)
     }
     
     
@@ -62,18 +63,27 @@ public class Work: MPCSerializable {
             print(error)
         }
         
-//        do {
-//            if let response:NSDictionary = try NSJSONSerialization.JSONObjectWithData(json, options:NSJSONReadingOptions.MutableContainers) as? Dictionary<String, Timer> {
-//                decoded = response as! [String: Timer]
-//                dump(decoded)
-//            } else {
-//                print("Failed...")
-//            }
-//        } catch let serializationError as NSError {
-//            print(serializationError)
-//        }
-        
         return decoded
+    }
+
+    
+    public func gatherGlobalFogMetrics() -> Metrics<String, Timer> {
+        if let newMetrics = fogMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+            self.addFogMetrics(newMetrics)
+        }
+        return serializedFogMetrics
+    }
+    
+    
+    public func getFogMetrics() -> Metrics<String, Timer> {
+        return serializedFogMetrics
+    }
+        
+    
+    func addFogMetrics(newMetrics: Metrics<String, Timer>) {
+        for (key, time) in newMetrics.getMetrics() {
+            serializedFogMetrics.updateValue(time, forKey: key)
+        }
     }
     
 }

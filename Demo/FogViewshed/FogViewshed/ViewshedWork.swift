@@ -27,7 +27,7 @@ class ViewshedWork: Work {
     
     
     override var mpcSerialized : NSData {
-        let metricsData = encodeDictionary(metrics)
+        let fogMetricsData = encodeDictionary(gatherGlobalFogMetrics())
         let result = NSKeyedArchiver.archivedDataWithRootObject(
             [FogViewshed.NUMBER_OF_QUADRANTS: numberOfQuadrants,
                 FogViewshed.WHICH_QUADRANT: whichQuadrant,
@@ -40,7 +40,7 @@ class ViewshedWork: Work {
                 FogViewshed.LATITUDE: latitude,
                 FogViewshed.LONGITUDE: longitude,
                 FogViewshed.ALGORITHM: algorithm,
-                Fog.METRICS: metricsData])
+                Fog.METRICS: fogMetricsData])
         
         return result
     }
