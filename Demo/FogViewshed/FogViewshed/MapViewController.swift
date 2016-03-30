@@ -13,7 +13,7 @@ import Fog
 
 
 var viewshedMetrics = ViewshedMetrics()
-
+let enableDisplayOfMetrics = false
 
 
 
@@ -540,7 +540,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             viewshedMetrics.updateValue(fogValue, forKey: Worker.getMe().displayName)
         }
         viewshedMetrics.processMetrics()
-        self.printOut(viewshedMetrics.getOutput())
+        if enableDisplayOfMetrics {
+            self.printOut(viewshedMetrics.getOutput())
+        }
     }
     
     
