@@ -11,7 +11,7 @@ import PeerKit
 import MultipeerConnectivity
 
 
-public var fogMetrics = FogMetrics()
+public var fogMetrics = MetricManager()
 
 
 public struct ConnectionManager {
