@@ -88,7 +88,7 @@ public struct ConnectionManager {
     public static func processResult(event: String, responseEvent: String, sender: String, object: [String: MPCSerializable], responseMethod: () -> (), completeMethod: () -> ()) {
         //dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
         dispatch_barrier_async(self.serialQueue) {
-            fogMetrics.startForMetric(Fog.Metric.RECEIVE)
+            fogMetrics.startForMetric(Fog.Metric.RECEIVE, deviceName: sender)
             responseMethod()
             printOut("processResult from \(sender)")
             receiptAssurance.updateForReceipt(responseEvent, receiver: sender)
@@ -105,7 +105,7 @@ public struct ConnectionManager {
             } else {
                 printOut("Not done and no timeouts yet.")
             }
-            fogMetrics.stopForMetric(Fog.Metric.RECEIVE)
+            fogMetrics.stopForMetric(Fog.Metric.RECEIVE, deviceName: sender)
          //   }
         }
     }
@@ -155,16 +155,17 @@ public struct ConnectionManager {
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
-            fogMetrics.startForMetric(Fog.Metric.SEND)
             for peer in peers {
+                fogMetrics.startForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
                 let theWork = workForPeer(allWorkers.count)
+                theWork.workerName = peer.displayName
                 
                 receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
                 
                 self.sendEventTo(event, object: [event: theWork], sendTo: peer.displayName)
                 log(peer.displayName)
+                fogMetrics.stopForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
             }
-            fogMetrics.stopForMetric(Fog.Metric.SEND)
         }
         receiptAssurance.startTimer(event, timeoutSeconds: timeoutSeconds)
     }

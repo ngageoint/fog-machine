@@ -12,10 +12,12 @@ import Foundation
 public class Work: MPCSerializable {
     
     var serializedFogMetrics = Metrics<String, Timer>()
+    var workerName: String = Worker.getMe().displayName
     
     public var mpcSerialized : NSData {
         let metricsData = encodeDictionary(gatherGlobalFogMetrics())
         let result = NSKeyedArchiver.archivedDataWithRootObject([
+            Fog.WORKER_NAME: workerName,
             Fog.METRICS: metricsData])
         
         return result
@@ -29,7 +31,8 @@ public class Work: MPCSerializable {
     public required init (mpcSerialized: NSData) {
         let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
         serializedFogMetrics = decodeDictionary(workData[Fog.METRICS] as! NSData)
-        fogMetrics.mergeValueWithExisting(serializedFogMetrics)
+        workerName = workData[Fog.WORKER_NAME] as! String
+        fogMetrics.mergeValueWithExisting(serializedFogMetrics, deviceName: workerName)
     }
     
     
@@ -68,7 +71,7 @@ public class Work: MPCSerializable {
 
     
     public func gatherGlobalFogMetrics() -> Metrics<String, Timer> {
-        if let newMetrics = fogMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+        if let newMetrics = fogMetrics.getMetricsForDevice(workerName) {
             self.addFogMetrics(newMetrics)
         }
         return serializedFogMetrics
@@ -79,6 +82,9 @@ public class Work: MPCSerializable {
         return serializedFogMetrics
     }
         
+    public func getWorkerName() -> String {
+        return workerName
+    }
     
     func addFogMetrics(newMetrics: Metrics<String, Timer>) {
         for (key, time) in newMetrics.getMetrics() {

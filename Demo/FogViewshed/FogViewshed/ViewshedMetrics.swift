@@ -37,6 +37,13 @@ class ViewshedMetrics {
     }
     
     
+    func addMetrics(newMetrics: Metrics<String, Metrics<String, Timer>>) {
+        for (key, value) in newMetrics.getMetrics() {
+            updateValue(value, forKey: key)
+        }
+    }
+    
+    
     func updateValue(value: Metrics<String, Timer>, forKey key: String) {
         guard let deviceMetrics = storedMetrics.getValue(key) else {
             storedMetrics.updateValue(value, forKey: key)

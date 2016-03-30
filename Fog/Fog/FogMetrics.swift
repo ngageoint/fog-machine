@@ -46,40 +46,40 @@ public class FogMetrics {
     }
     
     
-    func startForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+    func startForMetric(metric: String, deviceName: String) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
             //add new
             let newMetric = Metrics<String, Timer>()
             let timer = Timer()
             timer.startTimer()
             newMetric.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(newMetric, forKey: Worker.getMe().displayName)
+            storedMetrics.updateValue(newMetric, forKey: deviceName)
             return
         }
         
         let timer = Timer()
         timer.startTimer()
         deviceMetrics.updateValue(timer, forKey: metric)
-        storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
+        storedMetrics.updateValue(deviceMetrics, forKey: deviceName)
     }
     
     
-    func stopForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+    func stopForMetric(metric: String, deviceName: String) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
             return
         }
         
         if let timer = deviceMetrics.getValue(metric) {
             timer.stopTimer()
             deviceMetrics.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
+            storedMetrics.updateValue(deviceMetrics, forKey: deviceName)
         }
     }
     
     
-    func mergeValueWithExisting(newMetrics: Metrics<String, Timer>) {
-        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
-            self.updateValue(newMetrics, forKey: Worker.getMe().displayName)
+    func mergeValueWithExisting(newMetrics: Metrics<String, Timer>, deviceName: String) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
+            self.updateValue(newMetrics, forKey: deviceName)
             return
         }
         
@@ -105,7 +105,7 @@ public class FogMetrics {
             }
         }
         
-        self.updateValue(newMergedValues, forKey: Worker.getMe().displayName)
+        self.updateValue(newMergedValues, forKey: deviceName)
     }
     
     
@@ -122,6 +122,11 @@ public class FogMetrics {
             return nil
         }
         return deviceMetrics
+    }
+    
+    
+    public func getMetrics() -> Metrics<String, Metrics<String, Timer>> {
+        return storedMetrics
     }
     
 }

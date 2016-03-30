@@ -536,9 +536,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
         viewshedMetrics.stopOverall()
-        if let fogValue = fogMetrics.getMetricsForDevice(Worker.getMe().displayName) {
-            viewshedMetrics.updateValue(fogValue, forKey: Worker.getMe().displayName)
-        }
+        viewshedMetrics.addMetrics(fogMetrics.getMetrics())
         viewshedMetrics.processMetrics()
         if enableDisplayOfMetrics {
             self.printOut(viewshedMetrics.getOutput())
