@@ -18,8 +18,8 @@ public struct Fog {
     public static let METRICS = "FogMetrics"
     
     public struct Metric {
-        public static let SEND = "Fog Prepare Send"
-        public static let RECEIVE = "Fog Handle One Receive"
+        public static let SEND = "Fog Send Work"
+        public static let RECEIVE = "Fog Handle Result"
         
         // Update with the order the metrics will be displayed
         static let OUTPUT_ORDER = [Fog.Metric.SEND,

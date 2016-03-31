@@ -94,7 +94,7 @@ public struct ConnectionManager {
             receiptAssurance.updateForReceipt(responseEvent, receiver: sender)
             
           //  dispatch_async(dispatch_get_main_queue()) {
-
+            fogMetrics.stopForMetric(Fog.Metric.RECEIVE, deviceName: sender)
             if receiptAssurance.checkAllReceived(responseEvent) {
                 printOut("Running completeMethod()")
                 completeMethod()
@@ -105,7 +105,7 @@ public struct ConnectionManager {
             } else {
                 printOut("Not done and no timeouts yet.")
             }
-            fogMetrics.stopForMetric(Fog.Metric.RECEIVE, deviceName: sender)
+            
          //   }
         }
     }

@@ -471,9 +471,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
         
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
-        viewshedMetrics.startForMetric(Metric.SETUP_PALETTE)
         self.viewshedPalette.setupNewPalette(observer)
-        viewshedMetrics.stopForMetric(Metric.SETUP_PALETTE)
         if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
             self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
