@@ -1,33 +1,44 @@
 //
-//  FogMetrics.swift
+//  MetricManager.swift
 //  Fog
 //
-//  Created by Chris Wasko on 3/24/16.
+//  Created by Chris Wasko on 3/30/16.
 //  Copyright © 2016 NGA. All rights reserved.
 //
 
 import Foundation
 
 
-public class FogMetrics {
+public class MetricManager {
     
-    // Used for storing the Metrics
-    var storedMetrics: Metrics<String, Metrics<String, Timer>> // [Device Name: Metrics<Metric Name, Time>]
-    var devices: String
+
+    public var storedMetrics: Metrics<String, Metrics<String, Timer>> // [Device Name: Metrics<Metric Name, Time>]
+    public var overall: Timer
+    public var devices: String
+
     
-    init() {
+    public init() {
         self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
+        self.overall = Timer()
         self.devices = "Device(s): \n"
     }
     
     
     public func initialize() {
         self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
+        self.overall = Timer()
         self.devices = "Device(s): \n"
     }
     
     
-    func updateValue(value: Metrics<String, Timer>, forKey key: String) {
+    public func addMetrics(newMetrics: Metrics<String, Metrics<String, Timer>>) {
+        for (key, value) in newMetrics.getMetrics() {
+            updateValue(value, forKey: key)
+        }
+    }
+    
+    
+    public func updateValue(value: Metrics<String, Timer>, forKey key: String) {
         guard let deviceMetrics = storedMetrics.getValue(key) else {
             storedMetrics.updateValue(value, forKey: key)
             return
@@ -41,45 +52,68 @@ public class FogMetrics {
     }
     
     
-    func removeValueForKey(key: String) {
+    public func removeValueForKey(key: String) {
         storedMetrics.removeValueForKey(key)
     }
     
     
-    func startForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
+    public func startOverall() {
+        overall.startTimer()
+    }
+    
+    
+    public func stopOverall() {
+        overall.stopTimer()
+    }
+    
+    
+    public func startForMetric(metric: String, deviceName: String = ConnectionManager.selfNode().displayName) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
             //add new
             let newMetric = Metrics<String, Timer>()
             let timer = Timer()
             timer.startTimer()
             newMetric.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(newMetric, forKey: ConnectionManager.selfNode().displayName)
+            storedMetrics.updateValue(newMetric, forKey: deviceName)
             return
         }
         
         let timer = Timer()
         timer.startTimer()
         deviceMetrics.updateValue(timer, forKey: metric)
-        storedMetrics.updateValue(deviceMetrics, forKey: ConnectionManager.selfNode().displayName)
+        storedMetrics.updateValue(deviceMetrics, forKey: deviceName)
     }
     
     
-    func stopForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
+    public func stopForMetric(metric: String, deviceName: String = ConnectionManager.selfNode().displayName) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
             return
         }
         
         if let timer = deviceMetrics.getValue(metric) {
             timer.stopTimer()
             deviceMetrics.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(deviceMetrics, forKey: ConnectionManager.selfNode().displayName)
+            storedMetrics.updateValue(deviceMetrics, forKey: deviceName)
         }
     }
     
     
-    func mergeValueWithExisting(newMetrics: Metrics<String, Timer>) {
-        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
-            self.updateValue(newMetrics, forKey: ConnectionManager.selfNode().displayName)
+    public func getMetricsForDevice(device: String) -> Metrics<String, Timer>? {
+        guard let deviceMetrics = storedMetrics.getValue(device) else {
+            return nil
+        }
+        return deviceMetrics
+    }
+    
+    
+    public func getMetrics() -> Metrics<String, Metrics<String, Timer>> {
+        return storedMetrics
+    }
+    
+    
+    public func mergeValueWithExisting(newMetrics: Metrics<String, Timer>, deviceName: String) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
+            self.updateValue(newMetrics, forKey: deviceName)
             return
         }
         
@@ -105,23 +139,7 @@ public class FogMetrics {
             }
         }
         
-        self.updateValue(newMergedValues, forKey: ConnectionManager.selfNode().displayName)
-    }
-    
-    
-    func getValueForMetric(device: String, metric: String) -> Timer? {
-        guard let deviceMetrics = storedMetrics.getValue(device) else {
-            return nil
-        }
-        return deviceMetrics.getValue(metric)
-    }
-    
-    
-    public func getMetricsForDevice(device: String) -> Metrics<String, Timer>? {
-        guard let deviceMetrics = storedMetrics.getValue(device) else {
-            return nil
-        }
-        return deviceMetrics
+        self.updateValue(newMergedValues, forKey: deviceName)
     }
     
 }

@@ -71,24 +71,20 @@ struct Srtm {
 
 
 struct Metric {
-    static let WORK = "Process Everything"
-    static let VIEWSHED = "Process Viewshed"
-    static let OVERLAY = "Add Overlay"
-    static let SETUP_PALETTE = "Setup Palette"
+    static let WORK = "1: Work Processed"
+    static let VIEWSHED = "1.1: Process Viewshed"
+    static let OVERLAY = "1.2: Process Overlay"
     struct Data {
-        static let READING = "Data Reading for one HGT"
-        static let SENDING = "Data Sending"
-        static let MERGING = "Data Merging for all HGT"
+        static let READING = "1.1.1: Loading single HGT"
+        static let MERGING = "1.1.2: Merging all HGT(s)"
     }
 
     // Update with the order the metrics will be displayed
     static let OUTPUT_ORDER = [Metric.WORK,
-                               Metric.SETUP_PALETTE,
                                Metric.VIEWSHED,
-                               Metric.OVERLAY,
                                Metric.Data.READING,
-                               Metric.Data.SENDING,
                                Metric.Data.MERGING,
+                               Metric.OVERLAY,
                                Fog.Metric.SEND,
                                Fog.Metric.RECEIVE]
 }

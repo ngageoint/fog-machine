@@ -26,6 +26,7 @@ class ViewshedResult: Work {
         let result = NSKeyedArchiver.archivedDataWithRootObject(
             [FogViewshed.VIEWSHED_RESULT: viewshedResult,
                 FogViewshed.METRICS: viewshedMetricsData,
+                Fog.WORKER_NAME: getWorkerName(),
                 Fog.METRICS: fogMetricsData])
 
         return result

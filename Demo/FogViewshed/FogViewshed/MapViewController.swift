@@ -19,10 +19,10 @@ let enableDisplayOfMetrics = true
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
-    
+
     // MARK: Class Variables
-    
-    
+
+
     var allObservers = [ObserverEntity]()
     var model = ObserverFacade()
     var settingsObserver = Observer() //Only use for segue from ObserverSettings
@@ -32,22 +32,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
     var hasFogViewshedStarted = false
-    
+
     private let serialQueue = dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_SERIAL)
 
-    
+
     // MARK: IBOutlets
 
-    
+
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     @IBOutlet weak var logBox: UITextView!
     @IBOutlet weak var mapViewProportionalHeight: NSLayoutConstraint!
-    
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.tabBarController!.delegate = self
         mapView.delegate = self
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotationGesture(_:)))
@@ -57,7 +57,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         isLogShown = false
         logBox.text = "Connected to \(ConnectionManager.allPeerNodes().count) peers.\n"
         logBox.editable = false
-        
+
         allObservers = model.getObservers()
         displayObservations()
         displayDataRegions()
@@ -70,17 +70,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         setupFogViewshedEvents()
     }
-    
-    
+
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
+
+
     // MARK: - TabBarController Delegates
-    
-    
+
+
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
@@ -88,11 +88,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             displayDataRegions()
         }
     }
-    
-    
+
+
     // MARK: Location Delegate Methods
-    
-    
+
+
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
             self.locationManager.startUpdatingLocation()
@@ -100,10 +100,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.mapView.showsUserLocation = true
         }
     }
-    
-    
+
+
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
+
         if (self.isInitialAuthorizationCheck) {
             let location = locations.last
             let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
@@ -114,19 +114,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.locationManager.stopUpdatingLocation()
         }
     }
-    
-    
+
+
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error: " + error.localizedDescription)
     }
-    
-    
+
+
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
         mapView.setRegion(coordinateRegion, animated: true)
     }
-   
-    
+
+
     func locationManagerSettings() {
         if (self.locationManager == nil) {
             self.locationManager = CLLocationManager()
@@ -146,22 +146,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.mapView.setRegion(region, animated: true)
         }
     }
-    
-    
+
+
     // MARK: - Display Manipulations
-    
-    
+
+
     func displayObservations() {
         for entity in allObservers {
             pinObserverLocation(entity.getObserver())
         }
     }
-    
-    
+
+
     func displayDataRegions() {
         if !isDataRegionDrawn {
             let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-            
+
             do {
                 let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
                 let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
@@ -176,8 +176,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             isDataRegionDrawn = true
         }
     }
-    
-    
+
+
     func removeDataRegions() {
         var dataRegionOverlays = [MKOverlay]()
         for overlay in mapView.overlays {
@@ -185,22 +185,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 dataRegionOverlays.append(overlay)
             }
         }
-        
+
         if dataRegionOverlays.count > 0 {
             mapView.removeOverlays(dataRegionOverlays)
             isDataRegionDrawn = false
         }
     }
-    
-    
+
+
     func pinObserverLocation(observer: Observer) {
         let dropPin = MKPointAnnotation()
         dropPin.coordinate = observer.getObserverLocation()
         dropPin.title = observer.name
         mapView.addAnnotation(dropPin)
     }
-    
-    
+
+
     func addAnnotationGesture(gestureRecognizer: UIGestureRecognizer) {
         if gestureRecognizer.state == UIGestureRecognizerState.Began {
             let touchPoint = gestureRecognizer.locationInView(mapView)
@@ -225,7 +225,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
 
-    
+
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var polygonView:MKPolygonRenderer? = nil
         if overlay is MKPolygon {
@@ -243,16 +243,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         } else if overlay is ViewshedOverlay {
             let imageToUse = (overlay as! ViewshedOverlay).image
             let overlayView = ViewshedOverlayView(overlay: overlay, overlayImage: imageToUse)
-            
+
             return overlayView
         }
-        
+
         return polygonView!
     }
-    
-    
+
+
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        
+
         var view:MKPinAnnotationView? = nil
         let identifier = "pin"
         if (annotation is MKUserLocation) {
@@ -267,19 +267,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view!.canShowCallout = true
             view!.calloutOffset = CGPoint(x: -5, y: 5)
-            
+
             let image = UIImage(named: "Viewshed")
             let button = UIButton(type: UIButtonType.DetailDisclosure)
             button.setImage(image, forState: UIControlState.Normal)
-            
+
             view!.leftCalloutAccessoryView = button as UIView
             view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIView
         }
-        
+
         return view
     }
-    
-    
+
+
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if let selectedObserver = retrieveObserver((view.annotation?.coordinate)!) {
             if control == view.rightCalloutAccessoryView {
@@ -291,8 +291,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             print("Observer not found for \((view.annotation?.coordinate)!)")
         }
     }
-    
-    
+
+
     func changeMultiplier(constraint: NSLayoutConstraint, multiplier: CGFloat) -> NSLayoutConstraint {
         let newConstraint = NSLayoutConstraint(
             item: constraint.firstItem,
@@ -302,33 +302,33 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             attribute: constraint.secondAttribute,
             multiplier: multiplier,
             constant: constraint.constant)
-        
+
         newConstraint.priority = constraint.priority
-        
+
         NSLayoutConstraint.deactivateConstraints([constraint])
         NSLayoutConstraint.activateConstraints([newConstraint])
-        
+
         return newConstraint
     }
-    
-    
+
+
     func setMapLogDisplay() {
         guard let isLogShown = self.isLogShown else {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
             return
         }
-        
+
         if isLogShown {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.7)
         } else {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
         }
     }
-    
-    
+
+
     func retrieveObserver(coordinate: CLLocationCoordinate2D) -> ObserverEntity? {
         var foundObserver: ObserverEntity? = nil
-        
+
         for observer in allObservers
         {
             if coordinate.latitude == observer.latitude && coordinate.longitude == observer.longitude {
@@ -338,28 +338,28 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         return foundObserver
     }
-    
-    
+
+
     func removeAllFromMap() {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
         isDataRegionDrawn = false
     }
-    
-    
+
+
     func redrawMap() {
         allObservers = model.getObservers()
         removeAllFromMap()
         displayObservations()
         displayDataRegions()
     }
-    
-    
+
+
     // MARK: - Fog Viewshed
-    
-    
+
+
     func initiateFogViewshed(observer: Observer) {
-        
+
         if !self.hasFogViewshedStarted {
             if (self.viewshedPalette.isViewshedPossible(observer)) {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -377,7 +377,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             } else {
                 let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
                 let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-                
+
                 let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
                     // Do noting for cancel
                 }
@@ -389,7 +389,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         } else {
             let message = "Fog Viewshed is being calculated.\n\nPlease wait for the viewshed to finish before starting another viewshed."
             let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-            
+
             let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
                 // Do nothing for cancel
             }
@@ -399,29 +399,29 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
     }
-    
-    
+
+
     func startFogViewshed(observer: Observer) {
         printOut("Beginning viewshed on \(ConnectionManager.selfNode().displayName)")
-        
+
         var count = 1 //Start at one since initiator is 0-indexed
-        
+
         ConnectionManager.sendEventToAll(Event.StartViewshed.rawValue,
             workForPeer: { workerCount in
                 let workDivision = self.getQuadrant(workerCount)
                 let currentQuadrant = workDivision[count]
                 let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
                 count += 1
-                
+
                 return theWork
             },
             workForSelf: { workerCount in
                 self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-                
+
                 let selfQuadrant = 1
                 let selfWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant, observer: observer)
                 self.processWork(selfWork)
-                
+
                 if (workerCount < 2) {
                     //if no peers
                     self.completeViewshed()
@@ -433,8 +433,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         )
     }
-    
-    
+
+
     func processWork(work: ViewshedWork) -> ViewshedResult {
         viewshedMetrics.startForMetric(Metric.WORK)
         self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
@@ -442,38 +442,36 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         viewshedMetrics.startForMetric(Metric.VIEWSHED)
         self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
         viewshedMetrics.stopForMetric(Metric.VIEWSHED)
-      
+
         //Uncomment if passing [[Int]]
         //let result = ViewshedResult(viewshedResult: self.viewshedResults)
-        
+
         self.printOut("\tDisplay result locally on \(ConnectionManager.selfNode().displayName)")
         self.pinObserverLocation(work.getObserver())
-        
+
         viewshedMetrics.startForMetric(Metric.OVERLAY)
         let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
         dispatch_async(dispatch_get_main_queue()) {
             self.mapView.addOverlay(viewshedOverlay)
         }
         viewshedMetrics.stopForMetric(Metric.OVERLAY)
-        
+
         //Use if passing UIImage
         let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
         viewshedMetrics.stopForMetric(Metric.WORK)
-        
+
         if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
             result.addViewshedMetrics(deviceMetrics)
         }
-        
+
         return result
     }
-    
-    
+
+
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
-        
+
         printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
-        viewshedMetrics.startForMetric(Metric.SETUP_PALETTE)
         self.viewshedPalette.setupNewPalette(observer)
-        viewshedMetrics.stopForMetric(Metric.SETUP_PALETTE)
         if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
             self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
@@ -482,30 +480,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: observer.elevation)
             self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
         }
-        
+
         printOut("\tFinished Viewshed Processing on \(observer.name).")
     }
-    
-    
+
+
     func setupFogViewshedEvents() {
-        
+
         ConnectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
             self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(ConnectionManager.selfNode().displayName) to \(fromPeerId.displayName)")
-            
+
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
             let workData = object as! [String: NSData]
             let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
-        
+
             let result = self.processWork(work)
-            
+
             ConnectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
         }
-        
+
         ConnectionManager.onEvent(Event.SendViewshedResult.rawValue) { fromPeerId, object in
-            
+
             var workData = object as! [NSString: NSData]
             let result = ViewshedResult(mpcSerialized: workData[Event.SendViewshedResult.rawValue]!)
-            
+
             ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
                     viewshedMetrics.updateValue(result.getViewshedMetrics(), forKey: fromPeerId.displayName)
@@ -514,7 +512,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                         self.printOut("\tResult received from \(fromPeerId.displayName).")
                         //   }
                         //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-                        
+
                         let viewshedOverlay = self.viewshedPalette.generateOverlay(result.viewshedResult)
                         self.mapView.addOverlay(viewshedOverlay)
                     }
@@ -527,39 +525,37 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             })
             //}
         }
-        
+
     }
-    
-    
+
+
     func completeViewshed() {
         self.printOut("Viewshed complete.")
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
         viewshedMetrics.stopOverall()
-        if let fogValue = fogMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
-            viewshedMetrics.updateValue(fogValue, forKey: ConnectionManager.selfNode().displayName)
-        }
+        viewshedMetrics.addMetrics(fogMetrics.getMetrics())
         viewshedMetrics.processMetrics()
         if enableDisplayOfMetrics {
             self.printOut(viewshedMetrics.getOutput())
         }
     }
-    
-    
+
+
     private func getQuadrant(numberOfWorkers: Int) -> [Int] {
         var quadrants:[Int] = []
-        
+
         for count in 0 ..< numberOfWorkers {
             quadrants.append(count + 1)
         }
-        
+
         return quadrants
     }
-    
-    
+
+
     // MARK: - IBActions
-    
-    
+
+
     @IBAction func mapTypeChanged(sender: AnyObject) {
         let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
         switch (mapType!) {
@@ -571,16 +567,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.mapType = MKMapType.Satellite
         }
     }
-    
-    
+
+
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
         locationManagerSettings()
     }
-    
-    
+
+
     // MARK: Segue
-    
-    
+
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "observerSettings" {
             let navController = segue.destinationViewController as! UINavigationController
@@ -592,46 +588,46 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             viewController.isLogShown = self.isLogShown
         }
     }
-    
-    
+
+
     @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         removeDataRegions()
         isDataRegionDrawn = false
         displayDataRegions()
     }
-    
-    
+
+
     @IBAction func applyOptions(segue: UIStoryboardSegue) {
-        
+
     }
-    
-    
+
+
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         redrawMap()
         self.logBox.text = "Connected to \(ConnectionManager.allPeerNodes().count) peers.\n"
     }
-    
-    
+
+
     @IBAction func removePinFromSettings(segue: UIStoryboardSegue) {
         redrawMap()
     }
-    
-    
+
+
     @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         model.clearEntity()
         redrawMap()
     }
-    
-    
+
+
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
         redrawMap()
         self.initiateFogViewshed(self.settingsObserver)
     }
-    
-    
+
+
     @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {
         if segue.sourceViewController.isKindOfClass(ObserverSettingsViewController) {
             allObservers = model.getObservers()
@@ -639,15 +635,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             displayObservations()
         }
     }
-    
-    
+
+
     // MARK: Verification
-    
-    
+
+
     func verifyBoundBox(observer: Observer) {
         let boundingBox = BoundingBox()
         let box = boundingBox.getBoundingBox(observer)
-        
+
         var points = [
             box.lowerLeft,
             box.upperLeft,
@@ -657,11 +653,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
         self.mapView.addOverlay(polygonOverlay)
     }
-    
-    
+
+
     // MARK: Logging/Printing
-    
-    
+
+
     func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
             let range = NSMakeRange(0, (output as NSString).length)
@@ -674,6 +670,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
     }
-    
-    
+
+
 }

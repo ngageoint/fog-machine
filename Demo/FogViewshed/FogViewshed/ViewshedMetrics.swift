@@ -9,93 +9,20 @@
 import Foundation
 import Fog
 
-class ViewshedMetrics {
+class ViewshedMetrics: MetricManager {
     
-    // Used for storing the Metrics
-    var storedMetrics: Metrics<String, Metrics<String, Timer>> // [Device Name: Metrics<Metric Name, Time>]
-    var overall: Timer
-    var devices: String
     
     // Used for processing the Metrics
     var totalManager = [String: CFAbsoluteTime]() // [Metric Name : Time]
     var individualManager = [String: Metrics<String, CFAbsoluteTime>]() // [Metric Name: Metrics<Device Name, Time>]
 
     
-    init() {
-        self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
-        self.overall = Timer()
-        self.devices = "Device(s): \n"
-    }
-    
-    
-    func initialize() {
-        self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
-        self.overall = Timer()
-        self.devices = "Device(s): \n"
+    override func initialize() {
+        super.initialize()
         self.totalManager.removeAll()
         self.individualManager.removeAll()
     }
     
-    
-    func updateValue(value: Metrics<String, Timer>, forKey key: String) {
-        guard let deviceMetrics = storedMetrics.getValue(key) else {
-            storedMetrics.updateValue(value, forKey: key)
-            return
-        }
-
-        for (event, timer) in value.getMetrics() {
-            deviceMetrics.updateValue(timer, forKey: event)
-        }
-        
-        storedMetrics.updateValue(deviceMetrics, forKey: key)
-    }
-    
-    
-    func removeValueForKey(key: String) {
-        storedMetrics.removeValueForKey(key)
-    }
-    
-    
-    func startOverall() {
-        overall.startTimer()
-    }
-    
-    
-    func stopOverall() {
-        overall.stopTimer()
-    }
-    
-    
-    func startForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
-            //add new
-            let newMetric = Metrics<String, Timer>()
-            let timer = Timer()
-            timer.startTimer()
-            newMetric.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(newMetric, forKey: ConnectionManager.selfNode().displayName)
-            return
-        }
-
-        let timer = Timer()
-        timer.startTimer()
-        deviceMetrics.updateValue(timer, forKey: metric)
-        storedMetrics.updateValue(deviceMetrics, forKey: ConnectionManager.selfNode().displayName)
-    }
-    
-    
-    func stopForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
-            return
-        }
-        
-        if let timer = deviceMetrics.getValue(metric) {
-            timer.stopTimer()
-            deviceMetrics.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(deviceMetrics, forKey: ConnectionManager.selfNode().displayName)
-        }
-    }
-
     
     func processMetrics() {
         for (device, deviceMetrics) in storedMetrics.getMetrics() {
@@ -110,8 +37,10 @@ class ViewshedMetrics {
     
     func getOutput() -> String {
         var output = "\n"
-        output += devices
+        output += self.devices
         output += "\n"
+        output += getOverallTime()
+        output += "\n\nStep Breakdown:\n"
         
         for key in Metric.OUTPUT_ORDER {
             var metricOutput = ""
@@ -123,22 +52,13 @@ class ViewshedMetrics {
             }
         }
 
-        output += getOverallTime()
         output += "\n"
 
         return output
     }
     
     
-    func getMetricsForDevice(device: String) -> Metrics<String, Timer>? {
-        guard let deviceMetrics = storedMetrics.getValue(device) else {
-            return nil
-        }
-        return deviceMetrics
-    }
-    
-    
-    // MARK: Private Functions
+    // MARK: Process - Private Functions
 
     
     private func addToTotal(key: String, value: CFAbsoluteTime) {
@@ -166,9 +86,9 @@ class ViewshedMetrics {
     
     
     private func getOverallTime() -> String {
-        var output = "Total Overall Time: "
+        var output = "Total Time: "
         output += formatTime(self.overall.getElapsed())
-        output += " seconds"
+        output += "s"
 
         return output
     }
@@ -181,7 +101,7 @@ class ViewshedMetrics {
         
         var output = "\t\(key):\n\t\t\t\(formatTime(value))s ("
         output += getPercentage(value, total: self.overall.getElapsed())
-        output += " of Overall Time)\n"
+        output += " of Total Time)\n"
         
         return output
     }
@@ -196,11 +116,15 @@ class ViewshedMetrics {
         }
         
         var output = ""
-
+        var printableKey = key
+        let parsedKey = key.componentsSeparatedByString(": ")
+        if parsedKey.count >= 2 {
+            printableKey = parsedKey[1]
+        }
         for (device, time) in individualMetrics.getMetrics() {
             output += "\t\t\(device):\n\t\t\t\(formatTime(time))s ("
             output += self.getPercentage(time, total: totalValue)
-            output += " of \(key))\n"
+            output += " of \(printableKey))\n"
         }
 
         return output

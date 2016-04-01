@@ -14,11 +14,12 @@ public struct Fog {
     // It must be a unique string, at most 15 characters long
     // Note: Devices will only connect to other devices with the same serviceType value.
     static let SERVICE_TYPE = "fog-machine"
+    public static let WORKER_NAME = "WorkerName"
     public static let METRICS = "FogMetrics"
     
     public struct Metric {
-        public static let SEND = "Fog Prepare Send"
-        public static let RECEIVE = "Fog Handle One Receive"
+        public static let SEND = "Fog Send Work"
+        public static let RECEIVE = "Fog Handle Result"
         
         // Update with the order the metrics will be displayed
         static let OUTPUT_ORDER = [Fog.Metric.SEND,

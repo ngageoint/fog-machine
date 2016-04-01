@@ -40,6 +40,7 @@ class ViewshedWork: Work {
                 FogViewshed.LATITUDE: latitude,
                 FogViewshed.LONGITUDE: longitude,
                 FogViewshed.ALGORITHM: algorithm,
+                Fog.WORKER_NAME: getWorkerName(),
                 Fog.METRICS: fogMetricsData])
         
         return result
