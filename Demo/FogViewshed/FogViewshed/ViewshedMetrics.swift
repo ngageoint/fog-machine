@@ -67,32 +67,32 @@ class ViewshedMetrics {
     
     
     func startForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
             //add new
             let newMetric = Metrics<String, Timer>()
             let timer = Timer()
             timer.startTimer()
             newMetric.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(newMetric, forKey: Worker.getMe().displayName)
+            storedMetrics.updateValue(newMetric, forKey: ConnectionManager.selfNode().displayName)
             return
         }
 
         let timer = Timer()
         timer.startTimer()
         deviceMetrics.updateValue(timer, forKey: metric)
-        storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
+        storedMetrics.updateValue(deviceMetrics, forKey: ConnectionManager.selfNode().displayName)
     }
     
     
     func stopForMetric(metric: String) {
-        guard let deviceMetrics = storedMetrics.getValue(Worker.getMe().displayName) else {
+        guard let deviceMetrics = storedMetrics.getValue(ConnectionManager.selfNode().displayName) else {
             return
         }
         
         if let timer = deviceMetrics.getValue(metric) {
             timer.stopTimer()
             deviceMetrics.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(deviceMetrics, forKey: Worker.getMe().displayName)
+            storedMetrics.updateValue(deviceMetrics, forKey: ConnectionManager.selfNode().displayName)
         }
     }
 

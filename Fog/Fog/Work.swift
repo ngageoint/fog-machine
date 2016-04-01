@@ -68,7 +68,7 @@ public class Work: MPCSerializable {
 
     
     public func gatherGlobalFogMetrics() -> Metrics<String, Timer> {
-        if let newMetrics = fogMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+        if let newMetrics = fogMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
             self.addFogMetrics(newMetrics)
         }
         return serializedFogMetrics

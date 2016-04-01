@@ -13,29 +13,42 @@ import MultipeerConnectivity
 
 public var fogMetrics = FogMetrics()
 
-
-public struct ConnectionManager {
+public class ConnectionManager {
     
-
-    static private let serialQueue = dispatch_queue_create("mil.nga.magic.fog", DISPATCH_QUEUE_SERIAL)
-    static private var receiptAssurance = ReceiptAssurance(sender: Worker.getMe().displayName)
-    
+    static private let serialQueue = dispatch_queue_create("mil.nga.giat.fogmachine", DISPATCH_QUEUE_SERIAL)
+    static private var receiptAssurance = ReceiptAssurance(sender: ConnectionManager.selfPeerID().displayName)
     
     // MARK: Properties
     
+    private static func selfPeerID() -> MCPeerID {
+        return PeerKit.masterSession.myPeerId
+    }
     
-    private static var peers: [MCPeerID] {
+    public static func selfNode() -> Node {
+        return Node(uniqueId: PeerKit.myName.componentsSeparatedByString(PeerKit.delimiter)[1], displayName: PeerKit.myName.componentsSeparatedByString(PeerKit.delimiter)[0])
+    }
+
+    private static func allPeerIDs() -> [MCPeerID] {
         return PeerKit.masterSession.allConnectedPeers() ?? []
     }
     
-    public static var otherWorkers: [Worker] {
-        return peers.map { Worker(peer: $0) }
+    public static func allPeerNodes() -> [Node] {
+        var nodes: [Node] = []
+        for peerId in ConnectionManager.allPeerIDs() {
+            nodes.append(Node(uniqueId: peerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[1], displayName: peerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[0]))
+        }
+        return nodes
     }
     
-    public static var allWorkers: [Worker] {
-        return [Worker.getMe()] + otherWorkers
+    public static func allNodes() -> [Node] {
+        var nodes: [Node] = []
+        nodes.append(ConnectionManager.selfNode())
+        nodes += allPeerNodes()
+        nodes.sortInPlace { (obj1, obj2) -> Bool in
+            return obj1.uniqueId < obj2.uniqueId
+        }
+        return nodes
     }
-    
     
     // MARK: Start
     
@@ -120,7 +133,7 @@ public struct ConnectionManager {
             }
         }
         
-        for peer in peers {
+        for peer in ConnectionManager.allPeerIDs() {
             if peer.displayName == sendTo {
                 let toPeer:[MCPeerID] = [peer]
 
@@ -131,33 +144,16 @@ public struct ConnectionManager {
 
     }
     
-    
-//    static func sendEventToPeer<T: Work>(event: Event, willThrottle: Bool = false, workForPeer: (count: Int) -> (T), workForSelf: (Int) -> (), log: (String) -> (), selectedWorkersCount: Int, selectedPeers: Array<String>) { //, peerName: String) {
-//        
-//        workForSelf(selectedWorkersCount)
-//        // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
-//        // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
-//        dispatch_barrier_async(self.serialQueue) {
-//            for peerName in selectedPeers {
-//                //if peer.displayName == peerName {
-//                hasReceivedResponse[Worker.getMe().displayName] = [event.rawValue:[peerName: false]]
-//                let theWork = workForPeer(count: selectedWorkersCount)
-//                self.sendEventTo(event, willThrottle: willThrottle, object: [event.rawValue: theWork], sendTo: peerName)
-//                log(peerName)
-//            }
-//        }
-//    }
-    
     public static func sendEventToAll<T: Work>(event: String, timeoutSeconds: Double = 30.0, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> ()) {
         
-        workForSelf(allWorkers.count)
+        workForSelf(ConnectionManager.allNodes().count)
         
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
             fogMetrics.startForMetric(Fog.Metric.SEND)
-            for peer in peers {
-                let theWork = workForPeer(allWorkers.count)
+            for peer in ConnectionManager.allPeerIDs() {
+                let theWork = workForPeer(ConnectionManager.allNodes().count)
                 
                 receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
                 
@@ -196,7 +192,7 @@ public struct ConnectionManager {
     
     
     public static func sendEventForEach(event: String, objectBlock: () -> ([String: MPCSerializable])) {
-        for peer in peers {
+        for peer in ConnectionManager.allPeerIDs() {
             sendEvent(event, object: objectBlock(), toPeers: [peer])
         }
     }

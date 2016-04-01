@@ -17,7 +17,7 @@ class ViewshedResult: Work {
     var serializedViewshedMetrics = Metrics<String, Timer>()
     
     override var mpcSerialized : NSData {
-        if let newMetrics = viewshedMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+        if let newMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
             self.addViewshedMetrics(newMetrics)
         }
 

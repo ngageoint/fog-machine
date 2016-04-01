@@ -13,7 +13,7 @@ import Fog
 
 
 var viewshedMetrics = ViewshedMetrics()
-let enableDisplayOfMetrics = false
+let enableDisplayOfMetrics = true
 
 
 
@@ -33,7 +33,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var isDataRegionDrawn = false
     var hasFogViewshedStarted = false
     
-    private let serialQueue = dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_SERIAL)
+    private let serialQueue = dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_SERIAL)
 
     
     // MARK: IBOutlets
@@ -55,7 +55,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.addGestureRecognizer(gesture)
 
         isLogShown = false
-        logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
+        logBox.text = "Connected to \(ConnectionManager.allPeerNodes().count) peers.\n"
         logBox.editable = false
         
         allObservers = model.getObservers()
@@ -402,7 +402,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func startFogViewshed(observer: Observer) {
-        printOut("Beginning viewshed on \(Worker.getMe().displayName)")
+        printOut("Beginning viewshed on \(ConnectionManager.selfNode().displayName)")
         
         var count = 1 //Start at one since initiator is 0-indexed
         
@@ -446,7 +446,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //Uncomment if passing [[Int]]
         //let result = ViewshedResult(viewshedResult: self.viewshedResults)
         
-        self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
+        self.printOut("\tDisplay result locally on \(ConnectionManager.selfNode().displayName)")
         self.pinObserverLocation(work.getObserver())
         
         viewshedMetrics.startForMetric(Metric.OVERLAY)
@@ -460,7 +460,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
         viewshedMetrics.stopForMetric(Metric.WORK)
         
-        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(Worker.getMe().displayName) {
+        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
             result.addViewshedMetrics(deviceMetrics)
         }
         
@@ -490,7 +490,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func setupFogViewshedEvents() {
         
         ConnectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
-            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(Worker.getMe().displayName) to \(fromPeerId.displayName)")
+            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(ConnectionManager.selfNode().displayName) to \(fromPeerId.displayName)")
             
             self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
             let workData = object as! [String: NSData]
@@ -509,7 +509,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
                     viewshedMetrics.updateValue(result.getViewshedMetrics(), forKey: fromPeerId.displayName)
-                    // dispatch_barrier_async(dispatch_queue_create("mil.nga.magic.fog.results", DISPATCH_QUEUE_CONCURRENT)) {
+                    // dispatch_barrier_async(dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_CONCURRENT)) {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.printOut("\tResult received from \(fromPeerId.displayName).")
                         //   }
@@ -536,8 +536,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.hasFogViewshedStarted = false
         ActivityIndicator.hide(success: true, animated: true)
         viewshedMetrics.stopOverall()
-        if let fogValue = fogMetrics.getMetricsForDevice(Worker.getMe().displayName) {
-            viewshedMetrics.updateValue(fogValue, forKey: Worker.getMe().displayName)
+        if let fogValue = fogMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
+            viewshedMetrics.updateValue(fogValue, forKey: ConnectionManager.selfNode().displayName)
         }
         viewshedMetrics.processMetrics()
         if enableDisplayOfMetrics {
@@ -610,7 +610,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         redrawMap()
-        self.logBox.text = "Connected to \(ConnectionManager.otherWorkers.count) peers.\n"
+        self.logBox.text = "Connected to \(ConnectionManager.allPeerNodes().count) peers.\n"
     }
     
     

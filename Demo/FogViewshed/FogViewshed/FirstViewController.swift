@@ -52,7 +52,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //print("tableView->ConnectionManager.allWorkers.count : \(ConnectionManager.allWorkers.count)")
-        return ConnectionManager.allWorkers.count
+        return ConnectionManager.allNodes().count
     }
     
     
@@ -128,13 +128,11 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:ConnectionCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell") as! ConnectionCell
         // set cell label
-        if indexPath.row < ConnectionManager.allWorkers.count {
-            let range = NSMakeRange(0, (ConnectionManager.allWorkers[indexPath.row].displayName as NSString).length)
-            if let regex = try? NSRegularExpression(pattern: "😺[0-9]*", options: .CaseInsensitive) {
-                let printableOutput = regex.stringByReplacingMatchesInString(ConnectionManager.allWorkers[indexPath.row].displayName, options: .WithTransparentBounds, range: range, withTemplate: "")
-                cell.label.text = printableOutput
-            }
+        if indexPath.row < ConnectionManager.allNodes().count {
+            let node:Node = ConnectionManager.allNodes()[indexPath.row]
+            cell.label.text = node.displayName + " " + node.uniqueId;
         }
+        
         return cell
     }
     
@@ -152,7 +150,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     
     func updateWorkers() {
-        if (ConnectionManager.otherWorkers.count > 0) {
+        if (ConnectionManager.allPeerNodes().count > 0) {
             self.statusLabel.text = "Connected peers:"
         } else {
             self.statusLabel.text = "Searching for Fog Machines..."
