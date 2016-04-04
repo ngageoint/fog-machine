@@ -145,26 +145,37 @@ public class ConnectionManager {
         
     }
     
-    public static func sendEventToAll<T: Work>(event: String, timeoutSeconds: Double = 30.0, workForPeer: (Int) -> (T), workForSelf: (Int) -> (), log: (String) -> ()) {
-        
-        workForSelf(ConnectionManager.allNodes().count)
+    
+    public static func sendEventToAll<T: Work>(event: String, timeoutSeconds: Double = 30.0,
+                                      workDivider: (currentQuadrant: Int, numberOfQuadrants: Int) -> (T),
+                                      workForSelf: (selfWork: T, hasPeers: Bool) -> (),
+                                      log: (peerName: String) -> () ) {
+        var hasPeers = false
+        var deviceCounter = 1
+        let selfWork = workDivider(currentQuadrant: allNodes().count, numberOfQuadrants: deviceCounter)
+        receiptAssurance.add(selfNode().displayName, event: event, work: selfWork, timeoutSeconds: timeoutSeconds)
         
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
         dispatch_barrier_async(self.serialQueue) {
             for peer in allPeerIDs() {
+                hasPeers = true
+                deviceCounter = deviceCounter + 1
                 fogMetrics.startForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
-                let theWork = workForPeer(allNodes().count)
+                let theWork = workDivider(currentQuadrant: allNodes().count, numberOfQuadrants: deviceCounter)
                 theWork.workerName = peer.displayName
                 
                 receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
                 
                 self.sendEventTo(event, object: [event: theWork], sendTo: peer.displayName)
-                log(peer.displayName)
+                log(peerName: peer.displayName)
                 fogMetrics.stopForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
             }
         }
         receiptAssurance.startTimer(event, timeoutSeconds: timeoutSeconds)
+        
+        workForSelf(selfWork: selfWork, hasPeers: hasPeers)
+        receiptAssurance.updateForReceipt(event, receiver: selfNode().displayName)
     }
     
     

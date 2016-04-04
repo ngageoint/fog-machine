@@ -65,8 +65,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
         locationManagerSettings()
         if allObservers.count > 0 {
-            //Center on the last observer
-            self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
+            mapView.showAnnotations(mapView.annotations, animated: true)
         }
         setupFogViewshedEvents()
     }
@@ -120,13 +119,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         print("Error: " + error.localizedDescription)
     }
 
-
-    func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-
-
+    
     func locationManagerSettings() {
         if (self.locationManager == nil) {
             self.locationManager = CLLocationManager()
@@ -403,30 +396,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func startFogViewshed(observer: Observer) {
         printOut("Beginning viewshed on \(ConnectionManager.selfNode().displayName)")
-
-        var count = 1 //Start at one since initiator is 0-indexed
-
+       
         ConnectionManager.sendEventToAll(Event.StartViewshed.rawValue,
-            workForPeer: { workerCount in
-                let workDivision = self.getQuadrant(workerCount)
-                let currentQuadrant = workDivision[count]
-                let theWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: currentQuadrant, observer: observer)
-                count += 1
-
+            workDivider: { currentQuadrant, numberOfQuadrants in
+                let theWork = ViewshedWork(numberOfQuadrants: numberOfQuadrants, whichQuadrant: currentQuadrant, observer: observer)
                 return theWork
             },
-            workForSelf: { workerCount in
-                self.printOut("\tBeginning viewshed locally for 1 from \(workerCount)")
-
-                let selfQuadrant = 1
-                let selfWork = ViewshedWork(numberOfQuadrants: workerCount, whichQuadrant: selfQuadrant, observer: observer)
-                self.processWork(selfWork)
-
-                if (workerCount < 2) {
-                    //if no peers
+            workForSelf: { selfWork, hasPeers in
+                self.printOut("\tBeginning viewshed locally for selfWork")
+                if let selfViewshedWork = selfWork as? ViewshedWork {
+                    self.processWork(selfViewshedWork)
+                }
+                
+                if !hasPeers {
                     self.completeViewshed()
                 }
-                self.printOut("\tFound results locally out of \(workerCount).")
+                self.printOut("\tFound results locally for selfWork.")
             },
             log: { peerName in
                 self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
@@ -447,7 +432,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //let result = ViewshedResult(viewshedResult: self.viewshedResults)
 
         self.printOut("\tDisplay result locally on \(ConnectionManager.selfNode().displayName)")
-        self.pinObserverLocation(work.getObserver())
 
         viewshedMetrics.startForMetric(Metric.OVERLAY)
         let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
@@ -495,6 +479,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
 
             let result = self.processWork(work)
+            self.pinObserverLocation(work.getObserver())
 
             ConnectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
         }
@@ -539,17 +524,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if enableDisplayOfMetrics {
             self.printOut(viewshedMetrics.getOutput())
         }
-    }
-
-
-    private func getQuadrant(numberOfWorkers: Int) -> [Int] {
-        var quadrants:[Int] = []
-
-        for count in 0 ..< numberOfWorkers {
-            quadrants.append(count + 1)
-        }
-
-        return quadrants
     }
 
 
@@ -660,6 +634,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
+            print(output)
             self.logBox.text = self.logBox.text + "\n" + output
         }
     }
