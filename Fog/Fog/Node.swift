@@ -1,3 +1,6 @@
+import PeerKit
+import MultipeerConnectivity
+
 public class Node : Hashable, Equatable {
     
     // MARK: Properties
@@ -7,6 +10,16 @@ public class Node : Hashable, Equatable {
     init(uniqueId:String, displayName:String) {
         self.displayName = displayName
         self.uniqueId = uniqueId
+    }
+    
+    convenience init(mcPeerId: MCPeerID) {
+        self.init(uniqueId: mcPeerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[1],
+                  displayName: mcPeerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[0])
+    }
+    
+    convenience init(uniquePeerKitName: String) {
+        self.init(uniqueId: uniquePeerKitName.componentsSeparatedByString(PeerKit.delimiter)[1],
+                  displayName: uniquePeerKitName.componentsSeparatedByString(PeerKit.delimiter)[0])
     }
     
     public var hashValue: Int { return uniqueId.hash }

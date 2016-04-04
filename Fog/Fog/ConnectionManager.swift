@@ -17,7 +17,7 @@ public class ConnectionManager {
     }
     
     public static func selfNode() -> Node {
-        return Node(uniqueId: PeerKit.myName.componentsSeparatedByString(PeerKit.delimiter)[1], displayName: PeerKit.myName.componentsSeparatedByString(PeerKit.delimiter)[0])
+        return Node(uniquePeerKitName: PeerKit.myName)
     }
     
     private static func allPeerIDs() -> [MCPeerID] {
@@ -27,7 +27,7 @@ public class ConnectionManager {
     public static func allPeerNodes() -> [Node] {
         var nodes: [Node] = []
         for peerId in ConnectionManager.allPeerIDs() {
-            nodes.append(Node(uniqueId: peerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[1], displayName: peerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[0]))
+            nodes.append(Node(mcPeerId: peerId))
         }
         nodes.sortInPlace { (obj1, obj2) -> Bool in
             return obj1.uniqueId < obj2.uniqueId
