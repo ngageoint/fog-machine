@@ -27,7 +27,6 @@ struct Srtm3 {
     static let MAX_SIZE = 1201
     static let CENTER_OFFSET = 0.5
     static let CELL_SIZE_DENOMINATOR = 1201.0
-    static let DISPLAY_DIAMETER = 100000.0 * 1.5
     static let EXTENT_METERS = 90.0
 
 }
