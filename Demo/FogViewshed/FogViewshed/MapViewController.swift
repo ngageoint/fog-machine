@@ -447,7 +447,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         //let result = ViewshedResult(viewshedResult: self.viewshedResults)
         
         self.printOut("\tDisplay result locally on \(Worker.getMe().displayName)")
-        self.pinObserverLocation(work.getObserver())
         
         viewshedMetrics.startForMetric(Metric.OVERLAY)
         let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
@@ -495,6 +494,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
         
             let result = self.processWork(work)
+            self.pinObserverLocation(work.getObserver())
             
             ConnectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
         }
