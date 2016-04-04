@@ -1,11 +1,3 @@
-//
-//  HgtRegions.swift
-//  FogMachine
-//
-//  Created by Ram Subramaniam on 2/12/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import Foundation
 
 let AFRICA_REGION_DATA:[String] =

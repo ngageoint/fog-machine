@@ -1,11 +1,3 @@
-//
-//  Node.swift
-//  Viewshed
-//
-//  Created by Ram Subramaniam on 11/18/15.
-//  Copyright (c) 2015 NGA. All rights reserved.
-//
-
 import Foundation
 
 let KreveldEventTypeEnter:Int = 1

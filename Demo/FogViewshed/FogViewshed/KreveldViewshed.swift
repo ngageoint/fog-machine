@@ -1,11 +1,3 @@
-//
-//  KreveldViewshed.swift
-//  Viewshed
-//
-//  Created by Ram Subramaniam on 11/11/15.
-//  Copyright (c) 2015 NGA. All rights reserved.
-//
-
 import Foundation
 
 class KreveldViewshed {

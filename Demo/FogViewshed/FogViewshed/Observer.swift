@@ -1,11 +1,3 @@
-//
-//  Observer.swift
-//  FogMachine
-//
-//  Created by Chris Wasko on 11/16/15.
-//  Copyright © 2015 NGA. All rights reserved.
-//
-
 import Foundation
 import MapKit
 

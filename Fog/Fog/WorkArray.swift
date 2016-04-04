@@ -1,11 +1,3 @@
-//
-//  WorkArray.swift
-//  FogMachine
-//
-//  Created by Chris Wasko on 11/30/15.
-//  Copyright © 2015 NGA. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import MapKit

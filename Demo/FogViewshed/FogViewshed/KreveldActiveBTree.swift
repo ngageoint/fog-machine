@@ -1,11 +1,3 @@
-//
-//  KreveldActiveBTree.swift
-//  Viewshed
-//
-//  Created by Ram Subramaniam on 11/15/15.
-//  Copyright (c) 2015 NGA. All rights reserved.
-//
-
 import Foundation
 // based on the paper : http://www.cs.uu.nl/research/techreps/repo/CS-1996/1996-22.pdf
 public struct KreveldActiveBTree {

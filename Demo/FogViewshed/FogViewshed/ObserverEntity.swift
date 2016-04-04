@@ -1,11 +1,3 @@
-//
-//  ObserverEntity.swift
-//  FogMachine
-//
-//  Created by Chris Wasko on 1/27/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import Foundation
 import CoreData
 import MapKit

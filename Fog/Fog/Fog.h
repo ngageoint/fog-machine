@@ -1,11 +1,3 @@
-//
-//  Fog.h
-//  Fog
-//
-//  Created by Chris Wasko on 2/25/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for Fog.

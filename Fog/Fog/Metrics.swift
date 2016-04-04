@@ -1,11 +1,3 @@
-//
-//  Metrics.swift
-//  Fog
-//
-//  Created by Chris Wasko on 3/22/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import Foundation
 
 

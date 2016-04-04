@@ -1,11 +1,3 @@
-//
-//  Bresenham.swift
-//  FogMachine
-//
-//  Created by Chris Wasko on 11/2/15.
-//  Copyright © 2015 NGA. All rights reserved.
-//
-
 import UIKit
 
 class Bresenham: NSObject {

@@ -1,11 +1,3 @@
-//
-//  SecondViewController.swift
-//  FogSearch
-//
-//  Created by Chris Wasko on 2/25/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import UIKit
 
 class SecondViewController: UIViewController {

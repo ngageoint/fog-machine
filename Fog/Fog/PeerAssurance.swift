@@ -1,11 +1,3 @@
-//
-//  PeerAssurance.swift
-//  FogMachine
-//
-//  Created by Chris Wasko on 2/10/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import Foundation
 
 

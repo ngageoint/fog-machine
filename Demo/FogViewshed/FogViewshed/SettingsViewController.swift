@@ -1,11 +1,3 @@
-//
-//  SettingsViewController.swift
-//  FogMachineSearch
-//
-//  Created by Ram Subramaniam on 11/25/15.
-//  Copyright © 2015 NGA. All rights reserved.
-//
-
 import UIKit
 import MapKit
 

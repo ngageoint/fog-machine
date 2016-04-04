@@ -1,11 +1,3 @@
-//
-//  Box.swift
-//  FogViewshed
-//
-//  Created by Chris Wasko on 3/4/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import Foundation
 import MapKit
 

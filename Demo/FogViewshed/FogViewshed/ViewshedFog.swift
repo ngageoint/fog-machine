@@ -1,11 +1,3 @@
-//
-//  ViewshedFog.swift
-//  FogMachine
-//
-//  Created by Chris Wasko on 11/18/15.
-//  Copyright © 2015 NGA. All rights reserved.
-//
-
 import UIKit
 import MapKit
 

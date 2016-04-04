@@ -1,11 +1,3 @@
-//
-//  Downloader.swift
-//  FogMachine
-//
-//  Created by Ram Subramaniam on 2/1/16.
-//  Copyright © 2016 NGA. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import SSZipArchive
