@@ -641,14 +641,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
 
     func verifyBoundBox(observer: Observer) {
-        let boundingBox = BoundingBox()
-        let box = boundingBox.getBoundingBox(observer)
+        
+        let box = AxisOrientedBoundingBox.getBoundingBox(observer.getObserverLocation(), radius: Double(observer.getRadius()))
 
         var points = [
-            box.lowerLeft,
-            box.upperLeft,
-            box.upperRight,
-            box.lowerRight
+            box.getLowerLeft(),
+            box.getUpperLeft(),
+            box.getUpperRight(),
+            box.getLowerRight()
         ]
         let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
         self.mapView.addOverlay(polygonOverlay)
@@ -660,14 +660,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
-            let range = NSMakeRange(0, (output as NSString).length)
-            if let regex = try? NSRegularExpression(pattern: "😺[0-9]*", options: .CaseInsensitive) {
-                let printableOutput = regex.stringByReplacingMatchesInString(output, options: .WithTransparentBounds, range: range, withTemplate: "")
-                //Can easily change this to print out to a file without modifying the rest of the code.
-                print(printableOutput)
-                //metricsOutput = metricsOutput + "\n" + output
-                self.logBox.text = self.logBox.text + "\n" + printableOutput
-            }
+            self.logBox.text = self.logBox.text + "\n" + output
         }
     }
 

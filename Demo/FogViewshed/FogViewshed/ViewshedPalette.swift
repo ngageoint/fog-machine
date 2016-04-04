@@ -50,14 +50,13 @@ class ViewshedPalette: NSObject {
     
     
     func getRequiredHgtFiles(observer: Observer) -> [Hgt] {
-        let boundingBox = BoundingBox()
-        let box = boundingBox.getBoundingBox(observer)
         
+        let box = AxisOrientedBoundingBox.getBoundingBox(observer.getObserverLocation(), radius: Double(observer.getRadius()))
         return getHgtNeededForBox(box)
     }
     
     
-    func getHgtNeededForBox(box: Box) -> [Hgt] {
+    func getHgtNeededForBox(box: AxisOrientedBoundingBox) -> [Hgt] {
         var hgts = [Hgt]()
         
         //get unique hgt for each of the corners

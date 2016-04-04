@@ -11,6 +11,7 @@ target 'FogViewshed' do
     platform :ios, '8.4'
     xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
     pod 'SSZipArchive', '~> 1.1'
+    #pod 'GEOSwift'
     pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.1'
     #pod 'PeerKit', :path => '../PeerKit'
     pod 'Fog', :path => 'Fog/'
