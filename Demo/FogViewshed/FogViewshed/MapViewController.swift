@@ -57,7 +57,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
         locationManagerSettings()
         if allObservers.count > 0 {
-            mapView.showAnnotations(mapView.annotations, animated: true)
+            //Center on most recently added observer
+            self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
         }
         setupFogViewshedEvents()
     }
@@ -109,6 +110,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error: " + error.localizedDescription)
+    }
+    
+    
+    func centerMapOnLocation(location: CLLocationCoordinate2D) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
+        mapView.setRegion(coordinateRegion, animated: true)
     }
 
     
@@ -304,7 +311,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
 
         if isLogShown {
-            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.7)
+            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.8)
         } else {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
         }
