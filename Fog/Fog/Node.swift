@@ -13,13 +13,13 @@ public class Node : Hashable, Equatable {
     }
     
     convenience init(mcPeerId: MCPeerID) {
-        self.init(uniqueId: mcPeerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[1],
-                  displayName: mcPeerId.displayName.componentsSeparatedByString(PeerKit.delimiter)[0])
+        self.init(uniqueId: mcPeerId.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1],
+                  displayName: mcPeerId.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0])
     }
     
     convenience init(uniquePeerKitName: String) {
-        self.init(uniqueId: uniquePeerKitName.componentsSeparatedByString(PeerKit.delimiter)[1],
-                  displayName: uniquePeerKitName.componentsSeparatedByString(PeerKit.delimiter)[0])
+        self.init(uniqueId: uniquePeerKitName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1],
+                  displayName: uniquePeerKitName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0])
     }
     
     public var hashValue: Int { return uniqueId.hash }
