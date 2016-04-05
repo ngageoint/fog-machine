@@ -144,7 +144,7 @@ public class ConnectionManager {
                                       log: (peerName: String) -> () ) {
         var hasPeers = false
         var deviceCounter = 1
-        let selfWork = workDivider(currentQuadrant: allNodes().count, numberOfQuadrants: deviceCounter)
+        let selfWork = workDivider(currentQuadrant: deviceCounter, numberOfQuadrants: allNodes().count)
         receiptAssurance.add(selfNode().displayName, event: event, work: selfWork, timeoutSeconds: timeoutSeconds)
         
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
@@ -154,7 +154,7 @@ public class ConnectionManager {
                 hasPeers = true
                 deviceCounter = deviceCounter + 1
                 fogMetrics.startForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
-                let theWork = workDivider(currentQuadrant: allNodes().count, numberOfQuadrants: deviceCounter)
+                let theWork = workDivider(currentQuadrant: deviceCounter, numberOfQuadrants: allNodes().count)
                 theWork.workerName = peer.displayName
                 
                 receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
