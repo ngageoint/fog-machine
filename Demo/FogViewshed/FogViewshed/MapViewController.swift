@@ -414,6 +414,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             },
             log: { peerName in
                 self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
+            },
+            completeMethod: {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.printOut("\tAll received")
+                    self.completeViewshed()
+                }
             }
         )
     }

@@ -9,12 +9,12 @@ public class PeerAssurance {
         var startTime: CFAbsoluteTime
     }
     
-    var name: String!
-    var receivedData: ReceivedData!
-    var work: Work!
+    var deviceNode: Node
+    var receivedData: ReceivedData
+    var work: Work
     
-    public init(name: String, work: Work, timeoutSeconds: Double) {
-        self.name = name
+    public init(deviceNode: Node, work: Work, timeoutSeconds: Double) {
+        self.deviceNode = deviceNode
         self.work = work
         self.receivedData = ReceivedData(isReceived: false, timeoutSeconds: timeoutSeconds, startTime: CFAbsoluteTimeGetCurrent())
     }

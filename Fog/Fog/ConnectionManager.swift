@@ -7,22 +7,36 @@ public var fogMetrics = MetricManager()
 
 public class ConnectionManager {
     
+    
+    //Swift 3 will enable generic typealias'
+    //public typealias selfWorkDefinition<T: Work> = (T, Bool) -> ()
+    public typealias SelfWorkDefinition = (selfWork: Work, hasPeers: Bool) -> ()
+    // TODO: Make FogTool for these
+    static private var doWorkOnSelf: SelfWorkDefinition!
+    static private var completeWork: (() -> ())!
+    
     static private let serialQueue = dispatch_queue_create("mil.nga.giat.fogmachine", DISPATCH_QUEUE_SERIAL)
-    static private var receiptAssurance = ReceiptAssurance(sender: ConnectionManager.selfPeerID().displayName)
+    static private var receiptAssurance = ReceiptAssurance(sender: ConnectionManager.selfNode())
+
+    
     
     // MARK: Properties
+    
     
     private static func selfPeerID() -> MCPeerID {
         return PeerKit.masterSession.myPeerId
     }
     
+    
     public static func selfNode() -> Node {
         return Node(namePlusUniqueId: PeerKit.myName)
     }
     
+    
     private static func allPeerIDs() -> [MCPeerID] {
         return PeerKit.masterSession.allConnectedPeers() ?? []
     }
+    
     
     public static func allPeerNodes() -> [Node] {
         var nodes: [Node] = []
@@ -35,6 +49,8 @@ public class ConnectionManager {
         return nodes
     }
     
+    
+
     public static func allNodes() -> [Node] {
         var nodes: [Node] = []
         nodes.append(ConnectionManager.selfNode())
@@ -44,6 +60,7 @@ public class ConnectionManager {
         }
         return nodes
     }
+    
     
     // MARK: Start
     
@@ -100,8 +117,8 @@ public class ConnectionManager {
             fogMetrics.startForMetric(Fog.Metric.RECEIVE, deviceNode: senderNode)
             responseMethod()
             printOut("processResult from \(sender)")
-            receiptAssurance.updateForReceipt(responseEvent, receiver: sender.displayName)
-            
+            receiptAssurance.updateForReceipt(responseEvent, receiver: senderNode)
+
             //  dispatch_async(dispatch_get_main_queue()) {
             fogMetrics.stopForMetric(Fog.Metric.RECEIVE, deviceNode: senderNode)
             if receiptAssurance.checkAllReceived(responseEvent) {
@@ -141,12 +158,15 @@ public class ConnectionManager {
     
     public static func sendEventToAll<T: Work>(event: String, timeoutSeconds: Double = 30.0,
                                       workDivider: (currentQuadrant: Int, numberOfQuadrants: Int) -> (T),
-                                      workForSelf: (selfWork: T, hasPeers: Bool) -> (),
-                                      log: (peerName: String) -> () ) {
+                                      workForSelf: SelfWorkDefinition,//(selfWork: T, hasPeers: Bool) -> (),
+                                      log: (peerName: String) -> (),
+                                      completeMethod: () -> ()) {
         var hasPeers = false
         var deviceCounter = 1
+        self.doWorkOnSelf = workForSelf
+        self.completeWork = completeMethod
         let selfWork = workDivider(currentQuadrant: deviceCounter, numberOfQuadrants: allNodes().count)
-        receiptAssurance.add(selfNode().displayName, event: event, work: selfWork, timeoutSeconds: timeoutSeconds)
+        receiptAssurance.add(selfNode(), event: event, work: selfWork, timeoutSeconds: timeoutSeconds)
         
         // The barrier is used to sync sends to receipts and prevent a really fast device from finishing and sending results back before any other device has been sent their results, causing the response queue to only have one sent entry
         // The processResult function uses the same barrier so the first result is not processed until all the Work has been sent out
@@ -159,7 +179,7 @@ public class ConnectionManager {
                 let theWork = workDivider(currentQuadrant: deviceCounter, numberOfQuadrants: allNodes().count)
                 theWork.workerNode = Node(mcPeerId: peer)
                 
-                receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
+                receiptAssurance.add(peerNode, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
                 
                 self.sendEventTo(event, object: [event: theWork], sendTo: peer.displayName)
                 log(peerName: peer.displayName)
@@ -167,9 +187,12 @@ public class ConnectionManager {
             }
         }
         receiptAssurance.startTimer(event, timeoutSeconds: timeoutSeconds)
+        dispatch_barrier_async(self.serialQueue) {
+
         
         workForSelf(selfWork: selfWork, hasPeers: hasPeers)
-        receiptAssurance.updateForReceipt(event, receiver: selfNode().displayName)
+        receiptAssurance.updateForReceipt(event, receiver: selfNode())
+        }
     }
     
     
@@ -185,14 +208,21 @@ public class ConnectionManager {
     
     public static func reprocessWork(responseEvent: String) {
         let peer = receiptAssurance.getFinishedPeer(responseEvent)
-        
-        if let finishedPeer = peer {
-            printOut("found peer \(finishedPeer) to finish work")
-            let work = receiptAssurance.getNextTimedOutWork(responseEvent)
-            
-            if let timedOutWork = work {
-                printOut("found work to finish")
-                self.sendEventTo(responseEvent, object: [responseEvent: timedOutWork], sendTo: finishedPeer)
+        let work = receiptAssurance.getNextTimedOutWork(responseEvent)
+        if let timedOutWork = work {
+            printOut("Found work to finish")
+            if !peer.isSelf() {
+                printOut("Found peer \(peer.displayName) to finish work")
+                self.sendEventTo(responseEvent, object: [responseEvent: timedOutWork], sendTo: peer.getMcPeerIdDisplayName())
+            } else if peer.isSelf() {
+                self.doWorkOnSelf(selfWork: timedOutWork, hasPeers: true)
+                // Handle situation when all peers are done and only the initiator is processing work.
+                //   Once done, the initiator needs to call complete.
+                if receiptAssurance.checkAllReceived(responseEvent) {
+                    printOut("Running completeMethod()")
+                    self.completeWork()
+                    receiptAssurance.removeAllForEvent(responseEvent)
+                }
             }
         }
     }
@@ -204,8 +234,8 @@ public class ConnectionManager {
         }
     }
     
-    
-    public static func printOut(output: String) {
+    //Used for debugging
+    private static func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
             //NSLog(output)
         }
