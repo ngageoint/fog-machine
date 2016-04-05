@@ -17,7 +17,7 @@ public class ConnectionManager {
     }
     
     public static func selfNode() -> Node {
-        return Node(uniquePeerKitName: PeerKit.myName)
+        return Node(namePlusUniqueId: PeerKit.myName)
     }
     
     private static func allPeerIDs() -> [MCPeerID] {
@@ -93,16 +93,17 @@ public class ConnectionManager {
     }
     
     
-    public static func processResult(event: String, responseEvent: String, sender: String, object: [String: MPCSerializable], responseMethod: () -> (), completeMethod: () -> ()) {
+    public static func processResult(event: String, responseEvent: String, sender: MCPeerID, object: [String: MPCSerializable], responseMethod: () -> (), completeMethod: () -> ()) {
         //dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+        let senderNode = Node(mcPeerId: sender)
         dispatch_barrier_async(self.serialQueue) {
-            fogMetrics.startForMetric(Fog.Metric.RECEIVE, deviceName: sender)
+            fogMetrics.startForMetric(Fog.Metric.RECEIVE, deviceNode: senderNode)
             responseMethod()
             printOut("processResult from \(sender)")
-            receiptAssurance.updateForReceipt(responseEvent, receiver: sender)
+            receiptAssurance.updateForReceipt(responseEvent, receiver: sender.displayName)
             
             //  dispatch_async(dispatch_get_main_queue()) {
-            fogMetrics.stopForMetric(Fog.Metric.RECEIVE, deviceName: sender)
+            fogMetrics.stopForMetric(Fog.Metric.RECEIVE, deviceNode: senderNode)
             if receiptAssurance.checkAllReceived(responseEvent) {
                 printOut("Running completeMethod()")
                 completeMethod()
@@ -153,15 +154,16 @@ public class ConnectionManager {
             for peer in allPeerIDs() {
                 hasPeers = true
                 deviceCounter = deviceCounter + 1
-                fogMetrics.startForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
+                let peerNode = Node(mcPeerId: peer)
+                fogMetrics.startForMetric(Fog.Metric.SEND, deviceNode: peerNode)
                 let theWork = workDivider(currentQuadrant: deviceCounter, numberOfQuadrants: allNodes().count)
-                theWork.workerName = peer.displayName
+                theWork.workerNode = Node(mcPeerId: peer)
                 
                 receiptAssurance.add(peer.displayName, event: event, work: theWork, timeoutSeconds:  timeoutSeconds)
                 
                 self.sendEventTo(event, object: [event: theWork], sendTo: peer.displayName)
                 log(peerName: peer.displayName)
-                fogMetrics.stopForMetric(Fog.Metric.SEND, deviceName: peer.displayName)
+                fogMetrics.stopForMetric(Fog.Metric.SEND, deviceNode: peerNode)
             }
         }
         receiptAssurance.startTimer(event, timeoutSeconds: timeoutSeconds)

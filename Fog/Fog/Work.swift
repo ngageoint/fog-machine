@@ -4,12 +4,13 @@ import Foundation
 public class Work: MPCSerializable {
 
     var serializedFogMetrics = Metrics<String, Timer>()
-    var workerName: String = ConnectionManager.selfNode().displayName
+    // TODO: Change relationship to Node has Work, not Work has Node (implemented this way for current compatibility)
+    var workerNode: Node = ConnectionManager.selfNode()
 
     public var mpcSerialized : NSData {
         let metricsData = encodeDictionary(gatherGlobalFogMetrics())
         let result = NSKeyedArchiver.archivedDataWithRootObject([
-            Fog.WORKER_NAME: workerName,
+            Fog.WORKER_NODE: workerNode.mpcSerialized,
             Fog.METRICS: metricsData])
 
         return result
@@ -23,8 +24,8 @@ public class Work: MPCSerializable {
     public required init (mpcSerialized: NSData) {
         let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
         serializedFogMetrics = decodeDictionary(workData[Fog.METRICS] as! NSData)
-        workerName = workData[Fog.WORKER_NAME] as! String
-        fogMetrics.mergeValueWithExisting(serializedFogMetrics, deviceName: workerName)
+        workerNode = Node(mpcSerialized: workData[Fog.WORKER_NODE] as! NSData)
+        fogMetrics.mergeValueWithExisting(serializedFogMetrics, deviceNode: workerNode)
     }
 
 
@@ -63,7 +64,7 @@ public class Work: MPCSerializable {
 
 
     public func gatherGlobalFogMetrics() -> Metrics<String, Timer> {
-        if let newMetrics = fogMetrics.getMetricsForDevice(workerName) {
+        if let newMetrics = fogMetrics.getMetricsForDevice(workerNode) {
             self.addFogMetrics(newMetrics)
         }
         return serializedFogMetrics
@@ -74,8 +75,8 @@ public class Work: MPCSerializable {
         return serializedFogMetrics
     }
 
-    public func getWorkerName() -> String {
-        return workerName
+    public func getWorkerNode() -> Node {
+        return workerNode
     }
 
     func addFogMetrics(newMetrics: Metrics<String, Timer>) {

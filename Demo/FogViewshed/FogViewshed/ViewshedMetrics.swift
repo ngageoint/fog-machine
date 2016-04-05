@@ -6,7 +6,7 @@ class ViewshedMetrics: MetricManager {
     
     // Used for processing the Metrics
     var totalManager = [String: CFAbsoluteTime]() // [Metric Name : Time]
-    var individualManager = [String: Metrics<String, CFAbsoluteTime>]() // [Metric Name: Metrics<Device Name, Time>]
+    var individualManager = [String: Metrics<Node, CFAbsoluteTime>]() // [Metric Name: Metrics<Device Node, Time>]
 
     
     override func initialize() {
@@ -17,11 +17,11 @@ class ViewshedMetrics: MetricManager {
     
     
     func processMetrics() {
-        for (device, deviceMetrics) in storedMetrics.getMetrics() {
-            devices += "\t\t\(device)\n"
+        for (aNode, deviceMetrics) in storedMetrics.getMetrics() {
+            devices += "\t\t\(aNode.displayName)\n"
             for (event, timer) in deviceMetrics.getMetrics() {
                 addToTotal(event, value: timer.getElapsed())
-                addToIndividual(event, metricKey: device, metricValue: timer.getElapsed())
+                addToIndividual(event, metricKey: aNode, metricValue: timer.getElapsed())
             }
         }
     }
@@ -64,9 +64,9 @@ class ViewshedMetrics: MetricManager {
     }
     
     
-    private func addToIndividual(key: String, metricKey: String, metricValue: CFAbsoluteTime) {
+    private func addToIndividual(key: String, metricKey: Node, metricValue: CFAbsoluteTime) {
         guard let updateValue = individualManager[key] else {
-            let newValue = Metrics<String, CFAbsoluteTime>()
+            let newValue = Metrics<Node, CFAbsoluteTime>()
             newValue.updateValue(metricValue, forKey: metricKey)
             individualManager.updateValue(newValue, forKey: key)
             return
@@ -109,12 +109,12 @@ class ViewshedMetrics: MetricManager {
         
         var output = ""
         var printableKey = key
-        let parsedKey = key.componentsSeparatedByString(": ")
+        let parsedKey = key.componentsSeparatedByString(Metric.DELIMITER)
         if parsedKey.count >= 2 {
             printableKey = parsedKey[1]
         }
-        for (device, time) in individualMetrics.getMetrics() {
-            output += "\t\t\(device):\n\t\t\t\(formatTime(time))s ("
+        for (aNode, time) in individualMetrics.getMetrics() {
+            output += "\t\t\(aNode.displayName):\n\t\t\t\(formatTime(time))s ("
             output += self.getPercentage(time, total: totalValue)
             output += " of \(printableKey))\n"
         }

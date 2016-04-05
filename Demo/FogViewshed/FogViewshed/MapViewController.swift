@@ -443,7 +443,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
         viewshedMetrics.stopForMetric(Metric.WORK)
 
-        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
+        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode()) {
             result.addViewshedMetrics(deviceMetrics)
         }
 
@@ -488,12 +488,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             var workData = object as! [NSString: NSData]
             let result = ViewshedResult(mpcSerialized: workData[Event.SendViewshedResult.rawValue]!)
 
-            ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId.displayName, object: [Event.SendViewshedResult.rawValue: result],
+            ConnectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId, object: [Event.SendViewshedResult.rawValue: result],
                 responseMethod: {
-                    viewshedMetrics.updateValue(result.getViewshedMetrics(), forKey: fromPeerId.displayName)
+                    let peerNode = Node(mcPeerId: fromPeerId)
+                    viewshedMetrics.updateValue(result.getViewshedMetrics(), forKey: peerNode)
                     // dispatch_barrier_async(dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_CONCURRENT)) {
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.printOut("\tResult received from \(fromPeerId.displayName).")
+                        self.printOut("\tResult received from \(peerNode.displayName).")
                         //   }
                         //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
 

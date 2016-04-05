@@ -4,33 +4,33 @@ import Foundation
 public class MetricManager {
     
 
-    public var storedMetrics: Metrics<String, Metrics<String, Timer>> // [Device Name: Metrics<Metric Name, Time>]
+    public var storedMetrics: Metrics<Node, Metrics<String, Timer>> // [Device Node: Metrics<Metric Name, Time>]
     public var overall: Timer
     public var devices: String
 
     
     public init() {
-        self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
+        self.storedMetrics = Metrics<Node, Metrics<String, Timer>>()
         self.overall = Timer()
         self.devices = "Device(s): \n"
     }
     
     
     public func initialize() {
-        self.storedMetrics = Metrics<String, Metrics<String, Timer>>()
+        self.storedMetrics = Metrics<Node, Metrics<String, Timer>>()
         self.overall = Timer()
         self.devices = "Device(s): \n"
     }
     
     
-    public func addMetrics(newMetrics: Metrics<String, Metrics<String, Timer>>) {
+    public func addMetrics(newMetrics: Metrics<Node, Metrics<String, Timer>>) {
         for (key, value) in newMetrics.getMetrics() {
             updateValue(value, forKey: key)
         }
     }
     
     
-    public func updateValue(value: Metrics<String, Timer>, forKey key: String) {
+    public func updateValue(value: Metrics<String, Timer>, forKey key: Node) {
         guard let deviceMetrics = storedMetrics.getValue(key) else {
             storedMetrics.updateValue(value, forKey: key)
             return
@@ -44,7 +44,7 @@ public class MetricManager {
     }
     
     
-    public func removeValueForKey(key: String) {
+    public func removeValueForKey(key: Node) {
         storedMetrics.removeValueForKey(key)
     }
     
@@ -59,53 +59,53 @@ public class MetricManager {
     }
     
     
-    public func startForMetric(metric: String, deviceName: String = ConnectionManager.selfNode().displayName) {
-        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
+    public func startForMetric(metric: String, deviceNode: Node = ConnectionManager.selfNode()) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
             //add new
             let newMetric = Metrics<String, Timer>()
             let timer = Timer()
             timer.startTimer()
             newMetric.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(newMetric, forKey: deviceName)
+            storedMetrics.updateValue(newMetric, forKey: deviceNode)
             return
         }
         
         let timer = Timer()
         timer.startTimer()
         deviceMetrics.updateValue(timer, forKey: metric)
-        storedMetrics.updateValue(deviceMetrics, forKey: deviceName)
+        storedMetrics.updateValue(deviceMetrics, forKey: deviceNode)
     }
     
     
-    public func stopForMetric(metric: String, deviceName: String = ConnectionManager.selfNode().displayName) {
-        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
+    public func stopForMetric(metric: String, deviceNode: Node = ConnectionManager.selfNode()) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
             return
         }
         
         if let timer = deviceMetrics.getValue(metric) {
             timer.stopTimer()
             deviceMetrics.updateValue(timer, forKey: metric)
-            storedMetrics.updateValue(deviceMetrics, forKey: deviceName)
+            storedMetrics.updateValue(deviceMetrics, forKey: deviceNode)
         }
     }
     
     
-    public func getMetricsForDevice(device: String) -> Metrics<String, Timer>? {
-        guard let deviceMetrics = storedMetrics.getValue(device) else {
+    public func getMetricsForDevice(deviceNode: Node) -> Metrics<String, Timer>? {
+        guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
             return nil
         }
         return deviceMetrics
     }
     
     
-    public func getMetrics() -> Metrics<String, Metrics<String, Timer>> {
+    public func getMetrics() -> Metrics<Node, Metrics<String, Timer>> {
         return storedMetrics
     }
     
     
-    public func mergeValueWithExisting(newMetrics: Metrics<String, Timer>, deviceName: String) {
-        guard let deviceMetrics = storedMetrics.getValue(deviceName) else {
-            self.updateValue(newMetrics, forKey: deviceName)
+    public func mergeValueWithExisting(newMetrics: Metrics<String, Timer>, deviceNode: Node) {
+        guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
+            self.updateValue(newMetrics, forKey: deviceNode)
             return
         }
         
@@ -131,7 +131,7 @@ public class MetricManager {
             }
         }
         
-        self.updateValue(newMergedValues, forKey: deviceName)
+        self.updateValue(newMergedValues, forKey: deviceNode)
     }
     
 }

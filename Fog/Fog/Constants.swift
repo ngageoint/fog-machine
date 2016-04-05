@@ -6,8 +6,16 @@ public struct Fog {
     // It must be a unique string, at most 15 characters long
     // Note: Devices will only connect to other devices with the same serviceType value.
     static let SERVICE_TYPE = "fog-machine"
-    public static let WORKER_NAME = "WorkerName"
+    public static let WORKER_NODE = "WorkerNode"
     public static let METRICS = "FogMetrics"
+    
+    
+    public struct Node {
+        public static let DISPLAY_NAME = "DisplayName"
+        public static let UNIQUE_ID = "UniqueId"
+        public static let HASH = "Hash"
+    }
+    
     
     public struct Metric {
         public static let SEND = "Fog Send Work"

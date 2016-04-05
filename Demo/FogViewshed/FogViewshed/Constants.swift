@@ -63,12 +63,14 @@ struct Srtm {
 
 
 struct Metric {
-    static let WORK = "1: Work Processed"
-    static let VIEWSHED = "1.1: Process Viewshed"
-    static let OVERLAY = "1.2: Process Overlay"
+    static let DELIMITER = ": "
+    // Format of Step + Delimiter + Name
+    static let WORK = "1" + Metric.DELIMITER + "Work Processed"
+    static let VIEWSHED = "1.1" + Metric.DELIMITER + "Process Viewshed"
+    static let OVERLAY = "1.2" + Metric.DELIMITER + "Process Overlay"
     struct Data {
-        static let READING = "1.1.1: Loading single HGT"
-        static let MERGING = "1.1.2: Merging all HGT(s)"
+        static let READING = "1.1.1" + Metric.DELIMITER + "Loading single HGT"
+        static let MERGING = "1.1.2" + Metric.DELIMITER + "Merging all HGT(s)"
     }
 
     // Update with the order the metrics will be displayed

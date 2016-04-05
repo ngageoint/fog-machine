@@ -9,7 +9,7 @@ class ViewshedResult: Work {
     var serializedViewshedMetrics = Metrics<String, Timer>()
     
     override var mpcSerialized : NSData {
-        if let newMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode().displayName) {
+        if let newMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode()) {
             self.addViewshedMetrics(newMetrics)
         }
 
@@ -18,7 +18,7 @@ class ViewshedResult: Work {
         let result = NSKeyedArchiver.archivedDataWithRootObject(
             [FogViewshed.VIEWSHED_RESULT: viewshedResult,
                 FogViewshed.METRICS: viewshedMetricsData,
-                Fog.WORKER_NAME: getWorkerName(),
+                Fog.WORKER_NODE: getWorkerNode().mpcSerialized,
                 Fog.METRICS: fogMetricsData])
 
         return result
