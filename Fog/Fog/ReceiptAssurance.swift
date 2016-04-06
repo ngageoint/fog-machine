@@ -6,7 +6,7 @@ public class ReceiptAssurance: NSObject {
 
     var sender: Node
     var assurance: [String:[PeerAssurance]] //Event: PeerAssurance
-
+    var reprocessMethod: ((String) -> ())? = nil
     
     public init(sender: Node) {
         self.sender = sender
@@ -136,8 +136,9 @@ public class ReceiptAssurance: NSObject {
     }
     
     
-    public func startTimer(event: String, timeoutSeconds: Double) {
+    public func startTimer(event: String, timeoutSeconds: Double, reprocessMethod: (String) -> ()) {
         //printOut("Starting Timer for \(timeoutSeconds) seconds")
+        self.reprocessMethod = reprocessMethod
         dispatch_async(dispatch_get_main_queue()) {
             NSTimer.scheduledTimerWithTimeInterval(timeoutSeconds, target: self, selector: #selector(ReceiptAssurance.timerAction(_:)), userInfo: event, repeats: false)
         }
@@ -148,7 +149,10 @@ public class ReceiptAssurance: NSObject {
     public func timerAction(timer: NSTimer) {
         //printOut("TimeoutAction")
         let event = timer.userInfo as! String
-        ConnectionManager.checkForTimeouts(event)
+        while checkForTimeouts(event) {
+            printOut("detected timed out work")
+            self.reprocessMethod!(event)
+        }
         dispatch_async(dispatch_get_main_queue()) {
             timer.invalidate()
         }
