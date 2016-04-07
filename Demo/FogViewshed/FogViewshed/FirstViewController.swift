@@ -119,9 +119,14 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:ConnectionCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell") as! ConnectionCell
-        // set cell label
         if indexPath.row < ConnectionManager.allNodes().count {
             let node:Node = ConnectionManager.allNodes()[indexPath.row]
+            if node.isSelf() {
+                cell.label.font = UIFont(name: ".SFUIText-Bold", size: 16.0)
+            } else {
+                cell.label.font = UIFont(name: ".SFUIText-Regular", size: 16.0)
+            }
+            
             cell.label.text = node.displayName + " " + node.uniqueId;
         }
         
