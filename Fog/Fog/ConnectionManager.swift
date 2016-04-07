@@ -24,9 +24,8 @@ public class ConnectionManager {
         return PeerKit.masterSession.myPeerId
     }
     
-    
     public static func selfNode() -> Node {
-        return Node(namePlusUniqueId: PeerKit.myName)
+        return Node(uniqueId: PeerKit.myName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], displayName: PeerKit.myName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0])
     }
     
     
@@ -34,11 +33,10 @@ public class ConnectionManager {
         return PeerKit.masterSession.allConnectedPeers() ?? []
     }
     
-    
     public static func allPeerNodes() -> [Node] {
         var nodes: [Node] = []
         for peerId in ConnectionManager.allPeerIDs() {
-            nodes.append(Node(mcPeerId: peerId))
+            nodes.append(Node(uniqueId: peerId.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], displayName: peerId.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0]))
         }
         nodes.sortInPlace { (obj1, obj2) -> Bool in
             return obj1.uniqueId < obj2.uniqueId
@@ -204,7 +202,7 @@ public class ConnectionManager {
             self.printOut("Found work to finish")
             if !peer.isSelf() {
                 self.printOut("Found peer \(peer.displayName) to finish work")
-                self.sendEventTo(responseEvent, object: [responseEvent: timedOutWork], sendTo: peer.getMcPeerIdDisplayName())
+                self.sendEventTo(responseEvent, object: [responseEvent: timedOutWork], sendTo: (peer.displayName + PeerKit.ID_DELIMITER + peer.uniqueId))
             } else if peer.isSelf() {
                 self.fogTool.selfWork(selfWork: timedOutWork, hasPeers: true)
                 // Handle situation when all peers are done and only the initiator is processing work.

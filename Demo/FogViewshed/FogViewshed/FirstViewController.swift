@@ -148,9 +148,9 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func updateWorkers() {
         if (ConnectionManager.allPeerNodes().count > 0) {
-            self.statusLabel.text = "Connected peers:"
+            self.statusLabel.text = "Connections"
         } else {
-            self.statusLabel.text = "Searching for Fog Machines..."
+            self.statusLabel.text = "Searching for peers..."
         }
         
         connectionTableView.reloadData()
