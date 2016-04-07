@@ -39,6 +39,7 @@ public class ViewshedFog: NSObject {
         let perimeter:[(x:Int, y:Int)] = SquarePerimeter.getAnySizedPerimeter(obsX, inY: obsY, radius: viewRadius,
             numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
         
+        viewshedMetrics.startForMetric(Metric.PERIMETER)
         // 3. Iterate through the cells c of the square’s perimeter. Each c has coordinates
         //  (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
         for (x, y) in perimeter {
@@ -84,7 +85,7 @@ public class ViewshedFog: NSObject {
             }
             
         }
-        
+        viewshedMetrics.stopForMetric(Metric.PERIMETER)
         viewshedMatrix[obsX][obsY] = -1 // mark observer cell as unique
         
         return viewshedMatrix

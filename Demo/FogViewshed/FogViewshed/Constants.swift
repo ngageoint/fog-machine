@@ -66,7 +66,8 @@ struct Metric {
     static let DELIMITER = ": "
     // Format of Step + Delimiter + Name
     static let WORK = "1" + Metric.DELIMITER + "Work Processed"
-    static let VIEWSHED = "1.1" + Metric.DELIMITER + "Process Viewshed"
+    static let VIEWSHED = "1.1" + Metric.DELIMITER + "Process Entire Viewshed"
+    static let PERIMETER = "1.1.3" + Metric.DELIMITER + "Perimeter Viewshed"
     static let OVERLAY = "1.2" + Metric.DELIMITER + "Process Overlay"
     struct Data {
         static let READING = "1.1.1" + Metric.DELIMITER + "Loading single HGT"
@@ -78,6 +79,7 @@ struct Metric {
                                Metric.VIEWSHED,
                                Metric.Data.READING,
                                Metric.Data.MERGING,
+                               Metric.PERIMETER,
                                Metric.OVERLAY,
                                Fog.Metric.SEND,
                                Fog.Metric.RECEIVE]
