@@ -1,17 +1,40 @@
-# FogMachine
+# Fog Machine Framework
 
-## An open-source Swift framework for Multipeer Connectivity Apps
+## An open-source iOS Swift framework for parallel processing
+
+## About
+
+![viewshed on three phones](Demo/FogViewshed/FogViewshed/Screenshots/0.png)
+
+Solve hard problems fast with the Fog Machine framework.
+
+The Fog Machine framework is a research and development effort to harness the computing power of multiple, locally connected iOS devices.  By using a mesh-network of mobile devices, parallel processing techniques allows Fog Machine to analyze data and answer complex questions quickly and efficiently.  Parallel processing over mesh networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  The communication relies on a wifi or bluetooth chipset and is built on apple's multipeer connectivity framework.
+
+There are two demos apps.  The first simple demo app distributes searching for a word in a given text.  The second app calculates the viewshed of a position.  A viewshed is the geographical area that is visible from a location. It includes all surrounding points that are in line-of-sight with that location and excludes points that are beyond the horizon or obstructed by terrain and other features.
+
+FogMachine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the Apache license.
+
+## Build
+
+Fog Machine uses CocoaPods for dependency management.   
+
+Install all dependencies:
+```bash
+Pod install
+```
 
 ## Usage
+
+The Fog machine framework provides a simple lifecycle for your app to use.
 
 ```swift
 // Connect
 ConnectionManager.start()
 ```
 
-## About
+# Requirements
 
-FogMachine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the Apache license.
+Fog Machine requires iOS 8+.
 
 ## Pull Requests
 
