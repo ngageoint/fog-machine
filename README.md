@@ -28,7 +28,7 @@ The Fog machine framework provides a simple lifecycle for your app to use.
 ConnectionManager.start()
 ```
 
-# Requirements
+## Requirements
 
 Fog Machine requires iOS 8+.
 
