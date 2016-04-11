@@ -1,12 +1,8 @@
 # Fog Machine Framework
 
-## An open-source iOS Swift framework for parallel processing
-
-## About
-
 ![viewshed on three phones](Demo/FogViewshed/FogViewshed/Screenshots/0.png)
 
-Solve hard problems fast with the Fog Machine framework.
+An open-source iOS Swift framework for parallel processing.  Solve hard problems fast with the Fog Machine framework.
 
 The Fog Machine framework is a research and development effort to harness the computing power of multiple, locally connected iOS devices.  By using a mesh-network of mobile devices, parallel processing techniques allows Fog Machine to analyze data and answer complex questions quickly and efficiently.  Parallel processing over mesh networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  The communication relies on a wifi or bluetooth chipset and is built on apple's multipeer connectivity framework.
 
