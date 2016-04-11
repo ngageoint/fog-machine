@@ -16,7 +16,8 @@ Fog Machine uses CocoaPods for dependency management.
 
 Install all dependencies:
 ```bash
-Pod install
+pod cache clean --all
+pod install
 ```
 
 ## Usage
