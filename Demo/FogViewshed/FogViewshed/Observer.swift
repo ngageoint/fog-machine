@@ -1,7 +1,8 @@
 import Foundation
 import MapKit
 
-class Observer: NSObject {
+public class Observer: NSObject {
+    
     var name: String
     // 0,0 is top left for x, y
     //1200, 1 is bottom left for x, y

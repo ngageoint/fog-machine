@@ -12,11 +12,8 @@ class ViewshedPalette: NSObject {
     
     func setupNewPalette(observer: Observer) {
         let requiredHgtFiles = getRequiredHgtFiles(observer)
-        
-        
-        viewshedMetrics.startForMetric(Metric.Data.MERGING)
+
         observerHgtGrid = HgtGrid(hgtFiles: requiredHgtFiles)
-        viewshedMetrics.stopForMetric(Metric.Data.MERGING)
         observer.updateXYLocationForGrid(observerHgtGrid)
     }
     

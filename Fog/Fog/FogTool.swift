@@ -1,27 +1,85 @@
 import Foundation
 import MultipeerConnectivity
 
+/**
+ Base class for applications that use FogMachine to overwrite.  Has a lifecycle that you should abide by.  You should extend this class and provide implmentations for the following routines:
+ createWork
+ processWork
+ mergeResults
+ 
+ */
 public class FogTool {
     
-    //Swift 3 will enable generic typealias', but until then use non-generic alias'
-    //public typealias selfWorkDefinition<T: Work> = (T, Bool) -> ()
-    public typealias WorkDividerDefinition = (currentQuadrant: Int, numberOfQuadrants: Int, metadata: AnyObject) -> (Work)
-    public typealias LogDefinition = (peerName: String) -> ()
-    public typealias SelfWorkDefinition = (selfWork: Work, hasPeers: Bool) -> ()
-    public typealias ProcessResultDefinition = (result: [String: MPCSerializable], fromPeerId: MCPeerID) -> ()
-    public typealias VoidDefinition = (() -> ())
+    public init() {
+        
+    }
     
-    public var workDivider: WorkDividerDefinition
-    public var log: LogDefinition
-    public var selfWork: SelfWorkDefinition!
-    public var processResult: ProcessResultDefinition!
-    public var completeWork: VoidDefinition!
+    public func name() -> String {
+        return "BASE FOGTOOL"
+    }
     
-    public init(workDivider: WorkDividerDefinition, log: LogDefinition, selfWork: SelfWorkDefinition, processResult: ProcessResultDefinition, completeWork: VoidDefinition) {
-        self.workDivider = workDivider
-        self.log = log
-        self.selfWork = selfWork
-        self.processResult = processResult
-        self.completeWork = completeWork
+    /**
+     
+     This gets called n times by FogMachine on the initiator node, where n is the number of nodes in the network (including yourself)
+     This function creates the information that will be sent to each node in the network.  As a user of Fog Machine, you must provide an implmentation for this routine!
+     
+     @param node The node in the network that will process this piece of work
+     @param nodeNumber Of the nodes in the network an ordered nuber that indicates which node this is.  Ex: 2
+     @param numberOfNodes The number of Nodes in the network for this lifecycle  Ex: 3
+     
+     @return Work The information that needs to get send to the node
+     
+     */
+    public func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> FogWork {
+        
+        let serializedData:[String:NSObject] = [String:NSObject]()
+        return FogWork(serializedData: serializedData);
+    }
+    
+    /**
+     
+     This funciton will get called with one piece of work that was created in createWork.  Each node will process it's own work, and therefore this funtion will get called once on each device, each call with a different piece of work. (excluding the retry logic)
+     
+     @param node The node that is processing this piece of work
+     @param work The work to be processed by this node
+     
+     @return FogResult The information that needs to be returned to the initiator
+     
+     */
+    public func processWork(node:Node, work: FogWork) -> FogResult {
+        
+        let serializedData:[String:NSObject] = [String:NSObject]()
+        return FogResult(serializedData:serializedData);
+    }
+    
+    /**
+     
+     This gets called only once by FogMachine on the initiator node.  It is resposible for merging all the results.
+     
+     @param node The node processing the work.  This is you!
+     @param nodeToResult All of the results tied to each node.
+     
+     */
+    public func mergeResults(node:Node, nodeToResult :[Node:FogResult]) -> Void {
+        
+    }
+    
+    
+    /**
+     
+     This is called when a peer connects to the network
+     
+     */
+    public func onPeerConnect(myNode:Node, connectedNode:Node) {
+        
+    }
+    
+    /**
+     
+     This is called when a peer disconnects from the network
+     
+     */
+    public func onPeerDisconnect(myNode:Node, disconnectedNode:Node) {
+        
     }
 }

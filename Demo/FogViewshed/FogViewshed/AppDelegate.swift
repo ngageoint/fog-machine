@@ -7,11 +7,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-        ConnectionManager.start()
-
+        // init fog machine
+        ConnectionManager.fogMachineInstance.startSearchForPeers()
+        ConnectionManager.fogMachineInstance.setTool(ViewshedTool())
         
         let prefs = NSUserDefaults.standardUserDefaults()
 

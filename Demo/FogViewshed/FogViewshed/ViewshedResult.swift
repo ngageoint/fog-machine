@@ -2,53 +2,24 @@ import Foundation
 import MapKit
 import Fog
 
-class ViewshedResult: Work {
-    
-    
-    let viewshedResult:UIImage// UIImage//[[Int]]
-    var serializedViewshedMetrics = Metrics<String, Timer>()
-    
-    override var mpcSerialized : NSData {
-        if let newMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode()) {
-            self.addViewshedMetrics(newMetrics)
-        }
+public class ViewshedResult: FogResult {
 
-        let viewshedMetricsData = encodeDictionary(getViewshedMetrics())
-        let fogMetricsData = encodeDictionary(gatherGlobalFogMetrics())
-        let result = NSKeyedArchiver.archivedDataWithRootObject(
-            [FogViewshed.VIEWSHED_RESULT: viewshedResult,
-                FogViewshed.METRICS: viewshedMetricsData,
-                Fog.WORKER_NODE: getWorkerNode().mpcSerialized,
-                Fog.METRICS: fogMetricsData])
-
-        return result
-    }
+    let viewshedResult:UIImage //[[Int]]
     
-    
-    init (viewshedResult: UIImage) { //UIImage) { //[[Int]]) {
+    init (viewshedResult: UIImage) {
         self.viewshedResult = viewshedResult
         super.init()
     }
     
-    
-    required init (mpcSerialized: NSData) {
-        let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        viewshedResult = workData[FogViewshed.VIEWSHED_RESULT] as! UIImage //UIImage//[[Int]]
-        super.init(mpcSerialized: mpcSerialized)
-        serializedViewshedMetrics = decodeDictionary(workData[FogViewshed.METRICS] as! NSData)
+    public required init (serializedData: [String:NSObject]) {
+        viewshedResult = serializedData[ViewshedWork.NUMBER_OF_QUADRANTS] as! UIImage
+        super.init(serializedData: serializedData)
     }
     
-    
-    func addViewshedMetrics(newMetrics: Metrics<String, Timer>) {
-        for (key, time) in newMetrics.getMetrics() {
-            serializedViewshedMetrics.updateValue(time, forKey: key)
-        }
-    }
-    
-    
-    func getViewshedMetrics() -> Metrics<String, Timer> {
-        return serializedViewshedMetrics
+    public override func getDataToSerialize() -> [String:NSObject] {
+        return [ViewshedWork.VIEWSHED_RESULT: viewshedResult];
     }
 
+    
 }
 

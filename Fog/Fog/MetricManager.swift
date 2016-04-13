@@ -59,7 +59,7 @@ public class MetricManager {
     }
     
     
-    public func startForMetric(metric: String, deviceNode: Node = ConnectionManager.selfNode()) {
+    public func startForMetric(metric: String, deviceNode: Node) {
         guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
             //add new
             let newMetric = Metrics<String, Timer>()
@@ -77,7 +77,7 @@ public class MetricManager {
     }
     
     
-    public func stopForMetric(metric: String, deviceNode: Node = ConnectionManager.selfNode()) {
+    public func stopForMetric(metric: String, deviceNode: Node) {
         guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
             return
         }

@@ -2,10 +2,26 @@ import Foundation
 import MapKit
 import Fog
 
-class ViewshedWork: Work {
+public class ViewshedWork: FogWork {
     
-    let numberOfQuadrants: Int
-    let whichQuadrant: Int
+    static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
+    static let WHICH_QUADRANT = "whichQuadrant"
+    static let VIEWSHED_RESULT = "viewshedResult"
+    
+    static let ASSIGNED_TO = "assignedTo"
+    static let SEARCH_INITIATOR = "searchInitiator"
+    
+    static let ALGORITHM = "algorithm"
+    static let NAME = "name"
+    static let XCOORD = "xCoord"
+    static let YCOORD = "yCoord"
+    static let ELEVATION = "elevation"
+    static let RADIUS = "radius"
+    static let LATITUDE = "latitude"
+    static let LONGITUDE = "longitude"
+    
+    let numberOfQuadrants: UInt
+    let whichQuadrant: UInt
     
     // Observer properties
     let name: String
@@ -16,33 +32,10 @@ class ViewshedWork: Work {
     let latitude: Double
     let longitude: Double
     let algorithm: Int
-    
-    
-    override var mpcSerialized : NSData {
-        let fogMetricsData = encodeDictionary(gatherGlobalFogMetrics())
-        let result = NSKeyedArchiver.archivedDataWithRootObject(
-            [FogViewshed.NUMBER_OF_QUADRANTS: numberOfQuadrants,
-                FogViewshed.WHICH_QUADRANT: whichQuadrant,
-                //FogViewshed.OBSERVER: observer,
-                FogViewshed.NAME: name,
-                FogViewshed.XCOORD: xCoord,
-                FogViewshed.YCOORD: yCoord,
-                FogViewshed.ELEVATION: elevation,
-                FogViewshed.RADIUS: radius,
-                FogViewshed.LATITUDE: latitude,
-                FogViewshed.LONGITUDE: longitude,
-                FogViewshed.ALGORITHM: algorithm,
-                Fog.WORKER_NODE: getWorkerNode().mpcSerialized,
-                Fog.METRICS: fogMetricsData])
-        
-        return result
-    }
-   
 
-    init (numberOfQuadrants: Int, whichQuadrant: Int, observer: Observer) {
+    init (numberOfQuadrants: UInt, whichQuadrant: UInt, observer: Observer) {
         self.numberOfQuadrants = numberOfQuadrants
         self.whichQuadrant = whichQuadrant
-        //self.observer = observer
         self.name = observer.name
         self.xCoord = observer.xCoord
         self.yCoord = observer.yCoord
@@ -59,21 +52,32 @@ class ViewshedWork: Work {
         return Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: elevation, radius: radius, coordinate: CLLocationCoordinate2DMake(latitude, longitude))
     }
     
+    public required init (serializedData: [String:NSObject]) {
+
+        numberOfQuadrants = serializedData[ViewshedWork.NUMBER_OF_QUADRANTS] as! UInt
+        whichQuadrant = serializedData[ViewshedWork.WHICH_QUADRANT] as! UInt
+        name = serializedData[ViewshedWork.NAME] as! String
+        xCoord = serializedData[ViewshedWork.XCOORD] as! Int
+        yCoord = serializedData[ViewshedWork.YCOORD] as! Int
+        elevation = serializedData[ViewshedWork.ELEVATION] as! Int
+        radius = serializedData[ViewshedWork.RADIUS] as! Int
+        latitude = serializedData[ViewshedWork.LATITUDE] as! Double
+        longitude = serializedData[ViewshedWork.LONGITUDE] as! Double
+        algorithm = serializedData[ViewshedWork.ALGORITHM] as! Int
+        super.init(serializedData: serializedData)
+    }
     
-    required init (mpcSerialized: NSData) {
-        let workData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        numberOfQuadrants = workData[FogViewshed.NUMBER_OF_QUADRANTS] as! Int
-        whichQuadrant = workData[FogViewshed.WHICH_QUADRANT] as! Int
-        //observer = NSKeyedUnarchiver.unarchiveObjectWithData(dict[FogViewshed.OBSERVER] as! NSData) as! Observer
-        name = workData[FogViewshed.NAME] as! String
-        xCoord = workData[FogViewshed.XCOORD] as! Int
-        yCoord = workData[FogViewshed.YCOORD] as! Int
-        elevation = workData[FogViewshed.ELEVATION] as! Int
-        radius = workData[FogViewshed.RADIUS] as! Int
-        latitude = workData[FogViewshed.LATITUDE] as! Double
-        longitude = workData[FogViewshed.LONGITUDE] as! Double
-        algorithm = workData[FogViewshed.ALGORITHM] as! Int
-        super.init(mpcSerialized: mpcSerialized)
+    public override func getDataToSerialize() -> [String:NSObject] {
+        return [ViewshedWork.NUMBER_OF_QUADRANTS: numberOfQuadrants,
+                ViewshedWork.WHICH_QUADRANT: whichQuadrant,
+                ViewshedWork.NAME: name,
+                ViewshedWork.XCOORD: xCoord,
+                ViewshedWork.YCOORD: yCoord,
+                ViewshedWork.ELEVATION: elevation,
+                ViewshedWork.RADIUS: radius,
+                ViewshedWork.LATITUDE: latitude,
+                ViewshedWork.LONGITUDE: longitude,
+                ViewshedWork.ALGORITHM: algorithm];
     }
 }
 

@@ -1,41 +1,43 @@
 import PeerKit
 import MultipeerConnectivity
 
-public class Node : Hashable, Equatable, MPCSerializable {
+public class Node : CustomStringConvertible, Hashable, Equatable, FogSerializable {
+
+    public static let NAME = "Name"
+    public static let UNIQUEID = "UniqueId"
+    public static let MCPEERID = "MCPeerID"
+    public static let HASH = "Hash"
     
     // MARK: Properties
-    public var displayName: String
+    public var name: String
     public var uniqueId: String
-    public var hashValue: Int
-    public var mpcSerialized : NSData {
-        let result = NSKeyedArchiver.archivedDataWithRootObject([
-            Fog.Node.DISPLAY_NAME: displayName,
-            Fog.Node.UNIQUE_ID: uniqueId,
-            Fog.Node.HASH: hashValue])
-        
-        return result
-    }
+    public private(set) var mcPeerID: MCPeerID
     
-    public init(uniqueId:String, displayName:String) {
-        self.displayName = displayName
+    public var description: String{
+        return name + " " + uniqueId
+    }
+    public var hashValue: Int
+    
+    public init(uniqueId:String, name:String, mcPeerID:MCPeerID) {
+        self.name = name
         self.uniqueId = uniqueId
+        self.mcPeerID = mcPeerID;
         self.hashValue = uniqueId.hash
     }
     
-    public convenience init(mcPeerId: MCPeerID) {
-               self.init(uniqueId: mcPeerId.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1],
-                          displayName: mcPeerId.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0])
-        }
+    public required init (serializedData: [String:NSObject]) {
+        self.name = serializedData[Node.NAME] as! String
+        self.uniqueId = serializedData[Node.UNIQUEID] as! String
+        self.mcPeerID = serializedData[Node.MCPEERID] as! MCPeerID
+        self.hashValue = serializedData[Node.HASH] as! Int
+    }
     
-    public required init (mpcSerialized: NSData) {
-        let nodeData = NSKeyedUnarchiver.unarchiveObjectWithData(mpcSerialized) as! [String: NSObject]
-        self.displayName = nodeData[Fog.Node.DISPLAY_NAME] as! String
-        self.uniqueId = nodeData[Fog.Node.UNIQUE_ID] as! String
-        self.hashValue = nodeData[Fog.Node.HASH] as! Int
-    }    
-    
-    public func isSelf() -> Bool {
-        return (displayName + PeerKit.ID_DELIMITER + uniqueId) == PeerKit.myName
+    public func getDataToSerialize() -> [String:NSObject] {
+        return [
+            Node.NAME: name,
+            Node.UNIQUEID: uniqueId,
+            Node.MCPEERID: mcPeerID,
+            Node.HASH: hashValue];
     }
     
     // TODO: status/lastSeen/DeviceInfo/equals

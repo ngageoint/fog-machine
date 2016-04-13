@@ -10,13 +10,6 @@ public struct Fog {
     public static let METRICS = "FogMetrics"
     
     
-    public struct Node {
-        public static let DISPLAY_NAME = "DisplayName"
-        public static let UNIQUE_ID = "UniqueId"
-        public static let HASH = "Hash"
-    }
-    
-    
     public struct Metric {
         public static let SEND = "Fog Send Work"
         public static let RECEIVE = "Fog Handle Result"
@@ -32,4 +25,8 @@ struct Time {
     static let START = "start"
     static let END = "end"
     static let ELAPSED = "elapsed"
+}
+
+enum FogMachineError: ErrorType {
+    case PeerIDError
 }

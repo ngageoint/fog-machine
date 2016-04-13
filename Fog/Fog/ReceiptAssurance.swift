@@ -3,7 +3,6 @@ import Foundation
 
 public class ReceiptAssurance: NSObject {
     
-
     var sender: Node
     var assurance: [String:[PeerAssurance]] //Event: PeerAssurance
     var reprocessMethod: ((String) -> ())? = nil
@@ -13,13 +12,12 @@ public class ReceiptAssurance: NSObject {
         self.assurance = [:]
     }
     
-    
     // MARK: Receipt Assurance
     
     
-    public func add(peer: Node, event: String, work: Work, timeoutSeconds: Double) {
-        printOut("Adding: peer: \(peer.displayName), event: \(event)")
-        let newPeerAssurance = PeerAssurance(deviceNode: peer, work: work, timeoutSeconds: timeoutSeconds)
+    public func add(peer: Node, event: String, work: FogWork) {
+        printOut("Adding: peer: \(peer.name), event: \(event)")
+        let newPeerAssurance = PeerAssurance(deviceNode: peer, work: work, timeoutSeconds: 30)
         
         if assurance[event] == nil {
             assurance[event] = [newPeerAssurance]
@@ -92,12 +90,12 @@ public class ReceiptAssurance: NSObject {
     }
     
     
-    public func getNextTimedOutWork(event: String) -> Work? {
+    public func getNextTimedOutWork(event: String) -> FogWork? {
         printOut("getNextTimedOutWork")
         guard assurance[event] != nil else {
             return nil
         }
-        var work: Work? = nil
+        var work: FogWork? = nil
         
         for peer in assurance[event]! {
             let runTime = CFAbsoluteTimeGetCurrent() - peer.receivedData.startTime
@@ -115,25 +113,25 @@ public class ReceiptAssurance: NSObject {
     }
     
     
-    public func getFinishedPeer(event: String) -> Node {
-        printOut("getFinishedPeer")
-        guard assurance[event] != nil else {
-            return ConnectionManager.selfNode()
-        }
-        var peerNode: Node = ConnectionManager.selfNode()
-        
-        for peer in assurance[event]! {
-            //printOut("\tpeer \(peer.name) has value \(peer.receivedData.isReceived)")
-            if !peer.deviceNode.isSelf() {
-                if peer.receivedData.isReceived {
-                    peerNode = peer.deviceNode
-                    break
-                }
-            }
-        }
-        
-        return peerNode
-    }
+//    public func getFinishedPeer(event: String) -> Node {
+//        printOut("getFinishedPeer")
+//        guard assurance[event] != nil else {
+//            return ConnectionManager.selfNode()
+//        }
+//        var peerNode: Node = ConnectionManager.selfNode()
+//        
+//        for peer in assurance[event]! {
+//            //printOut("\tpeer \(peer.name) has value \(peer.receivedData.isReceived)")
+//            if !peer.deviceNode.isSelf() {
+//                if peer.receivedData.isReceived {
+//                    peerNode = peer.deviceNode
+//                    break
+//                }
+//            }
+//        }
+//        
+//        return peerNode
+//    }
     
     
     public func startTimer(event: String, timeoutSeconds: Double, reprocessMethod: (String) -> ()) {
@@ -158,11 +156,9 @@ public class ReceiptAssurance: NSObject {
         }
     }
     
-    //Used for debugging
     private func printOut(output: String) {
         dispatch_async(dispatch_get_main_queue()) {
-            //NSLog(output)
+            NSLog(output)
         }
     }
-    
 }

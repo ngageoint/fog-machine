@@ -12,8 +12,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     // MARK: Class Variables
 
-
-    var connectionManager: ConnectionManager!
     var allObservers = [ObserverEntity]()
     var model = ObserverFacade()
     var settingsObserver = Observer() //Only use for segue from ObserverSettings
@@ -46,7 +44,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.addGestureRecognizer(gesture)
 
         isLogShown = false
-        logBox.text = "Connected to \(ConnectionManager.allPeerNodes().count) peers.\n"
+        logBox.text = "Connected to \(ConnectionManager.fogMachineInstance.getPeerNodes().count) peers.\n"
         logBox.editable = false
 
         allObservers = model.getObservers()
@@ -59,7 +57,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             //Center on most recently added observer
             self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
         }
-        setupFogViewshedEvents()
+        //setupFogViewshedEvents()
     }
 
 
@@ -393,42 +391,44 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
 
     func startFogViewshed(observer: Observer) {
-        printOut("Beginning viewshed on \(ConnectionManager.selfNode().displayName)")
+        printOut("User requested that viewshed be run")
         
-        self.connectionManager.sendEventToAll(Event.StartViewshed.rawValue, timeoutSeconds: 30, metadata: observer)
+        (ConnectionManager.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
+        
+        ConnectionManager.fogMachineInstance.execute()
     }
 
 
-    func processWork(work: ViewshedWork) -> ViewshedResult {
-        viewshedMetrics.startForMetric(Metric.WORK)
-        self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-
-        viewshedMetrics.startForMetric(Metric.VIEWSHED)
-        self.performFogViewshed(work.getObserver(), numberOfQuadrants: work.numberOfQuadrants, whichQuadrant: work.whichQuadrant)
-        viewshedMetrics.stopForMetric(Metric.VIEWSHED)
-
-        //Uncomment if passing [[Int]]
-        //let result = ViewshedResult(viewshedResult: self.viewshedResults)
-
-        self.printOut("\tDisplay result locally on \(ConnectionManager.selfNode().displayName)")
-
-        viewshedMetrics.startForMetric(Metric.OVERLAY)
-        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
-        dispatch_async(dispatch_get_main_queue()) {
-            self.mapView.addOverlay(viewshedOverlay)
-        }
-        viewshedMetrics.stopForMetric(Metric.OVERLAY)
-
-        //Use if passing UIImage
-        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
-        viewshedMetrics.stopForMetric(Metric.WORK)
-
-        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode()) {
-            result.addViewshedMetrics(deviceMetrics)
-        }
-
-        return result
-    }
+//    func processWork(work: ViewshedWork) -> ViewshedResult {
+//        viewshedMetrics.startForMetric(Metric.WORK)
+//        self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
+//
+//        viewshedMetrics.startForMetric(Metric.VIEWSHED)
+//        
+//        viewshedMetrics.stopForMetric(Metric.VIEWSHED)
+//
+//        //Uncomment if passing [[Int]]
+//        //let result = ViewshedResult(viewshedResult: self.viewshedResults)
+//
+//        self.printOut("\tDisplay result locally on \(ConnectionManager.selfNode().displayName)")
+//
+//        viewshedMetrics.startForMetric(Metric.OVERLAY)
+//        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
+//        dispatch_async(dispatch_get_main_queue()) {
+//            self.mapView.addOverlay(viewshedOverlay)
+//        }
+//        viewshedMetrics.stopForMetric(Metric.OVERLAY)
+//
+//        //Use if passing UIImage
+//        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
+//        viewshedMetrics.stopForMetric(Metric.WORK)
+//
+//        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode()) {
+//            result.addViewshedMetrics(deviceMetrics)
+//        }
+//
+//        return result
+//    }
 
 
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
@@ -448,75 +448,75 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
 
-    func setupFogViewshedEvents() {
-      
-        let fogTool = FogTool(
-            workDivider: { currentQuadrant, numberOfQuadrants, metadata in
-                let observer = metadata as! Observer
-                let theWork = ViewshedWork(numberOfQuadrants: numberOfQuadrants, whichQuadrant: currentQuadrant, observer: observer)
-                return theWork
-            },
-            log: { peerName in
-                self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
-            },
-            selfWork: { selfWork, hasPeers in
-                self.printOut("\tBeginning viewshed locally for selfWork")
-                if let selfViewshedWork = selfWork as? ViewshedWork {
-                    self.processWork(selfViewshedWork)
-                }
-                
-                if !hasPeers {
-                    self.completeViewshed()
-                }
-                self.printOut("\tFound results locally for selfWork.")
-            },
-            processResult: {result, fromPeerId in
-                let viewshedResult = result[Event.SendViewshedResult.rawValue] as! ViewshedResult
-                let peerNode = Node(mcPeerId: fromPeerId)
-                viewshedMetrics.updateValue(viewshedResult.getViewshedMetrics(), forKey: peerNode)
-                // dispatch_barrier_async(dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_CONCURRENT)) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.printOut("\tResult received from \(peerNode.displayName).")
-                    //   }
-                    //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-                    
-                    let viewshedOverlay = self.viewshedPalette.generateOverlay(viewshedResult.viewshedResult)
-                    self.mapView.addOverlay(viewshedOverlay)
-                }
-                
-            },
-            completeWork: {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.printOut("\tAll received")
-                    self.completeViewshed()
-                }
-            }
-        )
-        
-        self.connectionManager = ConnectionManager(fogTool: fogTool)
+//    func setupFogViewshedEvents() {
+//      
+//        let fogTool = FogTool(
+//            workDivider: { currentQuadrant, numberOfQuadrants, metadata in
+//                let observer = metadata as! Observer
+//                let theWork = ViewshedWork(numberOfQuadrants: numberOfQuadrants, whichQuadrant: currentQuadrant, observer: observer)
+//                return theWork
+//            },
+//            log: { peerName in
+//                self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
+//            },
+//            selfWork: { selfWork, hasPeers in
+//                self.printOut("\tBeginning viewshed locally for selfWork")
+//                if let selfViewshedWork = selfWork as? ViewshedWork {
+//                    self.processWork(selfViewshedWork)
+//                }
+//                
+//                if !hasPeers {
+//                    self.completeViewshed()
+//                }
+//                self.printOut("\tFound results locally for selfWork.")
+//            },
+//            processResult: {result, fromPeerId in
+//                let viewshedResult = result[Event.SendViewshedResult.rawValue] as! ViewshedResult
+//                let peerNode = Node(mcPeerId: fromPeerId)
+//                viewshedMetrics.updateValue(viewshedResult.getViewshedMetrics(), forKey: peerNode)
+//                // dispatch_barrier_async(dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_CONCURRENT)) {
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    self.printOut("\tResult received from \(peerNode.displayName).")
+//                    //   }
+//                    //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
+//                    
+//                    let viewshedOverlay = self.viewshedPalette.generateOverlay(viewshedResult.viewshedResult)
+//                    self.mapView.addOverlay(viewshedOverlay)
+//                }
+//                
+//            },
+//            completeWork: {
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    self.printOut("\tAll received")
+//                    self.completeViewshed()
+//                }
+//            }
+//        )
+//        
+//        self.connectionManager = ConnectionManager(fogTool: fogTool)
 
-        self.connectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
-            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(ConnectionManager.selfNode().displayName) to \(fromPeerId.displayName)")
-
-            self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
-            let workData = object as! [String: NSData]
-            let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
-
-            let result = self.processWork(work)
-            self.pinObserverLocation(work.getObserver())
-
-            self.connectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
-        }
-
-        self.connectionManager.onEvent(Event.SendViewshedResult.rawValue) { fromPeerId, object in
-
-            var workData = object as! [NSString: NSData]
-            let result = ViewshedResult(mpcSerialized: workData[Event.SendViewshedResult.rawValue]!)
-
-            self.connectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId, object: [Event.SendViewshedResult.rawValue: result])
-        }
-
-    }
+//        self.connectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
+//            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(ConnectionManager.selfNode().displayName) to \(fromPeerId.displayName)")
+//
+//            self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
+//            let workData = object as! [String: NSData]
+//            let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
+//
+//            let result = self.processWork(work)
+//            self.pinObserverLocation(work.getObserver())
+//
+//            self.connectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
+//        }
+//
+//        self.connectionManager.onEvent(Event.SendViewshedResult.rawValue) { fromPeerId, object in
+//
+//            var workData = object as! [NSString: NSData]
+//            let result = ViewshedResult(mpcSerialized: workData[Event.SendViewshedResult.rawValue]!)
+//
+//            self.connectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId, object: [Event.SendViewshedResult.rawValue: result])
+//        }
+//
+//    }
 
 
     func completeViewshed() {
@@ -585,7 +585,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         redrawMap()
-        self.logBox.text = "Connected to \(ConnectionManager.allPeerNodes().count) peers.\n"
+        self.logBox.text = "Connected to \(ConnectionManager.fogMachineInstance.getPeerNodes().count) peers.\n"
     }
 
 
@@ -638,8 +638,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
 
     func printOut(output: String) {
+        NSLog(output)
         dispatch_async(dispatch_get_main_queue()) {
-            print(output)
             self.logBox.text = self.logBox.text + "\n" + output
         }
     }

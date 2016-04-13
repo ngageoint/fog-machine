@@ -18,7 +18,7 @@ class ViewshedMetrics: MetricManager {
     
     func processMetrics() {
         for (aNode, deviceMetrics) in storedMetrics.getMetrics() {
-            devices += "\t\t\(aNode.displayName)\n"
+            devices += "\t\t\(aNode.name)\n"
             for (event, timer) in deviceMetrics.getMetrics() {
                 addToTotal(event, value: timer.getElapsed())
                 addToIndividual(event, metricKey: aNode, metricValue: timer.getElapsed())
@@ -114,7 +114,7 @@ class ViewshedMetrics: MetricManager {
             printableKey = parsedKey[1]
         }
         for (aNode, time) in individualMetrics.getMetrics() {
-            output += "\t\t\(aNode.displayName):\n\t\t\t\(formatTime(time))s ("
+            output += "\t\t\(aNode.name):\n\t\t\t\(formatTime(time))s ("
             output += self.getPercentage(time, total: totalValue)
             output += " of \(printableKey))\n"
         }

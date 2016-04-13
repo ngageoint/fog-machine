@@ -10,7 +10,7 @@
 		7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
 		7539D65C1C9C45F4008CCBE0 /* MetricSingleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */; };
 		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
-		753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* MapViewController.swift */; };
+		753D3D5F1BEA33CF004E3589 /* ViewshedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */; };
 		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
 		753D3D6A1BEBA59E004E3589 /* HGT in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D691BEBA59E004E3589 /* HGT */; };
 		753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */; };
@@ -45,13 +45,14 @@
 		9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */; };
 		9BE78E791C727D1E00506F11 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE78E781C727D1E00506F11 /* Toast.swift */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
-		E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* FirstViewController.swift */; };
+		E314F6C31B79023D005B75C6 /* ConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */; };
 		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
 		E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C61B79023D005B75C6 /* Main.storyboard */; };
 		E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C91B79023D005B75C6 /* Images.xcassets */; };
 		E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */; };
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
 		E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */; };
+		F997AB011CBD9BC2009C929B /* ViewshedTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F997AB001CBD9BC2009C929B /* ViewshedTool.swift */; };
 		F9D9E3B41C87A651009710A5 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AA1C87A651009710A5 /* N37W123.hgt */; };
 		F9D9E3B51C87A651009710A5 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AB1C87A651009710A5 /* N38W077.hgt */; };
 		F9D9E3B61C87A651009710A5 /* N38W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AC1C87A651009710A5 /* N38W078.hgt */; };
@@ -79,7 +80,7 @@
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
 		7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricSingleDevice.swift; sourceTree = "<group>"; };
 		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
-		753D3D5E1BEA33CF004E3589 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedViewController.swift; sourceTree = "<group>"; };
 		753D3D621BEA7900004E3589 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		753D3D691BEBA59E004E3589 /* HGT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HGT; sourceTree = "<group>"; };
 		753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
@@ -118,7 +119,7 @@
 		E314F6BB1B79023D005B75C6 /* FogViewshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogViewshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E314F6C21B79023D005B75C6 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsViewController.swift; sourceTree = "<group>"; };
 		E314F6C41B79023D005B75C6 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		E314F6C71B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E314F6C91B79023D005B75C6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 		E314F6D71B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogViewshedTests.swift; sourceTree = "<group>"; };
 		E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
+		F997AB001CBD9BC2009C929B /* ViewshedTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedTool.swift; sourceTree = "<group>"; };
 		F9D9E3A81C87A4A9009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = HGT/N37W123.hgt; sourceTree = "<group>"; };
 		F9D9E3AA1C87A651009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = HGT/N37W123.hgt; sourceTree = "<group>"; };
 		F9D9E3AB1C87A651009710A5 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 			children = (
 				753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */,
 				75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */,
+				F997AB001CBD9BC2009C929B /* ViewshedTool.swift */,
 			);
 			name = FogModels;
 			sourceTree = "<group>";
@@ -338,9 +341,9 @@
 		E3CB97F71B7975C8006D6961 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E314F6C21B79023D005B75C6 /* FirstViewController.swift */,
+				E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */,
 				E314F6C41B79023D005B75C6 /* DataViewController.swift */,
-				753D3D5E1BEA33CF004E3589 /* MapViewController.swift */,
+				753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */,
 				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
 				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 				758FB77F1C0A3AE400A193A7 /* Viewshed */,
@@ -537,7 +540,7 @@
 				753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */,
 				758885461C8A116B009AFB06 /* AxisOrientedBoundingBox.swift in Sources */,
 				758885441C89F93D009AFB06 /* GeoUtility.swift in Sources */,
-				753D3D5F1BEA33CF004E3589 /* MapViewController.swift in Sources */,
+				753D3D5F1BEA33CF004E3589 /* ViewshedViewController.swift in Sources */,
 				9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */,
 				9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */,
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
@@ -545,12 +548,13 @@
 				E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */,
 				9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */,
 				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
-				E314F6C31B79023D005B75C6 /* FirstViewController.swift in Sources */,
+				E314F6C31B79023D005B75C6 /* ConnectionsViewController.swift in Sources */,
 				9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */,
 				7539D65C1C9C45F4008CCBE0 /* MetricSingleDevice.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BE78E791C727D1E00506F11 /* Toast.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
+				F997AB011CBD9BC2009C929B /* ViewshedTool.swift in Sources */,
 				9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

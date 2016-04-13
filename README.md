@@ -31,7 +31,7 @@ ConnectionManager.start()
 
 ## Requirements
 
-Fog Machine requires iOS 8+.
+Fog Machine requires iOS 8.4+.
 
 ## Pull Requests
 

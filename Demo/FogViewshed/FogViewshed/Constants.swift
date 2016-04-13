@@ -1,11 +1,33 @@
 import Foundation
 import Fog
 
+
+//SRTM = Shuttle Radar Topography Mission sampled at three arc-seconds
+struct Srtm3 {
+    static let MAX_SIZE = 1201
+    static let CENTER_OFFSET = 0.5
+    static let CELL_SIZE_DENOMINATOR = 1201.0
+    static let DISPLAY_DIAMETER = 100000.0 * 3.0
+    static let EXTENT_METERS = 90.0
+    
+}
+
+enum MapType: Int {
+    case Standard = 0
+    case Hybrid
+    case Satellite
+}
+
+enum ViewshedAlgorithm: Int {
+    case FranklinRay = 0
+    case VanKreveld = 1
+}
+
 struct FogViewshed {
     static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
     static let WHICH_QUADRANT = "whichQuadrant"
     static let VIEWSHED_RESULT = "viewshedResult"
-
+    
     static let ASSIGNED_TO = "assignedTo"
     static let SEARCH_INITIATOR = "searchInitiator"
     
@@ -20,32 +42,6 @@ struct FogViewshed {
     
     static let ENTITY = "Observer"
     static let METRICS = "ViewshedMetrics"
-}
-
-//SRTM = Shuttle Radar Topography Mission sampled at three arc-seconds
-struct Srtm3 {
-    static let MAX_SIZE = 1201
-    static let CENTER_OFFSET = 0.5
-    static let CELL_SIZE_DENOMINATOR = 1201.0
-    static let DISPLAY_DIAMETER = 100000.0 * 3.0
-    static let EXTENT_METERS = 90.0
-
-}
-
-enum MapType: Int {
-    case Standard = 0
-    case Hybrid
-    case Satellite
-}
-
-enum Event: String {
-    case StartViewshed = "StartViewshed",
-    SendViewshedResult = "SendViewshedResult"
-}
-
-enum ViewshedAlgorithm: Int {
-    case FranklinRay = 0
-    case VanKreveld = 1
 }
 
 struct Srtm {
@@ -73,7 +69,7 @@ struct Metric {
         static let READING = "1.1.1" + Metric.DELIMITER + "Loading single HGT"
         static let MERGING = "1.1.2" + Metric.DELIMITER + "Merging all HGT(s)"
     }
-
+    
     // Update with the order the metrics will be displayed
     static let OUTPUT_ORDER = [Metric.WORK,
                                Metric.VIEWSHED,
