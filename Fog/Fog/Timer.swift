@@ -23,6 +23,6 @@ public class Timer {
     }
     
     public func getElapsedTimeInSeconds() -> CFAbsoluteTime {
-        return stopTime - stopTime
+        return stopTime - startTime
     }
 }

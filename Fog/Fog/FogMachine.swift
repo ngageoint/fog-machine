@@ -222,7 +222,7 @@ public class FogMachine {
         }
         
         // process your own work
-        NSLog(getSelfNode().description + " starting to process work.")
+        NSLog("Processing self work.")
         let selfResult:FogResult = self.fogTool.processWork(getSelfNode(), work: selfWork!)
         
         // store the result and merge results if needed
