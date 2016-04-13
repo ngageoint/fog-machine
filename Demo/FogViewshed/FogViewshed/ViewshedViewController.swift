@@ -35,8 +35,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         mapView.addGestureRecognizer(gesture)
 
         isLogShown = false
-        logBox.text = "Connected to \(FogMachine.fogMachineInstance.getPeerNodes().count) peers.\n"
-        logBox.editable = false
+        ViewshedLog("Connected to \(FogMachine.fogMachineInstance.getPeerNodes().count) peers.\n", clearLog: true)
 
         allObservers = model.getObservers()
         displayObservations()
@@ -59,7 +58,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: - TabBarController Delegates
 
-
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
@@ -70,7 +68,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
 
     // MARK: Location Delegate Methods
-
 
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
@@ -607,7 +604,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Logging
 
-    func ViewshedLog(output: String, optional clearLog: Bool = false) {
+    func ViewshedLog(output: String, clearLog: Bool = false) {
         NSLog(output)
         dispatch_async(dispatch_get_main_queue()) {
             if(clearLog) {
