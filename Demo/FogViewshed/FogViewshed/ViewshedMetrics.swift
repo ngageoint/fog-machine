@@ -20,34 +20,34 @@ class ViewshedMetrics: MetricManager {
         for (aNode, deviceMetrics) in storedMetrics.getMetrics() {
             devices += "\t\t\(aNode.name)\n"
             for (event, timer) in deviceMetrics.getMetrics() {
-                addToTotal(event, value: timer.getElapsed())
-                addToIndividual(event, metricKey: aNode, metricValue: timer.getElapsed())
+                addToTotal(event, value: timer.getElapsedTimeInSeconds())
+                addToIndividual(event, metricKey: aNode, metricValue: timer.getElapsedTimeInSeconds())
             }
         }
     }
 
     
-    func getOutput() -> String {
-        var output = "\n"
-        output += self.devices
-        output += "\n"
-        output += getOverallTime()
-        output += "\n\nStep Breakdown:\n"
-        
-        for key in Metric.OUTPUT_ORDER {
-            var metricOutput = ""
-            metricOutput += getTotalTimeForKey(key)
-            metricOutput += getIndividualTimesForKey(key)
-            if metricOutput != "" {
-                output += metricOutput
-                output += "\n"
-            }
-        }
-
-        output += "\n"
-
-        return output
-    }
+//    func getOutput() -> String {
+//        var output = "\n"
+//        output += self.devices
+//        output += "\n"
+//        output += getOverallTime()
+//        output += "\n\nStep Breakdown:\n"
+//        
+//        for key in Metric.OUTPUT_ORDER {
+//            var metricOutput = ""
+//            metricOutput += getTotalTimeForKey(key)
+//            metricOutput += getIndividualTimesForKey(key)
+//            if metricOutput != "" {
+//                output += metricOutput
+//                output += "\n"
+//            }
+//        }
+//
+//        output += "\n"
+//
+//        return output
+//    }
     
     
     // MARK: Process - Private Functions
@@ -79,7 +79,7 @@ class ViewshedMetrics: MetricManager {
     
     private func getOverallTime() -> String {
         var output = "Total Time: "
-        output += formatTime(self.overall.getElapsed())
+        output += formatTime(self.overall.getElapsedTimeInSeconds())
         output += "s"
 
         return output
@@ -92,35 +92,35 @@ class ViewshedMetrics: MetricManager {
         }
         
         var output = "\t\(key):\n\t\t\t\(formatTime(value))s ("
-        output += getPercentage(value, total: self.overall.getElapsed())
+        output += getPercentage(value, total: self.overall.getElapsedTimeInSeconds())
         output += " of Total Time)\n"
         
         return output
     }
 
     
-    private func getIndividualTimesForKey(key: String) -> String {
-        guard let individualMetrics = individualManager[key] else {
-            return ""
-        }
-        guard let totalValue = totalManager[key] else {
-            return ""
-        }
-        
-        var output = ""
-        var printableKey = key
-        let parsedKey = key.componentsSeparatedByString(Metric.DELIMITER)
-        if parsedKey.count >= 2 {
-            printableKey = parsedKey[1]
-        }
-        for (aNode, time) in individualMetrics.getMetrics() {
-            output += "\t\t\(aNode.name):\n\t\t\t\(formatTime(time))s ("
-            output += self.getPercentage(time, total: totalValue)
-            output += " of \(printableKey))\n"
-        }
-
-        return output
-    }
+//    private func getIndividualTimesForKey(key: String) -> String {
+//        guard let individualMetrics = individualManager[key] else {
+//            return ""
+//        }
+//        guard let totalValue = totalManager[key] else {
+//            return ""
+//        }
+//        
+//        var output = ""
+//        var printableKey = key
+//        let parsedKey = key.componentsSeparatedByString(Metric.DELIMITER)
+//        if parsedKey.count >= 2 {
+//            printableKey = parsedKey[1]
+//        }
+//        for (aNode, time) in individualMetrics.getMetrics() {
+//            output += "\t\t\(aNode.name):\n\t\t\t\(formatTime(time))s ("
+//            output += self.getPercentage(time, total: totalValue)
+//            output += " of \(printableKey))\n"
+//        }
+//
+//        return output
+//    }
     
     
     private func getPercentage(value: CFAbsoluteTime, total: CFAbsoluteTime) -> String {

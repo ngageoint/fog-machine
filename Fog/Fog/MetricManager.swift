@@ -50,12 +50,12 @@ public class MetricManager {
     
     
     public func startOverall() {
-        overall.startTimer()
+        overall.start()
     }
     
     
     public func stopOverall() {
-        overall.stopTimer()
+        overall.stop()
     }
     
     
@@ -64,14 +64,14 @@ public class MetricManager {
             //add new
             let newMetric = Metrics<String, Timer>()
             let timer = Timer()
-            timer.startTimer()
+            timer.start()
             newMetric.updateValue(timer, forKey: metric)
             storedMetrics.updateValue(newMetric, forKey: deviceNode)
             return
         }
         
         let timer = Timer()
-        timer.startTimer()
+        timer.start()
         deviceMetrics.updateValue(timer, forKey: metric)
         storedMetrics.updateValue(deviceMetrics, forKey: deviceNode)
     }
@@ -83,7 +83,7 @@ public class MetricManager {
         }
         
         if let timer = deviceMetrics.getValue(metric) {
-            timer.stopTimer()
+            timer.stop()
             deviceMetrics.updateValue(timer, forKey: metric)
             storedMetrics.updateValue(deviceMetrics, forKey: deviceNode)
         }
@@ -100,38 +100,6 @@ public class MetricManager {
     
     public func getMetrics() -> Metrics<Node, Metrics<String, Timer>> {
         return storedMetrics
-    }
-    
-    
-    public func mergeValueWithExisting(newMetrics: Metrics<String, Timer>, deviceNode: Node) {
-        guard let deviceMetrics = storedMetrics.getValue(deviceNode) else {
-            self.updateValue(newMetrics, forKey: deviceNode)
-            return
-        }
-        
-        let newMergedValues = Metrics<String, Timer>()
-        
-        for (key, value) in deviceMetrics.getMetrics() {
-            for (newKey, newValue) in newMetrics.getMetrics() {
-                if key == newKey {
-                    let mergedTimer = Timer()
-                    if value.getStart() == -1 {
-                        mergedTimer.setStart(newValue.getStart())
-                    } else {
-                        mergedTimer.setStart(value.getStart())
-                    }
-                    if value.getEnd() == -1 {
-                        mergedTimer.setEnd(newValue.getEnd())
-                    } else {
-                        mergedTimer.setEnd(value.getEnd())
-                    }
-                    mergedTimer.calculateElapsed()
-                    newMergedValues.updateValue(mergedTimer, forKey: key)
-                }
-            }
-        }
-        
-        self.updateValue(newMergedValues, forKey: deviceNode)
     }
     
 }

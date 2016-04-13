@@ -76,22 +76,22 @@ public class FogMachine {
         // when a work request comes over the air, have the tool process the work
         PeerKit.eventBlocks[self.sendWorkEvent] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
             let selfNode: Node = self.getSelfNode()
-            //let fromNode: Node = mcPeerIDToNode[fromPeerID]!
+            let fromNode: Node = Node(uniqueId: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: fromPeerID)
             
             // deserialize the work
             let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
-            
-            NSLog(selfNode.description + " received work to process for session " + sessionUUID + ".  Starting to process work.")
-            
             let peerWork:FogWork =  FogWork(serializedData: dataReceived["FogToolWork"] as! [String: NSObject])
+            
+            NSLog(selfNode.description + " received work to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
+            
+            // process the work, and get a result
             let peerResult:FogResult = self.fogTool.processWork(selfNode, work: peerWork)
 
             let dataToSend:[String:NSObject] =
                 ["FogToolResult": peerResult.getDataToSerialize(),
                  "SessionID": sessionUUID];
 
-            
             NSLog(selfNode.description + " done processing work.  Sending result back.")
             
             // send the result back
@@ -130,7 +130,11 @@ public class FogMachine {
     
     public func startSearchForPeers() {
         NSLog("searching for peers")
-        transceiver.startTransceiving(serviceType: Fog.SERVICE_TYPE)
+        // Service type can contain only ASCII lowercase letters, numbers, and hyphens.
+        // It must be a unique string, at most 15 characters long
+        // Note: Devices will only connect to other devices with the same serviceType value.
+        let SERVICE_TYPE = "fog-machine"
+        transceiver.startTransceiving(serviceType: SERVICE_TYPE)
     }
     
     /**
@@ -140,7 +144,7 @@ public class FogMachine {
      */
     public func execute() -> Void {
         // time how long the entire execution takes
-        executionTimer.startTimer()
+        executionTimer.start()
         
         // this is a uuid to keep track on this session (a round of execution).  It's mostly used to make sure requests and responses happen correctly for a single session.
         let sessionUUID:String = NSUUID().UUIDString
@@ -237,10 +241,10 @@ public class FogMachine {
             
             NSLog(selfNode.description + " received all \(nodeToResult.count) results.  Merging results.")
             self.fogTool.mergeResults(selfNode, nodeToResult: nodeToResult)
-            executionTimer.stopTimer()
-            NSLog("Execution time: " + String(format: "%.3f", executionTimer.getElapsed()) + " seconds")
+            executionTimer.stop()
+            NSLog("Execution time: " + String(format: "%.3f", executionTimer.getElapsedTimeInSeconds()) + " seconds")
         } else {
-            // TODO : add the retry logic!
+            // FIXME : add the retry logic!
             //NSTimer.scheduledTimerWithTimeInterval(timeoutSeconds, target: self, selector: #selector(ReceiptAssurance.timerAction(_:)), userInfo: event, repeats: false)
         }
     }

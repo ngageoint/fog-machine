@@ -34,6 +34,7 @@ public class ViewshedTool : FogTool {
 //        
 //        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)
 
+        sleep(10)
         
         let serializedData:[String:NSObject] = [String:NSObject]()
         return FogResult(serializedData:serializedData);
