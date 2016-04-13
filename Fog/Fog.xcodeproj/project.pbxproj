@@ -15,7 +15,7 @@
 		7577E4F81CAC6FE70099B337 /* MetricManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7577E4F71CAC6FE70099B337 /* MetricManager.swift */; };
 		7579CB5D1CA1A68F009A86F2 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7579CB5C1CA1A68F009A86F2 /* Metrics.swift */; };
 		75802C821C7F37AE00DAE8BD /* Fog.h in Headers */ = {isa = PBXBuildFile; fileRef = 75802C811C7F37AE00DAE8BD /* Fog.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75802CB91C7F449200DAE8BD /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CB81C7F449200DAE8BD /* ConnectionManager.swift */; };
+		75802CB91C7F449200DAE8BD /* FogMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CB81C7F449200DAE8BD /* FogMachine.swift */; };
 		75802CBD1C7F44D200DAE8BD /* FogWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CBB1C7F44D200DAE8BD /* FogWork.swift */; };
 		75802CBF1C7F451800DAE8BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CBE1C7F451800DAE8BD /* Constants.swift */; };
 		75802CC21C7F453400DAE8BD /* ReceiptAssurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CC01C7F453400DAE8BD /* ReceiptAssurance.swift */; };
@@ -36,7 +36,7 @@
 		75802C7E1C7F37AE00DAE8BD /* Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75802C811C7F37AE00DAE8BD /* Fog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fog.h; sourceTree = "<group>"; };
 		75802C831C7F37AE00DAE8BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		75802CB81C7F449200DAE8BD /* ConnectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
+		75802CB81C7F449200DAE8BD /* FogMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogMachine.swift; sourceTree = "<group>"; };
 		75802CBB1C7F44D200DAE8BD /* FogWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogWork.swift; sourceTree = "<group>"; };
 		75802CBE1C7F451800DAE8BD /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		75802CC01C7F453400DAE8BD /* ReceiptAssurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptAssurance.swift; sourceTree = "<group>"; };
@@ -113,7 +113,7 @@
 		75802CC81C8087D100DAE8BD /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				75802CB81C7F449200DAE8BD /* ConnectionManager.swift */,
+				75802CB81C7F449200DAE8BD /* FogMachine.swift */,
 				75802CC11C7F453400DAE8BD /* PeerAssurance.swift */,
 				75802CC01C7F453400DAE8BD /* ReceiptAssurance.swift */,
 				7577E4F71CAC6FE70099B337 /* MetricManager.swift */,
@@ -246,7 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F997AAFF1CBC60B3009C929B /* FogResult.swift in Sources */,
-				75802CB91C7F449200DAE8BD /* ConnectionManager.swift in Sources */,
+				75802CB91C7F449200DAE8BD /* FogMachine.swift in Sources */,
 				752E3BF21CB441C60026818C /* FogTool.swift in Sources */,
 				75802CC31C7F453400DAE8BD /* PeerAssurance.swift in Sources */,
 				F94F54BE1CADD8AE00D00160 /* Node.swift in Sources */,

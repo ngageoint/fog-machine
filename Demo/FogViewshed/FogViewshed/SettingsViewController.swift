@@ -49,7 +49,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let viewController: MapViewController = segue.destinationViewController as! MapViewController
+        let viewController: ViewshedViewController = segue.destinationViewController as! ViewshedViewController
         viewController.isLogShown = mapLogSwitch.on
     }
     

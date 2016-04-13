@@ -11,7 +11,7 @@
         <!--Connections-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9pv-A4-QxB" customClass="ConnectionsViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -218,7 +218,7 @@
         <!--Viewshed-->
         <scene sceneID="XZA-M0-u1n">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="pEj-gH-Hgf" userLabel="Viewshed" customClass="MapViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="pEj-gH-Hgf" userLabel="Viewshed" customClass="ViewshedViewController" customModule="FogViewshed" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ex2-aV-BLO"/>
                         <viewControllerLayoutGuide type="bottom" id="nk6-LY-TBR"/>

@@ -9,7 +9,6 @@ class KreveldViewshed {
         return viewshedMatrix
     }
     
-    
     // create a queue with the dummy KreveldSweepEventNode event with the eventType OTHER...so the total event count in the queue is one more than normal
     private func calculateViewshed (cellsInRadius:[(x:Int, y:Int)], elevationMatrix: [[Int]], observPt: ElevationPoint, radius: Int, numQuadrants: Int, quadrant2Calc: Int) ->[[Int]] {
         var observPt = observPt

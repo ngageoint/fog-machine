@@ -54,7 +54,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         } else if segue.identifier == "runSelectedFogViewshed" {
             let editedObserver = createObserverFromSettings()
             saveObserverSettings(editedObserver)
-            let mapViewController = segue.destinationViewController as! MapViewController
+            let mapViewController = segue.destinationViewController as! ViewshedViewController
             mapViewController.settingsObserver = editedObserver
         }
     }

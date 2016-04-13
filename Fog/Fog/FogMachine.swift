@@ -13,9 +13,9 @@ import MultipeerConnectivity
  Call fogMachineInstance.execute() to run your tool in your network!
  
  */
-public class ConnectionManager {
+public class FogMachine {
     
-    public static let fogMachineInstance = ConnectionManager()
+    public static let fogMachineInstance = FogMachine()
     
     // Your application will set this
     private var fogTool: FogTool = FogTool()

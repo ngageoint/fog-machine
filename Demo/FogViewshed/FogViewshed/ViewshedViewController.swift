@@ -2,12 +2,7 @@ import UIKit
 import MapKit
 import Fog
 
-
-var viewshedMetrics = ViewshedMetrics()
-let enableDisplayOfMetrics = true
-
-
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
+class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
 
     // MARK: Class Variables
@@ -20,13 +15,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
-    var hasFogViewshedStarted = false
-
-    private let serialQueue = dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_SERIAL)
-
+    var isViewshedRunning = false
 
     // MARK: IBOutlets
-
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
@@ -39,12 +30,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
         self.tabBarController!.delegate = self
         mapView.delegate = self
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.addAnnotationGesture(_:)))
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(ViewshedViewController.addAnnotationGesture(_:)))
         gesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(gesture)
 
         isLogShown = false
-        logBox.text = "Connected to \(ConnectionManager.fogMachineInstance.getPeerNodes().count) peers.\n"
+        logBox.text = "Connected to \(FogMachine.fogMachineInstance.getPeerNodes().count) peers.\n"
         logBox.editable = false
 
         allObservers = model.getObservers()
@@ -53,11 +44,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         viewshedPalette = ViewshedPalette()
 
         locationManagerSettings()
-        if allObservers.count > 0 {
-            //Center on most recently added observer
+        if (allObservers.count > 0) {
+            // TODO: Center on bounding box of all the observers
             self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
         }
-        //setupFogViewshedEvents()
     }
 
 
@@ -349,18 +339,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func initiateFogViewshed(observer: Observer) {
 
-        if !self.hasFogViewshedStarted {
+        if !self.isViewshedRunning {
             if (self.viewshedPalette.isViewshedPossible(observer)) {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.logBox.text = ""
                 }
-                fogMetrics.initialize()
-                viewshedMetrics.initialize()
-                viewshedMetrics.startOverall()
                 ActivityIndicator.show("Calculating Viewshed")
                 dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-                    self.hasFogViewshedStarted = true
-                    self.startFogViewshed(observer)
+                    self.isViewshedRunning = true
+                    self.ViewshedLog("User requested that viewshed be run")
+                    (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
+                    FogMachine.fogMachineInstance.execute()
                 }
                 //self.verifyBoundBox(observer)
             } else {
@@ -388,16 +377,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
         }
     }
-
-
-    func startFogViewshed(observer: Observer) {
-        printOut("User requested that viewshed be run")
-        
-        (ConnectionManager.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
-        
-        ConnectionManager.fogMachineInstance.execute()
-    }
-
 
 //    func processWork(work: ViewshedWork) -> ViewshedResult {
 //        viewshedMetrics.startForMetric(Metric.WORK)
@@ -433,7 +412,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
 
-        printOut("Starting Fog Viewshed Processing on Observer: \(observer.name)")
+        ViewshedLog("Starting Fog Viewshed Processing on Observer: \(observer.name)")
         self.viewshedPalette.setupNewPalette(observer)
         if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
             let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
@@ -444,7 +423,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
         }
 
-        printOut("\tFinished Viewshed Processing on \(observer.name).")
+        ViewshedLog("\tFinished Viewshed Processing on \(observer.name).")
     }
 
 
@@ -518,17 +497,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 //
 //    }
 
-
-    func completeViewshed() {
-        self.printOut("Viewshed complete.")
-        self.hasFogViewshedStarted = false
+    func completedViewshed() {
+        ViewshedLog("Complete viewshed.")
+        self.isViewshedRunning = false
         ActivityIndicator.hide(success: true, animated: true)
-        viewshedMetrics.stopOverall()
-        viewshedMetrics.addMetrics(fogMetrics.getMetrics())
-        viewshedMetrics.processMetrics()
-        if enableDisplayOfMetrics {
-            self.printOut(viewshedMetrics.getOutput())
-        }
     }
 
 
@@ -585,7 +557,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         redrawMap()
-        self.logBox.text = "Connected to \(ConnectionManager.fogMachineInstance.getPeerNodes().count) peers.\n"
     }
 
 
@@ -634,13 +605,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
 
-    // MARK: Logging/Printing
+    // MARK: Logging
 
-
-    func printOut(output: String) {
+    func ViewshedLog(output: String, optional clearLog: Bool = false) {
         NSLog(output)
         dispatch_async(dispatch_get_main_queue()) {
-            self.logBox.text = self.logBox.text + "\n" + output
+            if(clearLog) {
+                self.logBox.text = ""
+            }
+            self.logBox.text.appendContentsOf("\n" + output)
         }
     }
 
