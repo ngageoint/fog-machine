@@ -6,18 +6,19 @@ public class ViewshedResult: FogResult {
 
     let viewshedResult:UIImage //[[Int]]
     
-    init (viewshedResult: UIImage) {
+    init (processWorkTime:CFAbsoluteTime, viewshedResult: UIImage) {
         self.viewshedResult = viewshedResult
-        super.init()
+        super.init(processWorkTime: processWorkTime)
     }
     
-    public required init (serializedData: [String:NSObject]) {
-        viewshedResult = serializedData[ViewshedWork.NUMBER_OF_QUADRANTS] as! UIImage
-        super.init(serializedData: serializedData)
+    required public init(coder decoder: NSCoder) {
+        self.viewshedResult = decoder.decodeObjectForKey("viewshed") as! UIImage
+        super.init(coder: decoder)
     }
     
-    public override func getDataToSerialize() -> [String:NSObject] {
-        return [ViewshedWork.VIEWSHED_RESULT: viewshedResult];
+    public override func encodeWithCoder(coder: NSCoder) {
+        super.encodeWithCoder(coder);
+        coder.encodeObject(viewshedResult, forKey: "viewshed")
     }
 
     

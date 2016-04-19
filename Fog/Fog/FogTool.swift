@@ -31,9 +31,7 @@ public class FogTool {
      
      */
     public func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> FogWork {
-        
-        let serializedData:[String:NSObject] = [String:NSObject]()
-        return FogWork(serializedData: serializedData);
+        return FogWork();
     }
     
     /**
@@ -46,10 +44,10 @@ public class FogTool {
      @return FogResult The information that needs to be returned to the initiator
      
      */
-    public func processWork(node:Node, work: FogWork) -> FogResult {
-        
-        let serializedData:[String:NSObject] = [String:NSObject]()
-        return FogResult(serializedData:serializedData);
+    public func processWork(node:Node, fromNode:Node, work: FogWork) -> FogResult {
+        let processWorkTimer = Timer()
+        processWorkTimer.start()
+        return FogResult(processWorkTime: processWorkTimer.stop());
     }
     
     /**

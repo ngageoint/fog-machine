@@ -15,10 +15,11 @@ public class ViewshedTool : FogTool {
     }
     
     public override func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> ViewshedWork {
-        return ViewshedWork(numberOfQuadrants: numberOfNodes, whichQuadrant: nodeNumber, observer: createWorkObserver!);
+        return ViewshedWork(numberOfQuadrants: Int(numberOfNodes), whichQuadrant: Int(nodeNumber), observer: createWorkObserver!);
     }
     
-    public override func processWork(node:Node, work: FogWork) -> FogResult {
+    public override func processWork(node:Node, fromNode:Node, work: FogWork) -> ViewshedResult {
+        let processWorkTimer = Timer()
         
         //let viewshedWork = work as! ViewshedWork
         
@@ -33,15 +34,17 @@ public class ViewshedTool : FogTool {
 //        }
 //        
 //        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)
-
-        sleep(10)
+        if(fromNode != node) {
+            sleep(10)
+        }
         
-        let serializedData:[String:NSObject] = [String:NSObject]()
-        return FogResult(serializedData:serializedData);
+        processWorkTimer.start()
+        return ViewshedResult(processWorkTime: processWorkTimer.stop(), viewshedResult: UIImage());
     }
     
     public override func mergeResults(node:Node, nodeToResult :[Node:FogResult]) -> Void {
         
+        SwiftEventBus.post("viewShedComplete")
     }
     
     public override func onPeerConnect(myNode:Node, connectedNode:Node) {

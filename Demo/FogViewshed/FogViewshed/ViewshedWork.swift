@@ -4,24 +4,8 @@ import Fog
 
 public class ViewshedWork: FogWork {
     
-    static let NUMBER_OF_QUADRANTS = "numberOfQuadrants"
-    static let WHICH_QUADRANT = "whichQuadrant"
-    static let VIEWSHED_RESULT = "viewshedResult"
-    
-    static let ASSIGNED_TO = "assignedTo"
-    static let SEARCH_INITIATOR = "searchInitiator"
-    
-    static let ALGORITHM = "algorithm"
-    static let NAME = "name"
-    static let XCOORD = "xCoord"
-    static let YCOORD = "yCoord"
-    static let ELEVATION = "elevation"
-    static let RADIUS = "radius"
-    static let LATITUDE = "latitude"
-    static let LONGITUDE = "longitude"
-    
-    let numberOfQuadrants: UInt
-    let whichQuadrant: UInt
+    let numberOfQuadrants: Int
+    let whichQuadrant: Int
     
     // Observer properties
     let name: String
@@ -33,9 +17,10 @@ public class ViewshedWork: FogWork {
     let longitude: Double
     let algorithm: Int
 
-    init (numberOfQuadrants: UInt, whichQuadrant: UInt, observer: Observer) {
+    init (numberOfQuadrants: Int, whichQuadrant: Int, observer: Observer) {
         self.numberOfQuadrants = numberOfQuadrants
         self.whichQuadrant = whichQuadrant
+        
         self.name = observer.name
         self.xCoord = observer.xCoord
         self.yCoord = observer.yCoord
@@ -52,32 +37,35 @@ public class ViewshedWork: FogWork {
         return Observer(name: name, xCoord: xCoord, yCoord: yCoord, elevation: elevation, radius: radius, coordinate: CLLocationCoordinate2DMake(latitude, longitude))
     }
     
-    public required init (serializedData: [String:NSObject]) {
-
-        numberOfQuadrants = serializedData[ViewshedWork.NUMBER_OF_QUADRANTS] as! UInt
-        whichQuadrant = serializedData[ViewshedWork.WHICH_QUADRANT] as! UInt
-        name = serializedData[ViewshedWork.NAME] as! String
-        xCoord = serializedData[ViewshedWork.XCOORD] as! Int
-        yCoord = serializedData[ViewshedWork.YCOORD] as! Int
-        elevation = serializedData[ViewshedWork.ELEVATION] as! Int
-        radius = serializedData[ViewshedWork.RADIUS] as! Int
-        latitude = serializedData[ViewshedWork.LATITUDE] as! Double
-        longitude = serializedData[ViewshedWork.LONGITUDE] as! Double
-        algorithm = serializedData[ViewshedWork.ALGORITHM] as! Int
-        super.init(serializedData: serializedData)
+    required public init(coder decoder: NSCoder) {
+        self.numberOfQuadrants = decoder.decodeIntegerForKey("numberOfQuadrants")
+        self.whichQuadrant = decoder.decodeIntegerForKey("whichQuadrant")
+        
+        self.name = decoder.decodeObjectForKey("name") as! String
+        self.xCoord = decoder.decodeIntegerForKey("xCoord")
+        self.yCoord = decoder.decodeIntegerForKey("yCoord")
+        self.elevation = decoder.decodeIntegerForKey("elevation")
+        self.radius = decoder.decodeIntegerForKey("radius")
+        self.latitude = decoder.decodeDoubleForKey("latitude")
+        self.longitude = decoder.decodeDoubleForKey("longitude")
+        self.algorithm = decoder.decodeIntegerForKey("algorithm")
+        
+        super.init(coder: decoder)
     }
     
-    public override func getDataToSerialize() -> [String:NSObject] {
-        return [ViewshedWork.NUMBER_OF_QUADRANTS: numberOfQuadrants,
-                ViewshedWork.WHICH_QUADRANT: whichQuadrant,
-                ViewshedWork.NAME: name,
-                ViewshedWork.XCOORD: xCoord,
-                ViewshedWork.YCOORD: yCoord,
-                ViewshedWork.ELEVATION: elevation,
-                ViewshedWork.RADIUS: radius,
-                ViewshedWork.LATITUDE: latitude,
-                ViewshedWork.LONGITUDE: longitude,
-                ViewshedWork.ALGORITHM: algorithm];
+    public override func encodeWithCoder(coder: NSCoder) {
+        super.encodeWithCoder(coder);
+        coder.encodeInteger(numberOfQuadrants, forKey: "numberOfQuadrants")
+        coder.encodeInteger(whichQuadrant, forKey: "whichQuadrant")
+        
+        coder.encodeObject(name, forKey: "name")
+        coder.encodeInteger(xCoord, forKey: "xCoord")
+        coder.encodeInteger(yCoord, forKey: "yCoord")
+        coder.encodeInteger(elevation, forKey: "elevation")
+        coder.encodeInteger(radius, forKey: "radius")
+        coder.encodeDouble(latitude, forKey: "latitude")
+        coder.encodeDouble(longitude, forKey: "longitude")
+        coder.encodeInteger(algorithm, forKey: "algorithm")
     }
 }
 

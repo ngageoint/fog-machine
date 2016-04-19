@@ -2,11 +2,12 @@ import Foundation
 
 public class Timer {
     
-    var startTime: CFAbsoluteTime!
-    var stopTime: CFAbsoluteTime!
+    var startTime: CFAbsoluteTime
+    var stopTime: CFAbsoluteTime
     
     public init() {
-        start()
+        startTime = CFAbsoluteTimeGetCurrent()
+        stopTime = CFAbsoluteTimeGetCurrent()
     }
     
     // MARK: Functions

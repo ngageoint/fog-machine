@@ -27,7 +27,7 @@ class ConnectionsViewController: UIViewController, UITableViewDataSource, UITabl
             self.updateWorkers()
         }
         
-        SwiftEventBus.onMainThread(self, name: "onPeerConnect") { result in
+        SwiftEventBus.onMainThread(self, name: "onPeerDisconnect") { result in
             self.updateWorkers()
         }
     }

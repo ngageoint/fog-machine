@@ -1,6 +1,7 @@
 import UIKit
 import MapKit
 import Fog
+import SwiftEventBus
 
 class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
@@ -34,6 +35,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         gesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(gesture)
 
+        SwiftEventBus.onMainThread(self, name: "viewShedComplete") { result in
+            self.isViewshedRunning = false
+            ActivityIndicator.hide(success: true, animated: true)
+        }
+        
         isLogShown = false
         ViewshedLog("Connected to \(FogMachine.fogMachineInstance.getPeerNodes().count) peers.\n", clearLog: true)
 
@@ -48,7 +54,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
         }
     }
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -77,7 +82,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 
         if (self.isInitialAuthorizationCheck) {
@@ -101,7 +105,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
         mapView.setRegion(coordinateRegion, animated: true)
     }
-
     
     func locationManagerSettings() {
         if (self.locationManager == nil) {
@@ -124,7 +127,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
 
-    // MARK: - Display Manipulations
+    // MARK: Display Stuff
 
 
     func displayObservations() {
@@ -132,7 +135,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             pinObserverLocation(entity.getObserver())
         }
     }
-
 
     func displayDataRegions() {
         if !isDataRegionDrawn {
@@ -375,38 +377,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-//    func processWork(work: ViewshedWork) -> ViewshedResult {
-//        viewshedMetrics.startForMetric(Metric.WORK)
-//        self.printOut("\tBeginning viewshed for \(work.whichQuadrant) from \(work.numberOfQuadrants)")
-//
-//        viewshedMetrics.startForMetric(Metric.VIEWSHED)
-//        
-//        viewshedMetrics.stopForMetric(Metric.VIEWSHED)
-//
-//        //Uncomment if passing [[Int]]
-//        //let result = ViewshedResult(viewshedResult: self.viewshedResults)
-//
-//        self.printOut("\tDisplay result locally on \(ConnectionManager.selfNode().displayName)")
-//
-//        viewshedMetrics.startForMetric(Metric.OVERLAY)
-//        let viewshedOverlay = self.viewshedPalette.getViewshedOverlay()
-//        dispatch_async(dispatch_get_main_queue()) {
-//            self.mapView.addOverlay(viewshedOverlay)
-//        }
-//        viewshedMetrics.stopForMetric(Metric.OVERLAY)
-//
-//        //Use if passing UIImage
-//        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)//self.viewshedResults)
-//        viewshedMetrics.stopForMetric(Metric.WORK)
-//
-//        if let deviceMetrics = viewshedMetrics.getMetricsForDevice(ConnectionManager.selfNode()) {
-//            result.addViewshedMetrics(deviceMetrics)
-//        }
-//
-//        return result
-//    }
-
-
     func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
 
         ViewshedLog("Starting Fog Viewshed Processing on Observer: \(observer.name)")
@@ -423,86 +393,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         ViewshedLog("\tFinished Viewshed Processing on \(observer.name).")
     }
 
-
-//    func setupFogViewshedEvents() {
-//      
-//        let fogTool = FogTool(
-//            workDivider: { currentQuadrant, numberOfQuadrants, metadata in
-//                let observer = metadata as! Observer
-//                let theWork = ViewshedWork(numberOfQuadrants: numberOfQuadrants, whichQuadrant: currentQuadrant, observer: observer)
-//                return theWork
-//            },
-//            log: { peerName in
-//                self.printOut("Sent \(Event.StartViewshed.rawValue) to \(peerName)")
-//            },
-//            selfWork: { selfWork, hasPeers in
-//                self.printOut("\tBeginning viewshed locally for selfWork")
-//                if let selfViewshedWork = selfWork as? ViewshedWork {
-//                    self.processWork(selfViewshedWork)
-//                }
-//                
-//                if !hasPeers {
-//                    self.completeViewshed()
-//                }
-//                self.printOut("\tFound results locally for selfWork.")
-//            },
-//            processResult: {result, fromPeerId in
-//                let viewshedResult = result[Event.SendViewshedResult.rawValue] as! ViewshedResult
-//                let peerNode = Node(mcPeerId: fromPeerId)
-//                viewshedMetrics.updateValue(viewshedResult.getViewshedMetrics(), forKey: peerNode)
-//                // dispatch_barrier_async(dispatch_queue_create("mil.nga.giat.fogmachine.results", DISPATCH_QUEUE_CONCURRENT)) {
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    self.printOut("\tResult received from \(peerNode.displayName).")
-//                    //   }
-//                    //self.viewshedResults = self.mergeViewshedResults(self.viewshedResults, viewshedTwo: result.viewshedResult)
-//                    
-//                    let viewshedOverlay = self.viewshedPalette.generateOverlay(viewshedResult.viewshedResult)
-//                    self.mapView.addOverlay(viewshedOverlay)
-//                }
-//                
-//            },
-//            completeWork: {
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    self.printOut("\tAll received")
-//                    self.completeViewshed()
-//                }
-//            }
-//        )
-//        
-//        self.connectionManager = ConnectionManager(fogTool: fogTool)
-
-//        self.connectionManager.onEvent(Event.StartViewshed.rawValue){ fromPeerId, object in
-//            self.printOut("\tSending \(Event.SendViewshedResult.rawValue) from \(ConnectionManager.selfNode().displayName) to \(fromPeerId.displayName)")
-//
-//            self.printOut("Recieved request to initiate a viewshed from \(fromPeerId.displayName)")
-//            let workData = object as! [String: NSData]
-//            let work = ViewshedWork(mpcSerialized: workData[Event.StartViewshed.rawValue]!)
-//
-//            let result = self.processWork(work)
-//            self.pinObserverLocation(work.getObserver())
-//
-//            self.connectionManager.sendEventTo(Event.SendViewshedResult.rawValue, object: [Event.SendViewshedResult.rawValue: result], sendTo: fromPeerId.displayName)
-//        }
-//
-//        self.connectionManager.onEvent(Event.SendViewshedResult.rawValue) { fromPeerId, object in
-//
-//            var workData = object as! [NSString: NSData]
-//            let result = ViewshedResult(mpcSerialized: workData[Event.SendViewshedResult.rawValue]!)
-//
-//            self.connectionManager.processResult(Event.SendViewshedResult.rawValue, responseEvent: Event.StartViewshed.rawValue, sender: fromPeerId, object: [Event.SendViewshedResult.rawValue: result])
-//        }
-//
-//    }
-
-    func completedViewshed() {
-        ViewshedLog("Complete viewshed.")
-        self.isViewshedRunning = false
-        ActivityIndicator.hide(success: true, animated: true)
-    }
-
-
-    // MARK: - IBActions
-
+    // MARK: IBActions
 
     @IBAction func mapTypeChanged(sender: AnyObject) {
         let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
@@ -516,14 +407,12 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
         locationManagerSettings()
     }
 
 
     // MARK: Segue
-
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "observerSettings" {
@@ -537,7 +426,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-
     @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         removeDataRegions()
@@ -545,22 +433,18 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         displayDataRegions()
     }
 
-
     @IBAction func applyOptions(segue: UIStoryboardSegue) {
 
     }
-
 
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         redrawMap()
     }
 
-
     @IBAction func removePinFromSettings(segue: UIStoryboardSegue) {
         redrawMap()
     }
-
 
     @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
         setMapLogDisplay()
@@ -583,35 +467,14 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-
-    // MARK: Verification
-
-
-    func verifyBoundBox(observer: Observer) {
-        
-        let box = AxisOrientedBoundingBox.getBoundingBox(observer.getObserverLocation(), radius: Double(observer.getRadius()))
-
-        var points = [
-            box.getLowerLeft(),
-            box.getUpperLeft(),
-            box.getUpperRight(),
-            box.getLowerRight()
-        ]
-        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
-        self.mapView.addOverlay(polygonOverlay)
-    }
-
-
     // MARK: Logging
 
     func ViewshedLog(output: String, clearLog: Bool = false) {
         NSLog(output)
-        dispatch_async(dispatch_get_main_queue()) {
-            if(clearLog) {
-                self.logBox.text = ""
-            }
-            self.logBox.text.appendContentsOf("\n" + output)
+        if(clearLog) {
+            self.logBox.text = ""
         }
+        self.logBox.text.appendContentsOf("\n" + output)
     }
 
 

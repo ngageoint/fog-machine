@@ -1,7 +1,7 @@
 import PeerKit
 import MultipeerConnectivity
 
-public class Node : CustomStringConvertible, Hashable, Equatable, FogSerializable {
+public class Node : CustomStringConvertible, Hashable, Equatable {
 
     public static let NAME = "Name"
     public static let UNIQUEID = "UniqueId"
@@ -25,22 +25,22 @@ public class Node : CustomStringConvertible, Hashable, Equatable, FogSerializabl
         self.hashValue = uniqueId.hash
     }
     
-    public required init (serializedData: [String:NSObject]) {
-        self.name = serializedData[Node.NAME] as! String
-        self.uniqueId = serializedData[Node.UNIQUEID] as! String
-        self.mcPeerID = serializedData[Node.MCPEERID] as! MCPeerID
-        self.hashValue = serializedData[Node.HASH] as! Int
-    }
+//    public required init (serializedData: [String:NSObject]) {
+//        self.name = serializedData[Node.NAME] as! String
+//        self.uniqueId = serializedData[Node.UNIQUEID] as! String
+//        self.mcPeerID = serializedData[Node.MCPEERID] as! MCPeerID
+//        self.hashValue = serializedData[Node.HASH] as! Int
+//    }
+//    
+//    public func getDataToSerialize() -> [String:NSObject] {
+//        return [
+//            Node.NAME: name,
+//            Node.UNIQUEID: uniqueId,
+//            Node.MCPEERID: mcPeerID,
+//            Node.HASH: hashValue];
+//    }
     
-    public func getDataToSerialize() -> [String:NSObject] {
-        return [
-            Node.NAME: name,
-            Node.UNIQUEID: uniqueId,
-            Node.MCPEERID: mcPeerID,
-            Node.HASH: hashValue];
-    }
-    
-    // TODO: status/lastSeen/DeviceInfo/equals
+    // TODO: status/lastSeen/DeviceInfo
 }
 
 public func ==(lhs: Node, rhs: Node) -> Bool {

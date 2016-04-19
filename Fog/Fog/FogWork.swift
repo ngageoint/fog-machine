@@ -1,16 +1,16 @@
 import Foundation
 
-public class FogWork: FogSerializable {
+public class FogWork: FogCoding {
     
-    public init() {
-        
+    public override init() {
+        super.init()
     }
     
-    public required init (serializedData: [String:NSObject]) {
-        
+    required public init(coder decoder: NSCoder) {
+        super.init(coder: decoder)
     }
     
-    public func getDataToSerialize() -> [String:NSObject] {
-        return ["test": "testvalue"];
+    public override func encodeWithCoder(coder: NSCoder) {
+        super.encodeWithCoder(coder);
     }
 }

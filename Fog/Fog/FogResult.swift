@@ -1,16 +1,20 @@
 import Foundation
 
-public class FogResult: FogSerializable {
+public class FogResult: FogCoding {
+    var processWorkTime:CFAbsoluteTime = 0.0
     
-    public init() {
-        
+    public init(processWorkTime:CFAbsoluteTime) {
+        super.init()
+        self.processWorkTime = processWorkTime;
     }
     
-    public required init (serializedData: [String:NSObject]) {
-        
+    required public init(coder decoder: NSCoder) {
+        super.init(coder: decoder)
+        self.processWorkTime = decoder.decodeDoubleForKey("processWorkTime")
     }
     
-    public func getDataToSerialize() -> [String:NSObject] {
-        return ["test": "testvalue"];
+    public override func encodeWithCoder(coder: NSCoder) {
+        super.encodeWithCoder(coder);
+        coder.encodeDouble(self.processWorkTime, forKey: "processWorkTime")
     }
 }
