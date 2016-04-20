@@ -82,7 +82,7 @@ public class FogMachine {
             NSLog(selfNode.description + " received \(workMirror.subjectType) to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
             
             // process the work, and get a result
-            let processWorkTimer:Timer = Timer()
+            let processWorkTimer:FMTimer = FMTimer()
             processWorkTimer.start()
             let peerResult:FMResult = self.fmTool.processWork(selfNode, fromNode: fromNode, work: peerWork)
             processWorkTimer.stop()
@@ -142,7 +142,7 @@ public class FogMachine {
     
     // used to time stuff
     // TODO : replace with a better metric utility?
-    private let executionTimer:Timer = Timer()
+    private let executionTimer:FMTimer = FMTimer()
     
     // how long should the initiator wait after completing it's work to start resechduling work
     private let reprocessingScheduleWaitTimeInSeconds:Double = 5.0
@@ -163,7 +163,7 @@ public class FogMachine {
     private var nodeToResult:[String:[Node:FMResult]] = [String:[Node:FMResult]]()
     
     // keep a map of the session to the Nodes to the roundTrip time.  The roundtrip time is the time it takes for a node to go out and come back
-    private var nodeToRoundTripTimer:[String:[Node:Timer]] = [String:[Node:Timer]]()
+    private var nodeToRoundTripTimer:[String:[Node:FMTimer]] = [String:[Node:FMTimer]]()
     
     /**
      
@@ -181,7 +181,7 @@ public class FogMachine {
         mcPeerIDToNode[sessionUUID] = [MCPeerID:Node]()
         nodeToWork[sessionUUID] = [Node:FMWork]()
         nodeToResult[sessionUUID] = [Node:FMResult]()
-        nodeToRoundTripTimer[sessionUUID] = [Node:Timer]()
+        nodeToRoundTripTimer[sessionUUID] = [Node:FMTimer]()
         
         for node in getAllNodes() {
             mcPeerIDToNode[sessionUUID]![node.mcPeerID] = node
@@ -237,7 +237,7 @@ public class FogMachine {
                 selfWork = work
             }
             nodeToWork[sessionUUID]![node] = work
-            nodeToRoundTripTimer[sessionUUID]![node] = Timer()
+            nodeToRoundTripTimer[sessionUUID]![node] = FMTimer()
             nodeCount += 1
         }
         
@@ -295,7 +295,7 @@ public class FogMachine {
             PeerKit.eventBlocks.removeValueForKey(self.sendResultEvent + sessionUUID)
             
             NSLog(getSelfNode().description + " received all \(nodeToResult[sessionUUID]!.count) results for session " + sessionUUID + ".  Merging results.")
-            let mergeResultsTimer:Timer = Timer()
+            let mergeResultsTimer:FMTimer = FMTimer()
             mergeResultsTimer.start()
             self.fmTool.mergeResults(getSelfNode(), nodeToResult: self.nodeToResult[sessionUUID]!)
             mergeResultsTimer.stop()

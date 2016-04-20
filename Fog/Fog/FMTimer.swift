@@ -1,6 +1,6 @@
 import Foundation
 
-public class Timer {
+public class FMTimer {
     
     var startTime: CFAbsoluteTime
     var stopTime: CFAbsoluteTime
