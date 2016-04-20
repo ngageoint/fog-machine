@@ -1,5 +1,4 @@
 import UIKit
-import PeerKit
 import Fog
 import SwiftEventBus
 
