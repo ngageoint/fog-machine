@@ -8,7 +8,7 @@ import MultipeerConnectivity
  mergeResults
  
  */
-public class FogTool {
+public class FMTool {
     
     public init() {
         

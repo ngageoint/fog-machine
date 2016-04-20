@@ -2,7 +2,7 @@ import Foundation
 import Fog
 import SwiftEventBus
 
-public class ViewshedTool : FogTool {
+public class ViewshedTool : FMTool {
     
     public var createWorkObserver:Observer?
     
@@ -15,7 +15,7 @@ public class ViewshedTool : FogTool {
     }
     
     public override func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> ViewshedWork {
-        return ViewshedWork(numberOfQuadrants: Int(numberOfNodes), whichQuadrant: Int(nodeNumber), observer: createWorkObserver!);
+        return ViewshedWork(numberOfQuadrants: Int(numberOfNodes), whichQuadrant: Int(nodeNumber), observer: createWorkObserver!)
     }
     
     public override func processWork(node:Node, fromNode:Node, work: FogWork) -> ViewshedResult {
@@ -38,7 +38,7 @@ public class ViewshedTool : FogTool {
             sleep(2)
         }
         
-        return ViewshedResult(viewshedResult: UIImage());
+        return ViewshedResult(viewshedResult: UIImage())
     }
     
     public override func mergeResults(node:Node, nodeToResult: [Node:FogResult]) -> Void {
