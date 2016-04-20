@@ -22,6 +22,7 @@ public class FogMachine {
     
     // event names to be used with PeerKit
     private let sendWorkEvent: String = "sendWorkEvent"
+    // this event name will be concatenated with the session id to allow execute of mulitple session at once
     private let sendResultEvent: String = "sendResultEvent"
     
     private init() {
@@ -81,18 +82,22 @@ public class FogMachine {
             NSLog(selfNode.description + " received \(workMirror.subjectType) to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
             
             // process the work, and get a result
+            let processWorkTimer:Timer = Timer();
+            processWorkTimer.start()
             let peerResult:FogResult = self.fogTool.processWork(selfNode, fromNode: fromNode, work: peerWork)
-
+            processWorkTimer.stop()
+            
             let dataToSend:[String:NSObject] =
                 ["FogToolResult": NSKeyedArchiver.archivedDataWithRootObject(peerResult),
+                 "ProcessWorkTime": processWorkTimer.getElapsedTimeInSeconds(),
                  "SessionID": sessionUUID];
 
             let peerResultMirror = Mirror(reflecting: peerResult)
             
             NSLog(selfNode.description + " done processing work.  Sending \(peerResultMirror.subjectType) back.")
             
-            // send the result back
-            PeerKit.sendEvent(self.sendResultEvent, object: NSKeyedArchiver.archivedDataWithRootObject(dataToSend), toPeers: [fromPeerID])
+            // send the result back to the session
+            PeerKit.sendEvent(self.sendResultEvent + sessionUUID, object: NSKeyedArchiver.archivedDataWithRootObject(dataToSend), toPeers: [fromPeerID])
         }
     }
     
@@ -137,7 +142,10 @@ public class FogMachine {
     
     // used to time stuff
     // TODO : replace with a better metric utility?
-    private let executionTimer = Timer()
+    private let executionTimer:Timer = Timer()
+    
+    // how long should the initiator wait after completing it's work to start resechduling work
+    private let reprocessingScheduleWaitTimeInSeconds:Double = 5.0
     
     // TODO : Should refactor this into a FogMachineData api ...
     // all the data structures below are session dependant!
@@ -157,9 +165,6 @@ public class FogMachine {
     // keep a map of the session to the Nodes to the roundTrip time.  The roundtrip time is the time it takes for a node to go out and come back
     private var nodeToRoundTripTimer:[String:[Node:Timer]] = [String:[Node:Timer]]()
     
-    // has the execute method setup the reprocess work timers for this session?
-    private var haveSetUpReprocessWork:[String:Bool] = [String:Bool]()
-    
     /**
      
      This runs a FogTool!  Your app should call this!
@@ -177,7 +182,6 @@ public class FogMachine {
         nodeToWork[sessionUUID] = [Node:FogWork]()
         nodeToResult[sessionUUID] = [Node:FogResult]()
         nodeToRoundTripTimer[sessionUUID] = [Node:Timer]()
-        haveSetUpReprocessWork[sessionUUID] = false;
         
         for node in getAllNodes() {
             mcPeerIDToNode[sessionUUID]![node.mcPeerID] = node;
@@ -186,13 +190,14 @@ public class FogMachine {
         let numberOfNodes:UInt = UInt(mcPeerIDToNode[sessionUUID]!.count)
         NSLog("Executing " + fogTool.name() + " in session " + sessionUUID + " on \(numberOfNodes) nodes (including myself).")
         
-        // when a result comes back over the air
-        PeerKit.eventBlocks[self.sendResultEvent] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
+        // when a result comes back over the air for this session
+        PeerKit.eventBlocks[self.sendResultEvent + sessionUUID] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
             let selfNode: Node = self.getSelfNode()
             
             // deserialize the result!
             let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
             let receivedSessionUUID:String = dataReceived["SessionID"] as! String
+            let processWorkTime:Double = dataReceived["ProcessWorkTime"] as! Double
             
             // make sure this is the same session!
             if(self.mcPeerIDToNode.keys.contains(receivedSessionUUID)) {
@@ -203,11 +208,16 @@ public class FogMachine {
                     let peerResultMirror = Mirror(reflecting: peerResult)
                     
                     let roundTripTime:CFAbsoluteTime = (self.nodeToRoundTripTimer[receivedSessionUUID]![fromNode]?.stop())!
+                    NSLog(fromNode.description + " round trip time: " + String(format: "%.3f", roundTripTime) + " seconds.")
+                    NSLog(fromNode.description + " process work time: " + String(format: "%.3f", processWorkTime) + " seconds.")
+                    NSLog(fromNode.description + " network/data transfer and overhead time: " + String(format: "%.3f", roundTripTime - processWorkTime) + " seconds.")
                     NSLog(selfNode.description + " received \(peerResultMirror.subjectType) in session " + receivedSessionUUID + " from " + fromNode.description + " after " + String(format: "%.3f", roundTripTime) + " seconds, storing result.")
+                    
                     self.nodeToResult[receivedSessionUUID]![fromNode] = peerResult
-                    self.finishAndMerge(selfNode, callerNode: fromNode, sessionUUID: receivedSessionUUID)
+                    self.finishAndMerge(fromNode, sessionUUID: receivedSessionUUID)
                 }
             } else {
+                // the likelyhood of this occuring is very very very small
                 NSLog(selfNode.description + " received result for session " + receivedSessionUUID + ", but that session no longer exists.  Discarding work.")
             }
         }
@@ -255,26 +265,41 @@ public class FogMachine {
         
         // store the result and merge results if needed
         dispatch_sync(self.lock) {
-            self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.stop()
+            let selfTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.stop())!
+            NSLog(self.getSelfNode().description + " process work time: " + String(format: "%.3f", selfTimeToFinish) + " seconds.")
             NSLog("Storing self result.")
             self.nodeToResult[sessionUUID]![self.getSelfNode()] = selfResult
-            self.finishAndMerge(self.getSelfNode(), callerNode: self.getSelfNode(), sessionUUID: sessionUUID)
+            let status = self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
+            // schedule the reprocessing stuff
+            if(status == false) {
+                let data:[String:NSObject] = ["SessionID": sessionUUID];
+                dispatch_async(dispatch_get_main_queue()) {
+                    NSTimer.scheduledTimerWithTimeInterval(self.reprocessingScheduleWaitTimeInSeconds, target: self, selector: #selector(FogMachine.scheduleReprocessWork(_:)), userInfo: data, repeats: false)
+                }
+            }
         }
     }
     
     /**
  
-     This method is called whenever a result comes back.  If all the results have come in, this method will delegate the merge to the FogTool.  It will also set up the reprocessing stuff for timouts
+     This method is called whenever a result comes back.  If all the results have come in, this method will delegate the merge to the FogTool.
+     
+     @return True if all the results are in and the merge occured, false otherwise
  
      */
-    private func finishAndMerge(selfNode:Node, callerNode:Node, sessionUUID:String) {
+    private func finishAndMerge(callerNode:Node, sessionUUID:String) -> Bool {
+        var status:Bool = false
         // did we get all the results, yet?
         if(nodeToWork[sessionUUID]!.count == nodeToResult[sessionUUID]!.count) {
-            // remove sendResultEvent from peerkit so we don't get future extraneous messages
-            PeerKit.eventBlocks.removeValueForKey(self.sendResultEvent)
+            // remove sendResultEvent from peerkit for this session so we don't get future extraneous messages that we don't know what do to with
+            PeerKit.eventBlocks.removeValueForKey(self.sendResultEvent + sessionUUID)
             
-            NSLog(selfNode.description + " received all \(nodeToResult[sessionUUID]!.count) results for session " + sessionUUID + ".  Merging results.")
-            self.fogTool.mergeResults(selfNode, nodeToResult: self.nodeToResult[sessionUUID]!)
+            NSLog(getSelfNode().description + " received all \(nodeToResult[sessionUUID]!.count) results for session " + sessionUUID + ".  Merging results.")
+            let mergeResultsTimer:Timer = Timer();
+            mergeResultsTimer.start()
+            self.fogTool.mergeResults(getSelfNode(), nodeToResult: self.nodeToResult[sessionUUID]!)
+            mergeResultsTimer.stop()
+            NSLog("Merge results time for " + fogTool.name() + ": " + String(format: "%.3f", mergeResultsTimer.getElapsedTimeInSeconds()) + " seconds.")
             executionTimer.stop()
             
             // remove session information from data structures
@@ -282,48 +307,57 @@ public class FogMachine {
             nodeToWork.removeValueForKey(sessionUUID)
             nodeToResult.removeValueForKey(sessionUUID)
             nodeToRoundTripTimer.removeValueForKey(sessionUUID)
-            haveSetUpReprocessWork.removeValueForKey(sessionUUID)
-            NSLog("Total execution time: " + String(format: "%.3f", executionTimer.getElapsedTimeInSeconds()) + " seconds.")
-        } else {
-            // account for timeout failures
-            if(haveSetUpReprocessWork[sessionUUID] == false) {
-                if(selfNode == callerNode) {
-                    NSLog("Setting up reprocessing tasks.")
-                    haveSetUpReprocessWork[sessionUUID] = true
-                    var averageTimeToFinish:Double = (nodeToRoundTripTimer[sessionUUID]![selfNode]?.getElapsedTimeInSeconds())!
-                    var pendingNodes:[Node] = []
-                    // get work that has not been completed
-                    for (node, work) in nodeToWork[sessionUUID]! {
-                        if(node != selfNode) {
-                            if(nodeToResult[sessionUUID]!.keys.contains(node) == false) {
-                                pendingNodes.append(node)
-                            } else {
-                                // update running average if needed
-                                let nodeCount:Int = nodeToRoundTripTimer[sessionUUID]!.count;
-                                averageTimeToFinish = ((Double(nodeCount - 1)*averageTimeToFinish) + (nodeToRoundTripTimer[sessionUUID]![node]?.getElapsedTimeInSeconds())!) / Double(nodeCount)
-                            }
-                        }
-                    }
-                    
-                    // give peers a little more time to finish, min time to wait is 8 seconds, max time to wait is five minutes.
-                    let waitTime:Double = min(max(averageTimeToFinish*0.5, 8), 60*5)
-                    var i:Int = 0
-                    for node in pendingNodes {
-                        let work:FogWork = nodeToWork[sessionUUID]![node]!
-        
-                        let data:[String:NSObject] =
-                            ["FailedPeerID": node.mcPeerID,
-                             "FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
-                             "SessionID": sessionUUID];
-                        
-                        let retryTime:Double = waitTime + (averageTimeToFinish*Double(i))
-                        NSLog("Scheduling reprocess work for node " + node.description + " in: " + String(format: "%.3f", retryTime) + " seconds.")
-                        dispatch_async(dispatch_get_main_queue()) {
-                            NSTimer.scheduledTimerWithTimeInterval(retryTime, target: self, selector: #selector(FogMachine.reprocessWork(_:)), userInfo: data, repeats: false)
-                        }
-                        i = i + 1;
+            NSLog("Total execution time for " + fogTool.name() + ": " + String(format: "%.3f", executionTimer.getElapsedTimeInSeconds()) + " seconds.")
+            status = true
+        }
+        return status
+    }
+    
+    /**
+ 
+     Set up future reprocessing stuff for nodes that might fail
+     
+     */
+    @objc public func scheduleReprocessWork(timer: NSTimer) {
+        dispatch_sync(self.lock) {
+            let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
+            let sessionUUID:String = dataReceived["SessionID"] as! String
+            NSLog("Setting up reprocessing tasks.")
+            var totalTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.getElapsedTimeInSeconds())!
+            var pendingNodes:[Node] = []
+            // get work that has not been completed
+            for (node, work) in self.nodeToWork[sessionUUID]! {
+                if(node != self.getSelfNode()) {
+                    if(self.nodeToResult[sessionUUID]!.keys.contains(node) == false) {
+                        pendingNodes.append(node)
+                    } else {
+                        // update running average if needed
+                        totalTimeToFinish = totalTimeToFinish + (self.nodeToRoundTripTimer[sessionUUID]![node]?.getElapsedTimeInSeconds())!
                     }
                 }
+            }
+            
+            let nodeCount:Int = self.nodeToRoundTripTimer[sessionUUID]!.count
+            let averageTimeToFinish:Double = totalTimeToFinish/Double(nodeCount)
+            
+            // give peers 50% more time to finish that the current average time. min time to wait is 8 seconds. max time to wait is 5 minutes.
+            let waitTime:Double = min(max((averageTimeToFinish * 0.5) - self.reprocessingScheduleWaitTimeInSeconds, 8), 60*5)
+            var i:Int = 0
+            for node in pendingNodes {
+                let work:FogWork = self.nodeToWork[sessionUUID]![node]!
+                
+                let data:[String:NSObject] =
+                    ["FailedPeerID": node.mcPeerID,
+                     "FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
+                     "SessionID": sessionUUID];
+                
+                let selfTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.getElapsedTimeInSeconds())!
+                let retryTime:Double = waitTime + (selfTimeToFinish*Double(i))
+                NSLog("Scheduling reprocess work for node " + node.description + " in: " + String(format: "%.3f", retryTime) + " seconds.")
+                dispatch_async(dispatch_get_main_queue()) {
+                    NSTimer.scheduledTimerWithTimeInterval(retryTime, target: self, selector: #selector(FogMachine.reprocessWork(_:)), userInfo: data, repeats: false)
+                }
+                i = i + 1;
             }
         }
     }
@@ -335,9 +369,7 @@ public class FogMachine {
      */
     @objc public func reprocessWork(timer: NSTimer) {
         dispatch_sync(self.lock) {
-            
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
-            
             let sessionUUID:String = dataReceived["SessionID"] as! String
             if(self.mcPeerIDToNode.keys.contains(sessionUUID)) {
                 let failedPeerNode:Node = self.mcPeerIDToNode[sessionUUID]![dataReceived["FailedPeerID"] as! MCPeerID]!
@@ -348,13 +380,17 @@ public class FogMachine {
                 
                     NSLog("Processing missing work for node " + failedPeerNode.description)
                     
-                    let failedPeerResult:FogResult = self.fogTool.processWork(self.getSelfNode(), fromNode: self.getSelfNode(), work: work)
+                    let peerResult:FogResult = self.fogTool.processWork(self.getSelfNode(), fromNode: self.getSelfNode(), work: work)
                 
                     // store the result and merge results if needed
                     NSLog("Storing re-processed result.")
-                    self.nodeToResult[sessionUUID]![failedPeerNode] = failedPeerResult
-                    self.finishAndMerge(self.getSelfNode(), callerNode: self.getSelfNode(), sessionUUID: sessionUUID)
+                    self.nodeToResult[sessionUUID]![failedPeerNode] = peerResult
+                    self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
+                } else {
+                    NSLog("No need to re-processed " + failedPeerNode.description + " work.  Work was returned.")
                 }
+            } else {
+                NSLog("No need to re-processed work, work came back and session completed.")
             }
         }
         

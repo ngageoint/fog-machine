@@ -41,7 +41,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
         
         isLogShown = false
-        ViewshedLog("Connected to \(FogMachine.fogMachineInstance.getPeerNodes().count) peers.\n", clearLog: true)
 
         allObservers = model.getObservers()
         displayObservations()

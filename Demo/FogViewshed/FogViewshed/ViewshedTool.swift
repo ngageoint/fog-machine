@@ -35,7 +35,7 @@ public class ViewshedTool : FogTool {
         if(fromNode != node) {
             sleep(12)
         } else {
-            sleep(8)
+            sleep(2)
         }
         
         return ViewshedResult(viewshedResult: UIImage());
