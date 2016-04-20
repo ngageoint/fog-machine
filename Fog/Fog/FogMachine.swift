@@ -39,8 +39,8 @@ public class FogMachine {
         
         // When a peer connects, log the connection and delegate to the tool
         PeerKit.onConnect = { (myPeerID: MCPeerID, peerID: MCPeerID) -> Void in
-            let selfNode:Node = self.getSelfNode()
-            let peerNode:Node = Node(uniqueId: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: peerID)
+            let selfNode:FMNode = self.getSelfNode()
+            let peerNode:FMNode = FMNode(uniqueId: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: peerID)
             
             // make sure this is you!
             //guard myPeerID == selfNode.mcPeerID else { throw FogMachineError.PeerIDError }
@@ -54,8 +54,8 @@ public class FogMachine {
         
         // When a peer disconnects, log the disconnection and delegate to the tool
         PeerKit.onDisconnect = { (myPeerID: MCPeerID, peerID: MCPeerID) -> Void in
-            let selfNode:Node = self.getSelfNode()
-            let peerNode:Node = Node(uniqueId: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: peerID)
+            let selfNode:FMNode = self.getSelfNode()
+            let peerNode:FMNode = FMNode(uniqueId: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: peerID)
             
             // make sure this is you!
             //guard myPeerID == selfNode.mcPeerID else { throw FogMachineError.PeerIDError }
@@ -69,8 +69,8 @@ public class FogMachine {
         
         // when a work request comes over the air, have the tool process the work
         PeerKit.eventBlocks[self.sendWorkEvent] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
-            let selfNode: Node = self.getSelfNode()
-            let fromNode: Node = Node(uniqueId: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: fromPeerID)
+            let selfNode:FMNode = self.getSelfNode()
+            let fromNode:FMNode = FMNode(uniqueId: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: fromPeerID)
             
             // deserialize the work
             let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
@@ -103,16 +103,16 @@ public class FogMachine {
     
     // MARK: Properties
     
-    public func getSelfNode() -> Node {
-        return Node(uniqueId: PeerKit.myName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: PeerKit.myName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: PeerKit.masterSession.myPeerId)
+    public func getSelfNode() -> FMNode {
+        return FMNode(uniqueId: PeerKit.myName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: PeerKit.myName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: PeerKit.masterSession.myPeerId)
     }
     
-    public func getPeerNodes() -> [Node] {
-        var nodes: [Node] = []
+    public func getPeerNodes() -> [FMNode] {
+        var nodes: [FMNode] = []
         
         let mcPeerIDs: [MCPeerID] = PeerKit.masterSession.allConnectedPeers() ?? []
         for peerID in mcPeerIDs {
-            nodes.append(Node(uniqueId: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: peerID))
+            nodes.append(FMNode(uniqueId: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: peerID))
         }
         nodes.sortInPlace { (obj1, obj2) -> Bool in
             return obj1.uniqueId < obj2.uniqueId
@@ -120,8 +120,8 @@ public class FogMachine {
         return nodes
     }
     
-    public func getAllNodes() -> [Node] {
-        var nodes: [Node] = []
+    public func getAllNodes() -> [FMNode] {
+        var nodes: [FMNode] = []
         nodes.append(getSelfNode())
         nodes += getPeerNodes()
         nodes.sortInPlace { (obj1, obj2) -> Bool in
@@ -154,16 +154,16 @@ public class FogMachine {
     private let lock = dispatch_queue_create("mil.nga.giat.fogmachine", nil)
     
     // keep a map of the session to the MCPeerIDs to the nodes for this session
-    private var mcPeerIDToNode:[String:[MCPeerID:Node]] = [String:[MCPeerID:Node]]()
+    private var mcPeerIDToNode:[String:[MCPeerID:FMNode]] = [String:[MCPeerID:FMNode]]()
     
     // keep a map of the session to the Nodes to the works for this session, as nodes may come and go otherwise
-    private var nodeToWork:[String:[Node:FMWork]] = [String:[Node:FMWork]]()
+    private var nodeToWork:[String:[FMNode:FMWork]] = [String:[FMNode:FMWork]]()
     
     // keep a map of the session to the Nodes to the results for this session, as nodes may come and go otherwise
-    private var nodeToResult:[String:[Node:FMResult]] = [String:[Node:FMResult]]()
+    private var nodeToResult:[String:[FMNode:FMResult]] = [String:[FMNode:FMResult]]()
     
     // keep a map of the session to the Nodes to the roundTrip time.  The roundtrip time is the time it takes for a node to go out and come back
-    private var nodeToRoundTripTimer:[String:[Node:FMTimer]] = [String:[Node:FMTimer]]()
+    private var nodeToRoundTripTimer:[String:[FMNode:FMTimer]] = [String:[FMNode:FMTimer]]()
     
     /**
      
@@ -178,10 +178,10 @@ public class FogMachine {
         let sessionUUID:String = NSUUID().UUIDString
         
         // create new data structures for this session
-        mcPeerIDToNode[sessionUUID] = [MCPeerID:Node]()
-        nodeToWork[sessionUUID] = [Node:FMWork]()
-        nodeToResult[sessionUUID] = [Node:FMResult]()
-        nodeToRoundTripTimer[sessionUUID] = [Node:FMTimer]()
+        mcPeerIDToNode[sessionUUID] = [MCPeerID:FMNode]()
+        nodeToWork[sessionUUID] = [FMNode:FMWork]()
+        nodeToResult[sessionUUID] = [FMNode:FMResult]()
+        nodeToRoundTripTimer[sessionUUID] = [FMNode:FMTimer]()
         
         for node in getAllNodes() {
             mcPeerIDToNode[sessionUUID]![node.mcPeerID] = node
@@ -192,10 +192,10 @@ public class FogMachine {
         
         // when a result comes back over the air for this session
         PeerKit.eventBlocks[self.sendResultEvent + sessionUUID] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
-            let selfNode: Node = self.getSelfNode()
+            let selfNode:FMNode = self.getSelfNode()
             
             // deserialize the result!
-            let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
+            let dataReceived:[String: NSObject] = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
             let receivedSessionUUID:String = dataReceived["SessionID"] as! String
             let processWorkTime:Double = dataReceived["ProcessWorkTime"] as! Double
             
@@ -203,7 +203,7 @@ public class FogMachine {
             if(self.mcPeerIDToNode.keys.contains(receivedSessionUUID)) {
                 // store the result and merge results if needed
                 dispatch_sync(self.lock) {
-                    let fromNode: Node = self.mcPeerIDToNode[receivedSessionUUID]![fromPeerID]!
+                    let fromNode:FMNode = self.mcPeerIDToNode[receivedSessionUUID]![fromPeerID]!
                     let peerResult:FMResult = NSKeyedUnarchiver.unarchiveObjectWithData(dataReceived["FogToolResult"] as! NSData) as! FMResult
                     let peerResultMirror = Mirror(reflecting: peerResult)
                     
@@ -287,7 +287,7 @@ public class FogMachine {
      @return True if all the results are in and the merge occured, false otherwise
      
      */
-    private func finishAndMerge(callerNode:Node, sessionUUID:String) -> Bool {
+    private func finishAndMerge(callerNode:FMNode, sessionUUID:String) -> Bool {
         var status:Bool = false
         // did we get all the results, yet?
         if(nodeToWork[sessionUUID]!.count == nodeToResult[sessionUUID]!.count) {
@@ -324,7 +324,7 @@ public class FogMachine {
             let sessionUUID:String = dataReceived["SessionID"] as! String
             NSLog("Setting up reprocessing tasks.")
             var totalTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.getElapsedTimeInSeconds())!
-            var pendingNodes:[Node] = []
+            var pendingNodes:[FMNode] = []
             // get work that has not been completed
             for (node, work) in self.nodeToWork[sessionUUID]! {
                 if(node != self.getSelfNode()) {
@@ -372,7 +372,7 @@ public class FogMachine {
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
             if(self.mcPeerIDToNode.keys.contains(sessionUUID)) {
-                let failedPeerNode:Node = self.mcPeerIDToNode[sessionUUID]![dataReceived["FailedPeerID"] as! MCPeerID]!
+                let failedPeerNode:FMNode = self.mcPeerIDToNode[sessionUUID]![dataReceived["FailedPeerID"] as! MCPeerID]!
                 
                 // make sure this thing is still in a failed state!
                 if(self.nodeToResult[sessionUUID]!.keys.contains(failedPeerNode) == false) {

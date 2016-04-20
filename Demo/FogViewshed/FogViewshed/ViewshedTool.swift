@@ -14,11 +14,11 @@ public class ViewshedTool : FMTool {
         return "Viewshed Tool for observer at (\(createWorkObserver!.coordinate.latitude), \(createWorkObserver!.coordinate.longitude))"
     }
     
-    public override func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> ViewshedWork {
+    public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> ViewshedWork {
         return ViewshedWork(numberOfQuadrants: Int(numberOfNodes), whichQuadrant: Int(nodeNumber), observer: createWorkObserver!)
     }
     
-    public override func processWork(node:Node, fromNode:Node, work: FMWork) -> ViewshedResult {
+    public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> ViewshedResult {
         //let viewshedWork = work as! ViewshedWork
         
 //        self.viewshedPalette.setupNewPalette(observer)
@@ -41,15 +41,15 @@ public class ViewshedTool : FMTool {
         return ViewshedResult(viewshedResult: UIImage())
     }
     
-    public override func mergeResults(node:Node, nodeToResult: [Node:FMResult]) -> Void {
+    public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
         SwiftEventBus.post("viewShedComplete")
     }
     
-    public override func onPeerConnect(myNode:Node, connectedNode:Node) {
+    public override func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {
         SwiftEventBus.post("onPeerConnect")
     }
     
-    public override func onPeerDisconnect(myNode:Node, disconnectedNode:Node) {
+    public override func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
         SwiftEventBus.post("onPeerDisconnect")
     }
 }

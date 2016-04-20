@@ -1,7 +1,7 @@
 import PeerKit
 import MultipeerConnectivity
 
-public class Node : CustomStringConvertible, Hashable, Equatable {
+public class FMNode : CustomStringConvertible, Hashable, Equatable {
     
     // MARK: Properties
     public var name: String
@@ -21,6 +21,6 @@ public class Node : CustomStringConvertible, Hashable, Equatable {
     }
 }
 
-public func ==(lhs: Node, rhs: Node) -> Bool {
+public func ==(lhs: FMNode, rhs: FMNode) -> Bool {
     return lhs.uniqueId == rhs.uniqueId
 }

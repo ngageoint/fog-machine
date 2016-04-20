@@ -44,7 +44,7 @@ class ConnectionsViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell:UITableViewCell = self.connectionTableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         if indexPath.row < FogMachine.fogMachineInstance.getAllNodes().count {
-            let node:Node = FogMachine.fogMachineInstance.getAllNodes()[indexPath.row]
+            let node:FMNode = FogMachine.fogMachineInstance.getAllNodes()[indexPath.row]
             if (FogMachine.fogMachineInstance.getSelfNode() == node) {
                 cell.textLabel?.font = UIFont(name: ".SFUIText-Bold", size: 16.0)
             } else {

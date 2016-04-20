@@ -30,7 +30,7 @@ public class FMTool {
      @return FMWork The information that needs to get send to the node
      
      */
-    public func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> FMWork {
+    public func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> FMWork {
         return FMWork();
     }
     
@@ -44,7 +44,7 @@ public class FMTool {
      @return FMResult The information that needs to be returned to the initiator
      
      */
-    public func processWork(node:Node, fromNode:Node, work: FMWork) -> FMResult {
+    public func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> FMResult {
         return FMResult();
     }
     
@@ -56,7 +56,7 @@ public class FMTool {
      @param nodeToResult All of the results tied to each node.
      
      */
-    public func mergeResults(node:Node, nodeToResult :[Node:FMResult]) -> Void {
+    public func mergeResults(node:FMNode, nodeToResult :[FMNode:FMResult]) -> Void {
         
     }
     
@@ -66,7 +66,7 @@ public class FMTool {
      This is called when a peer connects to the network
      
      */
-    public func onPeerConnect(myNode:Node, connectedNode:Node) {
+    public func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {
         
     }
     
@@ -75,7 +75,7 @@ public class FMTool {
      This is called when a peer disconnects from the network
      
      */
-    public func onPeerDisconnect(myNode:Node, disconnectedNode:Node) {
+    public func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
         
     }
 }
