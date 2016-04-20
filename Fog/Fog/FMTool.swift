@@ -27,11 +27,11 @@ public class FMTool {
      @param nodeNumber Of the nodes in the network an ordered nuber that indicates which node this is.  Ex: 2
      @param numberOfNodes The number of Nodes in the network for this lifecycle  Ex: 3
      
-     @return Work The information that needs to get send to the node
+     @return FMWork The information that needs to get send to the node
      
      */
-    public func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> FogWork {
-        return FogWork();
+    public func createWork(node:Node, nodeNumber:UInt, numberOfNodes:UInt) -> FMWork {
+        return FMWork();
     }
     
     /**
@@ -41,11 +41,11 @@ public class FMTool {
      @param node The node that is processing this piece of work
      @param work The work to be processed by this node
      
-     @return FogResult The information that needs to be returned to the initiator
+     @return FMResult The information that needs to be returned to the initiator
      
      */
-    public func processWork(node:Node, fromNode:Node, work: FogWork) -> FogResult {
-        return FogResult();
+    public func processWork(node:Node, fromNode:Node, work: FMWork) -> FMResult {
+        return FMResult();
     }
     
     /**
@@ -56,7 +56,7 @@ public class FMTool {
      @param nodeToResult All of the results tied to each node.
      
      */
-    public func mergeResults(node:Node, nodeToResult :[Node:FogResult]) -> Void {
+    public func mergeResults(node:Node, nodeToResult :[Node:FMResult]) -> Void {
         
     }
     

@@ -18,7 +18,7 @@ public class ViewshedTool : FMTool {
         return ViewshedWork(numberOfQuadrants: Int(numberOfNodes), whichQuadrant: Int(nodeNumber), observer: createWorkObserver!)
     }
     
-    public override func processWork(node:Node, fromNode:Node, work: FogWork) -> ViewshedResult {
+    public override func processWork(node:Node, fromNode:Node, work: FMWork) -> ViewshedResult {
         //let viewshedWork = work as! ViewshedWork
         
 //        self.viewshedPalette.setupNewPalette(observer)
@@ -41,7 +41,7 @@ public class ViewshedTool : FMTool {
         return ViewshedResult(viewshedResult: UIImage())
     }
     
-    public override func mergeResults(node:Node, nodeToResult: [Node:FogResult]) -> Void {
+    public override func mergeResults(node:Node, nodeToResult: [Node:FMResult]) -> Void {
         SwiftEventBus.post("viewShedComplete")
     }
     

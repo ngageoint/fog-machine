@@ -1,6 +1,6 @@
 import Foundation
 
-public class FogCoding: NSObject, NSCoding {
+public class FMCoding: NSObject, NSCoding {
     
     // keep a uuid for possible identification purposes, may not be needed
     public private(set) var uuid: String = NSUUID().UUIDString

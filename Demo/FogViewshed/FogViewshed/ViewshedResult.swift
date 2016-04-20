@@ -2,7 +2,7 @@ import Foundation
 import MapKit
 import Fog
 
-public class ViewshedResult: FogResult {
+public class ViewshedResult: FMResult {
 
     let viewshedResult:UIImage //[[Int]]
     

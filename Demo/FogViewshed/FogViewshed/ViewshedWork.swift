@@ -2,7 +2,7 @@ import Foundation
 import MapKit
 import Fog
 
-public class ViewshedWork: FogWork {
+public class ViewshedWork: FMWork {
     
     let numberOfQuadrants: Int
     let whichQuadrant: Int

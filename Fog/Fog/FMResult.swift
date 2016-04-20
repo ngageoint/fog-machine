@@ -1,6 +1,6 @@
 import Foundation
 
-public class FogResult: FogCoding {
+public class FMResult: FMCoding {
     
     public override init() {
         super.init()
