@@ -6,9 +6,9 @@ public class ViewshedResult: FogResult {
 
     let viewshedResult:UIImage //[[Int]]
     
-    init (processWorkTime:CFAbsoluteTime, viewshedResult: UIImage) {
+    init (viewshedResult: UIImage) {
         self.viewshedResult = viewshedResult
-        super.init(processWorkTime: processWorkTime)
+        super.init()
     }
     
     required public init(coder decoder: NSCoder) {

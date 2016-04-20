@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
-		7539D65C1C9C45F4008CCBE0 /* MetricSingleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */; };
 		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
 		753D3D5F1BEA33CF004E3589 /* ViewshedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */; };
 		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
@@ -28,7 +27,6 @@
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
 		7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */; };
 		7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */; };
-		7579CB5F1CA1CEA2009A86F2 /* ViewshedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */; };
 		758885441C89F93D009AFB06 /* GeoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885431C89F93D009AFB06 /* GeoUtility.swift */; };
 		758885461C8A116B009AFB06 /* AxisOrientedBoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885451C8A116B009AFB06 /* AxisOrientedBoundingBox.swift */; };
 		75A808831CA345430090792B /* SquarePerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A808821CA345430090792B /* SquarePerimeter.swift */; };
@@ -78,7 +76,6 @@
 /* Begin PBXFileReference section */
 		23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
-		7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricSingleDevice.swift; sourceTree = "<group>"; };
 		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
 		753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedViewController.swift; sourceTree = "<group>"; };
 		753D3D621BEA7900004E3589 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
@@ -98,7 +95,6 @@
 		7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
 		7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtGrid.swift; sourceTree = "<group>"; };
 		7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedPalette.swift; sourceTree = "<group>"; };
-		7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedMetrics.swift; sourceTree = "<group>"; };
 		758885431C89F93D009AFB06 /* GeoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoUtility.swift; sourceTree = "<group>"; };
 		758885451C8A116B009AFB06 /* AxisOrientedBoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AxisOrientedBoundingBox.swift; sourceTree = "<group>"; };
 		75A808821CA345430090792B /* SquarePerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquarePerimeter.swift; sourceTree = "<group>"; };
@@ -169,15 +165,6 @@
 				23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		7579CB601CA2D3DF009A86F2 /* Metrics */ = {
-			isa = PBXGroup;
-			children = (
-				7539D65B1C9C45F4008CCBE0 /* MetricSingleDevice.swift */,
-				7579CB5E1CA1CEA2009A86F2 /* ViewshedMetrics.swift */,
-			);
-			name = Metrics;
 			sourceTree = "<group>";
 		};
 		758FB77E1C0A3A2600A193A7 /* VanKreveld */ = {
@@ -347,7 +334,6 @@
 				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
 				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
 				758FB77F1C0A3AE400A193A7 /* Viewshed */,
-				7579CB601CA2D3DF009A86F2 /* Metrics */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -530,7 +516,6 @@
 				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
 				7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */,
 				7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */,
-				7579CB5F1CA1CEA2009A86F2 /* ViewshedMetrics.swift in Sources */,
 				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
 				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
 				75A808831CA345430090792B /* SquarePerimeter.swift in Sources */,
@@ -550,7 +535,6 @@
 				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
 				E314F6C31B79023D005B75C6 /* ConnectionsViewController.swift in Sources */,
 				9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */,
-				7539D65C1C9C45F4008CCBE0 /* MetricSingleDevice.swift in Sources */,
 				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
 				9BE78E791C727D1E00506F11 /* Toast.swift in Sources */,
 				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,

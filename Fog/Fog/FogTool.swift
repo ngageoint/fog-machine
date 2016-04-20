@@ -45,9 +45,7 @@ public class FogTool {
      
      */
     public func processWork(node:Node, fromNode:Node, work: FogWork) -> FogResult {
-        let processWorkTimer = Timer()
-        processWorkTimer.start()
-        return FogResult(processWorkTime: processWorkTimer.stop());
+        return FogResult();
     }
     
     /**

@@ -471,10 +471,12 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     func ViewshedLog(output: String, clearLog: Bool = false) {
         NSLog(output)
-        if(clearLog) {
-            self.logBox.text = ""
+        dispatch_async(dispatch_get_main_queue()) {
+            if(clearLog) {
+                self.logBox.text = ""
+            }
+            self.logBox.text.appendContentsOf("\n" + output)
         }
-        self.logBox.text.appendContentsOf("\n" + output)
     }
 
 

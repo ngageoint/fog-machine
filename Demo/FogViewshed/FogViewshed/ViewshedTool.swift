@@ -19,8 +19,6 @@ public class ViewshedTool : FogTool {
     }
     
     public override func processWork(node:Node, fromNode:Node, work: FogWork) -> ViewshedResult {
-        let processWorkTimer = Timer()
-        
         //let viewshedWork = work as! ViewshedWork
         
 //        self.viewshedPalette.setupNewPalette(observer)
@@ -35,15 +33,15 @@ public class ViewshedTool : FogTool {
 //        
 //        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)
         if(fromNode != node) {
-            sleep(10)
+            sleep(12)
+        } else {
+            sleep(8)
         }
         
-        processWorkTimer.start()
-        return ViewshedResult(processWorkTime: processWorkTimer.stop(), viewshedResult: UIImage());
+        return ViewshedResult(viewshedResult: UIImage());
     }
     
-    public override func mergeResults(node:Node, nodeToResult :[Node:FogResult]) -> Void {
-        
+    public override func mergeResults(node:Node, nodeToResult: [Node:FogResult]) -> Void {
         SwiftEventBus.post("viewShedComplete")
     }
     
