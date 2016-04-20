@@ -20,16 +20,9 @@ public class FogMachine {
     // Your application will set this
     private var fogTool: FogTool = FogTool()
     
-    // used to control concurrency.  It synchronizes many of the data structures in the class
-    private let lock = dispatch_queue_create("mil.nga.giat.fogmachine", nil)
-    
     // event names to be used with PeerKit
     private let sendWorkEvent: String = "sendWorkEvent"
     private let sendResultEvent: String = "sendResultEvent"
-    
-    // used to time stuff
-    // TODO : replace with a better metric colletion
-    private let executionTimer = Timer()
     
     private init() {
     }
@@ -141,8 +134,16 @@ public class FogMachine {
         transceiver.startTransceiving(serviceType: SERVICE_TYPE)
     }
     
+    
+    // used to time stuff
+    // TODO : replace with a better metric utility?
+    private let executionTimer = Timer()
+    
     // TODO : Should refactor this into a FogMachineData api ...
     // all the data structures below are session dependant!
+    
+    // used to control concurrency.  It synchronizes many of the data structures below
+    private let lock = dispatch_queue_create("mil.nga.giat.fogmachine", nil)
     
     // keep a map of the session to the MCPeerIDs to the nodes for this session
     private var mcPeerIDToNode:[String:[MCPeerID:Node]] = [String:[MCPeerID:Node]]()
@@ -261,6 +262,11 @@ public class FogMachine {
         }
     }
     
+    /**
+ 
+     This method is called whenever a result comes back.  If all the results have come in, this method will delegate the merge to the FogTool.  It will also set up the reprocessing stuff for timouts
+ 
+     */
     private func finishAndMerge(selfNode:Node, callerNode:Node, sessionUUID:String) {
         // did we get all the results, yet?
         if(nodeToWork[sessionUUID]!.count == nodeToResult[sessionUUID]!.count) {
