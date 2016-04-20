@@ -675,7 +675,7 @@
 				INFOPLIST_FILE = FogViewshed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogViewshed;
 				PRODUCT_NAME = FogViewshed;
 				PROVISIONING_PROFILE = "";
 			};
@@ -691,7 +691,7 @@
 				INFOPLIST_FILE = FogViewshed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "mil.dod.nga.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogViewshed;
 				PRODUCT_NAME = FogViewshed;
 				PROVISIONING_PROFILE = "";
 			};
