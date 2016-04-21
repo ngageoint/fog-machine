@@ -69,35 +69,38 @@ public class FogMachine {
         
         // when a work request comes over the air, have the tool process the work
         PeerKit.eventBlocks[self.sendWorkEvent] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
-            let selfNode:FMNode = self.getSelfNode()
-            let fromNode:FMNode = FMNode(uniqueId: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: fromPeerID)
-            
-            // deserialize the work
-            let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
-            let sessionUUID:String = dataReceived["SessionID"] as! String
-            let peerWork:FMWork =  NSKeyedUnarchiver.unarchiveObjectWithData(dataReceived["FogToolWork"] as! NSData) as! FMWork
-            
-            let workMirror = Mirror(reflecting: peerWork)
-            
-            NSLog(selfNode.description + " received \(workMirror.subjectType) to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
-            
-            // process the work, and get a result
-            let processWorkTimer:FMTimer = FMTimer()
-            processWorkTimer.start()
-            let peerResult:FMResult = self.fmTool.processWork(selfNode, fromNode: fromNode, work: peerWork)
-            processWorkTimer.stop()
-            
-            let dataToSend:[String:NSObject] =
-                ["FogToolResult": NSKeyedArchiver.archivedDataWithRootObject(peerResult),
-                 "ProcessWorkTime": processWorkTimer.getElapsedTimeInSeconds(),
-                 "SessionID": sessionUUID]
-            
-            let peerResultMirror = Mirror(reflecting: peerResult)
-            
-            NSLog(selfNode.description + " done processing work.  Sending \(peerResultMirror.subjectType) back.")
-            
-            // send the result back to the session
-            PeerKit.sendEvent(self.sendResultEvent + sessionUUID, object: NSKeyedArchiver.archivedDataWithRootObject(dataToSend), toPeers: [fromPeerID])
+            // run on background thread
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+                let selfNode:FMNode = self.getSelfNode()
+                let fromNode:FMNode = FMNode(uniqueId: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[1], name: fromPeerID.displayName.componentsSeparatedByString(PeerKit.ID_DELIMITER)[0], mcPeerID: fromPeerID)
+                
+                // deserialize the work
+                let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
+                let sessionUUID:String = dataReceived["SessionID"] as! String
+                let peerWork:FMWork =  NSKeyedUnarchiver.unarchiveObjectWithData(dataReceived["FogToolWork"] as! NSData) as! FMWork
+                
+                let workMirror = Mirror(reflecting: peerWork)
+                
+                NSLog(selfNode.description + " received \(workMirror.subjectType) to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
+                
+                // process the work, and get a result
+                let processWorkTimer:FMTimer = FMTimer()
+                processWorkTimer.start()
+                let peerResult:FMResult = self.fmTool.processWork(selfNode, fromNode: fromNode, work: peerWork)
+                processWorkTimer.stop()
+                
+                let dataToSend:[String:NSObject] =
+                    ["FogToolResult": NSKeyedArchiver.archivedDataWithRootObject(peerResult),
+                     "ProcessWorkTime": processWorkTimer.getElapsedTimeInSeconds(),
+                     "SessionID": sessionUUID]
+                
+                let peerResultMirror = Mirror(reflecting: peerResult)
+                
+                NSLog(selfNode.description + " done processing work.  Sending \(peerResultMirror.subjectType) back.")
+                
+                // send the result back to the session
+                PeerKit.sendEvent(self.sendResultEvent + sessionUUID, object: NSKeyedArchiver.archivedDataWithRootObject(dataToSend), toPeers: [fromPeerID])
+            }
         }
     }
     
@@ -165,12 +168,20 @@ public class FogMachine {
     // keep a map of the session to the Nodes to the roundTrip time.  The roundtrip time is the time it takes for a node to go out and come back
     private var nodeToRoundTripTimer:[String:[FMNode:FMTimer]] = [String:[FMNode:FMTimer]]()
     
+    
     /**
      
      This runs a FogTool!  Your app should call this!
      
      */
     public func execute() -> Void {
+        // run on background thread
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+            self.executeOnThread()
+        }
+    }
+    
+    private func executeOnThread() -> Void {
         // time how long the entire execution takes
         executionTimer.start()
         
@@ -208,10 +219,10 @@ public class FogMachine {
                     let peerResultMirror = Mirror(reflecting: peerResult)
                     
                     let roundTripTime:CFAbsoluteTime = (self.nodeToRoundTripTimer[receivedSessionUUID]![fromNode]?.stop())!
+                    NSLog(selfNode.description + " received \(peerResultMirror.subjectType) in session " + receivedSessionUUID + " from " + fromNode.description + ", storing result.")
                     NSLog(fromNode.description + " round trip time: " + String(format: "%.3f", roundTripTime) + " seconds.")
                     NSLog(fromNode.description + " process work time: " + String(format: "%.3f", processWorkTime) + " seconds.")
                     NSLog(fromNode.description + " network/data transfer and overhead time: " + String(format: "%.3f", roundTripTime - processWorkTime) + " seconds.")
-                    NSLog(selfNode.description + " received \(peerResultMirror.subjectType) in session " + receivedSessionUUID + " from " + fromNode.description + " after " + String(format: "%.3f", roundTripTime) + " seconds, storing result.")
                     
                     self.nodeToResult[receivedSessionUUID]![fromNode] = peerResult
                     self.finishAndMerge(fromNode, sessionUUID: receivedSessionUUID)
@@ -261,7 +272,6 @@ public class FogMachine {
         dispatch_sync(self.lock) {
             self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.start()
         }
-        // FIXME: Make sure this does not block the main thread! do I need to thread this?
         let selfResult:FMResult = self.fmTool.processWork(getSelfNode(), fromNode: getSelfNode(), work: selfWork!)
         
         // store the result and merge results if needed
@@ -289,8 +299,6 @@ public class FogMachine {
      
      */
     private func finishAndMerge(callerNode:FMNode, sessionUUID:String) -> Bool {
-        // TODO : make sure the merge is not called from the UI thread
-        
         var status:Bool = false
         // did we get all the results, yet?
         if(nodeToWork[sessionUUID]!.count == nodeToResult[sessionUUID]!.count) {

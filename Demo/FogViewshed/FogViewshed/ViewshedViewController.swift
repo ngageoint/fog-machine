@@ -343,12 +343,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
                     self.logBox.text = ""
                 }
                 ActivityIndicator.show("Calculating Viewshed")
-                dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-                    self.isViewshedRunning = true
-                    self.ViewshedLog("User requested that viewshed be run")
-                    (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
-                    FogMachine.fogMachineInstance.execute()
-                }
+                
+                self.isViewshedRunning = true
+                self.ViewshedLog("User requested that viewshed be run")
+                (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
+                FogMachine.fogMachineInstance.execute()
                 //self.verifyBoundBox(observer)
             } else {
                 let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
