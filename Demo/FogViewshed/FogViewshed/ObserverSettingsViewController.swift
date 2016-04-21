@@ -77,7 +77,6 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         model.addObserver(editedObserver)
     }
     
-    
     func createObserverFromSettings() -> Observer {
         let editedObserver = Observer()
         

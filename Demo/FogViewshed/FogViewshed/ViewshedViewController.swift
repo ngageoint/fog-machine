@@ -16,7 +16,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
     var isDataRegionDrawn = false
-    var isViewshedRunning = false
 
     // MARK: IBOutlets
 
@@ -24,7 +23,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     @IBOutlet weak var mapTypeSelector: UISegmentedControl!
     @IBOutlet weak var logBox: UITextView!
     @IBOutlet weak var mapViewProportionalHeight: NSLayoutConstraint!
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,9 +33,15 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         gesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(gesture)
 
+        // TODO: What should happen when the viewshed is done?
         SwiftEventBus.onMainThread(self, name: "viewShedComplete") { result in
-            self.isViewshedRunning = false
             ActivityIndicator.hide(success: true, animated: true)
+        }
+        
+        // log any info from Fog Machine to our textbox
+        SwiftEventBus.onMainThread(self, name: "onLog") { result in
+            let format:String = result.object as! String
+            self.ViewshedLog(format)
         }
         
         isLogShown = false
@@ -295,7 +299,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             return
         }
 
-        if isLogShown {
+        if(isLogShown) {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.8)
         } else {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
@@ -332,63 +336,13 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
 
-    // MARK: - Fog Viewshed
-
+    // MARK: Viewshed
 
     func initiateFogViewshed(observer: Observer) {
-
-        if !self.isViewshedRunning {
-            if (self.viewshedPalette.isViewshedPossible(observer)) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.logBox.text = ""
-                }
-                ActivityIndicator.show("Calculating Viewshed")
-                
-                self.isViewshedRunning = true
-                self.ViewshedLog("User requested that viewshed be run")
-                (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
-                FogMachine.fogMachineInstance.execute()
-                //self.verifyBoundBox(observer)
-            } else {
-                let message = "Fog Viewshed requires the surrounding HGT files.\n\nDownload the missing Hgt files from the Data Tab."
-                let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-
-                let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-                    // Do noting for cancel
-                }
-                alertController.addAction(cancelAction)
-                self.presentViewController(alertController, animated: true) {
-                    // Do nothing
-                }
-            }
-        } else {
-            let message = "Fog Viewshed is being calculated.\n\nPlease wait for the viewshed to finish before starting another viewshed."
-            let alertController = UIAlertController(title: "Fog Viewshed", message: message, preferredStyle: .Alert)
-
-            let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-                // Do nothing for cancel
-            }
-            alertController.addAction(cancelAction)
-            self.presentViewController(alertController, animated: true) {
-                // Do nothing
-            }
-        }
-    }
-
-    func performFogViewshed(observer: Observer, numberOfQuadrants: Int, whichQuadrant: Int) {
-
-        ViewshedLog("Starting Fog Viewshed Processing on Observer: \(observer.name)")
-        self.viewshedPalette.setupNewPalette(observer)
-        if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
-            let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
-            self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
-        } else if (observer.algorithm == ViewshedAlgorithm.VanKreveld) {
-            let kreveld: KreveldViewshed = KreveldViewshed()
-            let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: observer.elevation)
-            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
-        }
-
-        ViewshedLog("\tFinished Viewshed Processing on \(observer.name).")
+        ActivityIndicator.show("Calculating Viewshed")
+        self.ViewshedLog("Running viewshed")
+        (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
+        FogMachine.fogMachineInstance.execute()
     }
 
     // MARK: IBActions
@@ -467,13 +421,21 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Logging
 
-    func ViewshedLog(output: String, clearLog: Bool = false) {
-        NSLog(output)
+    func ViewshedLog(format: String, writeToDebugLog:Bool = false, clearLog: Bool = false) {
+        if(writeToDebugLog) {
+            NSLog(format)
+        }
         dispatch_async(dispatch_get_main_queue()) {
             if(clearLog) {
                 self.logBox.text = ""
             }
-            self.logBox.text.appendContentsOf("\n" + output)
+            let dateFormater = NSDateFormatter()
+            dateFormater.dateFormat = NSDateFormatter.dateFormatFromTemplate("HH:mm:ss.SSS", options: 0, locale:  NSLocale.currentLocale())
+            let currentTimestamp:String = dateFormater.stringFromDate(NSDate());
+            dispatch_async(dispatch_get_main_queue()) {
+                self.logBox.text.appendContentsOf(currentTimestamp + " " + format + "\n")
+                self.logBox.scrollRangeToVisible(NSMakeRange(self.logBox.text.characters.count - 1, 1));
+            }
         }
     }
 

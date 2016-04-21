@@ -53,4 +53,8 @@ public class ViewshedTool : FMTool {
     public override func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
         SwiftEventBus.post("onPeerDisconnect")
     }
+    
+    public override func onLog(format:String) {
+        SwiftEventBus.post("onLog", sender:format)
+    }
 }

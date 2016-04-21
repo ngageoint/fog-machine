@@ -78,4 +78,13 @@ public class FMTool {
     public func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
         
     }
+    
+    /**
+     
+     This is called when fog machines logs any information
+     
+     */
+    public func onLog(format:String) {
+        
+    }
 }
