@@ -12,8 +12,8 @@ s.license          = 'DOD'
 s.author           = { "NGA" => "cwasko@caci.com" }
 #s.source           = { :git => "https://git.geointapps.org/fogmachine", :tag => s.version.to_s }
 
-s.platform         = :ios, '8.0'
-s.ios.deployment_target = '8.0'
+s.platform         = :ios, '8.4'
+s.ios.deployment_target = '8.4'
 s.requires_arc = true
 
 s.source_files = 'FogMachine/**/*.swift'

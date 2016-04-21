@@ -28,7 +28,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/cesarferreira/SwiftEventBus.git
 
 SPEC CHECKSUMS:
-  FogMachine: d967d4067745fd9d2b8a999ffee31e3ce45f8768
+  FogMachine: 91f21d966c707bbf6b5d6cfd190ac39ccb2286ae
   PeerKit: afeefbde5a660a085749ab28bfcba515c07191bf
   SSZipArchive: de3d215ab73f87db627f81f2ce24f1731e3886c3
   SwiftEventBus: d334f7aecbddbd995c3de5c262cf35c72db550f3

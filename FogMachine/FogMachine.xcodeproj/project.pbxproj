@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		A9EF919AE587405155A5845B /* Pods_FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */; };
-		F9647BEC1CC850920070893F /* FMCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BE31CC850920070893F /* FMCoding.swift */; };
-		F9647BED1CC850920070893F /* FMNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BE41CC850920070893F /* FMNode.swift */; };
-		F9647BEE1CC850920070893F /* FMResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BE51CC850920070893F /* FMResult.swift */; };
-		F9647BEF1CC850920070893F /* FMTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BE61CC850920070893F /* FMTimer.swift */; };
-		F9647BF01CC850920070893F /* FMTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BE71CC850920070893F /* FMTool.swift */; };
-		F9647BF11CC850920070893F /* FMWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BE81CC850920070893F /* FMWork.swift */; };
 		F9647BF21CC850920070893F /* FogMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = F9647BE91CC850920070893F /* FogMachine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9647BF31CC850920070893F /* FogMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BEA1CC850920070893F /* FogMachine.swift */; };
 		F9647BF41CC850920070893F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9647BEB1CC850920070893F /* Info.plist */; };
+		F9DD389C1CC94C7500F1AC50 /* FMCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD38971CC94C7500F1AC50 /* FMCoding.swift */; };
+		F9DD389D1CC94C7500F1AC50 /* FMNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD38981CC94C7500F1AC50 /* FMNode.swift */; };
+		F9DD389E1CC94C7500F1AC50 /* FMResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD38991CC94C7500F1AC50 /* FMResult.swift */; };
+		F9DD389F1CC94C7500F1AC50 /* FMTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD389A1CC94C7500F1AC50 /* FMTool.swift */; };
+		F9DD38A01CC94C7500F1AC50 /* FMWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD389B1CC94C7500F1AC50 /* FMWork.swift */; };
+		F9DD38A31CC94CA200F1AC50 /* FMTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD38A21CC94CA200F1AC50 /* FMTimer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,16 +25,16 @@
 		86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig"; sourceTree = "<group>"; };
 		BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9446EBD1CC85A02000F8A17 /* FogMachine.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FogMachine.podspec; sourceTree = "<group>"; };
-		F9647BE31CC850920070893F /* FMCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCoding.swift; sourceTree = "<group>"; };
-		F9647BE41CC850920070893F /* FMNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMNode.swift; sourceTree = "<group>"; };
-		F9647BE51CC850920070893F /* FMResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMResult.swift; sourceTree = "<group>"; };
-		F9647BE61CC850920070893F /* FMTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMTimer.swift; sourceTree = "<group>"; };
-		F9647BE71CC850920070893F /* FMTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMTool.swift; sourceTree = "<group>"; };
-		F9647BE81CC850920070893F /* FMWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMWork.swift; sourceTree = "<group>"; };
 		F9647BE91CC850920070893F /* FogMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FogMachine.h; sourceTree = "<group>"; };
 		F9647BEA1CC850920070893F /* FogMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogMachine.swift; sourceTree = "<group>"; };
 		F9647BEB1CC850920070893F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F981F02E1CC85EE1006E724C /* PeerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PeerKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/FogMachine-ehakjtromnjnlkdndgtxzwnwrxhg/Build/Products/Debug-iphoneos/PeerKit.framework"; sourceTree = "<group>"; };
+		F9DD38971CC94C7500F1AC50 /* FMCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FMCoding.swift; path = Models/FMCoding.swift; sourceTree = "<group>"; };
+		F9DD38981CC94C7500F1AC50 /* FMNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FMNode.swift; path = Models/FMNode.swift; sourceTree = "<group>"; };
+		F9DD38991CC94C7500F1AC50 /* FMResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FMResult.swift; path = Models/FMResult.swift; sourceTree = "<group>"; };
+		F9DD389A1CC94C7500F1AC50 /* FMTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FMTool.swift; path = Models/FMTool.swift; sourceTree = "<group>"; };
+		F9DD389B1CC94C7500F1AC50 /* FMWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FMWork.swift; path = Models/FMWork.swift; sourceTree = "<group>"; };
+		F9DD38A21CC94CA200F1AC50 /* FMTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FMTimer.swift; path = Utility/FMTimer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,17 +89,33 @@
 		F9647BE21CC850920070893F /* FogMachine */ = {
 			isa = PBXGroup;
 			children = (
-				F9647BE31CC850920070893F /* FMCoding.swift */,
-				F9647BE41CC850920070893F /* FMNode.swift */,
-				F9647BE51CC850920070893F /* FMResult.swift */,
-				F9647BE61CC850920070893F /* FMTimer.swift */,
-				F9647BE71CC850920070893F /* FMTool.swift */,
-				F9647BE81CC850920070893F /* FMWork.swift */,
+				F9DD38A11CC94C9400F1AC50 /* Utility */,
+				F9DD38961CC94BE400F1AC50 /* Models */,
 				F9647BE91CC850920070893F /* FogMachine.h */,
 				F9647BEA1CC850920070893F /* FogMachine.swift */,
 				F9647BEB1CC850920070893F /* Info.plist */,
 			);
 			path = FogMachine;
+			sourceTree = "<group>";
+		};
+		F9DD38961CC94BE400F1AC50 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F9DD38971CC94C7500F1AC50 /* FMCoding.swift */,
+				F9DD38981CC94C7500F1AC50 /* FMNode.swift */,
+				F9DD38991CC94C7500F1AC50 /* FMResult.swift */,
+				F9DD389A1CC94C7500F1AC50 /* FMTool.swift */,
+				F9DD389B1CC94C7500F1AC50 /* FMWork.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		F9DD38A11CC94C9400F1AC50 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F9DD38A21CC94CA200F1AC50 /* FMTimer.swift */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -216,13 +232,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9647BEF1CC850920070893F /* FMTimer.swift in Sources */,
-				F9647BED1CC850920070893F /* FMNode.swift in Sources */,
-				F9647BEC1CC850920070893F /* FMCoding.swift in Sources */,
-				F9647BF01CC850920070893F /* FMTool.swift in Sources */,
+				F9DD38A01CC94C7500F1AC50 /* FMWork.swift in Sources */,
+				F9DD389F1CC94C7500F1AC50 /* FMTool.swift in Sources */,
+				F9DD389D1CC94C7500F1AC50 /* FMNode.swift in Sources */,
+				F9DD389C1CC94C7500F1AC50 /* FMCoding.swift in Sources */,
+				F9DD389E1CC94C7500F1AC50 /* FMResult.swift in Sources */,
+				F9DD38A31CC94CA200F1AC50 /* FMTimer.swift in Sources */,
 				F9647BF31CC850920070893F /* FogMachine.swift in Sources */,
-				F9647BEE1CC850920070893F /* FMResult.swift in Sources */,
-				F9647BF11CC850920070893F /* FMWork.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
