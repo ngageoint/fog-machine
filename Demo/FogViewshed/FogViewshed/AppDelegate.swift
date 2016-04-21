@@ -1,6 +1,6 @@
 import UIKit
 import CoreData
-import Fog
+import FogMachine
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

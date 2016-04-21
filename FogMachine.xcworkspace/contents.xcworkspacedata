@@ -8,7 +8,7 @@
       location = "group:Demo/FogViewshed/FogViewshed.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Fog/Fog.xcodeproj">
+      location = "group:FogMachine/FogMachine.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

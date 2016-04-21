@@ -1,5 +1,5 @@
 import UIKit
-import Fog
+import FogMachine
 import SwiftEventBus
 
 class ConnectionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {

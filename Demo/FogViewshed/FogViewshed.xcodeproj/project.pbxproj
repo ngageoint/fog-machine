@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
 		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
 		753D3D5F1BEA33CF004E3589 /* ViewshedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */; };
 		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
@@ -21,7 +20,6 @@
 		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
 		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
 		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
-		756D3AF41C9C8D9F00094EB8 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756D3AF31C9C8D9F00094EB8 /* Fog.framework */; };
 		7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */; };
 		7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */; };
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
@@ -42,6 +40,7 @@
 		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
 		9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */; };
 		9BE78E791C727D1E00506F11 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE78E781C727D1E00506F11 /* Toast.swift */; };
+		9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
 		E314F6C31B79023D005B75C6 /* ConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */; };
 		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
@@ -51,6 +50,7 @@
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
 		E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */; };
 		F997AB011CBD9BC2009C929B /* ViewshedTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F997AB001CBD9BC2009C929B /* ViewshedTool.swift */; };
+		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
 		F9D9E3B41C87A651009710A5 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AA1C87A651009710A5 /* N37W123.hgt */; };
 		F9D9E3B51C87A651009710A5 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AB1C87A651009710A5 /* N38W077.hgt */; };
 		F9D9E3B61C87A651009710A5 /* N38W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AC1C87A651009710A5 /* N38W078.hgt */; };
@@ -124,7 +124,9 @@
 		E314F6D71B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogViewshedTests.swift; sourceTree = "<group>"; };
 		E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
+		F904248C1CC942330034AAC4 /* PeerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PeerKit.framework; path = "/Users/wiedemanns/Library/Developer/Xcode/DerivedData/FogMachine-ehakjtromnjnlkdndgtxzwnwrxhg/Build/Products/Debug-iphoneos/PeerKit.framework"; sourceTree = "<absolute>"; };
 		F997AB001CBD9BC2009C929B /* ViewshedTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedTool.swift; sourceTree = "<group>"; };
+		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 		F9D9E3A81C87A4A9009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = HGT/N37W123.hgt; sourceTree = "<group>"; };
 		F9D9E3AA1C87A651009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = HGT/N37W123.hgt; sourceTree = "<group>"; };
 		F9D9E3AB1C87A651009710A5 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
@@ -143,8 +145,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				756D3AF41C9C8D9F00094EB8 /* Fog.framework in Frameworks */,
-				7414C17B4A3F2E44561305E7 /* Pods_FogViewshed.framework in Frameworks */,
+				F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */,
+				9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,6 +163,7 @@
 		401D5B75ECC7ACCCF10B7514 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9CF416D1CC857F5003F5405 /* FogMachine.framework */,
 				756D3AF31C9C8D9F00094EB8 /* Fog.framework */,
 				23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */,
 			);
@@ -212,6 +215,7 @@
 		E314F6B21B79023D005B75C6 = {
 			isa = PBXGroup;
 			children = (
+				F904248C1CC942330034AAC4 /* PeerKit.framework */,
 				E314F6BD1B79023D005B75C6 /* FogViewshed */,
 				E314F6D51B79023D005B75C6 /* FogViewshedTests */,
 				E314F6BC1B79023D005B75C6 /* Products */,

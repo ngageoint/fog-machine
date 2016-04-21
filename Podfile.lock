@@ -1,18 +1,18 @@
 PODS:
-  - Fog (2.0.0)
+  - FogMachine (3.0.0)
   - PeerKit (2.0.1)
   - SSZipArchive (1.1)
   - SwiftEventBus (1.1.0)
 
 DEPENDENCIES:
-  - Fog (from `Fog/`)
+  - FogMachine (from `FogMachine/`)
   - PeerKit (from `https://github.com/cwas/PeerKit.git`, tag `2.0.1`)
   - SSZipArchive (~> 1.1)
   - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`)
 
 EXTERNAL SOURCES:
-  Fog:
-    :path: Fog/
+  FogMachine:
+    :path: FogMachine/
   PeerKit:
     :git: https://github.com/cwas/PeerKit.git
     :tag: 2.0.1
@@ -28,7 +28,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/cesarferreira/SwiftEventBus.git
 
 SPEC CHECKSUMS:
-  Fog: 6f7a615532c5524b50d8ad538d2cd98c1b3f14cc
+  FogMachine: d967d4067745fd9d2b8a999ffee31e3ce45f8768
   PeerKit: afeefbde5a660a085749ab28bfcba515c07191bf
   SSZipArchive: de3d215ab73f87db627f81f2ce24f1731e3886c3
   SwiftEventBus: d334f7aecbddbd995c3de5c262cf35c72db550f3

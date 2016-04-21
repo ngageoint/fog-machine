@@ -1,6 +1,4 @@
 import Foundation
-import Fog
-
 
 //SRTM = Shuttle Radar Topography Mission sampled at three arc-seconds
 struct Srtm3 {

@@ -1,6 +1,6 @@
 import UIKit
 import MapKit
-import Fog
+import FogMachine
 import SwiftEventBus
 
 class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {

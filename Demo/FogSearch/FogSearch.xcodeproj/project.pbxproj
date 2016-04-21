@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		756D3AF61C9C8DD600094EB8 /* Fog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756D3AF51C9C8DD600094EB8 /* Fog.framework */; };
 		75802C961C7F390B00DAE8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C951C7F390B00DAE8BD /* AppDelegate.swift */; };
 		75802C981C7F390B00DAE8BD /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C971C7F390B00DAE8BD /* FirstViewController.swift */; };
 		75802C9A1C7F390B00DAE8BD /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802C991C7F390B00DAE8BD /* SecondViewController.swift */; };
@@ -17,7 +16,7 @@
 		75802CCB1C80881000DAE8BD /* MonteCristo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CCA1C80881000DAE8BD /* MonteCristo.swift */; };
 		75802CD01C80887000DAE8BD /* SearchWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CCF1C80887000DAE8BD /* SearchWork.swift */; };
 		75802CD21C8088B700DAE8BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75802CD11C8088B700DAE8BD /* Constants.swift */; };
-		9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */; };
+		F9CF41701CC85801003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416F1CC85801003F5405 /* FogMachine.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +35,7 @@
 		97A7E70FA12CE33A93537F4E /* Pods-FogSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogSearch.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogSearch/Pods-FogSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E997FD756F049C84B6268091 /* Pods-FogSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogSearch.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogSearch/Pods-FogSearch.release.xcconfig"; sourceTree = "<group>"; };
+		F9CF416F1CC85801003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,8 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				756D3AF61C9C8DD600094EB8 /* Fog.framework in Frameworks */,
-				9FA3CF26CFDC7106E43B38E7 /* Pods_FogSearch.framework in Frameworks */,
+				F9CF41701CC85801003F5405 /* FogMachine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +120,7 @@
 		A86355D0F2AEBCD24C695256 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9CF416F1CC85801003F5405 /* FogMachine.framework */,
 				756D3AF51C9C8DD600094EB8 /* Fog.framework */,
 				A95C355ACDD2ABDA044991C0 /* Pods_FogSearch.framework */,
 			);

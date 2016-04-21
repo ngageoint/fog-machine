@@ -1,6 +1,6 @@
 import Foundation
 import MapKit
-import Fog
+import FogMachine
 
 public class ViewshedWork: FMWork {
     

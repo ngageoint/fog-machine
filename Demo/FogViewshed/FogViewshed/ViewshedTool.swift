@@ -1,5 +1,5 @@
 import Foundation
-import Fog
+import FogMachine
 import SwiftEventBus
 
 public class ViewshedTool : FMTool {

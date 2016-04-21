@@ -1,7 +1,7 @@
 import Foundation
 import MapKit
 import UIKit
-import Fog
+import FogMachine
 
 class ViewshedPalette: NSObject {
     
