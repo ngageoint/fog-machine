@@ -1,6 +1,6 @@
 # Fog Machine Framework
 
-![viewshed on three phones](Demo/FogViewshed/FogViewshed/Screenshots/0.png)
+![viewshed on three phones](Demo/FogViewshed/Screenshots/0.png)
 
 Fog Machine is an iOS Swift framework for parallel processing.  Solve hard problems fast with the Fog Machine framework.
 
@@ -22,11 +22,15 @@ pod install
 
 ## Usage
 
-The Fog machine framework provides a simple lifecycle for your app to use.
+The Fog machine framework provides a simple lifecycle for your app to use.  Just extend FMTool, and start running you task in parallel immediately.
 
 ```swift
-// Connect
-ConnectionManager.start()
+// look for friends/devices to help me
+FogMachine.fogMachineInstance.startSearchForPeers()
+// what do I need help with?
+FogMachine.fogMachineInstance.setTool(MyCoolTool())
+// run MyCoolTool on all the nodes in the network
+FogMachine.fogMachineInstance.execute()
 ```
 
 ## Requirements

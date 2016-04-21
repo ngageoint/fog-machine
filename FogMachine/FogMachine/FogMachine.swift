@@ -147,7 +147,7 @@ public class FogMachine {
     // how long should the initiator wait after completing it's work to start resechduling work
     private let reprocessingScheduleWaitTimeInSeconds:Double = 5.0
     
-    // TODO : Should refactor this into a FogMachineData api ...
+    // TODO : Might refactor this into a FogMachineData api ...
     // all the data structures below are session dependant!
     
     // used to control concurrency.  It synchronizes many of the data structures below
