@@ -261,6 +261,7 @@ public class FogMachine {
         dispatch_sync(self.lock) {
             self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.start()
         }
+        // FIXME: Make sure this does not block the main thread! do I need to thread this?
         let selfResult:FMResult = self.fmTool.processWork(getSelfNode(), fromNode: getSelfNode(), work: selfWork!)
         
         // store the result and merge results if needed
@@ -288,6 +289,8 @@ public class FogMachine {
      
      */
     private func finishAndMerge(callerNode:FMNode, sessionUUID:String) -> Bool {
+        // TODO : make sure the merge is not called from the UI thread
+        
         var status:Bool = false
         // did we get all the results, yet?
         if(nodeToWork[sessionUUID]!.count == nodeToResult[sessionUUID]!.count) {
@@ -318,7 +321,7 @@ public class FogMachine {
      Set up future reprocessing stuff for nodes that might fail
      
      */
-    @objc public func scheduleReprocessWork(timer: NSTimer) {
+    @objc private func scheduleReprocessWork(timer: NSTimer) {
         dispatch_sync(self.lock) {
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
@@ -367,7 +370,7 @@ public class FogMachine {
      This method re-processes work on the initiator node that may not come back from other nodes
      
      */
-    @objc public func reprocessWork(timer: NSTimer) {
+    @objc private func reprocessWork(timer: NSTimer) {
         dispatch_sync(self.lock) {
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
