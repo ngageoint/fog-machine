@@ -20,13 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0305FDF3ACF4674AEEA09737 /* Pods-Fog.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fog.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-Fog/Pods-Fog.debug.xcconfig"; sourceTree = "<group>"; };
-		27BFC6FD4A92B2D9D81EF98F /* Pods_Fog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		754D5E551C80DCF4009B7876 /* Fog.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fog.podspec; sourceTree = "<group>"; };
 		75802C7E1C7F37AE00DAE8BD /* FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig"; sourceTree = "<group>"; };
-		AE165CDC20D66FA360E7DD4F /* Pods-Fog.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fog.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Fog/Pods-Fog.release.xcconfig"; sourceTree = "<group>"; };
 		BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9446EBD1CC85A02000F8A17 /* FogMachine.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FogMachine.podspec; sourceTree = "<group>"; };
 		F9647BE31CC850920070893F /* FMCoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCoding.swift; sourceTree = "<group>"; };
@@ -57,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				F981F02E1CC85EE1006E724C /* PeerKit.framework */,
-				27BFC6FD4A92B2D9D81EF98F /* Pods_Fog.framework */,
 				BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */,
 			);
 			name = Frameworks;
@@ -85,9 +80,6 @@
 		A3F6200A0272446E4CEF7C25 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				754D5E551C80DCF4009B7876 /* Fog.podspec */,
-				0305FDF3ACF4674AEEA09737 /* Pods-Fog.debug.xcconfig */,
-				AE165CDC20D66FA360E7DD4F /* Pods-Fog.release.xcconfig */,
 				86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */,
 				81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */,
 			);
