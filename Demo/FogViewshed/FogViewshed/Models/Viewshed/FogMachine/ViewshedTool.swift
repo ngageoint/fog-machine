@@ -4,22 +4,40 @@ import SwiftEventBus
 
 public class ViewshedTool : FMTool {
     
-    public var createWorkObserver:Observer?
+    public var createWorkViewshedObserver:Observer?
+    public var createWorkViewshedAlgorithmName:ViewshedAlgorithmName?
     
     public override init() {
         super.init()
     }
     
     public override func name() -> String {
-        return "Viewshed Tool for observer at (\(createWorkObserver!.coordinate.latitude), \(createWorkObserver!.coordinate.longitude))"
+        return "Viewshed Tool.  Runs " + createWorkViewshedAlgorithmName!.rawValue + " for observer at (\(createWorkViewshedObserver!.position.latitude), \(createWorkViewshedObserver!.position.longitude))"
     }
     
     public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> ViewshedWork {
-        return ViewshedWork(numberOfQuadrants: Int(numberOfNodes), whichQuadrant: Int(nodeNumber), observer: createWorkObserver!)
+        return ViewshedWork(sectorCount: Int(numberOfNodes), sectorNumber: Int(nodeNumber), observer: createWorkViewshedObserver!, viewshedAlgorithmName: createWorkViewshedAlgorithmName!)
     }
     
     public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> ViewshedResult {
-        //let viewshedWork = work as! ViewshedWork
+        let viewshedWork = work as! ViewshedWork
+        
+        var axisOrientedBoundingBox:AxisOrientedBoundingBox
+        // get bounding box for sector
+        if(viewshedWork.sectorCount == 1) {
+            axisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(viewshedWork.observer.position, radiusInMeters: viewshedWork.observer.radiusInMeters)
+        } else {
+            // TODO sector calculation
+        }
+        
+        // TODO : remove me
+        axisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(viewshedWork.observer.position, radiusInMeters: viewshedWork.observer.radiusInMeters)
+        // read elevation data
+        HGTManager.getElevationGrid(axisOrientedBoundingBox)
+        
+        // run viewshed on data
+        
+        // return [[int]]
         
 //        self.viewshedPalette.setupNewPalette(observer)
 //        if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {

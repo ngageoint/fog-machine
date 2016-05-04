@@ -7,60 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D581BE7A07F004E3589 /* Bresenham.swift */; };
-		753D3D5F1BEA33CF004E3589 /* ViewshedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */; };
-		753D3D631BEA7900004E3589 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D621BEA7900004E3589 /* Cell.swift */; };
-		753D3D6A1BEBA59E004E3589 /* HGT in Resources */ = {isa = PBXBuildFile; fileRef = 753D3D691BEBA59E004E3589 /* HGT */; };
-		753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */; };
-		753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */; };
 		753D3D761BF65A60004E3589 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D751BF65A60004E3589 /* Constants.swift */; };
-		753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D771BF66EA0004E3589 /* Pixel.swift */; };
-		753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D791BFA3ABA004E3589 /* Observer.swift */; };
-		753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7B1BFBCF66004E3589 /* Hgt.swift */; };
-		753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */; };
-		753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */; };
-		754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */; };
-		7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */; };
-		7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */; };
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
-		7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */; };
-		7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */; };
-		758885441C89F93D009AFB06 /* GeoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885431C89F93D009AFB06 /* GeoUtility.swift */; };
-		758885461C8A116B009AFB06 /* AxisOrientedBoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758885451C8A116B009AFB06 /* AxisOrientedBoundingBox.swift */; };
-		75A808831CA345430090792B /* SquarePerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A808821CA345430090792B /* SquarePerimeter.swift */; };
-		75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */; };
-		9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */; };
-		9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */; };
-		9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */; };
-		9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */; };
-		9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */; };
-		9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */; };
-		9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */; };
-		9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */; };
-		9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */; };
-		9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */; };
-		9BE78E791C727D1E00506F11 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE78E781C727D1E00506F11 /* Toast.swift */; };
 		9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
 		E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C01B79023D005B75C6 /* AppDelegate.swift */; };
-		E314F6C31B79023D005B75C6 /* ConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */; };
-		E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6C41B79023D005B75C6 /* DataViewController.swift */; };
 		E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C61B79023D005B75C6 /* Main.storyboard */; };
 		E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C91B79023D005B75C6 /* Images.xcassets */; };
 		E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */; };
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
-		E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */; };
-		F997AB011CBD9BC2009C929B /* ViewshedTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F997AB001CBD9BC2009C929B /* ViewshedTool.swift */; };
+		F91E131D1CD9177E00409376 /* ConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13181CD9177E00409376 /* ConnectionsViewController.swift */; };
+		F91E131E1CD9177E00409376 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13191CD9177E00409376 /* DataViewController.swift */; };
+		F91E131F1CD9177E00409376 /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E131A1CD9177E00409376 /* ObserverSettingsViewController.swift */; };
+		F91E13201CD9177E00409376 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E131B1CD9177E00409376 /* SettingsViewController.swift */; };
+		F91E13211CD9177E00409376 /* ViewshedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E131C1CD9177E00409376 /* ViewshedViewController.swift */; };
+		F91E13231CD91C5D00409376 /* ViewshedAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13221CD91C5D00409376 /* ViewshedAlgorithm.swift */; };
+		F91E13251CD92BB900409376 /* BoundingBoxUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13241CD92BB900409376 /* BoundingBoxUtility.swift */; };
+		F91E13271CD931E800409376 /* HGTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13261CD931E800409376 /* HGTManager.swift */; };
+		F93F14C71CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */; };
+		F93F14C81CCAE5AC00E35541 /* ElevationDataGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B11CCAE5AC00E35541 /* ElevationDataGrid.swift */; };
+		F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B41CCAE5AC00E35541 /* HGTFile.swift */; };
+		F93F14CB1CCAE5AC00E35541 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B61CCAE5AC00E35541 /* Cell.swift */; };
+		F93F14CC1CCAE5AC00E35541 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B71CCAE5AC00E35541 /* Observer.swift */; };
+		F93F14CD1CCAE5AC00E35541 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */; };
+		F93F14CE1CCAE5AC00E35541 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */; };
+		F93F14CF1CCAE5AC00E35541 /* ViewshedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14BC1CCAE5AC00E35541 /* ViewshedResult.swift */; };
+		F93F14D01CCAE5AC00E35541 /* ViewshedTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14BD1CCAE5AC00E35541 /* ViewshedTool.swift */; };
+		F93F14D11CCAE5AC00E35541 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14BE1CCAE5AC00E35541 /* ViewshedWork.swift */; };
+		F93F14D21CCAE5AC00E35541 /* FranklinRayViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14C01CCAE5AC00E35541 /* FranklinRayViewshed.swift */; };
+		F93F14D31CCAE5AC00E35541 /* SquarePerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14C11CCAE5AC00E35541 /* SquarePerimeter.swift */; };
+		F93F14DE1CCAE5C400E35541 /* GeoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14D91CCAE5C400E35541 /* GeoUtility.swift */; };
+		F93F14DF1CCAE5C400E35541 /* HGTDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14DA1CCAE5C400E35541 /* HGTDownloader.swift */; };
+		F93F14E01CCAE5C400E35541 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14DB1CCAE5C400E35541 /* Pixel.swift */; };
+		F93F14E11CCAE5C400E35541 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14DC1CCAE5C400E35541 /* Toast.swift */; };
+		F93F14E21CCAE5C400E35541 /* ViewshedImageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14DD1CCAE5C400E35541 /* ViewshedImageUtility.swift */; };
+		F93F14E41CCAE5FB00E35541 /* HGTRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E31CCAE5FB00E35541 /* HGTRegions.swift */; };
+		F93F14E61CCAE61300E35541 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E51CCAE61300E35541 /* ActivityIndicator.swift */; };
+		F93F14E81CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */; };
+		F93F14EB1CCAE62700E35541 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */; };
+		F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */; };
+		F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F14991CCAE49500E35541 /* N37W123.hgt */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
-		F9D9E3B41C87A651009710A5 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AA1C87A651009710A5 /* N37W123.hgt */; };
-		F9D9E3B51C87A651009710A5 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AB1C87A651009710A5 /* N38W077.hgt */; };
-		F9D9E3B61C87A651009710A5 /* N38W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AC1C87A651009710A5 /* N38W078.hgt */; };
-		F9D9E3B71C87A651009710A5 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AD1C87A651009710A5 /* N38W123.hgt */; };
-		F9D9E3B81C87A651009710A5 /* N39W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AE1C87A651009710A5 /* N39W077.hgt */; };
-		F9D9E3B91C87A651009710A5 /* N39W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3AF1C87A651009710A5 /* N39W078.hgt */; };
-		F9D9E3BA1C87A651009710A5 /* N39W105.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B01C87A651009710A5 /* N39W105.hgt */; };
-		F9D9E3BB1C87A651009710A5 /* N39W106.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B11C87A651009710A5 /* N39W106.hgt */; };
-		F9D9E3BC1C87A651009710A5 /* N40W105.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B21C87A651009710A5 /* N40W105.hgt */; };
-		F9D9E3BD1C87A651009710A5 /* N40W106.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9D9E3B31C87A651009710A5 /* N40W106.hgt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,68 +62,62 @@
 /* Begin PBXFileReference section */
 		23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
-		753D3D581BE7A07F004E3589 /* Bresenham.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bresenham.swift; sourceTree = "<group>"; };
-		753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedViewController.swift; sourceTree = "<group>"; };
-		753D3D621BEA7900004E3589 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
-		753D3D691BEBA59E004E3589 /* HGT */ = {isa = PBXFileReference; lastKnownFileType = folder; path = HGT; sourceTree = "<group>"; };
-		753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
-		753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
 		753D3D751BF65A60004E3589 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		753D3D771BF66EA0004E3589 /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
-		753D3D791BFA3ABA004E3589 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
-		753D3D7B1BFBCF66004E3589 /* Hgt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hgt.swift; sourceTree = "<group>"; };
-		753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedFog.swift; sourceTree = "<group>"; };
-		753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
-		754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverSettingsViewController.swift; sourceTree = "<group>"; };
 		754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FogMachine.xcdatamodel; sourceTree = "<group>"; };
 		756D3AF31C9C8D9F00094EB8 /* Fog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fog.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/FogMachine-dwszhekwuvrywcaaofntynfglvrx/Build/Products/Debug-iphoneos/Fog.framework"; sourceTree = "<group>"; };
-		7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverEntity.swift; sourceTree = "<group>"; };
-		7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
-		7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtGrid.swift; sourceTree = "<group>"; };
-		7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedPalette.swift; sourceTree = "<group>"; };
-		758885431C89F93D009AFB06 /* GeoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoUtility.swift; sourceTree = "<group>"; };
-		758885451C8A116B009AFB06 /* AxisOrientedBoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AxisOrientedBoundingBox.swift; sourceTree = "<group>"; };
-		75A808821CA345430090792B /* SquarePerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquarePerimeter.swift; sourceTree = "<group>"; };
-		75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
 		8B12973A4FECB067D196E0B8 /* Pods-FogViewshed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.release.xcconfig"; sourceTree = "<group>"; };
-		9B09C7BE1C32F33400C08D7C /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
-		9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtRegions.swift; sourceTree = "<group>"; };
-		9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
-		9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HgtDownloadMgr.swift; sourceTree = "<group>"; };
-		9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldSweepEventNode.swift; sourceTree = "<group>"; };
-		9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldViewshed.swift; sourceTree = "<group>"; };
-		9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationPoint.swift; sourceTree = "<group>"; };
-		9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldActiveBTree.swift; sourceTree = "<group>"; };
-		9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftPriorityQueue.swift; sourceTree = "<group>"; };
-		9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
-		9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		9BE78E781C727D1E00506F11 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogViewshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogViewshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C01B79023D005B75C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsViewController.swift; sourceTree = "<group>"; };
-		E314F6C41B79023D005B75C6 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		E314F6C71B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E314F6C91B79023D005B75C6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E314F6CC1B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E314F6D21B79023D005B75C6 /* FogViewshed.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FogViewshed.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6D71B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogViewshedTests.swift; sourceTree = "<group>"; };
-		E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
 		F904248C1CC942330034AAC4 /* PeerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PeerKit.framework; path = "/Users/wiedemanns/Library/Developer/Xcode/DerivedData/FogMachine-ehakjtromnjnlkdndgtxzwnwrxhg/Build/Products/Debug-iphoneos/PeerKit.framework"; sourceTree = "<absolute>"; };
-		F997AB001CBD9BC2009C929B /* ViewshedTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedTool.swift; sourceTree = "<group>"; };
+		F91E13181CD9177E00409376 /* ConnectionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectionsViewController.swift; path = Controllers/ConnectionsViewController.swift; sourceTree = "<group>"; };
+		F91E13191CD9177E00409376 /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataViewController.swift; path = Controllers/DataViewController.swift; sourceTree = "<group>"; };
+		F91E131A1CD9177E00409376 /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ObserverSettingsViewController.swift; path = Controllers/ObserverSettingsViewController.swift; sourceTree = "<group>"; };
+		F91E131B1CD9177E00409376 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Controllers/SettingsViewController.swift; sourceTree = "<group>"; };
+		F91E131C1CD9177E00409376 /* ViewshedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewshedViewController.swift; path = Controllers/ViewshedViewController.swift; sourceTree = "<group>"; };
+		F91E13221CD91C5D00409376 /* ViewshedAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedAlgorithm.swift; sourceTree = "<group>"; };
+		F91E13241CD92BB900409376 /* BoundingBoxUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxUtility.swift; sourceTree = "<group>"; };
+		F91E13261CD931E800409376 /* HGTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTManager.swift; sourceTree = "<group>"; };
+		F93F14991CCAE49500E35541 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W123.hgt; sourceTree = "<group>"; };
+		F93F149A1CCAE49500E35541 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W077.hgt; sourceTree = "<group>"; };
+		F93F149B1CCAE49500E35541 /* N38W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W078.hgt; sourceTree = "<group>"; };
+		F93F149C1CCAE49500E35541 /* N38W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W123.hgt; sourceTree = "<group>"; };
+		F93F149D1CCAE49500E35541 /* N39W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W077.hgt; sourceTree = "<group>"; };
+		F93F149E1CCAE49500E35541 /* N39W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W078.hgt; sourceTree = "<group>"; };
+		F93F149F1CCAE49500E35541 /* N39W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W105.hgt; sourceTree = "<group>"; };
+		F93F14A01CCAE49500E35541 /* N39W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W106.hgt; sourceTree = "<group>"; };
+		F93F14A11CCAE49500E35541 /* N40W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W105.hgt; sourceTree = "<group>"; };
+		F93F14A21CCAE49500E35541 /* N40W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W106.hgt; sourceTree = "<group>"; };
+		F93F14A31CCAE49500E35541 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AxisOrientedBoundingBox.swift; sourceTree = "<group>"; };
+		F93F14B11CCAE5AC00E35541 /* ElevationDataGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationDataGrid.swift; sourceTree = "<group>"; };
+		F93F14B41CCAE5AC00E35541 /* HGTFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTFile.swift; sourceTree = "<group>"; };
+		F93F14B61CCAE5AC00E35541 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		F93F14B71CCAE5AC00E35541 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
+		F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverEntity.swift; sourceTree = "<group>"; };
+		F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
+		F93F14BC1CCAE5AC00E35541 /* ViewshedResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedResult.swift; sourceTree = "<group>"; };
+		F93F14BD1CCAE5AC00E35541 /* ViewshedTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedTool.swift; sourceTree = "<group>"; };
+		F93F14BE1CCAE5AC00E35541 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
+		F93F14C01CCAE5AC00E35541 /* FranklinRayViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FranklinRayViewshed.swift; sourceTree = "<group>"; };
+		F93F14C11CCAE5AC00E35541 /* SquarePerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquarePerimeter.swift; sourceTree = "<group>"; };
+		F93F14D91CCAE5C400E35541 /* GeoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoUtility.swift; sourceTree = "<group>"; };
+		F93F14DA1CCAE5C400E35541 /* HGTDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTDownloader.swift; sourceTree = "<group>"; };
+		F93F14DB1CCAE5C400E35541 /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
+		F93F14DC1CCAE5C400E35541 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		F93F14DD1CCAE5C400E35541 /* ViewshedImageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedImageUtility.swift; sourceTree = "<group>"; };
+		F93F14E31CCAE5FB00E35541 /* HGTRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTRegions.swift; sourceTree = "<group>"; };
+		F93F14E51CCAE61300E35541 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BresenhamsLineAlgoritm.swift; sourceTree = "<group>"; };
+		F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
+		F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
-		F9D9E3A81C87A4A9009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = HGT/N37W123.hgt; sourceTree = "<group>"; };
-		F9D9E3AA1C87A651009710A5 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N37W123.hgt; path = HGT/N37W123.hgt; sourceTree = "<group>"; };
-		F9D9E3AB1C87A651009710A5 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W077.hgt; path = HGT/N38W077.hgt; sourceTree = "<group>"; };
-		F9D9E3AC1C87A651009710A5 /* N38W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W078.hgt; path = HGT/N38W078.hgt; sourceTree = "<group>"; };
-		F9D9E3AD1C87A651009710A5 /* N38W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N38W123.hgt; path = HGT/N38W123.hgt; sourceTree = "<group>"; };
-		F9D9E3AE1C87A651009710A5 /* N39W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W077.hgt; path = HGT/N39W077.hgt; sourceTree = "<group>"; };
-		F9D9E3AF1C87A651009710A5 /* N39W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W078.hgt; path = HGT/N39W078.hgt; sourceTree = "<group>"; };
-		F9D9E3B01C87A651009710A5 /* N39W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W105.hgt; path = HGT/N39W105.hgt; sourceTree = "<group>"; };
-		F9D9E3B11C87A651009710A5 /* N39W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N39W106.hgt; path = HGT/N39W106.hgt; sourceTree = "<group>"; };
-		F9D9E3B21C87A651009710A5 /* N40W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W105.hgt; path = HGT/N40W105.hgt; sourceTree = "<group>"; };
-		F9D9E3B31C87A651009710A5 /* N40W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; name = N40W106.hgt; path = HGT/N40W106.hgt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,39 +148,6 @@
 				23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		758FB77E1C0A3A2600A193A7 /* VanKreveld */ = {
-			isa = PBXGroup;
-			children = (
-				9BD5C1031C05E52E004A37B6 /* StatusEntry.swift */,
-				9BD5C0F11C05E51E004A37B6 /* KreveldSweepEventNode.swift */,
-				9BD5C0F41C05E51E004A37B6 /* KreveldActiveBTree.swift */,
-				9BD5C0F81C05E51E004A37B6 /* SwiftPriorityQueue.swift */,
-				9BD5C0F31C05E51E004A37B6 /* ElevationPoint.swift */,
-			);
-			name = VanKreveld;
-			sourceTree = "<group>";
-		};
-		758FB77F1C0A3AE400A193A7 /* Viewshed */ = {
-			isa = PBXGroup;
-			children = (
-				9BD5C0F21C05E51E004A37B6 /* KreveldViewshed.swift */,
-				753D3D581BE7A07F004E3589 /* Bresenham.swift */,
-				753D3D7D1BFCF1E0004E3589 /* ViewshedFog.swift */,
-				7575B3E91C5E7D2200FE32E9 /* ViewshedPalette.swift */,
-			);
-			name = Viewshed;
-			sourceTree = "<group>";
-		};
-		75D5A93B1C051BF300B7B246 /* FogModels */ = {
-			isa = PBXGroup;
-			children = (
-				753D3D7F1BFE4B6D004E3589 /* ViewshedWork.swift */,
-				75D5A93C1C051D7E00B7B246 /* ViewshedResult.swift */,
-				F997AB001CBD9BC2009C929B /* ViewshedTool.swift */,
-			);
-			name = FogModels;
 			sourceTree = "<group>";
 		};
 		B2895BE1E0A77C1DD56AD493 /* Pods */ = {
@@ -236,12 +183,15 @@
 		E314F6BD1B79023D005B75C6 /* FogViewshed */ = {
 			isa = PBXGroup;
 			children = (
-				753D3D691BEBA59E004E3589 /* HGT */,
-				E3B933E21B7BD0F9007B9444 /* Data */,
-				E3B933DF1B7BAE32007B9444 /* Views */,
-				E3CB97F71B7975C8006D6961 /* Controllers */,
-				E3CB97F61B7975BF006D6961 /* Models */,
+				F93F14D81CCAE5C400E35541 /* Utility */,
+				F93F14AF1CCAE5AC00E35541 /* Models */,
+				F93F14961CCAE47100E35541 /* Data */,
+				F93F14941CCAE44F00E35541 /* Controllers */,
 				E314F6C01B79023D005B75C6 /* AppDelegate.swift */,
+				F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */,
+				F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */,
+				F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */,
+				F93F14E51CCAE61300E35541 /* ActivityIndicator.swift */,
 				753D3D751BF65A60004E3589 /* Constants.swift */,
 				754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */,
 				E314F6C61B79023D005B75C6 /* Main.storyboard */,
@@ -277,69 +227,118 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E3B933DF1B7BAE32007B9444 /* Views */ = {
+		F93F14941CCAE44F00E35541 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				9B5EC0661C6B913300E7283D /* ActivityIndicator.swift */,
-				E3B933E01B7BAE3E007B9444 /* ConnectionCell.swift */,
-				9BE78E781C727D1E00506F11 /* Toast.swift */,
-				753D3D711BF104E8004E3589 /* ViewshedOverlayView.swift */,
+				F91E13181CD9177E00409376 /* ConnectionsViewController.swift */,
+				F91E13191CD9177E00409376 /* DataViewController.swift */,
+				F91E131A1CD9177E00409376 /* ObserverSettingsViewController.swift */,
+				F91E131B1CD9177E00409376 /* SettingsViewController.swift */,
+				F91E131C1CD9177E00409376 /* ViewshedViewController.swift */,
 			);
-			name = Views;
+			name = Controllers;
 			sourceTree = "<group>";
 		};
-		E3B933E21B7BD0F9007B9444 /* Data */ = {
+		F93F14961CCAE47100E35541 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				F9D9E3AA1C87A651009710A5 /* N37W123.hgt */,
-				F9D9E3AB1C87A651009710A5 /* N38W077.hgt */,
-				F9D9E3AC1C87A651009710A5 /* N38W078.hgt */,
-				F9D9E3AD1C87A651009710A5 /* N38W123.hgt */,
-				F9D9E3AE1C87A651009710A5 /* N39W077.hgt */,
-				F9D9E3AF1C87A651009710A5 /* N39W078.hgt */,
-				F9D9E3B01C87A651009710A5 /* N39W105.hgt */,
-				F9D9E3B11C87A651009710A5 /* N39W106.hgt */,
-				F9D9E3B21C87A651009710A5 /* N40W105.hgt */,
-				F9D9E3B31C87A651009710A5 /* N40W106.hgt */,
-				F9D9E3A81C87A4A9009710A5 /* N37W123.hgt */,
-				9B09C7BE1C32F33400C08D7C /* N38W077.hgt */,
+				F93F14981CCAE49500E35541 /* HGT */,
 			);
 			name = Data;
 			sourceTree = "<group>";
 		};
-		E3CB97F61B7975BF006D6961 /* Models */ = {
+		F93F14981CCAE49500E35541 /* HGT */ = {
 			isa = PBXGroup;
 			children = (
-				75A808821CA345430090792B /* SquarePerimeter.swift */,
-				758885431C89F93D009AFB06 /* GeoUtility.swift */,
-				758885451C8A116B009AFB06 /* AxisOrientedBoundingBox.swift */,
-				753D3D621BEA7900004E3589 /* Cell.swift */,
-				753D3D6F1BF103B5004E3589 /* ViewshedOverlay.swift */,
-				753D3D771BF66EA0004E3589 /* Pixel.swift */,
-				753D3D791BFA3ABA004E3589 /* Observer.swift */,
-				7575B3DE1C592C3500FE32E9 /* ObserverEntity.swift */,
-				7575B3E01C593A0200FE32E9 /* ObserverFacade.swift */,
-				753D3D7B1BFBCF66004E3589 /* Hgt.swift */,
-				9B5F282A1C63A69E002984F8 /* HgtDownloadMgr.swift */,
-				7575B3E71C5C21CB00FE32E9 /* HgtGrid.swift */,
-				9B0AC94F1C6E0D250059BA4A /* HgtRegions.swift */,
-				758FB77E1C0A3A2600A193A7 /* VanKreveld */,
-				75D5A93B1C051BF300B7B246 /* FogModels */,
+				F93F14991CCAE49500E35541 /* N37W123.hgt */,
+				F93F149A1CCAE49500E35541 /* N38W077.hgt */,
+				F93F149B1CCAE49500E35541 /* N38W078.hgt */,
+				F93F149C1CCAE49500E35541 /* N38W123.hgt */,
+				F93F149D1CCAE49500E35541 /* N39W077.hgt */,
+				F93F149E1CCAE49500E35541 /* N39W078.hgt */,
+				F93F149F1CCAE49500E35541 /* N39W105.hgt */,
+				F93F14A01CCAE49500E35541 /* N39W106.hgt */,
+				F93F14A11CCAE49500E35541 /* N40W105.hgt */,
+				F93F14A21CCAE49500E35541 /* N40W106.hgt */,
+				F93F14A31CCAE49500E35541 /* README.txt */,
 			);
-			name = Models;
+			name = HGT;
+			path = Data/HGT;
 			sourceTree = "<group>";
 		};
-		E3CB97F71B7975C8006D6961 /* Controllers */ = {
+		F93F14AF1CCAE5AC00E35541 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E314F6C21B79023D005B75C6 /* ConnectionsViewController.swift */,
-				E314F6C41B79023D005B75C6 /* DataViewController.swift */,
-				753D3D5E1BEA33CF004E3589 /* ViewshedViewController.swift */,
-				9BD5C1071C060BAB004A37B6 /* SettingsViewController.swift */,
-				754175841C5694B6000D51E0 /* ObserverSettingsViewController.swift */,
-				758FB77F1C0A3AE400A193A7 /* Viewshed */,
+				F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */,
+				F93F14B11CCAE5AC00E35541 /* ElevationDataGrid.swift */,
+				F93F14B31CCAE5AC00E35541 /* HGT */,
+				F93F14B51CCAE5AC00E35541 /* Map */,
+				F93F14B71CCAE5AC00E35541 /* Observer.swift */,
+				F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */,
+				F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */,
+				F93F14BA1CCAE5AC00E35541 /* Viewshed */,
 			);
-			name = Controllers;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F93F14B31CCAE5AC00E35541 /* HGT */ = {
+			isa = PBXGroup;
+			children = (
+				F93F14B41CCAE5AC00E35541 /* HGTFile.swift */,
+			);
+			path = HGT;
+			sourceTree = "<group>";
+		};
+		F93F14B51CCAE5AC00E35541 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				F93F14B61CCAE5AC00E35541 /* Cell.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		F93F14BA1CCAE5AC00E35541 /* Viewshed */ = {
+			isa = PBXGroup;
+			children = (
+				F91E13221CD91C5D00409376 /* ViewshedAlgorithm.swift */,
+				F93F14BB1CCAE5AC00E35541 /* FogMachine */,
+				F93F14BF1CCAE5AC00E35541 /* FranklinRay */,
+				F93F14C11CCAE5AC00E35541 /* SquarePerimeter.swift */,
+			);
+			path = Viewshed;
+			sourceTree = "<group>";
+		};
+		F93F14BB1CCAE5AC00E35541 /* FogMachine */ = {
+			isa = PBXGroup;
+			children = (
+				F93F14BC1CCAE5AC00E35541 /* ViewshedResult.swift */,
+				F93F14BD1CCAE5AC00E35541 /* ViewshedTool.swift */,
+				F93F14BE1CCAE5AC00E35541 /* ViewshedWork.swift */,
+			);
+			path = FogMachine;
+			sourceTree = "<group>";
+		};
+		F93F14BF1CCAE5AC00E35541 /* FranklinRay */ = {
+			isa = PBXGroup;
+			children = (
+				F93F14C01CCAE5AC00E35541 /* FranklinRayViewshed.swift */,
+			);
+			path = FranklinRay;
+			sourceTree = "<group>";
+		};
+		F93F14D81CCAE5C400E35541 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F93F14D91CCAE5C400E35541 /* GeoUtility.swift */,
+				F93F14DA1CCAE5C400E35541 /* HGTDownloader.swift */,
+				F93F14E31CCAE5FB00E35541 /* HGTRegions.swift */,
+				F93F14DB1CCAE5C400E35541 /* Pixel.swift */,
+				F93F14DC1CCAE5C400E35541 /* Toast.swift */,
+				F93F14DD1CCAE5C400E35541 /* ViewshedImageUtility.swift */,
+				F91E13241CD92BB900409376 /* BoundingBoxUtility.swift */,
+				F91E13261CD931E800409376 /* HGTManager.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -428,19 +427,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9D9E3B41C87A651009710A5 /* N37W123.hgt in Resources */,
-				F9D9E3B51C87A651009710A5 /* N38W077.hgt in Resources */,
-				F9D9E3B61C87A651009710A5 /* N38W078.hgt in Resources */,
-				F9D9E3B71C87A651009710A5 /* N38W123.hgt in Resources */,
-				F9D9E3B81C87A651009710A5 /* N39W077.hgt in Resources */,
-				F9D9E3B91C87A651009710A5 /* N39W078.hgt in Resources */,
-				F9D9E3BA1C87A651009710A5 /* N39W105.hgt in Resources */,
-				F9D9E3BB1C87A651009710A5 /* N39W106.hgt in Resources */,
-				F9D9E3BC1C87A651009710A5 /* N40W105.hgt in Resources */,
-				F9D9E3BD1C87A651009710A5 /* N40W106.hgt in Resources */,
+				F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
-				753D3D6A1BEBA59E004E3589 /* HGT in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -507,43 +496,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				753D3D721BF104E8004E3589 /* ViewshedOverlayView.swift in Sources */,
-				753D3D591BE7A07F004E3589 /* Bresenham.swift in Sources */,
-				7575B3E81C5C21CB00FE32E9 /* HgtGrid.swift in Sources */,
-				753D3D801BFE4B6D004E3589 /* ViewshedWork.swift in Sources */,
+				F93F14EB1CCAE62700E35541 /* ViewshedOverlay.swift in Sources */,
 				7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */,
-				9BD5C0FC1C05E51E004A37B6 /* KreveldViewshed.swift in Sources */,
-				E314F6C51B79023D005B75C6 /* DataViewController.swift in Sources */,
-				9BD5C0FD1C05E51E004A37B6 /* ElevationPoint.swift in Sources */,
-				753D3D701BF103B5004E3589 /* ViewshedOverlay.swift in Sources */,
-				9B0AC9501C6E0D250059BA4A /* HgtRegions.swift in Sources */,
-				75D5A93D1C051D7E00B7B246 /* ViewshedResult.swift in Sources */,
-				7575B3EA1C5E7D2200FE32E9 /* ViewshedPalette.swift in Sources */,
-				7575B3DF1C592C3500FE32E9 /* ObserverEntity.swift in Sources */,
-				753D3D7E1BFCF1E0004E3589 /* ViewshedFog.swift in Sources */,
-				753D3D7A1BFA3ABA004E3589 /* Observer.swift in Sources */,
-				75A808831CA345430090792B /* SquarePerimeter.swift in Sources */,
+				F93F14E11CCAE5C400E35541 /* Toast.swift in Sources */,
+				F93F14E81CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift in Sources */,
+				F91E131D1CD9177E00409376 /* ConnectionsViewController.swift in Sources */,
+				F93F14CF1CCAE5AC00E35541 /* ViewshedResult.swift in Sources */,
+				F91E13251CD92BB900409376 /* BoundingBoxUtility.swift in Sources */,
+				F93F14CC1CCAE5AC00E35541 /* Observer.swift in Sources */,
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
-				753D3D631BEA7900004E3589 /* Cell.swift in Sources */,
-				9BD5C1081C060BAB004A37B6 /* SettingsViewController.swift in Sources */,
-				753D3D781BF66EA0004E3589 /* Pixel.swift in Sources */,
-				758885461C8A116B009AFB06 /* AxisOrientedBoundingBox.swift in Sources */,
-				758885441C89F93D009AFB06 /* GeoUtility.swift in Sources */,
-				753D3D5F1BEA33CF004E3589 /* ViewshedViewController.swift in Sources */,
-				9BD5C0FB1C05E51E004A37B6 /* KreveldSweepEventNode.swift in Sources */,
-				9BD5C0FE1C05E51E004A37B6 /* KreveldActiveBTree.swift in Sources */,
+				F93F14E21CCAE5C400E35541 /* ViewshedImageUtility.swift in Sources */,
+				F93F14CD1CCAE5AC00E35541 /* ObserverEntity.swift in Sources */,
+				F93F14C81CCAE5AC00E35541 /* ElevationDataGrid.swift in Sources */,
+				F93F14C71CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift in Sources */,
+				F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */,
+				F93F14DF1CCAE5C400E35541 /* HGTDownloader.swift in Sources */,
+				F93F14CB1CCAE5AC00E35541 /* Cell.swift in Sources */,
+				F93F14E61CCAE61300E35541 /* ActivityIndicator.swift in Sources */,
+				F93F14DE1CCAE5C400E35541 /* GeoUtility.swift in Sources */,
+				F91E13211CD9177E00409376 /* ViewshedViewController.swift in Sources */,
+				F91E13271CD931E800409376 /* HGTManager.swift in Sources */,
+				F91E13231CD91C5D00409376 /* ViewshedAlgorithm.swift in Sources */,
+				F93F14E01CCAE5C400E35541 /* Pixel.swift in Sources */,
+				F93F14CE1CCAE5AC00E35541 /* ObserverFacade.swift in Sources */,
+				F91E131E1CD9177E00409376 /* DataViewController.swift in Sources */,
+				F93F14E41CCAE5FB00E35541 /* HGTRegions.swift in Sources */,
 				E314F6C11B79023D005B75C6 /* AppDelegate.swift in Sources */,
-				754175851C5694B6000D51E0 /* ObserverSettingsViewController.swift in Sources */,
-				E3B933E11B7BAE3E007B9444 /* ConnectionCell.swift in Sources */,
-				9B5F282B1C63A69E002984F8 /* HgtDownloadMgr.swift in Sources */,
-				7575B3E11C593A0200FE32E9 /* ObserverFacade.swift in Sources */,
-				E314F6C31B79023D005B75C6 /* ConnectionsViewController.swift in Sources */,
-				9B5EC0671C6B913300E7283D /* ActivityIndicator.swift in Sources */,
-				753D3D7C1BFBCF66004E3589 /* Hgt.swift in Sources */,
-				9BE78E791C727D1E00506F11 /* Toast.swift in Sources */,
-				9BD5C1011C05E51E004A37B6 /* SwiftPriorityQueue.swift in Sources */,
-				F997AB011CBD9BC2009C929B /* ViewshedTool.swift in Sources */,
-				9BD5C1041C05E52E004A37B6 /* StatusEntry.swift in Sources */,
+				F93F14D21CCAE5AC00E35541 /* FranklinRayViewshed.swift in Sources */,
+				F91E13201CD9177E00409376 /* SettingsViewController.swift in Sources */,
+				F93F14D01CCAE5AC00E35541 /* ViewshedTool.swift in Sources */,
+				F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */,
+				F93F14D31CCAE5AC00E35541 /* SquarePerimeter.swift in Sources */,
+				F93F14D11CCAE5AC00E35541 /* ViewshedWork.swift in Sources */,
+				F91E131F1CD9177E00409376 /* ObserverSettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

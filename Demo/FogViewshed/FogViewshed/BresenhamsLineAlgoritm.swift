@@ -1,26 +1,25 @@
 import UIKit
 
-class Bresenham: NSObject {
-
+/**
+ 
+ Bresenham's line algorithm is an algorithm that determines the points of an n-dimensional raster that should be selected in order to form a close approximation to a straight line between two points.
+ 
+ see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+ 
+ */
+public class BresenhamsLineAlgoritm: NSObject {
     
-    private static func reverseResults(matrix: [(x:Int,y:Int)]) -> [(x:Int,y:Int)] {
-        var results:[(x:Int,y:Int)] = []
-        for (x,y) in matrix.reverse() {
-            results.append((x, y))
-        }
-        return results
-    }
-
-    
-    //Adopted from http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm#Java
-    internal static func findLine(x1: Int, y1: Int, x2: Int, y2: Int) -> [(x:Int,y:Int)] {
-        // To substitude for the removal of var in parameters
-        var x1 = x1
-        var y1 = y1
+    /**
+     
+     see http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm#Java
+     
+     */
+    public static func findLine(x1 x1arg: Int, y1 y1arg: Int, x2: Int, y2: Int) -> [(x:Int,y:Int)] {
         
-        var results:[(x:Int,y:Int)] = []
-        let obsX = x1
-        let obsY = y1
+        var x1 = x1arg
+        var y1 = y1arg
+        
+        var line:[(x:Int,y:Int)] = []
         
         // delta of exact value and rounded value of the dependant variable
         var d = 0;
@@ -36,9 +35,7 @@ class Bresenham: NSObject {
         
         if (dy <= dx) {
             while true {
-                if (x1 != obsX || y1 != obsY) { // skip the observer point
-                    results.append((x1, y1))
-                }
+                line.append((x1, y1))
                 if (x1 == x2) {
                     break;
                 }
@@ -51,9 +48,7 @@ class Bresenham: NSObject {
             }
         } else {
             while true {
-                if (x1 != obsX || y1 != obsY) { // skip the observer point
-                    results.append((x1, y1))
-               }
+                line.append((x1, y1))
                 if (y1 == y2) {
                     break;
                 }
@@ -65,9 +60,6 @@ class Bresenham: NSObject {
                 }
             }
         }
-        
-        return results
+        return line
     }
-    
-    
 }

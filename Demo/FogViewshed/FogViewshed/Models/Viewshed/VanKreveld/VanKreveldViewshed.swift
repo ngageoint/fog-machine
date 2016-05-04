@@ -1,8 +1,14 @@
 import Foundation
 
-class KreveldViewshed {
+
+/**
+ 
+ Finds a viewshed using Van Kreveld's method.  More acurate, but slower.
+ 
+ */
+public class VanKreveldViewshed {
     
-    func parallelKreveld(elevationMatrix: [[Int]], observPt: ElevationPoint, radius: Int, numOfPeers: Int, quadrant2Calc: Int) ->[[Int]] {
+    public func runViewshed(elevationMatrix: [[Int]], observPt: ElevationPoint, radius: Int, numOfPeers: Int, quadrant2Calc: Int) -> [[Int]] {
         let cellsInRadius = getCellsInRadius(observPt.getXCoord(), observerY: observPt.getYCoord(), radius: radius, numOfPeers: numOfPeers, quadrant2Calc: quadrant2Calc)
         let viewshedMatrix = calculateViewshed (cellsInRadius, elevationMatrix: elevationMatrix, observPt: observPt, radius: radius, numQuadrants: numOfPeers, quadrant2Calc: quadrant2Calc)
         
@@ -26,8 +32,7 @@ class KreveldViewshed {
         
         var kreveldActive: KreveldActiveBTree = KreveldActiveBTree(reference: observPt)
         
-        var sweepEventQueue = PriorityQueue(ascending: true, startingValues: [KreveldSweepEventNode(eventType: KreveldEventTypeOther,
-            dataElevPoint: observPt, observerViewPt: observPt, angle: calculateAngle(observPt, view: observPt, type: KreveldEventTypeOther), distance: 0.0)])
+        var sweepEventQueue = PriorityQueue(ascending: true, startingValues: [KreveldSweepEventNode(eventType: KreveldEventTypeOther, dataElevPoint: observPt, observerViewPt: observPt, angle: calculateAngle(observPt, view: observPt, type: KreveldEventTypeOther), distance: 0.0)])
         
         //  fill the EventList with all points
         var dataCounter: Int = 0
@@ -44,14 +49,11 @@ class KreveldViewshed {
                     continue
                 }
             }
-            let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(eventType: 1,
-                dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
+            let sweepEnterEventList: KreveldSweepEventNode = KreveldSweepEventNode(eventType: 1, dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 1), distance: calcDistance(elevPointData, observerViewPt: observPt))
             
-            let sweepCenterEventList: KreveldSweepEventNode = KreveldSweepEventNode(eventType: 2,
-                dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 2), distance: calcDistance(elevPointData, observerViewPt: observPt))
+            let sweepCenterEventList: KreveldSweepEventNode = KreveldSweepEventNode(eventType: 2, dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 2), distance: calcDistance(elevPointData, observerViewPt: observPt))
             
-            let sweepExitEventList: KreveldSweepEventNode = KreveldSweepEventNode(eventType: 3,
-                dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 3), distance: calcDistance(elevPointData, observerViewPt: observPt))
+            let sweepExitEventList: KreveldSweepEventNode = KreveldSweepEventNode(eventType: 3, dataElevPoint: elevPointData, observerViewPt: observPt, angle: calculateAngle(elevPointData, view: observPt, type: 3), distance: calcDistance(elevPointData, observerViewPt: observPt))
             
             sweepEventQueue.push(sweepEnterEventList)
             sweepEventQueue.push(sweepExitEventList)
@@ -184,7 +186,7 @@ class KreveldViewshed {
                 let perimeter:[(x:Int, y:Int)] = SquarePerimeter.getAnySizedPerimeter(observerX, inY:observerY, radius: radius, numberOfQuadrants: numOfPeers, whichQuadrant: quadrant2Calc)
                 
                 for (x, y) in perimeter {
-                    let pointsInLine:[(x:Int, y:Int)] = Bresenham.findLine(observerX, y1: observerY, x2: x, y2: y)
+                    let pointsInLine:[(x:Int, y:Int)] = BresenhamsLineAlgoritm.findLine(x1:observerX, y1: observerY, x2: x, y2: y)
                     cellsInRadius.appendContentsOf(pointsInLine)
                 }
             }

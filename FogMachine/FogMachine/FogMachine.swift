@@ -228,7 +228,7 @@ public class FogMachine {
                     self.finishAndMerge(fromNode, sessionUUID: receivedSessionUUID)
                 }
             } else {
-                // the likelyhood of this occuring is very very very small
+                // the likelyhood of this occuring is small.
                 self.FMLog(selfNode.description + " received result for session " + receivedSessionUUID + ", but that session no longer exists.  Discarding work.")
             }
         }

@@ -7,15 +7,12 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Variables
     
-    
-    var originalObserver : ObserverEntity?
+    var originalObserver: ObserverEntity?
     var model = ObserverFacade()
     
     enum Warning: String {
-        case POSITIVE_INTEGER = "positive integer",
-        DECIMAL = "decimal"
+        case DECIMAL = "decimal"
     }
-    
     
     // MARK: IBOutlets
     
@@ -50,7 +47,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
             let editedObserver = createObserverFromSettings()
             saveObserverSettings(editedObserver)
         } else if segue.identifier == "removePinFromSettings" {
-            model.deleteObserver(originalObserver!)
+            model.delete(originalObserver!)
         } else if segue.identifier == "runSelectedFogViewshed" {
             let editedObserver = createObserverFromSettings()
             saveObserverSettings(editedObserver)
@@ -73,32 +70,28 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     
     func saveObserverSettings(editedObserver: Observer) {
-        model.deleteObserver(originalObserver!)
-        model.addObserver(editedObserver)
+        model.delete(originalObserver!)
+        model.add(editedObserver)
     }
     
     func createObserverFromSettings() -> Observer {
         let editedObserver = Observer()
         
-        editedObserver.algorithm = ViewshedAlgorithm(rawValue: algorithm.selectedSegmentIndex)!
         editedObserver.name = name.text!
 
-        let elevationValue = getIntegerValue(FogViewshed.ELEVATION, value: elevation.text, warningMessage: Warning.POSITIVE_INTEGER)
-        let radiusValue = getIntegerValue(FogViewshed.RADIUS, value: radius.text, warningMessage: Warning.POSITIVE_INTEGER)
-        let latitudeValue = getDoubleValue(FogViewshed.LATITUDE, value: latitude.text, warningMessage: Warning.DECIMAL)
-        let longitudeValue = getDoubleValue(FogViewshed.LONGITUDE, value: longitude.text, warningMessage: Warning.DECIMAL)
+        let elevationValue = getDoubleValue("elevation", value: elevation.text, warningMessage: Warning.DECIMAL)
+        let radiusValue = getDoubleValue("radius", value: radius.text, warningMessage: Warning.DECIMAL)
+        let latitudeValue = getDoubleValue("latitude", value: latitude.text, warningMessage: Warning.DECIMAL)
+        let longitudeValue = getDoubleValue("longitude", value: longitude.text, warningMessage: Warning.DECIMAL)
         
         if elevationValue != nil && radiusValue != nil && latitudeValue != nil && longitudeValue != nil {
-            editedObserver.elevation = elevationValue!
-            editedObserver.setRadius(radiusValue!)
-            editedObserver.coordinate = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
+            editedObserver.elevationInMeters = elevationValue!
+            editedObserver.radiusInMeters = radiusValue!
+            editedObserver.position = CLLocationCoordinate2DMake(latitudeValue!, longitudeValue!)
         }
-        
-        editedObserver.updateXYLocation()
         
         return editedObserver
     }
-    
     
     func getDoubleValue(key: String, value: String?, warningMessage: Warning) -> Double? {
         guard let doubleValue = Double(value!) else {
@@ -109,41 +102,24 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         return doubleValue
     }
     
-    
-    func getIntegerValue(key: String, value: String?, warningMessage: Warning) -> Int? {
-        guard let integerValue = Int(value!) else {
-            alertUser("The \(key) requires a \(warningMessage.rawValue).")
-            return nil
-        }
-        
-        guard integerValue > 0 else {
-            alertUser("The \(key) requires a \(warningMessage.rawValue).")
-            return nil
-        }
-        
-        return integerValue
-    }
-    
-    
     func loadObserverSettings() {
-        algorithm.selectedSegmentIndex = Int(originalObserver!.algorithm)
+        algorithm.selectedSegmentIndex = 0
         name.text = originalObserver!.name
-        elevation.text = String(originalObserver!.elevation)
-        radius.text = String(originalObserver!.radius)
+        elevation.text = String(originalObserver!.elevationInMeters)
+        radius.text = String(originalObserver!.radiusInMeters)
         latitude.text = String(originalObserver!.latitude)
         longitude.text = String(originalObserver!.longitude)
     }
-    
     
     func alertUser(message: String) {
         let alertController = UIAlertController(title: "Observer Settings Error", message: message, preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
-            //print(action)
+
         }
         alertController.addAction(cancelAction)
         self.presentViewController(alertController, animated: true) {
-            // ...
+            
         }
     }
 

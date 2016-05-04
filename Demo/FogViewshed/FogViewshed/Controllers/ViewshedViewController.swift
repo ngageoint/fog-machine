@@ -5,13 +5,10 @@ import SwiftEventBus
 
 class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
-
     // MARK: Class Variables
 
-    var allObservers = [ObserverEntity]()
     var model = ObserverFacade()
     var settingsObserver = Observer() //Only use for segue from ObserverSettings
-    var viewshedPalette: ViewshedPalette!
     var isLogShown: Bool!
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
@@ -46,16 +43,10 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         
         isLogShown = false
 
-        allObservers = model.getObservers()
-        displayObservations()
-        displayDataRegions()
-        viewshedPalette = ViewshedPalette()
+        drawObservers()
+        drawDataRegions()
 
         locationManagerSettings()
-        if (allObservers.count > 0) {
-            // TODO: Center on bounding box of all the observers
-            self.centerMapOnLocation(allObservers[allObservers.count - 1].getObserver().getObserverLocation())
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,7 +61,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
             removeDataRegions()
-            displayDataRegions()
+            drawDataRegions()
         }
     }
 
@@ -105,7 +96,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     
     
     func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, Srtm3.DISPLAY_DIAMETER, Srtm3.DISPLAY_DIAMETER)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, 10000, 10000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
@@ -133,28 +124,15 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     // MARK: Display Stuff
 
 
-    func displayObservations() {
-        for entity in allObservers {
-            pinObserverLocation(entity.getObserver())
+    func drawObservers() {
+        for observer in model.getObservers() {
+            drawPin(observer)
         }
     }
 
-    func displayDataRegions() {
-        if !isDataRegionDrawn {
-            let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
-
-            do {
-                let directoryUrls = try  NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
-                let hgtFiles = directoryUrls.filter{ $0.pathExtension == "hgt" }.map{ $0.lastPathComponent }
-                for file in hgtFiles{
-                    let name = file!.componentsSeparatedByString(".")[0]
-                    let tempHgt = Hgt(filename: name)
-                    self.mapView.addOverlay(tempHgt.getRectangularBoundry())
-                }
-            } catch let error as NSError {
-                print("Error displaying HGT file: \(error.localizedDescription)")
-            }
-            isDataRegionDrawn = true
+    func drawDataRegions() {
+        for hgtFile in HGTManager.getLocalHGTFiles() {
+            self.mapView.addOverlay(hgtFile.getPolygonBoundary())
         }
     }
 
@@ -174,38 +152,22 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
 
-    func pinObserverLocation(observer: Observer) {
+    func drawPin(observer: Observer) {
         let dropPin = MKPointAnnotation()
-        dropPin.coordinate = observer.getObserverLocation()
+        dropPin.coordinate = observer.position
         dropPin.title = observer.name
         mapView.addAnnotation(dropPin)
     }
 
-
     func addAnnotationGesture(gestureRecognizer: UIGestureRecognizer) {
-        if gestureRecognizer.state == UIGestureRecognizerState.Began {
-            let touchPoint = gestureRecognizer.locationInView(mapView)
-            let newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            let tempHgt = Hgt(coordinate: newCoordinates)
-            if tempHgt.hasHgtFileInDocuments() {
-                let newObserver = Observer()
-                newObserver.name = "Observer \(allObservers.count + 1)"
-                newObserver.setNewCoordinates(newCoordinates)
-                model.populateEntity(newObserver)
-                //Repopulate allObservers with new Observer
-                allObservers = model.getObservers()
-                pinObserverLocation(newObserver)
-            } else {
-                var style = ToastStyle()
-                style.messageColor = UIColor.redColor()
-                style.backgroundColor = UIColor.whiteColor()
-                style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
-                self.view.makeToast("Data unavailable for this location", duration: 1.5, position: .Center, style: style)
-                return
-            }
+        if (gestureRecognizer.state == UIGestureRecognizerState.Began) {
+            let newObserver = Observer()
+            newObserver.name = "Observer \(model.getObservers().count + 1)"
+            newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
+            model.add(newObserver)
+            drawPin(newObserver)
         }
     }
-
 
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var polygonView:MKPolygonRenderer? = nil
@@ -266,7 +228,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             if control == view.rightCalloutAccessoryView {
                 performSegueWithIdentifier("observerSettings", sender: selectedObserver)
             } else if control == view.leftCalloutAccessoryView {
-                self.initiateFogViewshed(selectedObserver.getObserver())
+                self.initiateFogViewshed(selectedObserver)
             }
         } else {
             print("Observer not found for \((view.annotation?.coordinate)!)")
@@ -307,12 +269,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
 
-    func retrieveObserver(coordinate: CLLocationCoordinate2D) -> ObserverEntity? {
-        var foundObserver: ObserverEntity? = nil
+    func retrieveObserver(coordinate: CLLocationCoordinate2D) -> Observer? {
+        var foundObserver: Observer? = nil
 
-        for observer in allObservers
-        {
-            if coordinate.latitude == observer.latitude && coordinate.longitude == observer.longitude {
+        for observer in model.getObservers() {
+            if coordinate.latitude == observer.position.latitude && coordinate.longitude == observer.position.longitude {
                 foundObserver = observer
                 break
             }
@@ -328,11 +289,10 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
 
-    func redrawMap() {
-        allObservers = model.getObservers()
+    func redraw() {
         removeAllFromMap()
-        displayObservations()
-        displayDataRegions()
+        drawObservers()
+        drawDataRegions()
     }
 
 
@@ -341,7 +301,8 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     func initiateFogViewshed(observer: Observer) {
         ActivityIndicator.show("Calculating Viewshed")
         self.ViewshedLog("Running viewshed")
-        (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkObserver = observer
+        (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedObserver = observer
+        (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedAlgorithmName = ViewshedAlgorithmName.FranklinRay
         FogMachine.fogMachineInstance.execute()
     }
 
@@ -382,7 +343,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         setMapLogDisplay()
         removeDataRegions()
         isDataRegionDrawn = false
-        displayDataRegions()
+        drawDataRegions()
     }
 
     @IBAction func applyOptions(segue: UIStoryboardSegue) {
@@ -391,31 +352,30 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
         setMapLogDisplay()
-        redrawMap()
+        redraw()
     }
 
     @IBAction func removePinFromSettings(segue: UIStoryboardSegue) {
-        redrawMap()
+        redraw()
     }
 
     @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
         setMapLogDisplay()
         model.clearEntity()
-        redrawMap()
+        redraw()
     }
 
 
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
-        redrawMap()
+        redraw()
         self.initiateFogViewshed(self.settingsObserver)
     }
 
 
     @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {
         if segue.sourceViewController.isKindOfClass(ObserverSettingsViewController) {
-            allObservers = model.getObservers()
             mapView.removeAnnotations(mapView.annotations)
-            displayObservations()
+            drawObservers()
         }
     }
 
@@ -438,6 +398,5 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             }
         }
     }
-
 
 }
