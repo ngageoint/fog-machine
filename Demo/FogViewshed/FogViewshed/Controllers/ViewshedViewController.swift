@@ -12,7 +12,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     var isLogShown: Bool!
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
-    var isDataRegionDrawn = false
 
     // MARK: IBOutlets
 
@@ -60,11 +59,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
-            removeDataRegions()
             drawDataRegions()
         }
     }
-
 
     // MARK: Location Delegate Methods
 
@@ -123,34 +120,33 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Display Stuff
 
-
     func drawObservers() {
+        mapView.removeAnnotations(mapView.annotations)
+        
         for observer in model.getObservers() {
             drawPin(observer)
         }
     }
 
     func drawDataRegions() {
-        for hgtFile in HGTManager.getLocalHGTFiles() {
-            self.mapView.addOverlay(hgtFile.getPolygonBoundary())
-        }
-    }
-
-
-    func removeDataRegions() {
         var dataRegionOverlays = [MKOverlay]()
         for overlay in mapView.overlays {
             if overlay is MKPolygon {
                 dataRegionOverlays.append(overlay)
             }
         }
-
-        if dataRegionOverlays.count > 0 {
-            mapView.removeOverlays(dataRegionOverlays)
-            isDataRegionDrawn = false
+        mapView.removeOverlays(dataRegionOverlays)
+        
+        for hgtFile in HGTManager.getLocalHGTFiles() {
+            self.mapView.addOverlay(hgtFile.getBoundingBox().asMKPolygon())
+            let llPin = MKPointAnnotation()
+            llPin.coordinate = hgtFile.getBoundingBox().getLowerLeft()
+            mapView.addAnnotation(llPin)
+            let urPin = MKPointAnnotation()
+            urPin.coordinate = hgtFile.getBoundingBox().getUpperRight()
+            mapView.addAnnotation(urPin)
         }
     }
-
 
     func drawPin(observer: Observer) {
         let dropPin = MKPointAnnotation()
@@ -193,7 +189,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         return polygonView!
     }
 
-
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
 
         var view:MKPinAnnotationView? = nil
@@ -222,7 +217,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         return view
     }
 
-
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if let selectedObserver = retrieveObserver((view.annotation?.coordinate)!) {
             if control == view.rightCalloutAccessoryView {
@@ -234,7 +228,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             print("Observer not found for \((view.annotation?.coordinate)!)")
         }
     }
-
 
     func changeMultiplier(constraint: NSLayoutConstraint, multiplier: CGFloat) -> NSLayoutConstraint {
         let newConstraint = NSLayoutConstraint(
@@ -254,7 +247,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         return newConstraint
     }
 
-
     func setMapLogDisplay() {
         guard let isLogShown = self.isLogShown else {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
@@ -268,7 +260,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-
     func retrieveObserver(coordinate: CLLocationCoordinate2D) -> Observer? {
         var foundObserver: Observer? = nil
 
@@ -281,16 +272,10 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         return foundObserver
     }
 
-
-    func removeAllFromMap() {
-        mapView.removeAnnotations(mapView.annotations)
-        mapView.removeOverlays(mapView.overlays)
-        isDataRegionDrawn = false
-    }
-
-
     func redraw() {
-        removeAllFromMap()
+        
+        mapView.removeOverlays(mapView.overlays)
+        
         drawObservers()
         drawDataRegions()
     }
@@ -341,8 +326,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
         setMapLogDisplay()
-        removeDataRegions()
-        isDataRegionDrawn = false
         drawDataRegions()
     }
 

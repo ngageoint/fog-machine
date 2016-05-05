@@ -27,6 +27,12 @@ class AxisOrientedBoundingBox {
         return CLLocationCoordinate2DMake(upperRight.latitude, lowerLeft.longitude)
     }
     
+    func getCentroid() -> CLLocationCoordinate2D {
+        let centroidLat:Double = (getLowerLeft().latitude + getUpperRight().latitude)/2
+        let centroidLon:Double = (getLowerLeft().longitude + getUpperRight().longitude)/2
+        return CLLocationCoordinate2DMake(centroidLat, centroidLon)
+    }
+    
     func intersectionExists(with:AxisOrientedBoundingBox) -> Bool {
         let aURLat = getUpperRight().latitude
         let aURLon = getUpperRight().longitude
@@ -55,5 +61,26 @@ class AxisOrientedBoundingBox {
         let urLon:Double = min(getUpperRight().longitude, with.getUpperRight().longitude);
         
         return AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLat, llLon), upperRight: CLLocationCoordinate2DMake(urLat, urLon))
+    }
+    
+    func asMKPolygon() -> MKPolygon {
+        var points = [
+            getLowerLeft(),
+            getUpperLeft(),
+            getUpperRight(),
+            getLowerRight()
+        ]
+        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
+        
+        return polygonOverlay
+    }
+    
+    func asMKMapRect() -> MKMapRect {
+        // convert them to MKMapPoint
+        let p1:MKMapPoint = MKMapPointForCoordinate (getLowerLeft());
+        let p2:MKMapPoint = MKMapPointForCoordinate (getUpperRight());
+        
+        // and make a MKMapRect using mins and spans
+        return MKMapRectMake(fmin(p1.x,p2.x), fmin(p1.y,p2.y), fabs(p1.x-p2.x), fabs(p1.y-p2.y));
     }
 }

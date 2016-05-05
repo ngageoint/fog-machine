@@ -6,18 +6,7 @@ import FogMachine
 class ViewshedImageUtility: NSObject {
 
     func generateOverlay(elevationDataGrid: ElevationDataGrid) -> ViewshedOverlay {
-        
-        let midLat:Double = (elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().latitude + elevationDataGrid.boundingBoxAreaExtent.getUpperRight().latitude)/2
-        let midLon:Double = (elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().longitude + elevationDataGrid.boundingBoxAreaExtent.getUpperRight().longitude)/2
-        
-        // convert them to MKMapPoint
-        let p1:MKMapPoint = MKMapPointForCoordinate (elevationDataGrid.boundingBoxAreaExtent.getLowerLeft());
-        let p2:MKMapPoint = MKMapPointForCoordinate (elevationDataGrid.boundingBoxAreaExtent.getUpperRight());
-        
-        // and make a MKMapRect using mins and spans
-        let mapRect:MKMapRect = MKMapRectMake(fmin(p1.x,p2.x), fmin(p1.y,p2.y), fabs(p1.x-p2.x), fabs(p1.y-p2.y));
-
-        return ViewshedOverlay(midCoordinate: CLLocationCoordinate2DMake(midLat, midLon), overlayBoundingMapRect: mapRect, viewshedImage: toUIImage(elevationDataGrid.elevationData))
+        return ViewshedOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: toUIImage(elevationDataGrid.elevationData))
     }
 
     private func toUIImage(viewshed: [[Int]]) -> UIImage {

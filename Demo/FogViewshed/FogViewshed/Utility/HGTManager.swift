@@ -39,14 +39,14 @@ public class HGTManager {
         }
     }
     
-    static func getLocalHGTFiles() -> [HGTFile] {
-        var hgtFiles:[HGTFile] = [HGTFile]()
+    static private func getLocalHGTFileMap() -> [String:HGTFile] {
+        var hgtFiles:[String:HGTFile] = [String:HGTFile]()
         let documentsUrl:NSURL =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
         do {
             let hgtPaths:[NSURL] = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions()).filter{ $0.pathExtension == "hgt" }
 
             for hgtpath in hgtPaths {
-                hgtFiles.append(HGTFile(path: hgtpath))
+                hgtFiles[hgtpath.lastPathComponent!] = HGTFile(path: hgtpath)
                 
             }
         } catch let error as NSError {
@@ -56,6 +56,13 @@ public class HGTManager {
         return hgtFiles
     }
     
+    static func getLocalHGTFiles() -> [HGTFile] {
+        return Array(getLocalHGTFileMap().values)
+    }
+    
+    static func getLocalHGTFileByName(filename:String) -> HGTFile? {
+        return getLocalHGTFileMap()[filename]
+    }
     
 
     /**
@@ -104,7 +111,7 @@ public class HGTManager {
     static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox) -> ElevationDataGrid {
         
         // TODO: pass this in
-        let resolutioni:Int = Srtm3.RESOLUTION
+        let resolutioni:Int = Srtm.SRTM3_RESOLUTION
         let resolutiond:Double = Double(resolutioni)
         
         // this is the size of a cell in degrees
@@ -112,43 +119,22 @@ public class HGTManager {
         
         // expand the bounds of the bounding box to snap to the srtm grid size
         
-        var signCorrection:Double = 1.0
         // lower left
         let llLatCell:Double = axisOrientedBoundingBox.getLowerLeft().latitude
         let llLatGrid:Double = floor(llLatCell) - (cellSizeInDegrees/2.0)
-        if(llLatGrid < 0) {
-            signCorrection = -1.0
-        } else {
-            signCorrection = 1.0
-        }
         let llLatCellGrided:Double = llLatGrid + (floor((llLatCell - llLatGrid)*resolutiond)*cellSizeInDegrees)
         
         let llLonCell:Double = axisOrientedBoundingBox.getLowerLeft().longitude
         let llLonGrid:Double = floor(llLonCell) - (cellSizeInDegrees/2.0)
-        if(llLonGrid < 0) {
-            signCorrection = -1.0
-        } else {
-            signCorrection = 1.0
-        }
         let llLonCellGrided:Double = llLonGrid + (floor((llLonCell - llLonGrid)*resolutiond)*cellSizeInDegrees)
         
         // upper right
         let urLatCell:Double = axisOrientedBoundingBox.getUpperRight().latitude
         let urLatGrid:Double = floor(urLatCell) - (cellSizeInDegrees/2.0)
-        if(urLatGrid < 0) {
-            signCorrection = -1.0
-        } else {
-            signCorrection = 1.0
-        }
         let urLatCellGrided:Double = urLatGrid + (ceil((urLatCell - urLatGrid)*resolutiond)*cellSizeInDegrees)
 
         let urLonCell:Double = axisOrientedBoundingBox.getUpperRight().longitude
         let urLonGrid:Double = floor(urLonCell) - (cellSizeInDegrees/2.0)
-        if(urLonGrid < 0) {
-            signCorrection = -1.0
-        } else {
-            signCorrection = 1.0
-        }
         let urLonCellGrided:Double = urLonGrid + (ceil((urLonCell - urLonGrid)*resolutiond)*cellSizeInDegrees)
         
         // this is the bounding box, snapped to the grid
@@ -157,35 +143,67 @@ public class HGTManager {
         // get hgt files of interest
         var hgtFilesOfInterest:[HGTFile] = [HGTFile]()
         
-        let filename:String = HGTFile.coordinateToFilename(griddedAxisOrientedBoundingBox.getLowerLeft());
+        let llLat:Double = griddedAxisOrientedBoundingBox.getLowerLeft().latitude
+        let urLat:Double = griddedAxisOrientedBoundingBox.getUpperRight().latitude
+        var iLat:Double = llLat
         
-        for file in HGTManager.getLocalHGTFiles() {
-            if(file.filename == filename) {
-                hgtFilesOfInterest.append(file)
+        let llLon:Double = griddedAxisOrientedBoundingBox.getLowerLeft().longitude
+        let urLon:Double = griddedAxisOrientedBoundingBox.getUpperRight().longitude
+        var iLon:Double = llLon
+
+        // get all the files that are covered by this bounding box
+        while(iLon <= urLon) {
+            while(iLat <= urLat) {
+                let hgtFile:HGTFile? = HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(CLLocationCoordinate2DMake(iLat, iLon), resolution: resolutioni))
+                if(hgtFile != nil) {
+                    hgtFilesOfInterest.append(hgtFile!)
+                }
+                iLat = iLat + 1.0
+            }
+            iLon = iLon + 1.0
+        }
+        
+        let elevationDataWidth:Int = Int((griddedAxisOrientedBoundingBox.getUpperRight().longitude - griddedAxisOrientedBoundingBox.getLowerLeft().longitude)*(1200.0))
+        let elevationDataHeight:Int = Int((griddedAxisOrientedBoundingBox.getUpperRight().latitude - griddedAxisOrientedBoundingBox.getLowerLeft().latitude)*(1200.0))
+        
+        var elevationData:[[Int]] = [[Int]](count:elevationDataWidth, repeatedValue:[Int](count:elevationDataHeight, repeatedValue:Srtm.DATA_VOID))
+        
+        for hgtFileOfInterest:HGTFile in hgtFilesOfInterest {
+            
+            let hgtFileBoundingBox:AxisOrientedBoundingBox = hgtFileOfInterest.getBoundingBox()
+            
+            // make sure this hgtfile intersets the bounding box
+            if(hgtFileBoundingBox.intersectionExists(griddedAxisOrientedBoundingBox)) {
+                // find the intersection
+                let hgtAreaOfInterest:AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
+                
+                // we need to read data from the upper left of the intersection to the lower right of the intersection
+                var upperLeftIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())
+                var lowerRightIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
+                
+                // the files are enumerated from top to bottom, left to right, so we need to flip the yIndex
+                upperLeftIndex.1 = hgtFileOfInterest.getResolution() - upperLeftIndex.1
+                lowerRightIndex.1 = hgtFileOfInterest.getResolution() - lowerRightIndex.1
+                
+                
+                let data = NSData(contentsOfURL: hgtFileOfInterest.path)!
+                
+                NSLog("data.length \(data.length)")
+                
+                let dataRange = NSRange(location: 0, length: data.length)
+                var elevation = [Int16](count: data.length, repeatedValue: Int16(Srtm.DATA_VOID))
+                data.getBytes(&elevation, range: dataRange)
+                
+                
             }
         }
         
         
-        // get the interestion between the hgtfile
-        if(hgtFilesOfInterest[0].getBoundingBox().intersectionExists(griddedAxisOrientedBoundingBox)) {
-            let hgtAreaOfIntrest:AxisOrientedBoundingBox = hgtFilesOfInterest[0].getBoundingBox().intersection(griddedAxisOrientedBoundingBox)
-            
-            
-            
-        }
         
     
-//        var elevation = [[Int]](count:Srtm3.MAX_SIZE, repeatedValue:[Int](count:Srtm3.MAX_SIZE, repeatedValue:0))
 //    
 //        var path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-//        let url = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(self.filenameWithExtension)
-//        let data = NSData(contentsOfURL: url)!
-//        
-//
-//        
-//        let dataRange = NSRange(location: 0, length: data.length)
-//        var elevation = [Int16](count: data.length, repeatedValue: 0)
-//        data.getBytes(&elevation, range: dataRange)
+
 //        
 //        
 //        var row = 0
@@ -206,6 +224,6 @@ public class HGTManager {
 //        }
 
         
-        return ElevationDataGrid(elevationData: [[Int]](),boundingBoxAreaExtent: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+        return ElevationDataGrid(elevationData: elevationData, boundingBoxAreaExtent: griddedAxisOrientedBoundingBox, resolution: resolutioni)
     }
 }

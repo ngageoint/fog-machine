@@ -12,7 +12,7 @@ public class ViewshedTool : FMTool {
     }
     
     public override func name() -> String {
-        return "Viewshed Tool.  Runs " + createWorkViewshedAlgorithmName!.rawValue + " for observer at (\(createWorkViewshedObserver!.position.latitude), \(createWorkViewshedObserver!.position.longitude))"
+        return "Viewshed Tool with " + createWorkViewshedAlgorithmName!.rawValue + " algorithm for observer at (\(createWorkViewshedObserver!.position.latitude), \(createWorkViewshedObserver!.position.longitude))"
     }
     
     public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> ViewshedWork {

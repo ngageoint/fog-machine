@@ -22,27 +22,30 @@ class HGTFile: NSObject {
 //        super.init()
 //    }
     
-    static func coordinateToFilename(coordinate:CLLocationCoordinate2D) -> String {
+    static func coordinateToFilename(coordinate:CLLocationCoordinate2D, resolution:Int) -> String {
+        
+        let correctedCoordinate:CLLocationCoordinate2D = CLLocationCoordinate2DMake(floor(coordinate.latitude + (1.0/Double(resolution))*0.5), floor(coordinate.longitude + (1.0/Double(resolution))*0.5))
+        
         var filename = ""
-        if (coordinate.latitude < 0.0) {
+        if (correctedCoordinate.latitude < 0.0) {
             filename += "S"
         } else {
             filename += "N"
         }
-        filename += String(format: "%02d", Int(abs(coordinate.latitude)))
+        filename += String(format: "%02d", Int(abs(correctedCoordinate.latitude)))
         
-        if (coordinate.longitude < 0.0) {
+        if (correctedCoordinate.longitude < 0.0) {
             filename += "W"
         } else {
             filename += "E"
         }
-        filename += String(format: "%03d", Int(abs(coordinate.longitude)))
+        filename += String(format: "%03d", Int(abs(correctedCoordinate.longitude)))
         filename += ".hgt"
         
         return filename
     }
     
-    private func getCoordinate() -> CLLocationCoordinate2D {
+    private func getLowerLeftCoordinate() -> CLLocationCoordinate2D {
         let nOrS:String = filename.substringWithRange(filename.startIndex ..< filename.startIndex.advancedBy(1))
         var lat:Double = Double(filename.substringWithRange(filename.startIndex.advancedBy(1) ..< filename.startIndex.advancedBy(3)))!
 
@@ -50,12 +53,16 @@ class HGTFile: NSObject {
             lat = lat * -1.0
         }
         
+        lat = lat - (1.0/Double(getResolution()))*0.5
+        
         let wOrE:String = filename.substringWithRange(filename.startIndex.advancedBy(3) ..< filename.startIndex.advancedBy(4))
         var lon:Double = Double(filename.substringWithRange(filename.startIndex.advancedBy(4) ..< filename.startIndex.advancedBy(7)))!
         
         if (wOrE.uppercaseString == "W") {
             lon = lon * -1.0
         }
+        
+        lon = lon - (1.0/Double(getResolution()))*0.5
         
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
@@ -79,23 +86,9 @@ class HGTFile: NSObject {
     }
     
     func getBoundingBox() -> AxisOrientedBoundingBox {
-        let llLat:Double = getCoordinate().latitude - (1.0/Double(getResolution()))*0.5
-        let llLon:Double = getCoordinate().longitude - (1.0/Double(getResolution()))*0.5
+        let llCoordinate:CLLocationCoordinate2D = getLowerLeftCoordinate()
         
-        return AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLat, llLon), upperRight: CLLocationCoordinate2DMake(llLat+1.0, llLon+1.0))
-    }
-    
-    func getPolygonBoundary() -> MKPolygon {
-        let boundingBox:AxisOrientedBoundingBox = getBoundingBox()
-        var points = [
-            boundingBox.getLowerLeft(),
-            boundingBox.getUpperLeft(),
-            boundingBox.getUpperRight(),
-            boundingBox.getLowerRight()
-        ]
-        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
-        
-        return polygonOverlay
+        return AxisOrientedBoundingBox(lowerLeft: llCoordinate, upperRight: CLLocationCoordinate2DMake(llCoordinate.latitude+1.0, llCoordinate.longitude+1.0))
     }
     
     // 0,0 is lower left; 1200, 1200 is upper right

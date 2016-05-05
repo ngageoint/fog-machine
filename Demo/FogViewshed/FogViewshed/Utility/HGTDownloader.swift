@@ -4,6 +4,9 @@ import SSZipArchive
 
 public class HGTDownloader: NSObject, NSURLSessionDownloadDelegate {
 
+    static let DOWNLOAD_SERVER = "https://fogmachine.geointapps.org/version2_1/SRTM3/"
+    static let ALTERNATE_DOWNLOAD_SERVER = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
+    
     let onDownload:(String)->()
     let onError:(String)->()
     
@@ -12,12 +15,17 @@ public class HGTDownloader: NSObject, NSURLSessionDownloadDelegate {
         self.onError = onError
     }
     
-    func downloadFile(remoteURL: NSURL) {
-        //download identifier can be customized. I used the "ulr.absoluteString"
-        let sessionConfig = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(remoteURL.absoluteString)
-        let session = NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
-        let task = session.downloadTaskWithURL(remoteURL)
-        task.resume()
+    func downloadFile(hgtFileName: String) {
+        let srtmDataRegion = HGTRegions.filePrefixToRegion[hgtFileName]!
+        
+        if (srtmDataRegion.isEmpty == false) {
+            let hgtFilePath: String = HGTDownloader.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
+            let hgtURL = NSURL(string: hgtFilePath)
+            let sessionConfig = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(hgtURL!.absoluteString)
+            let session = NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
+            let task = session.downloadTaskWithURL(hgtURL!)
+            task.resume()
+        }
     }
 
     // called once the download is complete

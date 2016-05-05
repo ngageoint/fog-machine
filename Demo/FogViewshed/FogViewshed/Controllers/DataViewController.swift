@@ -217,31 +217,21 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
             alertController.addAction(ok)
             presentViewController(alertController, animated: true, completion: nil)
         } else{
-            let srtmDataRegion = self.getHgtRegion(hgtFileName)
-            
-            if (srtmDataRegion.isEmpty == false) {
-                ActivityIndicator.show("Downloading")
-                let hgtFilePath: String = Srtm.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
-                let url = NSURL(string: hgtFilePath)
-                let hgtDownloader:HGTDownloader = HGTDownloader(onDownload: { path in
-                    
-                    dispatch_async(dispatch_get_main_queue()) {
-                        () -> Void in
-                        ActivityIndicator.hide(success: true, animated: true)
-                        self.mapView.removeAnnotations(self.mapView.annotations)
-                        self.refresh()
-                    }
-                    
-                    }, onError: { filename in
-                        ActivityIndicator.hide(success: false, animated: true, errorMsg: "Could not retrive file")
-                })
-                hgtDownloader.downloadFile(url!)
-            }
+            ActivityIndicator.show("Downloading")
+            let hgtDownloader:HGTDownloader = HGTDownloader(onDownload: { path in
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    () -> Void in
+                    ActivityIndicator.hide(success: true, animated: true)
+                    self.mapView.removeAnnotations(self.mapView.annotations)
+                    self.refresh()
+                }
+                
+                }, onError: { filename in
+                    ActivityIndicator.hide(success: false, animated: true, errorMsg: "Could not retrive file")
+            })
+            hgtDownloader.downloadFile(hgtFileName)
         }
-    }
-    
-    func getHgtRegion(hgtFileName: String) -> String {
-        return HGTRegions.filePrefixToRegion[hgtFileName]!
     }
     
     func didFailToReceieveResponse(error: String) {
