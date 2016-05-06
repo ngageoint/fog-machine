@@ -1,5 +1,6 @@
 import Foundation
 import MapKit
+import SwiftEventBus
 
 public class HGTManager {
     static func isFileInDocuments(fileName: String) -> Bool {
@@ -63,8 +64,25 @@ public class HGTManager {
     static func getLocalHGTFileByName(filename:String) -> HGTFile? {
         return getLocalHGTFileMap()[filename]
     }
-    
 
+    /**
+     
+     Converts a (lat,lon) to an index in the grid.  Used by several classes to map data.
+     
+     in the indexed returned, (0,0) is lower left; (resolution, resolution) is upper right
+ 
+    */
+    static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Double) -> (Int, Int) {
+        let llLat:Double = latLon.latitude
+        let llLatGrid:Double = boundingBox.getLowerLeft().latitude
+        let xIndex:Int = Int(floor((llLat - llLatGrid)*resolution))
+        
+        let llLon:Double = latLon.longitude
+        let llLonGrid:Double = boundingBox.getLowerLeft().longitude
+        let yIndex:Int = Int(floor((llLon - llLonGrid)*resolution))
+        return (xIndex, yIndex)
+    }
+    
     /**
      
      see https://dds.cr.usgs.gov/srtm/version2_1/Documentation/Quickstart.pdf for more information
@@ -110,6 +128,8 @@ public class HGTManager {
      */
     static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox) -> ElevationDataGrid {
         
+        //SwiftEventBus.post("drawDebugging", sender:axisOrientedBoundingBox.asMKPolygon())
+        
         // TODO: pass this in
         let resolutioni:Int = Srtm.SRTM3_RESOLUTION
         let resolutiond:Double = Double(resolutioni)
@@ -140,16 +160,17 @@ public class HGTManager {
         // this is the bounding box, snapped to the grid
         let griddedAxisOrientedBoundingBox:AxisOrientedBoundingBox = AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLatCellGrided, llLonCellGrided), upperRight: CLLocationCoordinate2DMake(urLatCellGrided, urLonCellGrided))
         
+        //SwiftEventBus.post("drawDebugging", sender:griddedAxisOrientedBoundingBox.asMKPolygon())
+        
         // get hgt files of interest
         var hgtFilesOfInterest:[HGTFile] = [HGTFile]()
         
-        let llLat:Double = griddedAxisOrientedBoundingBox.getLowerLeft().latitude
-        let urLat:Double = griddedAxisOrientedBoundingBox.getUpperRight().latitude
-        var iLat:Double = llLat
+        // looping vars
+        var iLat:Double = llLatGrid
+        let urLat:Double = urLatGrid + 1.0
         
-        let llLon:Double = griddedAxisOrientedBoundingBox.getLowerLeft().longitude
-        let urLon:Double = griddedAxisOrientedBoundingBox.getUpperRight().longitude
-        var iLon:Double = llLon
+        var iLon:Double = llLonGrid
+        let urLon:Double = urLonGrid + 1.0
 
         // get all the files that are covered by this bounding box
         while(iLon <= urLon) {
@@ -166,8 +187,10 @@ public class HGTManager {
         let elevationDataWidth:Int = Int((griddedAxisOrientedBoundingBox.getUpperRight().longitude - griddedAxisOrientedBoundingBox.getLowerLeft().longitude)*(1200.0))
         let elevationDataHeight:Int = Int((griddedAxisOrientedBoundingBox.getUpperRight().latitude - griddedAxisOrientedBoundingBox.getLowerLeft().latitude)*(1200.0))
         
-        var elevationData:[[Int]] = [[Int]](count:elevationDataWidth, repeatedValue:[Int](count:elevationDataHeight, repeatedValue:Srtm.DATA_VOID))
+        // this is the data structure that will contain the elevation data
+        var elevationData:[[Int]] = [[Int]](count:elevationDataWidth, repeatedValue:[Int](count:elevationDataHeight, repeatedValue:Srtm.NO_DATA))
         
+        // read sections of each file and fill in the martix as needed
         for hgtFileOfInterest:HGTFile in hgtFilesOfInterest {
             
             let hgtFileBoundingBox:AxisOrientedBoundingBox = hgtFileOfInterest.getBoundingBox()
@@ -177,21 +200,22 @@ public class HGTManager {
                 // find the intersection
                 let hgtAreaOfInterest:AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
                 
+                SwiftEventBus.post("drawDebugging", sender:hgtAreaOfInterest.asMKPolygon())
+                
                 // we need to read data from the upper left of the intersection to the lower right of the intersection
                 var upperLeftIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())
                 var lowerRightIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
                 
-                // the files are enumerated from top to bottom, left to right, so we need to flip the yIndex
+                // the files are enumerated from top to bottom, left to right, so flip the yIndex
                 upperLeftIndex.1 = hgtFileOfInterest.getResolution() - upperLeftIndex.1
                 lowerRightIndex.1 = hgtFileOfInterest.getResolution() - lowerRightIndex.1
-                
                 
                 let data = NSData(contentsOfURL: hgtFileOfInterest.path)!
                 
                 NSLog("data.length \(data.length)")
                 
                 let dataRange = NSRange(location: 0, length: data.length)
-                var elevation = [Int16](count: data.length, repeatedValue: Int16(Srtm.DATA_VOID))
+                var elevation = [Int16](count: data.length, repeatedValue: Int16(Srtm.NO_DATA))
                 data.getBytes(&elevation, range: dataRange)
                 
                 
@@ -226,4 +250,7 @@ public class HGTManager {
         
         return ElevationDataGrid(elevationData: elevationData, boundingBoxAreaExtent: griddedAxisOrientedBoundingBox, resolution: resolutioni)
     }
+    
+    
+    
 }

@@ -17,9 +17,7 @@ public class ElevationDataGrid {
         self.resolution = resolution
     }
     
-//    func getCellIndexAtLatLon(latlon:CLLocationCoordinate2D) -> (Int, Int) {
-//        
-//        
-//    
-//    }
+    func latLonToIndex(latLon:CLLocationCoordinate2D) -> (Int, Int) {
+        return HGTManager.latLonToIndex(latLon, boundingBox: boundingBoxAreaExtent, resolution: Double(resolution))
+    }
 }

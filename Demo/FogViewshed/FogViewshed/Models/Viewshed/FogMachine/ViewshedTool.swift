@@ -53,14 +53,14 @@ public class ViewshedTool : FMTool {
         if(fromNode != node) {
             sleep(12)
         } else {
-            sleep(20)
+            sleep(5)
         }
         
         return ViewshedResult(viewshedResult: UIImage())
     }
     
     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
-        sleep(10)
+        sleep(5)
         SwiftEventBus.post("viewShedComplete")
     }
     

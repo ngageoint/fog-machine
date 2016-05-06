@@ -1,7 +1,6 @@
 import UIKit
 import MapKit
 
-
 /**
  
  Finds a viewshed using Franklin and Ray's method.  Less acurate, but fast.
@@ -32,12 +31,19 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         
         let rowSize = elevationGrid.count
         let columnSize = elevationGrid[0].count
-        var viewshed:[[Int]] = [[Int]](count:rowSize, repeatedValue:[Int](count:columnSize, repeatedValue:0))
+        var viewshed:[[Int]] = [[Int]](count:rowSize, repeatedValue:[Int](count:columnSize, repeatedValue:Srtm.NO_DATA))
         
+        let oxiyi:(Int, Int) = elevationDataGrid.latLonToIndex(observer.position)
         // get the cell that the observer exists in
-        let oxi:Int = 600
-        let oyi:Int = 600
-        let oh:Double = Double(elevationGrid[oxi][oyi]) + observer.elevationInMeters
+        let oxi:Int = oxiyi.0
+        let oyi:Int = oxiyi.1
+        var oh:Double = Double(elevationGrid[oxi][oyi]) + observer.elevationInMeters
+        // FIXME: if there a better way to deal with this?
+        // if the elevation data where the observer is positioned is bad, just set elevation to above sea level
+        if(elevationGrid[oxi][oyi] == Srtm.DATA_VOID) {
+            oh = observer.elevationInMeters
+        }
+        
         let oRadius:Double = observer.radiusInMeters
         
         let latAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().latitude + ((1.0/Double(elevationDataGrid.resolution))*0.5)
@@ -56,7 +62,19 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
             
             // iterate along the line from the observer to the cell on the perimeter
             for (xi, yi) in lineCells {
-                let xyh:Double = Double(elevationGrid[xi][yi])
+                
+                // the observer can see itself, don't run this
+                if(oxi == xi && oyi == yi) {
+                    continue
+                }
+                
+                let xyi:Int = elevationGrid[xi][yi]
+                let xyh:Double = Double(xyi)
+                
+                // if the elevation data at this point is bad, we don't know if it's visible or not...
+                if(xyi == Srtm.DATA_VOID) {
+                    continue;
+                }
                 
                 // get the longitude in the center of the cell:
                 let xlat:Double = (Double(xi)*(1.0/Double(elevationDataGrid.resolution))) + latAdjust
@@ -68,8 +86,8 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 
                 // is the cell with in the area of intrest?
                 if(adjacent > oRadius) {
-                    // neither visible or non-visible, outisde of the area of interest
-                    viewshed[xi][yi] = -1
+                    // neither visible or non-visible, outisde of the area of interest. Already set to no_data, break the inner loop.
+                    break;
                 } else {
                     // find the slope of the line from the current cell to the observer
                     let xymu:Double = oppositeInMeters/adjacent

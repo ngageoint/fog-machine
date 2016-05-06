@@ -8,6 +8,7 @@ struct Srtm {
     static let SRTM3_RESOLUTION:Int = 1200
     
     static let DATA_VOID:Int = -32768
+    static let NO_DATA:Int = DATA_VOID + 1
 }
 
 enum MapType: Int {
