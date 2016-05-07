@@ -75,12 +75,17 @@ public class HGTManager {
     static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Double) -> (Int, Int) {
         let llLat:Double = latLon.latitude
         let llLatGrid:Double = boundingBox.getLowerLeft().latitude
-        let xIndex:Int = Int(floor((llLat - llLatGrid)*resolution))
+        let yIndex:Int = Int(floor(roundMe((llLat - llLatGrid)*resolution)))
         
         let llLon:Double = latLon.longitude
         let llLonGrid:Double = boundingBox.getLowerLeft().longitude
-        let yIndex:Int = Int(floor((llLon - llLonGrid)*resolution))
+        let xIndex:Int = Int(floor(roundMe((llLon - llLonGrid)*resolution)))
         return (xIndex, yIndex)
+    }
+    
+    static private func roundMe(d:Double) -> Double {
+        let precision:Double = pow(10, 9)
+        return Double(round(precision*d)/precision)
     }
     
     /**
@@ -184,8 +189,12 @@ public class HGTManager {
             iLon = iLon + 1.0
         }
         
-        let elevationDataWidth:Int = Int((griddedAxisOrientedBoundingBox.getUpperRight().longitude - griddedAxisOrientedBoundingBox.getLowerLeft().longitude)*(1200.0))
-        let elevationDataHeight:Int = Int((griddedAxisOrientedBoundingBox.getUpperRight().latitude - griddedAxisOrientedBoundingBox.getLowerLeft().latitude)*(1200.0))
+        
+        let elevationDataWidth:Int = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).1 - HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).1 + 1
+        let elevationDataHeight:Int = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).0 - HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).0 + 1
+        
+        NSLog("elevationDataWidth \(elevationDataWidth)")
+        NSLog("elevationDataHeight \(elevationDataHeight)")
         
         // this is the data structure that will contain the elevation data
         var elevationData:[[Int]] = [[Int]](count:elevationDataWidth, repeatedValue:[Int](count:elevationDataHeight, repeatedValue:Srtm.NO_DATA))
@@ -207,50 +216,69 @@ public class HGTManager {
                 var lowerRightIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
                 
                 // the files are enumerated from top to bottom, left to right, so flip the yIndex
-                upperLeftIndex.1 = hgtFileOfInterest.getResolution() - upperLeftIndex.1
-                lowerRightIndex.1 = hgtFileOfInterest.getResolution() - lowerRightIndex.1
+                upperLeftIndex.1 = hgtFileOfInterest.getResolution() - 1 - upperLeftIndex.1
+                lowerRightIndex.1 = hgtFileOfInterest.getResolution() - 1 - lowerRightIndex.1
                 
-                let data = NSData(contentsOfURL: hgtFileOfInterest.path)!
+                NSLog("upperLeftIndex \(upperLeftIndex.0) \(upperLeftIndex.1)")
+                NSLog("lowerRightIndex \(lowerRightIndex.0) \(lowerRightIndex.1)")
                 
-                NSLog("data.length \(data.length)")
+                NSLog("lowerRightIndex.0 - upperLeftIndex.0 + 1: \(lowerRightIndex.0 - upperLeftIndex.0 + 1)")
+                NSLog("lowerRightIndex.1 - upperLeftIndex.1 + 1: \(lowerRightIndex.1 - upperLeftIndex.1 + 1)")
                 
-                let dataRange = NSRange(location: 0, length: data.length)
-                var elevation = [Int16](count: data.length, repeatedValue: Int16(Srtm.NO_DATA))
-                data.getBytes(&elevation, range: dataRange)
+                // data row length, 2 bytes for every index
+                let dataRowLengthInBytes:Int = 2*(lowerRightIndex.0 - upperLeftIndex.0 + 1)
                 
+                NSLog("dataRowLengthInBytes \(dataRowLengthInBytes)")
                 
+                // always skip the first row of data + plus the extra cell in the last column that we don't care about
+                var numberOfBytesToStartReadingAt:UInt64 = UInt64((hgtFileOfInterest.getResolution() + 1) * 2)
+                
+                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
+                
+                // then skip the data until the exact of offset we want to read at
+                // account for each row and the last column, AND the offset in the current row
+                numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64(((upperLeftIndex.1 * (hgtFileOfInterest.getResolution() + 1)) + upperLeftIndex.0)*2)
+                
+                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
+                
+                // the last bytes is the start byte plus the number of columns minus one * the size of each row, plus the legth of the last row
+                let numberOfBytesUntilLastByteToRead:UInt64 = numberOfBytesToStartReadingAt + UInt64(2*((lowerRightIndex.1 - upperLeftIndex.1)*(hgtFileOfInterest.getResolution() + 1)) + dataRowLengthInBytes)
+                
+                NSLog("numberOfBytesUntilLastByteToRead \(numberOfBytesUntilLastByteToRead)")
+                
+                do {
+                    let handle:NSFileHandle = try NSFileHandle(forReadingFromURL: hgtFileOfInterest.path)
+                    
+                    var rowNumber:Int = 0
+                    // while there are more rows to read
+                    while(numberOfBytesToStartReadingAt <= numberOfBytesUntilLastByteToRead) {
+                        handle.seekToFileOffset(numberOfBytesToStartReadingAt)
+                        let data:NSData = handle.readDataOfLength(dataRowLengthInBytes)
+                        var oneRowOfElevation = [Int16](count: data.length, repeatedValue: Int16(Srtm.NO_DATA))
+                        let dataRange = NSRange(location: 0, length: data.length)
+                        // read the row into the temp structure
+                        data.getBytes(&oneRowOfElevation, range: dataRange)
+                        
+                        // find the index where this row should be indexed into the large elevationData structure
+                        var elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getUpperLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond)
+                        elevationDataIndex.1 = elevationDataIndex.1 - rowNumber
+                        
+                        // the byte order is backwards, so flip it.  Don't think there's a faster way to do this
+                        for j in 0 ..< (data.length/2) {
+                            elevationData[elevationDataIndex.1][elevationDataIndex.0 + j] = Int(oneRowOfElevation[j].bigEndian)
+                        }
+                        
+                        // seek to the next row
+                        numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64((hgtFileOfInterest.getResolution() + 1)*2)
+                        rowNumber = rowNumber + 1
+                    }
+                } catch let error as NSError {
+                    NSLog("Error reading HGT file: \(error.localizedDescription)")
+                }
             }
         }
-        
-        
-        
-    
-//    
-//        var path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-
-//        
-//        
-//        var row = 0
-//        var column = 0
-//        for cell in 0 ..< data.length {
-//            elevationMatrix[row][column] = Int(elevation[cell].bigEndian)
-//            //print(elevationMatrix[row][column])
-//            column += 1
-//            
-//            if column >= Srtm3.MAX_SIZE {
-//                column = 0
-//                row += 1
-//            }
-//            
-//            if row >= Srtm3.MAX_SIZE {
-//                break
-//            }
-//        }
-
-        
+   
         return ElevationDataGrid(elevationData: elevationData, boundingBoxAreaExtent: griddedAxisOrientedBoundingBox, resolution: resolutioni)
     }
-    
-    
     
 }
