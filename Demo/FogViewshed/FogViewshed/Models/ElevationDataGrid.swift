@@ -18,6 +18,6 @@ public class ElevationDataGrid {
     }
     
     func latLonToIndex(latLon:CLLocationCoordinate2D) -> (Int, Int) {
-        return HGTManager.latLonToIndex(latLon, boundingBox: boundingBoxAreaExtent, resolution: Double(resolution))
+        return HGTManager.latLonToIndex(latLon, boundingBox: boundingBoxAreaExtent, resolution: resolution)
     }
 }

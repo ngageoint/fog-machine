@@ -33,23 +33,14 @@ public class ViewshedTool : FMTool {
         // TODO : remove me
         axisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(viewshedWork.observer.position, radiusInMeters: viewshedWork.observer.radiusInMeters)
         // read elevation data
-        HGTManager.getElevationGrid(axisOrientedBoundingBox)
+        let elevationDataGrid:ElevationDataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox)
         
         // run viewshed on data
+        let franklinRayViewshed:FranklinRayViewshed = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, observer: viewshedWork.observer)
         
-        // return [[int]]
-        
-//        self.viewshedPalette.setupNewPalette(observer)
-//        if (observer.algorithm == ViewshedAlgorithm.FranklinRay) {
-//            let obsViewshed = ViewshedFog(elevation: self.viewshedPalette.getHgtElevation(), observer: observer, numberOfQuadrants: numberOfQuadrants, whichQuadrant: whichQuadrant)
-//            self.viewshedPalette.viewshedResults = obsViewshed.viewshedParallel()
-//        } else if (observer.algorithm == ViewshedAlgorithm.VanKreveld) {
-//            let kreveld: KreveldViewshed = KreveldViewshed()
-//            let observerPoints: ElevationPoint = ElevationPoint (xCoord: observer.xCoord, yCoord: observer.yCoord, h: observer.elevation)
-//            self.viewshedPalette.viewshedResults = kreveld.parallelKreveld(self.viewshedPalette.getHgtElevation(), observPt: observerPoints, radius: observer.getViewshedSrtm3Radius(), numOfPeers: numberOfQuadrants, quadrant2Calc: whichQuadrant)
-//        }
-//        
-//        let result = ViewshedResult(viewshedResult: self.viewshedPalette.viewshedImage)
+        let viewshed:[[Int]] = franklinRayViewshed.runViewshed()
+
+        let result = ViewshedResult(viewshedResult: ViewshedImageUtility.toUIImage(viewshed))
         if(fromNode != node) {
             sleep(12)
         } else {

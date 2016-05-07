@@ -5,11 +5,11 @@ import FogMachine
 
 class ViewshedImageUtility: NSObject {
 
-    func generateOverlay(elevationDataGrid: ElevationDataGrid) -> ViewshedOverlay {
+    static func generateOverlay(elevationDataGrid: ElevationDataGrid) -> ViewshedOverlay {
         return ViewshedOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: toUIImage(elevationDataGrid.elevationData))
     }
 
-    private func toUIImage(viewshed: [[Int]]) -> UIImage {
+    static func toUIImage(viewshed: [[Int]]) -> UIImage {
         // Flip width and height for 1x2 and 2x1 cases because CoreGraphics expects rows.
         var width = viewshed.count
         var height = viewshed[0].count
@@ -106,7 +106,7 @@ class ViewshedImageUtility: NSObject {
 //        return imageFromArgb32Bitmap(elevationImage, width: width, height: height)
 //    }
 
-    private func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
+    private static func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
 
         let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo:CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)

@@ -46,6 +46,7 @@
 		F93F14EB1CCAE62700E35541 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */; };
 		F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */; };
 		F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F14991CCAE49500E35541 /* N37W123.hgt */; };
+		F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F149C1CCAE49500E35541 /* N38W123.hgt */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
 /* End PBXBuildFile section */
 
@@ -427,6 +428,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */,
 				F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,

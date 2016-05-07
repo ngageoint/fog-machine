@@ -1,6 +1,13 @@
 import Foundation
 import MapKit
 
+/**
+ 
+ A bounding box aligned with (lat,lon) coordinate system.
+ 
+ FIXME: I would hate to see what some of these methods do when the box spans the 180th meridian....
+ 
+*/
 class AxisOrientedBoundingBox {
     
     private var lowerLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)

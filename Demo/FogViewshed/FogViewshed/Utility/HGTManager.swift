@@ -72,23 +72,70 @@ public class HGTManager {
      in the indexed returned, (0,0) is lower left; (resolution, resolution) is upper right
  
     */
-    static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Double) -> (Int, Int) {
+    static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Int) -> (Int, Int) {
         let llLat:Double = latLon.latitude
         let llLatGrid:Double = boundingBox.getLowerLeft().latitude
-        let yIndex:Int = Int(floor(roundMe((llLat - llLatGrid)*resolution)))
+        let yIndex:Int = max(min(smartFloorI((llLat - llLatGrid)*Double(resolution)), resolution - 1), 0)
         
         let llLon:Double = latLon.longitude
         let llLonGrid:Double = boundingBox.getLowerLeft().longitude
-        let xIndex:Int = Int(floor(roundMe((llLon - llLonGrid)*resolution)))
+        let xIndex:Int = max(min(smartFloorI((llLon - llLonGrid)*Double(resolution)), resolution - 1), 0)
+        
         return (xIndex, yIndex)
     }
     
-    static private func roundMe(d:Double) -> Double {
-        let precision:Double = pow(10, 9)
-        return Double(round(precision*d)/precision)
+    static private let NUMERICAL_PRECISION:Double = 8
+    
+    /**
+     
+     Finds the floor of the number, but will account for the numerical imprecision in doubles, like 37.999999999345 or -102.6666666666234
+ 
+    */
+    static private func smartFloorI(d:Double) -> Int {
+        return Int(smartFloorD(d))
+    }
+    
+    static private func smartFloorD(d:Double) -> Double {
+        let precision:Double = pow(10, NUMERICAL_PRECISION)
+        return floor(Double(round(precision*d)/precision))
     }
     
     /**
+     
+     See smartFloorI
+     
+     */
+    static private func smartCeilI(d:Double) -> Int {
+        return Int(smartCeilD(d))
+    }
+    
+    static private func smartCeilD(d:Double) -> Double {
+        let precision:Double = pow(10, NUMERICAL_PRECISION)
+        return ceil(Double(round(precision*d)/precision))
+    }
+    
+    /**
+     
+     This is the main method for reading and coalescing the elevation data.  There are several important steps here.
+     
+     1) Expand the bounding box the the gridded space formed by the srtm files at a certain resolution.  This is convenient and imporatnt for a few reasons.  First, it defines the exact area the datum at a certain resolution exists at.  Again, this is the exact map extend in which the AREA data exists at.  Seconds, it makes the algerbra and data processing a little more straightforward.  The bounding box is found using linear interpolation in the lat lon space.  Please note that we are note tied to any projection at this point.  Would it be better to use a smarter interpolation at account for earth curvature as in WGS84?  I don't know.
+     
+     2) Find all of the local hgt files that are covered by the space formed in step 1.  This is fairly straight forward.
+     
+     3) Determine the extend of the final elevation matrix.  Some indexing
+     
+     4) For each file in step 2, find the intersection between it and the bounding box in step 1.
+     
+     5) Using the intersection in step 4, read in the appropriate elevation data from the corresponding file.  Parse the data, and write it into the final elevation matrix.
+     
+     FIXME: Crossing the 180th meridian?  This method will fail in at least 10 ways...  someone should fix that...
+     
+     NOTE:
+     For the purpose of this application, we will ignore the first row (top row) and the last column (right column)
+     in the hgt files.  This will be done to avoid dealing with the overlap that extists across the hgt files.
+     Doing this will provide a perfect tiling.
+     
+     STRM Information:
      
      see https://dds.cr.usgs.gov/srtm/version2_1/Documentation/Quickstart.pdf for more information
      
@@ -121,14 +168,6 @@ public class HGTManager {
      and south edges as well as the columns at the east and west edges of each
      cell overlap and are identical to the edge rows and columns in the adjacent
      cell. SRTM1 files contain 3601 lines and 3601 samples, with similar overlap.
-
-     
-     
-     
-     NOTE:
-     For the purpose of this application, we will ignore the first row (top row) and the last column (right column)
-     in the hgt files.  This will be done to avoid dealing with the overlap that extists across the hgt files.  
-     Doing this will provide a perfect tiling.
      
      */
     static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox) -> ElevationDataGrid {
@@ -141,28 +180,29 @@ public class HGTManager {
         
         // this is the size of a cell in degrees
         let cellSizeInDegrees:Double = 1.0/resolutiond
+        let halfCellSizeInDegrees:Double = cellSizeInDegrees/2.0
         
         // expand the bounds of the bounding box to snap to the srtm grid size
         
         // lower left
         let llLatCell:Double = axisOrientedBoundingBox.getLowerLeft().latitude
-        let llLatGrid:Double = floor(llLatCell) - (cellSizeInDegrees/2.0)
-        let llLatCellGrided:Double = llLatGrid + (floor((llLatCell - llLatGrid)*resolutiond)*cellSizeInDegrees)
+        let llLatGrid:Double = smartFloorD(llLatCell) - halfCellSizeInDegrees
+        let llLatCellGrided:Double = llLatGrid + (smartFloorD((llLatCell - llLatGrid)*resolutiond)*cellSizeInDegrees)
         
         let llLonCell:Double = axisOrientedBoundingBox.getLowerLeft().longitude
-        let llLonGrid:Double = floor(llLonCell) - (cellSizeInDegrees/2.0)
-        let llLonCellGrided:Double = llLonGrid + (floor((llLonCell - llLonGrid)*resolutiond)*cellSizeInDegrees)
+        let llLonGrid:Double = smartFloorD(llLonCell) - halfCellSizeInDegrees
+        let llLonCellGrided:Double = llLonGrid + (smartFloorD((llLonCell - llLonGrid)*resolutiond)*cellSizeInDegrees)
         
         // upper right
         let urLatCell:Double = axisOrientedBoundingBox.getUpperRight().latitude
-        let urLatGrid:Double = floor(urLatCell) - (cellSizeInDegrees/2.0)
-        let urLatCellGrided:Double = urLatGrid + (ceil((urLatCell - urLatGrid)*resolutiond)*cellSizeInDegrees)
+        let urLatGrid:Double = smartFloorD(urLatCell) - halfCellSizeInDegrees
+        let urLatCellGrided:Double = urLatGrid + (smartCeilD((urLatCell - urLatGrid)*resolutiond)*cellSizeInDegrees)
 
         let urLonCell:Double = axisOrientedBoundingBox.getUpperRight().longitude
-        let urLonGrid:Double = floor(urLonCell) - (cellSizeInDegrees/2.0)
-        let urLonCellGrided:Double = urLonGrid + (ceil((urLonCell - urLonGrid)*resolutiond)*cellSizeInDegrees)
+        let urLonGrid:Double = smartFloorD(urLonCell) - halfCellSizeInDegrees
+        let urLonCellGrided:Double = urLonGrid + (smartCeilD((urLonCell - urLonGrid)*resolutiond)*cellSizeInDegrees)
         
-        // this is the bounding box, snapped to the grid
+        // this is the bounding box, expanded and snapped to the grid
         let griddedAxisOrientedBoundingBox:AxisOrientedBoundingBox = AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLatCellGrided, llLonCellGrided), upperRight: CLLocationCoordinate2DMake(urLatCellGrided, urLonCellGrided))
         
         //SwiftEventBus.post("drawDebugging", sender:griddedAxisOrientedBoundingBox.asMKPolygon())
@@ -190,14 +230,17 @@ public class HGTManager {
         }
         
         
-        let elevationDataWidth:Int = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).1 - HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).1 + 1
-        let elevationDataHeight:Int = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).0 - HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond).0 + 1
+        let elevationDataURIndex:(Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+        let elevationDataLLIndex:(Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
         
-        NSLog("elevationDataWidth \(elevationDataWidth)")
+        let elevationDataWidth:Int = elevationDataURIndex.0 - elevationDataLLIndex.0 + 1
+        let elevationDataHeight:Int = elevationDataURIndex.1 - elevationDataLLIndex.1 + 1
+        
         NSLog("elevationDataHeight \(elevationDataHeight)")
+        NSLog("elevationDataWidth \(elevationDataWidth)")
         
         // this is the data structure that will contain the elevation data
-        var elevationData:[[Int]] = [[Int]](count:elevationDataWidth, repeatedValue:[Int](count:elevationDataHeight, repeatedValue:Srtm.NO_DATA))
+        var elevationData:[[Int]] = [[Int]](count:elevationDataHeight, repeatedValue:[Int](count:elevationDataWidth, repeatedValue:Srtm.NO_DATA))
         
         // read sections of each file and fill in the martix as needed
         for hgtFileOfInterest:HGTFile in hgtFilesOfInterest {
@@ -249,6 +292,8 @@ public class HGTManager {
                 do {
                     let handle:NSFileHandle = try NSFileHandle(forReadingFromURL: hgtFileOfInterest.path)
                     
+                    // TODO : TBD, it may be faster to read an entire block of data, and then parse the information out of the file.
+                    
                     var rowNumber:Int = 0
                     // while there are more rows to read
                     while(numberOfBytesToStartReadingAt <= numberOfBytesUntilLastByteToRead) {
@@ -260,7 +305,7 @@ public class HGTManager {
                         data.getBytes(&oneRowOfElevation, range: dataRange)
                         
                         // find the index where this row should be indexed into the large elevationData structure
-                        var elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getUpperLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutiond)
+                        var elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getUpperLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
                         elevationDataIndex.1 = elevationDataIndex.1 - rowNumber
                         
                         // the byte order is backwards, so flip it.  Don't think there's a faster way to do this

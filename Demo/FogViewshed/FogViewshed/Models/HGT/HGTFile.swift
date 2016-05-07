@@ -86,7 +86,7 @@ class HGTFile: NSObject {
     }
     
     func latLonToIndex(latLon:CLLocationCoordinate2D) -> (Int, Int) {
-        return HGTManager.latLonToIndex(latLon, boundingBox: getBoundingBox(), resolution: Double(getResolution()))
+        return HGTManager.latLonToIndex(latLon, boundingBox: getBoundingBox(), resolution: getResolution())
     }
     
     override func isEqual(object: AnyObject?) -> Bool {
