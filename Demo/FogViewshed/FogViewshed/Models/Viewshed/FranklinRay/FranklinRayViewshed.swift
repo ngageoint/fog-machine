@@ -50,7 +50,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         let lonAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().longitude + ((1.0/Double(elevationDataGrid.resolution))*0.5)
         
         let olat:Double = (Double(oxi)*(1.0/Double(elevationDataGrid.resolution))) + latAdjust
-        let olon:Double = Double(oyi)*(1.0/Double(elevationDataGrid.resolution)) + lonAdjust
+        let olon:Double = (Double(oyi)*(1.0/Double(elevationDataGrid.resolution))) + lonAdjust
         
         // iterate through the cells c of the perimeter. Each c has coordinates (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
         for (px, py) in getPerimeterCells() {
@@ -78,7 +78,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 
                 // get the longitude in the center of the cell:
                 let xlat:Double = (Double(xi)*(1.0/Double(elevationDataGrid.resolution))) + latAdjust
-                let ylon:Double = (Double(yi)*(1.0/Double(elevationDataGrid.resolution))) + latAdjust
+                let ylon:Double = (Double(yi)*(1.0/Double(elevationDataGrid.resolution))) + lonAdjust
                 
                 let oppositeInMeters:Double = xyh - oh
                 // FIXME : should this use haversine or vincenty?
@@ -126,25 +126,36 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
             perimeter.append((0,0))
         } else {
             // lower left to top left
-            for i in 0.stride(to: columnSize - 1, by: 1) {
-                perimeter.append((i, 0))
-            }
-            // top left to top right (excludes corners)
-            for i in 1.stride(to: rowSize - 2, by: 1) {
-                perimeter.append((columnSize - 1, i))
-            }
-            // top right to lower right
-            for i in (columnSize - 1).stride(to: 0, by: -1) {
-                perimeter.append((i, rowSize - 1))
-            }
-            // lower right to lower left (excludes corners)
-            for i in (rowSize - 2).stride(to: 1, by: -1) {
+            var i:Int = 0
+            while(i <= columnSize - 1) {
                 perimeter.append((0, i))
+                i = i + 1
+            }
+            
+            // top left to top right (excludes corners)
+            i = 1
+            while(i <= rowSize - 2) {
+                perimeter.append((i, columnSize - 1))
+                i = i + 1
+            }
+            
+            // top right to lower right
+            i = columnSize - 1
+            while(i >= 0) {
+                perimeter.append((rowSize - 1, i))
+                i = i - 1
+            }
+            
+            // lower right to lower left (excludes corners)
+            i = rowSize - 2
+            while(i >= 1) {
+                perimeter.append((i, 0))
+                i = i - 1
             }
         }
         
         if(perimeterSize != perimeter.count) {
-            NSLog("Perimeter was the wrong size!")
+            NSLog("Perimeter was the wrong size! Expected: \(perimeterSize), received: \(perimeter.count)")
         }
         
         return perimeter

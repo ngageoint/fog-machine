@@ -62,7 +62,7 @@ class HGTFile: NSObject {
         var lat:Double = Double(filename.substringWithRange(filename.startIndex.advancedBy(1) ..< filename.startIndex.advancedBy(3)))!
         
         if (nOrS.uppercaseString == "S") {
-            lat = lat * -1.0
+            lat *= -1.0
         }
         
         lat = lat - (1.0/Double(getResolution()))*0.5
@@ -71,7 +71,7 @@ class HGTFile: NSObject {
         var lon:Double = Double(filename.substringWithRange(filename.startIndex.advancedBy(4) ..< filename.startIndex.advancedBy(7)))!
         
         if (wOrE.uppercaseString == "W") {
-            lon = lon * -1.0
+            lon *= -1.0
         }
         
         lon = lon - (1.0/Double(getResolution()))*0.5

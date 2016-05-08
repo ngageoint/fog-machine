@@ -211,22 +211,22 @@ public class HGTManager {
         var hgtFilesOfInterest:[HGTFile] = [HGTFile]()
         
         // looping vars
-        var iLat:Double = llLatGrid
-        let urLat:Double = urLatGrid + 1.0
         
+        var iLat:Double = llLatGrid
         var iLon:Double = llLonGrid
-        let urLon:Double = urLonGrid + 1.0
 
         // get all the files that are covered by this bounding box
-        while(iLon <= urLon) {
-            while(iLat <= urLat) {
+        while(iLat <= urLatGrid) {
+            iLon = llLonGrid
+            while(iLon <= urLonGrid) {
                 let hgtFile:HGTFile? = HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(CLLocationCoordinate2DMake(iLat, iLon), resolution: resolutioni))
                 if(hgtFile != nil) {
                     hgtFilesOfInterest.append(hgtFile!)
+                    NSLog("file of interest: " + hgtFile!.filename)
                 }
-                iLat = iLat + 1.0
+                iLon += 1.0
             }
-            iLon = iLon + 1.0
+            iLat += 1.0
         }
         
         
@@ -295,6 +295,11 @@ public class HGTManager {
                     // TODO : TBD, it may be faster to read an entire block of data, and then parse the information out of the file.
                     
                     var rowNumber:Int = 0
+                    let elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getUpperLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+                    
+                    NSLog("elevationDataIndex.0 \(elevationDataIndex.0)")
+                    NSLog("elevationDataIndex.1 \(elevationDataIndex.1)")
+                    
                     // while there are more rows to read
                     while(numberOfBytesToStartReadingAt <= numberOfBytesUntilLastByteToRead) {
                         handle.seekToFileOffset(numberOfBytesToStartReadingAt)
@@ -304,18 +309,15 @@ public class HGTManager {
                         // read the row into the temp structure
                         data.getBytes(&oneRowOfElevation, range: dataRange)
                         
-                        // find the index where this row should be indexed into the large elevationData structure
-                        var elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getUpperLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
-                        elevationDataIndex.1 = elevationDataIndex.1 - rowNumber
-                        
                         // the byte order is backwards, so flip it.  Don't think there's a faster way to do this
                         for j in 0 ..< (data.length/2) {
-                            elevationData[elevationDataIndex.1][elevationDataIndex.0 + j] = Int(oneRowOfElevation[j].bigEndian)
+                            // find the index where this row should be indexed into the large elevationData structure
+                            elevationData[elevationDataIndex.1 - rowNumber][elevationDataIndex.0 + j] = Int(oneRowOfElevation[j].bigEndian)
                         }
                         
                         // seek to the next row
                         numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64((hgtFileOfInterest.getResolution() + 1)*2)
-                        rowNumber = rowNumber + 1
+                        rowNumber += 1
                     }
                 } catch let error as NSError {
                     NSLog("Error reading HGT file: \(error.localizedDescription)")

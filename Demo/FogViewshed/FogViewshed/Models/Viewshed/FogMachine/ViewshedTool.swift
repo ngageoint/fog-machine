@@ -39,19 +39,15 @@ public class ViewshedTool : FMTool {
         let franklinRayViewshed:FranklinRayViewshed = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, observer: viewshedWork.observer)
         
         let viewshed:[[Int]] = franklinRayViewshed.runViewshed()
-
-        let result = ViewshedResult(viewshedResult: ViewshedImageUtility.toUIImage(viewshed))
-        if(fromNode != node) {
-            sleep(12)
-        } else {
-            sleep(5)
-        }
         
-        return ViewshedResult(viewshedResult: UIImage())
+        let viewshedDataGrid:ElevationDataGrid = ElevationDataGrid(elevationData: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: Srtm.SRTM3_RESOLUTION)
+        
+        SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateOverlay(elevationDataGrid))
+        
+        return ViewshedResult(viewshedResult: ViewshedImageUtility.viewshedToUIImage(viewshed))
     }
     
     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
-        sleep(5)
         SwiftEventBus.post("viewShedComplete")
     }
     

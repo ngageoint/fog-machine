@@ -45,6 +45,12 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             let polygon:MKPolygon = result.object as! MKPolygon
             self.mapView.addOverlay(polygon)
         }
+
+        // for debugging only
+        SwiftEventBus.onMainThread(self, name: "drawViewshed") { result in
+            let viewshedOverlay:ViewshedOverlay = result.object as! ViewshedOverlay
+            self.mapView.addOverlay(viewshedOverlay)
+        }
         
         isLogShown = false
 
@@ -177,7 +183,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             polygonView = MKPolygonRenderer(overlay: overlay)
             polygonView!.lineWidth = 0.5
             // FIXME : if fill color is set, the viewsheds combine with the yellow tint and look like crap.  We should look at the compositing of the views/images to fix this.
-            polygonView!.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.08)
+            //polygonView!.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.08)
             polygonView!.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.6)
         } else if overlay is Cell {
             polygonView = MKPolygonRenderer(overlay: overlay)

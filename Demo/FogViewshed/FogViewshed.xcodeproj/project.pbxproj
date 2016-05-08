@@ -34,7 +34,6 @@
 		F93F14D01CCAE5AC00E35541 /* ViewshedTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14BD1CCAE5AC00E35541 /* ViewshedTool.swift */; };
 		F93F14D11CCAE5AC00E35541 /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14BE1CCAE5AC00E35541 /* ViewshedWork.swift */; };
 		F93F14D21CCAE5AC00E35541 /* FranklinRayViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14C01CCAE5AC00E35541 /* FranklinRayViewshed.swift */; };
-		F93F14D31CCAE5AC00E35541 /* SquarePerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14C11CCAE5AC00E35541 /* SquarePerimeter.swift */; };
 		F93F14DE1CCAE5C400E35541 /* GeoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14D91CCAE5C400E35541 /* GeoUtility.swift */; };
 		F93F14DF1CCAE5C400E35541 /* HGTDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14DA1CCAE5C400E35541 /* HGTDownloader.swift */; };
 		F93F14E01CCAE5C400E35541 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14DB1CCAE5C400E35541 /* Pixel.swift */; };
@@ -47,6 +46,7 @@
 		F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */; };
 		F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F14991CCAE49500E35541 /* N37W123.hgt */; };
 		F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F149C1CCAE49500E35541 /* N38W123.hgt */; };
+		F9AB382C1CDE9CCA002CDFA3 /* N37W122.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
 /* End PBXBuildFile section */
 
@@ -107,7 +107,6 @@
 		F93F14BD1CCAE5AC00E35541 /* ViewshedTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedTool.swift; sourceTree = "<group>"; };
 		F93F14BE1CCAE5AC00E35541 /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
 		F93F14C01CCAE5AC00E35541 /* FranklinRayViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FranklinRayViewshed.swift; sourceTree = "<group>"; };
-		F93F14C11CCAE5AC00E35541 /* SquarePerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SquarePerimeter.swift; sourceTree = "<group>"; };
 		F93F14D91CCAE5C400E35541 /* GeoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoUtility.swift; sourceTree = "<group>"; };
 		F93F14DA1CCAE5C400E35541 /* HGTDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTDownloader.swift; sourceTree = "<group>"; };
 		F93F14DB1CCAE5C400E35541 /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
@@ -118,6 +117,7 @@
 		F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BresenhamsLineAlgoritm.swift; sourceTree = "<group>"; };
 		F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
 		F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
+		F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W122.hgt; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -251,6 +251,7 @@
 		F93F14981CCAE49500E35541 /* HGT */ = {
 			isa = PBXGroup;
 			children = (
+				F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */,
 				F93F14991CCAE49500E35541 /* N37W123.hgt */,
 				F93F149A1CCAE49500E35541 /* N38W077.hgt */,
 				F93F149B1CCAE49500E35541 /* N38W078.hgt */,
@@ -304,7 +305,6 @@
 				F91E13221CD91C5D00409376 /* ViewshedAlgorithm.swift */,
 				F93F14BB1CCAE5AC00E35541 /* FogMachine */,
 				F93F14BF1CCAE5AC00E35541 /* FranklinRay */,
-				F93F14C11CCAE5AC00E35541 /* SquarePerimeter.swift */,
 			);
 			path = Viewshed;
 			sourceTree = "<group>";
@@ -428,6 +428,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9AB382C1CDE9CCA002CDFA3 /* N37W122.hgt in Resources */,
 				F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */,
 				F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
@@ -528,7 +529,6 @@
 				F91E13201CD9177E00409376 /* SettingsViewController.swift in Sources */,
 				F93F14D01CCAE5AC00E35541 /* ViewshedTool.swift in Sources */,
 				F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */,
-				F93F14D31CCAE5AC00E35541 /* SquarePerimeter.swift in Sources */,
 				F93F14D11CCAE5AC00E35541 /* ViewshedWork.swift in Sources */,
 				F91E131F1CD9177E00409376 /* ObserverSettingsViewController.swift in Sources */,
 			);

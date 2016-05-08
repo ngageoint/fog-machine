@@ -22,41 +22,41 @@ public class BresenhamsLineAlgoritm: NSObject {
         var line:[(x:Int,y:Int)] = []
         
         // delta of exact value and rounded value of the dependant variable
-        var d = 0;
+        var d = 0
         
-        let dy = abs(y2 - y1);
-        let dx = abs(x2 - x1);
+        let dy = abs(y2 - y1)
+        let dx = abs(x2 - x1)
         
-        let dy2 = (dy << 1); // slope scaling factors to avoid floating
-        let dx2 = (dx << 1); // point
+        let dy2 = (dy << 1) // slope scaling factors to avoid floating point
+        let dx2 = (dx << 1)
         
-        let ix = x1 < x2 ? 1 : -1; // increment direction
-        let iy = y1 < y2 ? 1 : -1;
+        let ix = x1 < x2 ? 1 : -1 // increment direction
+        let iy = y1 < y2 ? 1 : -1
         
         if (dy <= dx) {
             while true {
                 line.append((x1, y1))
                 if (x1 == x2) {
-                    break;
+                    break
                 }
-                x1 += ix;
-                d += dy2;
+                x1 += ix
+                d += dy2
                 if (d > dx) {
-                    y1 += iy;
-                    d -= dx2;
+                    y1 += iy
+                    d -= dx2
                 }
             }
         } else {
             while true {
                 line.append((x1, y1))
                 if (y1 == y2) {
-                    break;
+                    break
                 }
-                y1 += iy;
-                d += dx2;
+                y1 += iy
+                d += dx2
                 if (d > dy) {
-                    x1 += ix;
-                    d -= dy2;
+                    x1 += ix
+                    d -= dy2
                 }
             }
         }
