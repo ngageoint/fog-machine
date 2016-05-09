@@ -8,10 +8,14 @@ import MapKit
  FIXME: I would hate to see what some of these methods do when the box spans the 180th meridian....
  
 */
-class AxisOrientedBoundingBox {
+class AxisOrientedBoundingBox : CustomStringConvertible {
     
     private var lowerLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
     private var upperRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+    
+    var description: String{
+        return "(\(getLowerLeft().latitude), \(getLowerLeft().longitude)), (\(getUpperRight().latitude), \(getUpperRight().longitude))"
+    }
     
     init(lowerLeft: CLLocationCoordinate2D, upperRight: CLLocationCoordinate2D) {
         self.lowerLeft = lowerLeft;

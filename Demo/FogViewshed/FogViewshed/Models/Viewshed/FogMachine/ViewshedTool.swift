@@ -41,6 +41,7 @@ public class ViewshedTool : FMTool {
         let viewshed:[[Int]] = franklinRayViewshed.runViewshed()
         
         let viewshedDataGrid:ElevationDataGrid = ElevationDataGrid(elevationData: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: Srtm.SRTM3_RESOLUTION)
+        NSLog("Done reading in data")
         
         SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateOverlay(elevationDataGrid))
         

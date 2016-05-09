@@ -73,13 +73,27 @@ public class HGTManager {
  
     */
     static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Int) -> (Int, Int) {
+        let resolutionD:Double = Double(resolution)
+        
         let llLat:Double = latLon.latitude
         let llLatGrid:Double = boundingBox.getLowerLeft().latitude
-        let yIndex:Int = max(min(smartFloorI((llLat - llLatGrid)*Double(resolution)), resolution - 1), 0)
+        let latDiff:Double = llLat - llLatGrid
+        let latDiffGrid:Double = boundingBox.getUpperRight().latitude - boundingBox.getLowerLeft().latitude
+        var latIndexMax:Int = smartFloorI(latDiffGrid*resolutionD)
+        if(latDiff == latDiffGrid) {
+            latIndexMax -= 1
+        }
+        let yIndex:Int = max(min(smartFloorI(latDiff*resolutionD), latIndexMax), 0)
         
         let llLon:Double = latLon.longitude
         let llLonGrid:Double = boundingBox.getLowerLeft().longitude
-        let xIndex:Int = max(min(smartFloorI((llLon - llLonGrid)*Double(resolution)), resolution - 1), 0)
+        let lonDiff:Double = llLon - llLonGrid
+        let lonDiffGrid:Double = boundingBox.getUpperRight().longitude - boundingBox.getLowerLeft().longitude
+        var lonIndexMax:Int = smartFloorI(lonDiffGrid*resolutionD)
+        if(lonDiff == lonDiffGrid) {
+            lonIndexMax -= 1
+        }
+        let xIndex:Int = max(min(smartFloorI(lonDiff*resolutionD), lonIndexMax), 0)
         
         return (xIndex, yIndex)
     }
@@ -229,6 +243,7 @@ public class HGTManager {
             iLat += 1.0
         }
         
+        NSLog("griddedAxisOrientedBoundingBox: " + griddedAxisOrientedBoundingBox.description)
         
         let elevationDataURIndex:(Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
         let elevationDataLLIndex:(Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
@@ -236,8 +251,8 @@ public class HGTManager {
         let elevationDataWidth:Int = elevationDataURIndex.0 - elevationDataLLIndex.0 + 1
         let elevationDataHeight:Int = elevationDataURIndex.1 - elevationDataLLIndex.1 + 1
         
-        NSLog("elevationDataHeight \(elevationDataHeight)")
-        NSLog("elevationDataWidth \(elevationDataWidth)")
+//        NSLog("elevationDataHeight \(elevationDataHeight)")
+//        NSLog("elevationDataWidth \(elevationDataWidth)")
         
         // this is the data structure that will contain the elevation data
         var elevationData:[[Int]] = [[Int]](count:elevationDataHeight, repeatedValue:[Int](count:elevationDataWidth, repeatedValue:Srtm.NO_DATA))
@@ -252,42 +267,45 @@ public class HGTManager {
                 // find the intersection
                 let hgtAreaOfInterest:AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
                 
+                NSLog("hgtAreaOfInterest: " + hgtAreaOfInterest.description)
+                
                 SwiftEventBus.post("drawDebugging", sender:hgtAreaOfInterest.asMKPolygon())
                 
                 // we need to read data from the upper left of the intersection to the lower right of the intersection
                 var upperLeftIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())
                 var lowerRightIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
                 
+                // bound the indexees to the boundary of the gridded space
+                upperLeftIndex.1 = min(upperLeftIndex.1, lowerRightIndex.1 + elevationDataHeight - 1)
+                lowerRightIndex.0 = min(lowerRightIndex.0, upperLeftIndex.0 + elevationDataWidth - 1)
+                
                 // the files are enumerated from top to bottom, left to right, so flip the yIndex
                 upperLeftIndex.1 = hgtFileOfInterest.getResolution() - 1 - upperLeftIndex.1
                 lowerRightIndex.1 = hgtFileOfInterest.getResolution() - 1 - lowerRightIndex.1
+//                NSLog("upperLeftIndex \(upperLeftIndex.0) \(upperLeftIndex.1)")
+//                NSLog("lowerRightIndex \(lowerRightIndex.0) \(lowerRightIndex.1)")
                 
-                NSLog("upperLeftIndex \(upperLeftIndex.0) \(upperLeftIndex.1)")
-                NSLog("lowerRightIndex \(lowerRightIndex.0) \(lowerRightIndex.1)")
-                
-                NSLog("lowerRightIndex.0 - upperLeftIndex.0 + 1: \(lowerRightIndex.0 - upperLeftIndex.0 + 1)")
-                NSLog("lowerRightIndex.1 - upperLeftIndex.1 + 1: \(lowerRightIndex.1 - upperLeftIndex.1 + 1)")
+                let hgtAreaOfInterestHeight:Int = lowerRightIndex.1 - upperLeftIndex.1 + 1
+                let hgtAreaOfInterestWidth:Int = lowerRightIndex.0 - upperLeftIndex.0 + 1
+//                NSLog("hgtAreaOfInterestHeight \(hgtAreaOfInterestHeight)")
+//                NSLog("hgtAreaOfInterestWidth \(hgtAreaOfInterestWidth)")
                 
                 // data row length, 2 bytes for every index
-                let dataRowLengthInBytes:Int = 2*(lowerRightIndex.0 - upperLeftIndex.0 + 1)
-                
-                NSLog("dataRowLengthInBytes \(dataRowLengthInBytes)")
+                let dataRowLengthInBytes:Int = 2*(hgtAreaOfInterestWidth)
+//                NSLog("dataRowLengthInBytes \(dataRowLengthInBytes)")
                 
                 // always skip the first row of data + plus the extra cell in the last column that we don't care about
                 var numberOfBytesToStartReadingAt:UInt64 = UInt64((hgtFileOfInterest.getResolution() + 1) * 2)
-                
-                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
+//                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
                 
                 // then skip the data until the exact of offset we want to read at
                 // account for each row and the last column, AND the offset in the current row
                 numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64(((upperLeftIndex.1 * (hgtFileOfInterest.getResolution() + 1)) + upperLeftIndex.0)*2)
-                
-                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
+//                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
                 
                 // the last bytes is the start byte plus the number of columns minus one * the size of each row, plus the legth of the last row
-                let numberOfBytesUntilLastByteToRead:UInt64 = numberOfBytesToStartReadingAt + UInt64(2*((lowerRightIndex.1 - upperLeftIndex.1)*(hgtFileOfInterest.getResolution() + 1)) + dataRowLengthInBytes)
-                
-                NSLog("numberOfBytesUntilLastByteToRead \(numberOfBytesUntilLastByteToRead)")
+                let numberOfBytesUntilLastByteToRead:UInt64 = numberOfBytesToStartReadingAt + UInt64(2*((hgtAreaOfInterestHeight - 1)*(hgtFileOfInterest.getResolution() + 1)) + dataRowLengthInBytes)
+//                NSLog("numberOfBytesUntilLastByteToRead \(numberOfBytesUntilLastByteToRead)")
                 
                 do {
                     let handle:NSFileHandle = try NSFileHandle(forReadingFromURL: hgtFileOfInterest.path)
@@ -295,10 +313,10 @@ public class HGTManager {
                     // TODO : TBD, it may be faster to read an entire block of data, and then parse the information out of the file.
                     
                     var rowNumber:Int = 0
-                    let elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getUpperLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+                    let elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
                     
-                    NSLog("elevationDataIndex.0 \(elevationDataIndex.0)")
-                    NSLog("elevationDataIndex.1 \(elevationDataIndex.1)")
+//                    NSLog("elevationDataIndex.0 \(elevationDataIndex.0)")
+//                    NSLog("elevationDataIndex.1 \(elevationDataIndex.1)")
                     
                     // while there are more rows to read
                     while(numberOfBytesToStartReadingAt <= numberOfBytesUntilLastByteToRead) {
@@ -312,7 +330,11 @@ public class HGTManager {
                         // the byte order is backwards, so flip it.  Don't think there's a faster way to do this
                         for j in 0 ..< (data.length/2) {
                             // find the index where this row should be indexed into the large elevationData structure
-                            elevationData[elevationDataIndex.1 - rowNumber][elevationDataIndex.0 + j] = Int(oneRowOfElevation[j].bigEndian)
+                            let ii:Int = elevationDataIndex.1 + hgtAreaOfInterestHeight - 1 - rowNumber;
+                            let jj:Int = elevationDataIndex.0 + j
+                            if(jj < elevationDataWidth && jj >= 0 && ii < elevationDataHeight && ii >= 0) {
+                                elevationData[ii][jj] = Int(oneRowOfElevation[j].bigEndian)
+                            }
                         }
                         
                         // seek to the next row
@@ -324,7 +346,7 @@ public class HGTManager {
                 }
             }
         }
-   
+        
         return ElevationDataGrid(elevationData: elevationData, boundingBoxAreaExtent: griddedAxisOrientedBoundingBox, resolution: resolutioni)
     }
     

@@ -151,12 +151,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         
         for hgtFile in HGTManager.getLocalHGTFiles() {
             self.mapView.addOverlay(hgtFile.getBoundingBox().asMKPolygon())
-            let llPin = MKPointAnnotation()
-            llPin.coordinate = hgtFile.getBoundingBox().getLowerLeft()
-            mapView.addAnnotation(llPin)
-            let urPin = MKPointAnnotation()
-            urPin.coordinate = hgtFile.getBoundingBox().getUpperRight()
-            mapView.addAnnotation(urPin)
         }
     }
 
@@ -285,9 +279,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
     func redraw() {
-        
-        mapView.removeOverlays(mapView.overlays)
-        
         drawObservers()
         drawDataRegions()
     }
@@ -328,7 +319,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         if segue.identifier == "observerSettings" {
             let navController = segue.destinationViewController as! UINavigationController
             let viewController: ObserverSettingsViewController = navController.topViewController as! ObserverSettingsViewController
-            viewController.originalObserver = sender as! ObserverEntity?
+            viewController.originalObserver = sender as! Observer?
         } else if segue.identifier == "settings" {
             let navController = segue.destinationViewController as! UINavigationController
             let viewController: SettingsViewController = navController.topViewController as! SettingsViewController
@@ -346,7 +337,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
     @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
-        setMapLogDisplay()
+        mapView.removeOverlays(mapView.overlays)
         redraw()
     }
 
@@ -355,7 +346,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
     @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
-        setMapLogDisplay()
         model.clearEntity()
         redraw()
     }

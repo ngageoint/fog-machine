@@ -7,7 +7,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Variables
     
-    var originalObserver: ObserverEntity?
+    var originalObserver: Observer?
     var model = ObserverFacade()
     
     enum Warning: String {
@@ -107,8 +107,8 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         name.text = originalObserver!.name
         elevation.text = String(originalObserver!.elevationInMeters)
         radius.text = String(originalObserver!.radiusInMeters)
-        latitude.text = String(originalObserver!.latitude)
-        longitude.text = String(originalObserver!.longitude)
+        latitude.text = String(originalObserver!.position.latitude)
+        longitude.text = String(originalObserver!.position.longitude)
     }
     
     func alertUser(message: String) {

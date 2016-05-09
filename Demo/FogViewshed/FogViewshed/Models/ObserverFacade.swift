@@ -29,9 +29,14 @@ class ObserverFacade {
     }
     
     
-    func delete(observer: ObserverEntity) {
-        managedContext.deleteObject(observer)
-        saveContext()
+    func delete(observer: Observer) {
+        for observerEntity:ObserverEntity in getObserverEntities() {
+            if(observer.name == observerEntity.name) {
+                managedContext.deleteObject(observerEntity)
+                saveContext()
+                break;
+            }
+        }
     }
     
     func add(observer: Observer) {
@@ -41,7 +46,7 @@ class ObserverFacade {
         managedObject.setValue(observer.radiusInMeters, forKey: "radiusInMeters")
         managedObject.setValue(observer.position.latitude, forKey: "latitude")
         managedObject.setValue(observer.position.longitude, forKey: "longitude")
-    
+        
         saveContext()
     }
     
@@ -59,25 +64,28 @@ class ObserverFacade {
         }
     }
     
-    func getObservers()-> [Observer] {
-        var observers:[Observer] = [Observer]()
+    private func getObserverEntities()-> [ObserverEntity] {
         var observerEntities:[ObserverEntity] = [ObserverEntity]()
         let fetchRequest = NSFetchRequest(entityName: "Observer")
         fetchRequest.returnsObjectsAsFaults = false
         do {
             let fetchResults = try managedContext.executeFetchRequest(fetchRequest) as? [ObserverEntity]
-
+            
             if let _ = fetchResults {
-                observerEntities = fetchResults!
+                observerEntities.appendContentsOf(fetchResults!)
             }
             
         } catch let error as NSError {
-            print("Error fetching observer entity " + " \(error): \(error.userInfo)")
+            print("Error fetching observer entities " + " \(error): \(error.userInfo)")
         }
-        for observerEntity:ObserverEntity in observerEntities {
+        return observerEntities
+    }
+    
+    func getObservers()-> [Observer] {
+        var observers:[Observer] = [Observer]()
+        for observerEntity:ObserverEntity in getObserverEntities() {
             observers.append(observerEntity.asObserver())
         }
-        
         return observers
     }
 }
