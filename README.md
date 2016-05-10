@@ -25,10 +25,10 @@ pod install
 The Fog machine framework provides a simple lifecycle for your app to use.  Just extend FMTool, and start running you task in parallel immediately.
 
 ```swift
-// look for friends/devices to help me
-FogMachine.fogMachineInstance.startSearchForPeers()
 // what do I need help with?
 FogMachine.fogMachineInstance.setTool(MyCoolTool())
+// look for friends/devices to help me
+FogMachine.fogMachineInstance.startSearchForPeers()
 // run MyCoolTool on all the nodes in the network
 FogMachine.fogMachineInstance.execute()
 ```
@@ -63,4 +63,8 @@ limitations under the License.
 
 Fog Machine makes use of the following open source projects:
 - **PeerKit**  
+*https://github.com/cwas/PeerKit*
+This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
+- **SwiftEventBus**  
+*https://github.com/cesarferreira/SwiftEventBus*
 This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php

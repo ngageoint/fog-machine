@@ -8,12 +8,30 @@ import MapKit
  */
 public class FranklinRayViewshed : ViewsehdAlgorithm {
 
-    let elevationDataGrid: ElevationDataGrid
+    let elevationDataGrid: DataGrid
     let observer: Observer
     
-    init(elevationDataGrid: ElevationDataGrid, observer: Observer) {
+    private let rowSize:Int
+    private let columnSize:Int
+    private var perimeterSize:Int
+    
+    init(elevationDataGrid: DataGrid, observer: Observer) {
         self.elevationDataGrid = elevationDataGrid
         self.observer = observer
+        
+        self.rowSize = elevationDataGrid.data.count
+        self.columnSize = elevationDataGrid.data[0].count
+        self.perimeterSize = 1
+        
+        if(rowSize == 1 && columnSize == 1) {
+            self.perimeterSize = 1
+        } else if(rowSize == 1) {
+            self.perimeterSize = columnSize
+        } else if(columnSize == 1) {
+            self.perimeterSize = rowSize
+        } else {
+            self.perimeterSize = 2*(rowSize + columnSize - 2)
+        }
     }
     
     /**
@@ -26,23 +44,23 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
      
      */
     public func runViewshed() -> [[Int]] {
-        
-        let elevationGrid: [[Int]] = elevationDataGrid.elevationData
-        
-        let rowSize = elevationGrid.count
-        let columnSize = elevationGrid[0].count
-        var viewshed:[[Int]] = [[Int]](count:rowSize, repeatedValue:[Int](count:columnSize, repeatedValue:Srtm.NO_DATA))
+        // inputs
+        let elevationGrid: [[Int]] = elevationDataGrid.data
         
         let oxiyi:(Int, Int) = elevationDataGrid.latLonToIndex(observer.position)
         // get the cell that the observer exists in
-        let oxi:Int = oxiyi.0
-        let oyi:Int = oxiyi.1
+        let oxi:Int = oxiyi.1
+        let oyi:Int = oxiyi.0
         var oh:Double = Double(elevationGrid[oxi][oyi]) + observer.elevationInMeters
         // FIXME: if there a better way to deal with this?
         // if the elevation data where the observer is positioned is bad, just set elevation to above sea level
         if(elevationGrid[oxi][oyi] == Srtm.DATA_VOID) {
             oh = observer.elevationInMeters
         }
+        
+        // outputs
+        var viewshed:[[Int]] = [[Int]](count:rowSize, repeatedValue:[Int](count:columnSize, repeatedValue:Viewshed.NO_DATA))
+        viewshed[oxi][oyi] = Viewshed.OBSERVER
         
         let oRadius:Double = observer.radiusInMeters
         
@@ -53,7 +71,9 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         let olon:Double = (Double(oyi)*(1.0/Double(elevationDataGrid.resolution))) + lonAdjust
         
         // iterate through the cells c of the perimeter. Each c has coordinates (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
-        for (px, py) in getPerimeterCells() {
+        while(hasAnotherPerimeterCell()) {
+            let (px,py):(Int,Int) = getNextPerimeterCell()
+            // NSLog("(px, py): (\(px), \(py))  ::  \(perimeterCellIndex)  \(perimeterSize)")
             // for each cell, find a line from the observer to the cell
             let lineCells:[(x:Int, y:Int)] = BresenhamsLineAlgoritm.findLine(x1: oxi, y1: oyi, x2: px, y2: py)
             
@@ -71,8 +91,9 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 let xyi:Int = elevationGrid[xi][yi]
                 let xyh:Double = Double(xyi)
                 
-                // if the elevation data at this point is bad, we don't know if it's visible or not...
-                if(xyi == Srtm.DATA_VOID) {
+                if(xyi == Srtm.NO_DATA) { // if there is no data at this point, we can not continue the running this line
+                    break;
+                } else if(xyi == Srtm.DATA_VOID) { // if the elevation data at this point is bad, we don't know if it's visible or not...
                     continue;
                 }
                 
@@ -95,10 +116,10 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                     // If xymu < mu, then this cell is not visible, otherwise, mark the cell is visible
                     if (xymu < mu) {
                         // not visible
-                        viewshed[xi][yi] = 0
+                        viewshed[xi][yi] = Viewshed.NOT_VISIBLE
                     } else {
                         // visible
-                        viewshed[xi][yi] = 1
+                        viewshed[xi][yi] = Viewshed.VISIBLE
                         mu = xymu
                     }
                 }
@@ -108,57 +129,77 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         return viewshed
     }
     
-    private func getPerimeterCells() -> [(x:Int,y:Int)] {
-        let elevationGrid: [[Int]] = elevationDataGrid.elevationData
-        let rowSize:Int = elevationGrid.count
-        let columnSize:Int = elevationGrid[0].count
-        
-        var perimeterSize = 2*(rowSize + columnSize - 2)
-        
-        if(rowSize == 1 && columnSize == 1) {
-            perimeterSize = 1
-        }
-        
-        // Perimeter goes clockwise from the lower left coordinate
-        var perimeter:[(x:Int, y:Int)] = []
-        
-        if(perimeterSize == 1) {
-            perimeter.append((0,0))
-        } else {
-            // lower left to top left
-            var i:Int = 0
-            while(i <= columnSize - 1) {
-                perimeter.append((0, i))
-                i = i + 1
-            }
-            
-            // top left to top right (excludes corners)
-            i = 1
-            while(i <= rowSize - 2) {
-                perimeter.append((i, columnSize - 1))
-                i = i + 1
-            }
-            
-            // top right to lower right
-            i = columnSize - 1
-            while(i >= 0) {
-                perimeter.append((rowSize - 1, i))
-                i = i - 1
-            }
-            
-            // lower right to lower left (excludes corners)
-            i = rowSize - 2
-            while(i >= 1) {
-                perimeter.append((i, 0))
-                i = i - 1
-            }
-        }
-        
-        if(perimeterSize != perimeter.count) {
-            NSLog("Perimeter was the wrong size! Expected: \(perimeterSize), received: \(perimeter.count)")
-        }
-        
-        return perimeter
+    private var perimeterCellIndex: Int = -1;
+    
+    private func hasAnotherPerimeterCell() -> Bool {
+        return (perimeterCellIndex < perimeterSize)
     }
+    
+    private func getNextPerimeterCell() -> (x:Int,y:Int) {
+        if(hasAnotherPerimeterCell()) {
+            perimeterCellIndex += 1
+            var i:Int = perimeterCellIndex
+            
+            if(i <= columnSize - 1) {
+                return(0, i)
+            }
+            i -= columnSize - 1
+            if(i <= rowSize - 1) {
+                return(i, columnSize - 1)
+            }
+            
+            i -= rowSize - 1
+            if(i <= columnSize - 1) {
+                return(rowSize - 1, columnSize - 1 - i)
+            }
+            
+            i -= columnSize - 1
+            return(rowSize - 1 - i, 0)
+        }
+        return (0,0)
+    }
+    
+//    private func getPerimeterCells() -> [(x:Int,y:Int)] {
+//        // Perimeter goes clockwise from the lower left coordinate
+//        var perimeter:[(x:Int, y:Int)] = []
+//        
+//        if(perimeterSize == 1) {
+//            perimeter.append((0,0))
+//        } else {
+//            // lower left to top left
+//            var i:Int = 0
+//            while(i <= columnSize - 1) {
+//                perimeter.append((0, i))
+//                i = i + 1
+//            }
+//            
+//            // top left to top right (excludes corners)
+//            i = 1
+//            while(i <= rowSize - 2) {
+//                perimeter.append((i, columnSize - 1))
+//                i = i + 1
+//            }
+//            
+//            // top right to lower right
+//            i = columnSize - 1
+//            while(i >= 0) {
+//                perimeter.append((rowSize - 1, i))
+//                i = i - 1
+//            }
+//            
+//            // lower right to lower left (excludes corners)
+//            i = rowSize - 2
+//            while(i >= 1) {
+//                perimeter.append((i, 0))
+//                i = i - 1
+//            }
+//        }
+//        
+//        if(perimeterSize != perimeter.count) {
+//            NSLog("Perimeter was the wrong size! Expected: \(perimeterSize), received: \(perimeter.count)")
+//        }
+//        
+//        return perimeter
+//    }
 
 }

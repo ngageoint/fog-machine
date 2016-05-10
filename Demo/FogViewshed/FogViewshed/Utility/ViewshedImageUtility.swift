@@ -5,34 +5,12 @@ import FogMachine
 
 class ViewshedImageUtility: NSObject {
 
-    static func generateOverlay(elevationDataGrid: ElevationDataGrid) -> ViewshedOverlay {
-        return ViewshedOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.elevationData))
+    static func generateElevationOverlay(elevationDataGrid: DataGrid) -> ViewshedOverlay {
+        return ViewshedOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data))
     }
-
-    static func viewshedToUIImage(viewshed: [[Int]]) -> UIImage {
-        let height = viewshed.count
-        let width = viewshed[0].count
-        var data: [Pixel] = []
-
-        for x in 0 ..< height {
-            for y in 0 ..< width {
-                let vxy:Int = viewshed[x][y]
-                var p:Pixel
-                if(vxy == 0) {
-                    p = Pixel(alpha: 50, red: 100, green: 0, blue: 0)
-                } else if(vxy == 1) {
-                    p = Pixel(alpha: 50, red: 0, green: 100, blue: 0)
-                } else if (vxy == Srtm.NO_DATA){
-                    p = Pixel(alpha: 50, red: 0, green: 0, blue: 255)
-                } else {
-                    p = Pixel(alpha: 50, red: 255, green: 255, blue: 0)
-                }
-                data.append(p);
-            }
-        }
-
-        let image = imageFromArgb32Bitmap(data, width: width, height: height)
-        return image
+    
+    static func generateViewshedOverlay(viewshedDataGrid: DataGrid) -> ViewshedOverlay {
+        return ViewshedOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data))
     }
 
     static func elevationToUIImage(elevationGrid: [[Int]]) -> UIImage {
@@ -96,17 +74,41 @@ class ViewshedImageUtility: NSObject {
                     color = Pixel(alpha: 50, red: 0, green: 0, blue: 255)
                 }
 
-                // projection for UIimage.  these are indexs in an array.  Do you floor or ceil them????
-                //var xprime = lon2x_SphericalMercator(x)
-                //var yprime = lat2y_SphericalMercator(y)
-
-                // maybe this isn't an array anymore?!?  Not sure what utils apple provides for drawing...
                 elevationImage.append(color)
             }
         }
         return imageFromArgb32Bitmap(elevationImage, width: width, height: height)
     }
+    
+    static func viewshedToUIImage(viewshed: [[Int]]) -> UIImage {
+        let height = viewshed.count
+        let width = viewshed[0].count
+        var data: [Pixel] = []
+        
+        for x in 0 ..< height {
+            for y in 0 ..< width {
+                let vxy:Int = viewshed[(height - 1) - x][y]
+                var p:Pixel
+                if(vxy == Viewshed.NOT_VISIBLE) {
+                    p = Pixel(alpha: 50, red: 100, green: 0, blue: 0)
+                } else if(vxy == Viewshed.VISIBLE) {
+                    p = Pixel(alpha: 50, red: 0, green: 100, blue: 0)
+                } else if(vxy == Viewshed.OBSERVER) {
+                    p = Pixel(alpha: 50, red: 0, green: 0, blue: 0)
+                } else if (vxy == Viewshed.NO_DATA){
+                    p = Pixel(alpha: 50, red: 0, green: 0, blue: 255)
+                } else {
+                    p = Pixel(alpha: 50, red: 255, green: 255, blue: 0)
+                }
+                data.append(p);
+            }
+        }
+        
+        let image = imageFromArgb32Bitmap(data, width: width, height: height)
+        return image
+    }
 
+    // TODO : see if this can be sped up
     private static func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
 
         let rgbColorSpace = CGColorSpaceCreateDeviceRGB()

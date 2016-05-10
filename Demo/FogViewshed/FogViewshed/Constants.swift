@@ -11,6 +11,13 @@ struct Srtm {
     static let NO_DATA:Int = DATA_VOID + 1
 }
 
+struct Viewshed {
+    static let NO_DATA:Int = Srtm.NO_DATA
+    static let VISIBLE:Int = 1
+    static let NOT_VISIBLE:Int = 0
+    static let OBSERVER:Int = 2
+}
+
 enum MapType: Int {
     case Standard = 0
     case Hybrid

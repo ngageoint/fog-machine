@@ -10,16 +10,16 @@ import MapKit
 */
 class AxisOrientedBoundingBox : CustomStringConvertible {
     
-    private var lowerLeft: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
-    private var upperRight: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+    private var lowerLeft: CLLocationCoordinate2D
+    private var upperRight: CLLocationCoordinate2D
     
     var description: String{
         return "(\(getLowerLeft().latitude), \(getLowerLeft().longitude)), (\(getUpperRight().latitude), \(getUpperRight().longitude))"
     }
     
     init(lowerLeft: CLLocationCoordinate2D, upperRight: CLLocationCoordinate2D) {
-        self.lowerLeft = lowerLeft;
-        self.upperRight = upperRight;
+        self.lowerLeft = lowerLeft
+        self.upperRight = upperRight
     }
     
     func getLowerLeft() -> CLLocationCoordinate2D {
@@ -88,10 +88,10 @@ class AxisOrientedBoundingBox : CustomStringConvertible {
     
     func asMKMapRect() -> MKMapRect {
         // convert them to MKMapPoint
-        let p1:MKMapPoint = MKMapPointForCoordinate (getLowerLeft());
-        let p2:MKMapPoint = MKMapPointForCoordinate (getUpperRight());
+        let p1:MKMapPoint = MKMapPointForCoordinate (getLowerLeft())
+        let p2:MKMapPoint = MKMapPointForCoordinate (getUpperRight())
         
         // and make a MKMapRect using mins and spans
-        return MKMapRectMake(fmin(p1.x,p2.x), fmin(p1.y,p2.y), fabs(p1.x-p2.x), fabs(p1.y-p2.y));
+        return MKMapRectMake(fmin(p1.x,p2.x), fmin(p1.y,p2.y), fabs(p1.x-p2.x), fabs(p1.y-p2.y))
     }
 }

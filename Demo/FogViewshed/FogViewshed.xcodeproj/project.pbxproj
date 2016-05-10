@@ -24,7 +24,7 @@
 		F91E13251CD92BB900409376 /* BoundingBoxUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13241CD92BB900409376 /* BoundingBoxUtility.swift */; };
 		F91E13271CD931E800409376 /* HGTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91E13261CD931E800409376 /* HGTManager.swift */; };
 		F93F14C71CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */; };
-		F93F14C81CCAE5AC00E35541 /* ElevationDataGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B11CCAE5AC00E35541 /* ElevationDataGrid.swift */; };
+		F93F14C81CCAE5AC00E35541 /* DataGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B11CCAE5AC00E35541 /* DataGrid.swift */; };
 		F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B41CCAE5AC00E35541 /* HGTFile.swift */; };
 		F93F14CB1CCAE5AC00E35541 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B61CCAE5AC00E35541 /* Cell.swift */; };
 		F93F14CC1CCAE5AC00E35541 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B71CCAE5AC00E35541 /* Observer.swift */; };
@@ -44,6 +44,7 @@
 		F93F14E81CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */; };
 		F93F14EB1CCAE62700E35541 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */; };
 		F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */; };
+		F99A27C61CE14BBF0040EBC8 /* Sector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99A27C51CE14BBF0040EBC8 /* Sector.swift */; };
 		F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F14991CCAE49500E35541 /* N37W123.hgt */; };
 		F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F149C1CCAE49500E35541 /* N38W123.hgt */; };
 		F9AB382C1CDE9CCA002CDFA3 /* N37W122.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */; };
@@ -97,7 +98,7 @@
 		F93F14A21CCAE49500E35541 /* N40W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W106.hgt; sourceTree = "<group>"; };
 		F93F14A31CCAE49500E35541 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AxisOrientedBoundingBox.swift; sourceTree = "<group>"; };
-		F93F14B11CCAE5AC00E35541 /* ElevationDataGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationDataGrid.swift; sourceTree = "<group>"; };
+		F93F14B11CCAE5AC00E35541 /* DataGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataGrid.swift; sourceTree = "<group>"; };
 		F93F14B41CCAE5AC00E35541 /* HGTFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTFile.swift; sourceTree = "<group>"; };
 		F93F14B61CCAE5AC00E35541 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		F93F14B71CCAE5AC00E35541 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BresenhamsLineAlgoritm.swift; sourceTree = "<group>"; };
 		F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
 		F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
+		F99A27C51CE14BBF0040EBC8 /* Sector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sector.swift; sourceTree = "<group>"; };
 		F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W122.hgt; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,14 +273,15 @@
 		F93F14AF1CCAE5AC00E35541 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */,
-				F93F14B11CCAE5AC00E35541 /* ElevationDataGrid.swift */,
 				F93F14B31CCAE5AC00E35541 /* HGT */,
 				F93F14B51CCAE5AC00E35541 /* Map */,
+				F93F14BA1CCAE5AC00E35541 /* Viewshed */,
+				F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */,
+				F93F14B11CCAE5AC00E35541 /* DataGrid.swift */,
 				F93F14B71CCAE5AC00E35541 /* Observer.swift */,
 				F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */,
 				F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */,
-				F93F14BA1CCAE5AC00E35541 /* Viewshed */,
+				F99A27C51CE14BBF0040EBC8 /* Sector.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -510,7 +513,7 @@
 				753D3D761BF65A60004E3589 /* Constants.swift in Sources */,
 				F93F14E21CCAE5C400E35541 /* ViewshedImageUtility.swift in Sources */,
 				F93F14CD1CCAE5AC00E35541 /* ObserverEntity.swift in Sources */,
-				F93F14C81CCAE5AC00E35541 /* ElevationDataGrid.swift in Sources */,
+				F93F14C81CCAE5AC00E35541 /* DataGrid.swift in Sources */,
 				F93F14C71CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift in Sources */,
 				F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */,
 				F93F14DF1CCAE5C400E35541 /* HGTDownloader.swift in Sources */,
@@ -528,6 +531,7 @@
 				F93F14D21CCAE5AC00E35541 /* FranklinRayViewshed.swift in Sources */,
 				F91E13201CD9177E00409376 /* SettingsViewController.swift in Sources */,
 				F93F14D01CCAE5AC00E35541 /* ViewshedTool.swift in Sources */,
+				F99A27C61CE14BBF0040EBC8 /* Sector.swift in Sources */,
 				F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */,
 				F93F14D11CCAE5AC00E35541 /* ViewshedWork.swift in Sources */,
 				F91E131F1CD9177E00409376 /* ObserverSettingsViewController.swift in Sources */,

@@ -27,23 +27,31 @@ public class ViewshedTool : FMTool {
         if(viewshedWork.sectorCount == 1) {
             axisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(viewshedWork.observer.position, radiusInMeters: viewshedWork.observer.radiusInMeters)
         } else {
-            // TODO sector calculation
+            let angleSize:Double = (2*M_PI)/Double(viewshedWork.sectorCount)
+            let startAngle:Double = angleSize*Double(viewshedWork.sectorNumber)
+            let endAngle:Double = angleSize*Double(viewshedWork.sectorNumber + 1)
+            
+            let sector:Sector = Sector(center: viewshedWork.observer.position, startAngleInRadans: startAngle, endAngleInRadans: endAngle, radiusInMeters: viewshedWork.observer.radiusInMeters)
+            axisOrientedBoundingBox = sector.getBoundingBox()
         }
         
-        // TODO : remove me
-        axisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(viewshedWork.observer.position, radiusInMeters: viewshedWork.observer.radiusInMeters)
         // read elevation data
-        let elevationDataGrid:ElevationDataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox)
+        NSLog("Start reading in elevation data")
+        let dataReadTimer:FMTimer = FMTimer()
+        dataReadTimer.start()
+        let elevationDataGrid:DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox)
+        NSLog("Read elevation data in " + String(format: "%.3f", dataReadTimer.stop()) + " seconds")
         
         // run viewshed on data
+        NSLog("Start running viewshed")
+        let viewshedTimer:FMTimer = FMTimer()
+        viewshedTimer.start()
         let franklinRayViewshed:FranklinRayViewshed = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, observer: viewshedWork.observer)
-        
         let viewshed:[[Int]] = franklinRayViewshed.runViewshed()
+        NSLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
-        let viewshedDataGrid:ElevationDataGrid = ElevationDataGrid(elevationData: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: Srtm.SRTM3_RESOLUTION)
-        NSLog("Done reading in data")
-        
-        SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateOverlay(elevationDataGrid))
+        let viewshedDataGrid:DataGrid = DataGrid(data: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: Srtm.SRTM3_RESOLUTION)
+        SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedDataGrid))
         
         return ViewshedResult(viewshedResult: ViewshedImageUtility.viewshedToUIImage(viewshed))
     }

@@ -283,7 +283,7 @@ public class FogMachine {
             let status = self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
             // schedule the reprocessing stuff
             if(status == false) {
-                let data:[String:NSObject] = ["SessionID": sessionUUID]
+                let data:[String:NSObject] = ["SessionID": sessionUUID, "SelfTimeToFinish":selfTimeToFinish]
                 dispatch_async(dispatch_get_main_queue()) {
                     NSTimer.scheduledTimerWithTimeInterval(self.reprocessingScheduleWaitTimeInSeconds, target: self, selector: #selector(FogMachine.scheduleReprocessWork(_:)), userInfo: data, repeats: false)
                 }
@@ -333,42 +333,48 @@ public class FogMachine {
         dispatch_sync(self.lock) {
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
-            self.FMLog("Setting up reprocessing tasks.")
-            var totalTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.getElapsedTimeInSeconds())!
-            var pendingNodes:[FMNode] = []
-            // get work that has not been completed
-            for (node, work) in self.nodeToWork[sessionUUID]! {
-                if(node != self.getSelfNode()) {
-                    if(self.nodeToResult[sessionUUID]!.keys.contains(node) == false) {
-                        pendingNodes.append(node)
-                    } else {
-                        // update running average if needed
-                        totalTimeToFinish = totalTimeToFinish + (self.nodeToRoundTripTimer[sessionUUID]![node]?.getElapsedTimeInSeconds())!
+            let selfTimeToFinish:Double = dataReceived["SelfTimeToFinish"] as! Double
+            // does the session still exist?
+            if(self.mcPeerIDToNode.keys.contains(sessionUUID)) {
+                self.FMLog("Setting up reprocessing tasks.")
+                var totalTimeToFinish:Double = 0
+                totalTimeToFinish += selfTimeToFinish
+                var pendingNodes:[FMNode] = []
+                // get work that has not been completed
+                for (node, work) in self.nodeToWork[sessionUUID]! {
+                    if(node != self.getSelfNode()) {
+                        if(self.nodeToResult[sessionUUID]!.keys.contains(node) == false) {
+                            pendingNodes.append(node)
+                        } else {
+                            // update running average if needed
+                            if(self.nodeToRoundTripTimer.keys.contains(sessionUUID)) {
+                                totalTimeToFinish += (self.nodeToRoundTripTimer[sessionUUID]![node]?.getElapsedTimeInSeconds())!
+                            }
+                        }
                     }
                 }
-            }
-            
-            let nodeCount:Int = self.nodeToRoundTripTimer[sessionUUID]!.count
-            let averageTimeToFinish:Double = totalTimeToFinish/Double(nodeCount)
-            
-            // give peers 50% more time to finish that the current average time. min time to wait is 8 seconds. max time to wait is 5 minutes.
-            let waitTime:Double = min(max((averageTimeToFinish * 0.5) - self.reprocessingScheduleWaitTimeInSeconds, 8), 60*5)
-            var i:Int = 0
-            for node in pendingNodes {
-                let work:FMWork = self.nodeToWork[sessionUUID]![node]!
                 
-                let data:[String:NSObject] =
-                    ["FailedPeerID": node.mcPeerID,
-                     "FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
-                     "SessionID": sessionUUID]
+                let nodeCount:Int = self.nodeToRoundTripTimer[sessionUUID]!.count
+                let averageTimeToFinish:Double = totalTimeToFinish/Double(nodeCount)
                 
-                let selfTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.getElapsedTimeInSeconds())!
-                let retryTime:Double = waitTime + (selfTimeToFinish*Double(i))
-                self.FMLog("Scheduling reprocess work for node " + node.description + " in: " + String(format: "%.3f", retryTime) + " seconds.")
-                dispatch_async(dispatch_get_main_queue()) {
-                    NSTimer.scheduledTimerWithTimeInterval(retryTime, target: self, selector: #selector(FogMachine.reprocessWork(_:)), userInfo: data, repeats: false)
+                // give peers 50% more time to finish that the current average time. min time to wait is 8 seconds. max time to wait is 5 minutes.
+                let waitTime:Double = min(max((averageTimeToFinish * 0.5) - self.reprocessingScheduleWaitTimeInSeconds, 8), 60*5)
+                var i:Int = 0
+                for node in pendingNodes {
+                    let work:FMWork = self.nodeToWork[sessionUUID]![node]!
+                    
+                    let data:[String:NSObject] =
+                        ["FailedPeerID": node.mcPeerID,
+                         "FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
+                         "SessionID": sessionUUID]
+                    
+                    let retryTime:Double = waitTime + (selfTimeToFinish*Double(i))
+                    self.FMLog("Scheduling reprocess work for node " + node.description + " in: " + String(format: "%.3f", retryTime) + " seconds.")
+                    dispatch_async(dispatch_get_main_queue()) {
+                        NSTimer.scheduledTimerWithTimeInterval(retryTime, target: self, selector: #selector(FogMachine.reprocessWork(_:)), userInfo: data, repeats: false)
+                    }
+                    i += 1
                 }
-                i = i + 1
             }
         }
     }

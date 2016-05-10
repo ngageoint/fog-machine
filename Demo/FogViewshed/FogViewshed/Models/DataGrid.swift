@@ -1,9 +1,9 @@
 import Foundation
 import MapKit
 
-public class ElevationDataGrid {
+public class DataGrid {
     
-    let elevationData: [[Int]]
+    let data: [[Int]]
     
     // this bounding box coveres the entire of the grid
     // When drawing or positioning the data, this information can be used to offset the elevation grid.  It says where the grid is pined to the earth
@@ -11,8 +11,8 @@ public class ElevationDataGrid {
     
     let resolution:Int
     
-    init(elevationData: [[Int]], boundingBoxAreaExtent:AxisOrientedBoundingBox, resolution:Int) {
-        self.elevationData = elevationData
+    init(data: [[Int]], boundingBoxAreaExtent:AxisOrientedBoundingBox, resolution:Int) {
+        self.data = data
         self.boundingBoxAreaExtent = boundingBoxAreaExtent
         self.resolution = resolution
     }

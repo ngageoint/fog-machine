@@ -96,4 +96,22 @@ class GeoUtility {
 
         return R * c
     }
+    
+    // see http://stackoverflow.com/questions/7222382/get-lat-long-given-current-point-distance-and-bearing/7835325#7835325
+    static func haversineDistanceInMeters(lat1:Double, lon1:Double, bearingInDegrees:Double, distanceInMeters:Double) -> (Double,Double) {
+        let bearingInRadians:Double = degreeToRadian(bearingInDegrees)
+        
+        let lat1R:Double = degreeToRadian(lat1)
+        let lon1R:Double = degreeToRadian(lon1)
+        
+        let R:Double = 6371000.0
+        
+        let lat2R:Double = asin( sin(lat1R)*cos(distanceInMeters/R) + cos(lat1R)*sin(distanceInMeters/R)*cos(bearingInRadians))
+        let lon2R:Double = lon1R + atan2(sin(bearingInRadians)*sin(distanceInMeters/R)*cos(lat1R), cos(distanceInMeters/R)-sin(lat1R)*sin(lat2R))
+        
+        let lat2:Double = radianToDegree(lat2R)
+        let lon2:Double = radianToDegree(lon2R)
+        
+        return (lat2,lon2)
+    }
 }
