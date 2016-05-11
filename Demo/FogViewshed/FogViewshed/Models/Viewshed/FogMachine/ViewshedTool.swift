@@ -39,11 +39,11 @@ public class ViewshedTool : FMTool {
         }
         
         // read elevation data
-        NSLog("Start reading in elevation data")
+        viewshedLog("Start reading in elevation data")
         let dataReadTimer:FMTimer = FMTimer()
         dataReadTimer.start()
-        let elevationDataGrid:DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox)
-        NSLog("Read elevation data in " + String(format: "%.3f", dataReadTimer.stop()) + " seconds")
+        let elevationDataGrid:DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox, resolution: Srtm.SRTM3_RESOLUTION)
+        viewshedLog("Read elevation data in " + String(format: "%.3f", dataReadTimer.stop()) + " seconds")
         
         if(viewshedWork.sectorCount == 1) {
             perimeter = RectangularPerimeter(dataGrid: elevationDataGrid)
@@ -52,12 +52,12 @@ public class ViewshedTool : FMTool {
         }
         
         // run viewshed on data
-        NSLog("Start running viewshed")
+        viewshedLog("Start running viewshed")
         let viewshedTimer:FMTimer = FMTimer()
         viewshedTimer.start()
         let franklinRayViewshed:FranklinRayViewshed = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, perimeter: perimeter, observer: viewshedWork.observer)
         let viewshed:[[Int]] = franklinRayViewshed.runViewshed()
-        NSLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
+        viewshedLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
         let viewshedDataGrid:DataGrid = DataGrid(data: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: elevationDataGrid.resolution)
         SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedDataGrid))
@@ -83,6 +83,11 @@ public class ViewshedTool : FMTool {
     
     public override func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
         SwiftEventBus.post("onPeerDisconnect")
+    }
+    
+    public func viewshedLog(format:String) {
+        NSLog(format)
+        self.onLog(format)
     }
     
     public override func onLog(format:String) {

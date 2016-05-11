@@ -31,6 +31,8 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         // inputs
         let elevationGrid: [[Int]] = elevationDataGrid.data
         
+        let resolutionInverse:Double = (1.0/Double(elevationDataGrid.resolution))
+        
         let rowSize:Int =  elevationDataGrid.data.count
         let columnSize:Int = elevationDataGrid.data[0].count
         
@@ -51,11 +53,11 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         
         let oRadius:Double = observer.radiusInMeters
         
-        let latAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().latitude + ((1.0/Double(elevationDataGrid.resolution))*0.5)
-        let lonAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().longitude + ((1.0/Double(elevationDataGrid.resolution))*0.5)
+        let latAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().latitude + (resolutionInverse*0.5)
+        let lonAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().longitude + (resolutionInverse*0.5)
         
-        let olat:Double = (Double(oyi)*(1.0/Double(elevationDataGrid.resolution))) + latAdjust
-        let olon:Double = (Double(oxi)*(1.0/Double(elevationDataGrid.resolution))) + lonAdjust
+        let olat:Double = (Double(oyi)*resolutionInverse) + latAdjust
+        let olon:Double = (Double(oxi)*resolutionInverse) + lonAdjust
         
         // iterate through the cells c of the perimeter. Each c has coordinates (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
         while(perimeter.hasAnotherPerimeterCell()) {
@@ -85,8 +87,8 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 }
                 
                 // get the longitude in the center of the cell:
-                let ylat:Double = (Double(yi)*(1.0/Double(elevationDataGrid.resolution))) + latAdjust
-                let xlon:Double = (Double(xi)*(1.0/Double(elevationDataGrid.resolution))) + lonAdjust
+                let ylat:Double = (Double(yi)*resolutionInverse) + latAdjust
+                let xlon:Double = (Double(xi)*resolutionInverse) + lonAdjust
                 
                 let oppositeInMeters:Double = xyh - oh
                 // FIXME : should this use haversine or vincenty?

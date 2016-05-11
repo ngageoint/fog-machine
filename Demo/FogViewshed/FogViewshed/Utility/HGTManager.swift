@@ -184,12 +184,9 @@ public class HGTManager {
      cell. SRTM1 files contain 3601 lines and 3601 samples, with similar overlap.
      
      */
-    static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox) -> DataGrid {
+    static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox, resolution resolutioni:Int) -> DataGrid {
         
         //SwiftEventBus.post("drawDebugging", sender:axisOrientedBoundingBox.asMKPolygon())
-        
-        // TODO: pass this in
-        let resolutioni:Int = Srtm.SRTM3_RESOLUTION
         let resolutiond:Double = Double(resolutioni)
         
         // this is the size of a cell in degrees

@@ -26,7 +26,6 @@
 		F93F14C71CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */; };
 		F93F14C81CCAE5AC00E35541 /* DataGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B11CCAE5AC00E35541 /* DataGrid.swift */; };
 		F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B41CCAE5AC00E35541 /* HGTFile.swift */; };
-		F93F14CB1CCAE5AC00E35541 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B61CCAE5AC00E35541 /* Cell.swift */; };
 		F93F14CC1CCAE5AC00E35541 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B71CCAE5AC00E35541 /* Observer.swift */; };
 		F93F14CD1CCAE5AC00E35541 /* ObserverEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */; };
 		F93F14CE1CCAE5AC00E35541 /* ObserverFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */; };
@@ -44,10 +43,34 @@
 		F93F14E81CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */; };
 		F93F14EB1CCAE62700E35541 /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */; };
 		F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */; };
+		F98C509E1CE3E86900F35C13 /* N25W081.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE5B1CE3E7E5006FEF82 /* N25W081.hgt */; };
+		F98C509F1CE3E86900F35C13 /* N25W082.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE5C1CE3E7E5006FEF82 /* N25W082.hgt */; };
+		F98C50A01CE3E86900F35C13 /* N26W080.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE5D1CE3E7E5006FEF82 /* N26W080.hgt */; };
+		F98C50A11CE3E86900F35C13 /* N26W081.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE5E1CE3E7E5006FEF82 /* N26W081.hgt */; };
+		F98C50A21CE3E86900F35C13 /* N26W082.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE5F1CE3E7E5006FEF82 /* N26W082.hgt */; };
+		F98C50A31CE3E86900F35C13 /* N32W118.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE601CE3E7E5006FEF82 /* N32W118.hgt */; };
+		F98C50A41CE3E86900F35C13 /* N33W117.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE611CE3E7E5006FEF82 /* N33W117.hgt */; };
+		F98C50A51CE3E86900F35C13 /* N33W118.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE621CE3E7E5006FEF82 /* N33W118.hgt */; };
+		F98C50A61CE3E86900F35C13 /* N33W119.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE631CE3E7E5006FEF82 /* N33W119.hgt */; };
+		F98C50A71CE3E86900F35C13 /* N34W117.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE641CE3E7E5006FEF82 /* N34W117.hgt */; };
+		F98C50A81CE3E86900F35C13 /* N34W118.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE651CE3E7E5006FEF82 /* N34W118.hgt */; };
+		F98C50A91CE3E86900F35C13 /* N34W119.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE661CE3E7E5006FEF82 /* N34W119.hgt */; };
+		F98C50AA1CE3E86900F35C13 /* N34W120.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE671CE3E7E5006FEF82 /* N34W120.hgt */; };
+		F98C50AB1CE3E86900F35C13 /* N36W121.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE681CE3E7E5006FEF82 /* N36W121.hgt */; };
+		F98C50AC1CE3E86900F35C13 /* N37W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE691CE3E7E5006FEF82 /* N37W078.hgt */; };
+		F98C50AD1CE3E86900F35C13 /* N37W122.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE6A1CE3E7E5006FEF82 /* N37W122.hgt */; };
+		F98C50AE1CE3E86900F35C13 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE6B1CE3E7E5006FEF82 /* N37W123.hgt */; };
+		F98C50AF1CE3E86900F35C13 /* N38W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE6C1CE3E7E5006FEF82 /* N38W077.hgt */; };
+		F98C50B01CE3E86900F35C13 /* N38W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE6D1CE3E7E5006FEF82 /* N38W078.hgt */; };
+		F98C50B11CE3E86900F35C13 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE6E1CE3E7E5006FEF82 /* N38W123.hgt */; };
+		F98C50B21CE3E86900F35C13 /* N38W124.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE6F1CE3E7E5006FEF82 /* N38W124.hgt */; };
+		F98C50B31CE3E86900F35C13 /* N39W077.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE701CE3E7E5006FEF82 /* N39W077.hgt */; };
+		F98C50B41CE3E86900F35C13 /* N39W078.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE711CE3E7E5006FEF82 /* N39W078.hgt */; };
+		F98C50B51CE3E86900F35C13 /* N39W105.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE721CE3E7E5006FEF82 /* N39W105.hgt */; };
+		F98C50B61CE3E86900F35C13 /* N39W106.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE731CE3E7E5006FEF82 /* N39W106.hgt */; };
+		F98C50B71CE3E86900F35C13 /* N40W105.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE741CE3E7E5006FEF82 /* N40W105.hgt */; };
+		F98C50B81CE3E86900F35C13 /* N40W106.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F97EFE751CE3E7E5006FEF82 /* N40W106.hgt */; };
 		F99A27C61CE14BBF0040EBC8 /* Sector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99A27C51CE14BBF0040EBC8 /* Sector.swift */; };
-		F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F14991CCAE49500E35541 /* N37W123.hgt */; };
-		F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F149C1CCAE49500E35541 /* N38W123.hgt */; };
-		F9AB382C1CDE9CCA002CDFA3 /* N37W122.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
 		F9F17DF91CE24EDA0007B3F5 /* RectangularPerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F17DF81CE24EDA0007B3F5 /* RectangularPerimeter.swift */; };
 		F9F17DFB1CE250070007B3F5 /* SectorPerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F17DFA1CE250070007B3F5 /* SectorPerimeter.swift */; };
@@ -89,21 +112,10 @@
 		F91E13221CD91C5D00409376 /* ViewshedAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedAlgorithm.swift; sourceTree = "<group>"; };
 		F91E13241CD92BB900409376 /* BoundingBoxUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxUtility.swift; sourceTree = "<group>"; };
 		F91E13261CD931E800409376 /* HGTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTManager.swift; sourceTree = "<group>"; };
-		F93F14991CCAE49500E35541 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W123.hgt; sourceTree = "<group>"; };
-		F93F149A1CCAE49500E35541 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W077.hgt; sourceTree = "<group>"; };
-		F93F149B1CCAE49500E35541 /* N38W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W078.hgt; sourceTree = "<group>"; };
-		F93F149C1CCAE49500E35541 /* N38W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W123.hgt; sourceTree = "<group>"; };
-		F93F149D1CCAE49500E35541 /* N39W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W077.hgt; sourceTree = "<group>"; };
-		F93F149E1CCAE49500E35541 /* N39W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W078.hgt; sourceTree = "<group>"; };
-		F93F149F1CCAE49500E35541 /* N39W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W105.hgt; sourceTree = "<group>"; };
-		F93F14A01CCAE49500E35541 /* N39W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W106.hgt; sourceTree = "<group>"; };
-		F93F14A11CCAE49500E35541 /* N40W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W105.hgt; sourceTree = "<group>"; };
-		F93F14A21CCAE49500E35541 /* N40W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W106.hgt; sourceTree = "<group>"; };
 		F93F14A31CCAE49500E35541 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AxisOrientedBoundingBox.swift; sourceTree = "<group>"; };
 		F93F14B11CCAE5AC00E35541 /* DataGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataGrid.swift; sourceTree = "<group>"; };
 		F93F14B41CCAE5AC00E35541 /* HGTFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTFile.swift; sourceTree = "<group>"; };
-		F93F14B61CCAE5AC00E35541 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		F93F14B71CCAE5AC00E35541 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverEntity.swift; sourceTree = "<group>"; };
 		F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverFacade.swift; sourceTree = "<group>"; };
@@ -121,8 +133,34 @@
 		F93F14E71CCAE61C00E35541 /* BresenhamsLineAlgoritm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BresenhamsLineAlgoritm.swift; sourceTree = "<group>"; };
 		F93F14E91CCAE62700E35541 /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
 		F93F14EA1CCAE62700E35541 /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
+		F97EFE5B1CE3E7E5006FEF82 /* N25W081.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N25W081.hgt; sourceTree = "<group>"; };
+		F97EFE5C1CE3E7E5006FEF82 /* N25W082.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N25W082.hgt; sourceTree = "<group>"; };
+		F97EFE5D1CE3E7E5006FEF82 /* N26W080.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N26W080.hgt; sourceTree = "<group>"; };
+		F97EFE5E1CE3E7E5006FEF82 /* N26W081.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N26W081.hgt; sourceTree = "<group>"; };
+		F97EFE5F1CE3E7E5006FEF82 /* N26W082.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N26W082.hgt; sourceTree = "<group>"; };
+		F97EFE601CE3E7E5006FEF82 /* N32W118.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N32W118.hgt; sourceTree = "<group>"; };
+		F97EFE611CE3E7E5006FEF82 /* N33W117.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N33W117.hgt; sourceTree = "<group>"; };
+		F97EFE621CE3E7E5006FEF82 /* N33W118.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N33W118.hgt; sourceTree = "<group>"; };
+		F97EFE631CE3E7E5006FEF82 /* N33W119.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N33W119.hgt; sourceTree = "<group>"; };
+		F97EFE641CE3E7E5006FEF82 /* N34W117.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N34W117.hgt; sourceTree = "<group>"; };
+		F97EFE651CE3E7E5006FEF82 /* N34W118.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N34W118.hgt; sourceTree = "<group>"; };
+		F97EFE661CE3E7E5006FEF82 /* N34W119.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N34W119.hgt; sourceTree = "<group>"; };
+		F97EFE671CE3E7E5006FEF82 /* N34W120.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N34W120.hgt; sourceTree = "<group>"; };
+		F97EFE681CE3E7E5006FEF82 /* N36W121.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N36W121.hgt; sourceTree = "<group>"; };
+		F97EFE691CE3E7E5006FEF82 /* N37W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W078.hgt; sourceTree = "<group>"; };
+		F97EFE6A1CE3E7E5006FEF82 /* N37W122.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W122.hgt; sourceTree = "<group>"; };
+		F97EFE6B1CE3E7E5006FEF82 /* N37W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W123.hgt; sourceTree = "<group>"; };
+		F97EFE6C1CE3E7E5006FEF82 /* N38W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W077.hgt; sourceTree = "<group>"; };
+		F97EFE6D1CE3E7E5006FEF82 /* N38W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W078.hgt; sourceTree = "<group>"; };
+		F97EFE6E1CE3E7E5006FEF82 /* N38W123.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W123.hgt; sourceTree = "<group>"; };
+		F97EFE6F1CE3E7E5006FEF82 /* N38W124.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N38W124.hgt; sourceTree = "<group>"; };
+		F97EFE701CE3E7E5006FEF82 /* N39W077.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W077.hgt; sourceTree = "<group>"; };
+		F97EFE711CE3E7E5006FEF82 /* N39W078.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W078.hgt; sourceTree = "<group>"; };
+		F97EFE721CE3E7E5006FEF82 /* N39W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W105.hgt; sourceTree = "<group>"; };
+		F97EFE731CE3E7E5006FEF82 /* N39W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N39W106.hgt; sourceTree = "<group>"; };
+		F97EFE741CE3E7E5006FEF82 /* N40W105.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W105.hgt; sourceTree = "<group>"; };
+		F97EFE751CE3E7E5006FEF82 /* N40W106.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N40W106.hgt; sourceTree = "<group>"; };
 		F99A27C51CE14BBF0040EBC8 /* Sector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sector.swift; sourceTree = "<group>"; };
-		F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W122.hgt; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 		F9F17DF81CE24EDA0007B3F5 /* RectangularPerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangularPerimeter.swift; sourceTree = "<group>"; };
 		F9F17DFA1CE250070007B3F5 /* SectorPerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectorPerimeter.swift; sourceTree = "<group>"; };
@@ -259,17 +297,33 @@
 		F93F14981CCAE49500E35541 /* HGT */ = {
 			isa = PBXGroup;
 			children = (
-				F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */,
-				F93F14991CCAE49500E35541 /* N37W123.hgt */,
-				F93F149A1CCAE49500E35541 /* N38W077.hgt */,
-				F93F149B1CCAE49500E35541 /* N38W078.hgt */,
-				F93F149C1CCAE49500E35541 /* N38W123.hgt */,
-				F93F149D1CCAE49500E35541 /* N39W077.hgt */,
-				F93F149E1CCAE49500E35541 /* N39W078.hgt */,
-				F93F149F1CCAE49500E35541 /* N39W105.hgt */,
-				F93F14A01CCAE49500E35541 /* N39W106.hgt */,
-				F93F14A11CCAE49500E35541 /* N40W105.hgt */,
-				F93F14A21CCAE49500E35541 /* N40W106.hgt */,
+				F97EFE5B1CE3E7E5006FEF82 /* N25W081.hgt */,
+				F97EFE5C1CE3E7E5006FEF82 /* N25W082.hgt */,
+				F97EFE5D1CE3E7E5006FEF82 /* N26W080.hgt */,
+				F97EFE5E1CE3E7E5006FEF82 /* N26W081.hgt */,
+				F97EFE5F1CE3E7E5006FEF82 /* N26W082.hgt */,
+				F97EFE601CE3E7E5006FEF82 /* N32W118.hgt */,
+				F97EFE611CE3E7E5006FEF82 /* N33W117.hgt */,
+				F97EFE621CE3E7E5006FEF82 /* N33W118.hgt */,
+				F97EFE631CE3E7E5006FEF82 /* N33W119.hgt */,
+				F97EFE641CE3E7E5006FEF82 /* N34W117.hgt */,
+				F97EFE651CE3E7E5006FEF82 /* N34W118.hgt */,
+				F97EFE661CE3E7E5006FEF82 /* N34W119.hgt */,
+				F97EFE671CE3E7E5006FEF82 /* N34W120.hgt */,
+				F97EFE681CE3E7E5006FEF82 /* N36W121.hgt */,
+				F97EFE691CE3E7E5006FEF82 /* N37W078.hgt */,
+				F97EFE6A1CE3E7E5006FEF82 /* N37W122.hgt */,
+				F97EFE6B1CE3E7E5006FEF82 /* N37W123.hgt */,
+				F97EFE6C1CE3E7E5006FEF82 /* N38W077.hgt */,
+				F97EFE6D1CE3E7E5006FEF82 /* N38W078.hgt */,
+				F97EFE6E1CE3E7E5006FEF82 /* N38W123.hgt */,
+				F97EFE6F1CE3E7E5006FEF82 /* N38W124.hgt */,
+				F97EFE701CE3E7E5006FEF82 /* N39W077.hgt */,
+				F97EFE711CE3E7E5006FEF82 /* N39W078.hgt */,
+				F97EFE721CE3E7E5006FEF82 /* N39W105.hgt */,
+				F97EFE731CE3E7E5006FEF82 /* N39W106.hgt */,
+				F97EFE741CE3E7E5006FEF82 /* N40W105.hgt */,
+				F97EFE751CE3E7E5006FEF82 /* N40W106.hgt */,
 				F93F14A31CCAE49500E35541 /* README.txt */,
 			);
 			name = HGT;
@@ -280,7 +334,6 @@
 			isa = PBXGroup;
 			children = (
 				F93F14B31CCAE5AC00E35541 /* HGT */,
-				F93F14B51CCAE5AC00E35541 /* Map */,
 				F93F14BA1CCAE5AC00E35541 /* Viewshed */,
 				F93F14B01CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift */,
 				F93F14B11CCAE5AC00E35541 /* DataGrid.swift */,
@@ -301,14 +354,6 @@
 				F93F14B41CCAE5AC00E35541 /* HGTFile.swift */,
 			);
 			path = HGT;
-			sourceTree = "<group>";
-		};
-		F93F14B51CCAE5AC00E35541 /* Map */ = {
-			isa = PBXGroup;
-			children = (
-				F93F14B61CCAE5AC00E35541 /* Cell.swift */,
-			);
-			path = Map;
 			sourceTree = "<group>";
 		};
 		F93F14BA1CCAE5AC00E35541 /* Viewshed */ = {
@@ -440,9 +485,33 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9AB382C1CDE9CCA002CDFA3 /* N37W122.hgt in Resources */,
-				F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */,
-				F9AB38291CDAB640002CDFA3 /* N37W123.hgt in Resources */,
+				F98C509E1CE3E86900F35C13 /* N25W081.hgt in Resources */,
+				F98C509F1CE3E86900F35C13 /* N25W082.hgt in Resources */,
+				F98C50A01CE3E86900F35C13 /* N26W080.hgt in Resources */,
+				F98C50A11CE3E86900F35C13 /* N26W081.hgt in Resources */,
+				F98C50A21CE3E86900F35C13 /* N26W082.hgt in Resources */,
+				F98C50A31CE3E86900F35C13 /* N32W118.hgt in Resources */,
+				F98C50A41CE3E86900F35C13 /* N33W117.hgt in Resources */,
+				F98C50A51CE3E86900F35C13 /* N33W118.hgt in Resources */,
+				F98C50A61CE3E86900F35C13 /* N33W119.hgt in Resources */,
+				F98C50A71CE3E86900F35C13 /* N34W117.hgt in Resources */,
+				F98C50A81CE3E86900F35C13 /* N34W118.hgt in Resources */,
+				F98C50A91CE3E86900F35C13 /* N34W119.hgt in Resources */,
+				F98C50AA1CE3E86900F35C13 /* N34W120.hgt in Resources */,
+				F98C50AB1CE3E86900F35C13 /* N36W121.hgt in Resources */,
+				F98C50AC1CE3E86900F35C13 /* N37W078.hgt in Resources */,
+				F98C50AD1CE3E86900F35C13 /* N37W122.hgt in Resources */,
+				F98C50AE1CE3E86900F35C13 /* N37W123.hgt in Resources */,
+				F98C50AF1CE3E86900F35C13 /* N38W077.hgt in Resources */,
+				F98C50B01CE3E86900F35C13 /* N38W078.hgt in Resources */,
+				F98C50B11CE3E86900F35C13 /* N38W123.hgt in Resources */,
+				F98C50B21CE3E86900F35C13 /* N38W124.hgt in Resources */,
+				F98C50B31CE3E86900F35C13 /* N39W077.hgt in Resources */,
+				F98C50B41CE3E86900F35C13 /* N39W078.hgt in Resources */,
+				F98C50B51CE3E86900F35C13 /* N39W105.hgt in Resources */,
+				F98C50B61CE3E86900F35C13 /* N39W106.hgt in Resources */,
+				F98C50B71CE3E86900F35C13 /* N40W105.hgt in Resources */,
+				F98C50B81CE3E86900F35C13 /* N40W106.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
@@ -527,7 +596,6 @@
 				F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */,
 				F93F14DF1CCAE5C400E35541 /* HGTDownloader.swift in Sources */,
 				F9F17DFD1CE2628D0007B3F5 /* Perimeter.swift in Sources */,
-				F93F14CB1CCAE5AC00E35541 /* Cell.swift in Sources */,
 				F93F14E61CCAE61300E35541 /* ActivityIndicator.swift in Sources */,
 				F93F14DE1CCAE5C400E35541 /* GeoUtility.swift in Sources */,
 				F91E13211CD9177E00409376 /* ViewshedViewController.swift in Sources */,

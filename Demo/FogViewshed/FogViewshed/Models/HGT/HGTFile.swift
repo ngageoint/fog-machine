@@ -1,6 +1,12 @@
 import Foundation
 import MapKit
 
+
+/**
+ 
+ Has information concerning an HGT file on the filesystem
+ 
+ */
 class HGTFile: NSObject {
     
     let path:NSURL
