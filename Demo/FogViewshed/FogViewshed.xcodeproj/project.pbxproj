@@ -49,6 +49,9 @@
 		F9AB382A1CDD750C002CDFA3 /* N38W123.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F93F149C1CCAE49500E35541 /* N38W123.hgt */; };
 		F9AB382C1CDE9CCA002CDFA3 /* N37W122.hgt in Resources */ = {isa = PBXBuildFile; fileRef = F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
+		F9F17DF91CE24EDA0007B3F5 /* RectangularPerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F17DF81CE24EDA0007B3F5 /* RectangularPerimeter.swift */; };
+		F9F17DFB1CE250070007B3F5 /* SectorPerimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F17DFA1CE250070007B3F5 /* SectorPerimeter.swift */; };
+		F9F17DFD1CE2628D0007B3F5 /* Perimeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F17DFC1CE2628D0007B3F5 /* Perimeter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +124,9 @@
 		F99A27C51CE14BBF0040EBC8 /* Sector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sector.swift; sourceTree = "<group>"; };
 		F9AB382B1CDE9CB5002CDFA3 /* N37W122.hgt */ = {isa = PBXFileReference; lastKnownFileType = file; path = N37W122.hgt; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
+		F9F17DF81CE24EDA0007B3F5 /* RectangularPerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangularPerimeter.swift; sourceTree = "<group>"; };
+		F9F17DFA1CE250070007B3F5 /* SectorPerimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectorPerimeter.swift; sourceTree = "<group>"; };
+		F9F17DFC1CE2628D0007B3F5 /* Perimeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Perimeter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +288,9 @@
 				F93F14B81CCAE5AC00E35541 /* ObserverEntity.swift */,
 				F93F14B91CCAE5AC00E35541 /* ObserverFacade.swift */,
 				F99A27C51CE14BBF0040EBC8 /* Sector.swift */,
+				F9F17DF81CE24EDA0007B3F5 /* RectangularPerimeter.swift */,
+				F9F17DFA1CE250070007B3F5 /* SectorPerimeter.swift */,
+				F9F17DFC1CE2628D0007B3F5 /* Perimeter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -517,6 +526,7 @@
 				F93F14C71CCAE5AC00E35541 /* AxisOrientedBoundingBox.swift in Sources */,
 				F93F14EC1CCAE62700E35541 /* ViewshedOverlayView.swift in Sources */,
 				F93F14DF1CCAE5C400E35541 /* HGTDownloader.swift in Sources */,
+				F9F17DFD1CE2628D0007B3F5 /* Perimeter.swift in Sources */,
 				F93F14CB1CCAE5AC00E35541 /* Cell.swift in Sources */,
 				F93F14E61CCAE61300E35541 /* ActivityIndicator.swift in Sources */,
 				F93F14DE1CCAE5C400E35541 /* GeoUtility.swift in Sources */,
@@ -532,8 +542,10 @@
 				F91E13201CD9177E00409376 /* SettingsViewController.swift in Sources */,
 				F93F14D01CCAE5AC00E35541 /* ViewshedTool.swift in Sources */,
 				F99A27C61CE14BBF0040EBC8 /* Sector.swift in Sources */,
+				F9F17DFB1CE250070007B3F5 /* SectorPerimeter.swift in Sources */,
 				F93F14CA1CCAE5AC00E35541 /* HGTFile.swift in Sources */,
 				F93F14D11CCAE5AC00E35541 /* ViewshedWork.swift in Sources */,
+				F9F17DF91CE24EDA0007B3F5 /* RectangularPerimeter.swift in Sources */,
 				F91E131F1CD9177E00409376 /* ObserverSettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

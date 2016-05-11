@@ -96,7 +96,7 @@ class ViewshedImageUtility: NSObject {
                 } else if(vxy == Viewshed.OBSERVER) {
                     p = Pixel(alpha: 50, red: 0, green: 0, blue: 0)
                 } else if (vxy == Viewshed.NO_DATA){
-                    p = Pixel(alpha: 50, red: 0, green: 0, blue: 255)
+                    p = Pixel(alpha: 0, red: 0, green: 0, blue: 0)
                 } else {
                     p = Pixel(alpha: 50, red: 255, green: 255, blue: 0)
                 }

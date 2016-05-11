@@ -8,12 +8,12 @@ import MapKit
  FIXME: I would hate to see what some of these methods do when the box spans the 180th meridian....
  
 */
-class AxisOrientedBoundingBox : CustomStringConvertible {
+public class AxisOrientedBoundingBox : NSObject, NSCoding {
     
     private var lowerLeft: CLLocationCoordinate2D
     private var upperRight: CLLocationCoordinate2D
     
-    var description: String{
+    override public var description: String{
         return "(\(getLowerLeft().latitude), \(getLowerLeft().longitude)), (\(getUpperRight().latitude), \(getUpperRight().longitude))"
     }
     
@@ -93,5 +93,23 @@ class AxisOrientedBoundingBox : CustomStringConvertible {
         
         // and make a MKMapRect using mins and spans
         return MKMapRectMake(fmin(p1.x,p2.x), fmin(p1.y,p2.y), fabs(p1.x-p2.x), fabs(p1.y-p2.y))
+    }
+    
+    
+    required public init(coder decoder: NSCoder) {
+        let lowerLeftLat:Double = decoder.decodeObjectForKey("lowerLeftLat") as! Double
+        let lowerLeftLon:Double = decoder.decodeObjectForKey("lowerLeftLon") as! Double
+        let upperRightLat:Double = decoder.decodeObjectForKey("upperRightLat") as! Double
+        let upperRightLon:Double = decoder.decodeObjectForKey("upperRightLon") as! Double
+        
+        self.lowerLeft = CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon)
+        self.upperRight = CLLocationCoordinate2DMake(upperRightLat, upperRightLon)
+    }
+    
+    public func encodeWithCoder(coder: NSCoder) {
+        coder.encodeObject(self.lowerLeft.latitude, forKey: "lowerLeftLat")
+        coder.encodeObject(self.lowerLeft.longitude, forKey: "lowerLeftLon")
+        coder.encodeObject(self.upperRight.latitude, forKey: "upperRightLat")
+        coder.encodeObject(self.upperRight.longitude, forKey: "upperRightLon")
     }
 }

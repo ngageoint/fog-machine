@@ -1,7 +1,7 @@
 import Foundation
 import MapKit
 
-public class DataGrid {
+public class DataGrid : NSObject, NSCoding {
     
     let data: [[Int]]
     
@@ -19,5 +19,17 @@ public class DataGrid {
     
     func latLonToIndex(latLon:CLLocationCoordinate2D) -> (Int, Int) {
         return HGTManager.latLonToIndex(latLon, boundingBox: boundingBoxAreaExtent, resolution: resolution)
+    }
+    
+    required public init(coder decoder: NSCoder) {
+        self.data = decoder.decodeObjectForKey("data") as! [[Int]]
+        self.boundingBoxAreaExtent = decoder.decodeObjectForKey("boundingBoxAreaExtent") as! AxisOrientedBoundingBox
+        self.resolution = decoder.decodeObjectForKey("resolution") as! Int
+    }
+    
+    public func encodeWithCoder(coder: NSCoder) {
+        coder.encodeObject(self.data, forKey: "data")
+        coder.encodeObject(self.boundingBoxAreaExtent, forKey: "boundingBoxAreaExtent")
+        coder.encodeObject(self.resolution, forKey: "resolution")
     }
 }
