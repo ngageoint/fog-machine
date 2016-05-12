@@ -20,11 +20,11 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
     
     /**
  
-     Runs the franklin ray viewshed algorithm
+     Runs the Franklin and Ray's viewshed algorithm
      
      see http://www.cs.rpi.edu/~cutler/publications/andrade_geoinformatica.pdf
     
-     Given a terrain T represented by an n × n elevation matrix M, a point p on T , a radius of interest r, and a height h above the local terrain for the observer and target, this algorithm computes the viewshed of p within a distance r of p.
+     Given a terrain T represented by an n × n elevation matrix M, a point p on T, a radius of interest r, and a height h above the local terrain for the observer and target, this algorithm computes the viewshed of p within a distance r of p.
      
      */
     public func runViewshed() -> [[Int]] {
@@ -37,7 +37,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         let columnSize:Int = elevationDataGrid.data[0].count
         
         let oxiyi:(Int, Int) = elevationDataGrid.latLonToIndex(observer.position)
-        // get the cell that the observer exists in
+        // get the cell the observer exists in
         let oxi:Int = oxiyi.0
         let oyi:Int = oxiyi.1
         var oh:Double = Double(elevationGrid[oyi][oxi]) + observer.elevationInMeters
@@ -80,13 +80,13 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 let xyi:Int = elevationGrid[yi][xi]
                 let xyh:Double = Double(xyi)
                 
-                if(xyi == Srtm.NO_DATA) { // if there is no data at this point, we can not continue the running this line
+                if(xyi == Srtm.NO_DATA) { // if there is no data at this point, we can not continue processing this line
                     break;
                 } else if(xyi == Srtm.DATA_VOID) { // if the elevation data at this point is bad, we don't know if it's visible or not...
                     continue;
                 }
                 
-                // get the longitude in the center of the cell:
+                // get the longitude in the center of the cell
                 let ylat:Double = (Double(yi)*resolutionInverse) + latAdjust
                 let xlon:Double = (Double(xi)*resolutionInverse) + lonAdjust
                 
@@ -94,7 +94,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 // FIXME : should this use haversine or vincenty?
                 let adjacent:Double = GeoUtility.haversineDistanceInMeters(ylat, lon1: xlon, lat2: olat, lon2: olon)
                 
-                // is the cell with in the area of intrest?
+                // is the cell within the area of interest?
                 if(adjacent > oRadius) {
                     // neither visible or non-visible, outisde of the area of interest. Already set to no_data, break the inner loop.
                     break;
@@ -102,7 +102,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                     // find the slope of the line from the current cell to the observer
                     let xymu:Double = oppositeInMeters/adjacent
                     
-                    // If xymu < mu, then this cell is not visible, otherwise, mark the cell is visible
+                    // If xymu < mu, then this cell is not visible, otherwise, mark the cell visible
                     if (xymu < mu) {
                         // not visible
                         viewshed[yi][xi] = Viewshed.NOT_VISIBLE

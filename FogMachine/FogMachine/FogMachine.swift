@@ -4,7 +4,7 @@ import MultipeerConnectivity
 
 /**
  
- This is a singleton! Use it that way
+ FogMachine is a singleton! Please use accordingly.
  
  This is the class your app should interface with.  It will handle all the connection stuff and the distribution of processing in your network.
  
@@ -134,7 +134,7 @@ public class FogMachine {
     }
     
     public func startSearchForPeers() {
-        self.FMLog("searching for peers")
+        self.FMLog("Searching for peers")
         // Service type can contain only ASCII lowercase letters, numbers, and hyphens.
         // It must be a unique string, at most 15 characters long
         // Note: Devices will only connect to other devices with the same serviceType value.
@@ -255,7 +255,7 @@ public class FogMachine {
         // send out all the work
         for (node, work) in nodeToWork[sessionUUID]! {
             if(node != getSelfNode()) {
-                self.FMLog("Sending a work to " + node.description)
+                self.FMLog("Sending work to " + node.description)
                 
                 let data:[String:NSObject] =
                     ["FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
@@ -278,7 +278,7 @@ public class FogMachine {
         dispatch_sync(self.lock) {
             let selfTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.stop())!
             self.FMLog(self.getSelfNode().description + " process work time: " + String(format: "%.3f", selfTimeToFinish) + " seconds.")
-            self.FMLog("Storing self result.")
+            self.FMLog("Storing self work result.")
             self.nodeToResult[sessionUUID]![self.getSelfNode()] = selfResult
             let status = self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
             // schedule the reprocessing stuff

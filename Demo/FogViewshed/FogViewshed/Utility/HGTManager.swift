@@ -69,7 +69,7 @@ public class HGTManager {
      
      Converts a (lat,lon) to an index in the grid.  Used by several classes to map data.
      
-     in the indexed returned, (0,0) is lower left; (resolution, resolution) is upper right
+     In the indexed returned, (0,0) is lower left; (resolution, resolution) is upper right
  
     */
     static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Int) -> (Int, Int) {
@@ -130,13 +130,13 @@ public class HGTManager {
     
     /**
      
-     This is the main method for reading and coalescing the elevation data.  There are several important steps here.
+     This is the main method for reading and coalescing the elevation data.  There are several important steps here:
      
-     1) Expand the bounding box the the gridded space formed by the srtm files at a certain resolution.  This is convenient and imporatnt for a few reasons.  First, it defines the exact area the datum at a certain resolution exists at.  Again, this is the exact map extend in which the AREA data exists at.  Seconds, it makes the algerbra and data processing a little more straightforward.  The bounding box is found using linear interpolation in the lat lon space.  Please note that we are note tied to any projection at this point.  Would it be better to use a smarter interpolation at account for earth curvature as in WGS84?  I don't know.
+     1) Expand the bounding box to the gridded space formed by the srtm files at a certain resolution.  This is convenient and imporatnt for a few reasons.  First, it defines the exact area the datum at a certain resolution exists at.  Again, this is the exact map extent in which the AREA data exists at.  Second, it makes the algerbra and data processing a little more straightforward.  The bounding box is found using linear interpolation in the lat lon space.  Please note that we are note tied to any projection at this point.  Would it be better to use a smarter interpolation at account for earth curvature as in WGS84?  I don't know.
      
      2) Find all of the local hgt files that are covered by the space formed in step 1.  This is fairly straight forward.
      
-     3) Determine the extend of the final elevation matrix.  Some indexing
+     3) Determine the extent of the final elevation matrix.  Some indexing
      
      4) For each file in step 2, find the intersection between it and the bounding box in step 1.
      
@@ -233,7 +233,7 @@ public class HGTManager {
                 let hgtFile:HGTFile? = HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(CLLocationCoordinate2DMake(iLat, iLon), resolution: resolutioni))
                 if(hgtFile != nil) {
                     hgtFilesOfInterest.append(hgtFile!)
-                    NSLog("file of interest: " + hgtFile!.filename)
+                    NSLog("File of interest: " + hgtFile!.filename)
                 }
                 iLon += 1.0
             }
@@ -272,7 +272,7 @@ public class HGTManager {
                 var upperLeftIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())
                 var lowerRightIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
                 
-                // bound the indexees to the boundary of the gridded space
+                // bound the indicies to the boundary of the gridded space
                 upperLeftIndex.1 = min(upperLeftIndex.1, lowerRightIndex.1 + elevationDataHeight - 1)
                 lowerRightIndex.0 = min(lowerRightIndex.0, upperLeftIndex.0 + elevationDataWidth - 1)
                 
@@ -300,7 +300,7 @@ public class HGTManager {
                 numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64(((upperLeftIndex.1 * (hgtFileOfInterest.getResolution() + 1)) + upperLeftIndex.0)*2)
 //                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
                 
-                // the last bytes is the start byte plus the number of columns minus one * the size of each row, plus the legth of the last row
+                // the last bytes are the start byte plus the number of columns minus one * the size of each row, plus the length of the last row
                 let numberOfBytesUntilLastByteToRead:UInt64 = numberOfBytesToStartReadingAt + UInt64(2*((hgtAreaOfInterestHeight - 1)*(hgtFileOfInterest.getResolution() + 1)) + dataRowLengthInBytes)
 //                NSLog("numberOfBytesUntilLastByteToRead \(numberOfBytesUntilLastByteToRead)")
                 

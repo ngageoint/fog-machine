@@ -5,8 +5,8 @@ public class DataGrid : NSObject, NSCoding {
     
     let data: [[Int]]
     
-    // this bounding box coveres the entire of the grid
-    // When drawing or positioning the data, this information can be used to offset the elevation grid.  It says where the grid is pined to the earth
+    // Bounding box covers the entirety of the grid
+    // When drawing or positioning the data, this information can be used to offset the elevation grid.  It says where the grid is pinned to the earth.
     let boundingBoxAreaExtent:AxisOrientedBoundingBox
     
     let resolution:Int

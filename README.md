@@ -4,9 +4,9 @@
 
 Fog Machine is an iOS Swift framework for parallel processing.  Solve hard problems fast with the Fog Machine framework.
 
-The Fog Machine framework is a research and development effort to harness the computing power of multiple, locally connected iOS devices.  By using a mesh-network of mobile devices, parallel processing techniques allows Fog Machine to analyze data and answer complex questions quickly and efficiently.  Parallel processing over mesh networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  The communication relies on a wifi or bluetooth chipset and is built on apple's multipeer connectivity framework.
+The Fog Machine framework is a research and development effort to harness the computing power of multiple, locally connected iOS devices.  By using a mesh-network of mobile devices, parallel processing techniques allows Fog Machine to analyze data and answer complex questions quickly and efficiently.  Parallel processing over mesh-networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  The communication relies on a wifi or bluetooth chipset and is built on Apple's Multipeer Connectivity framework.
 
-There are two demos apps.  The first simple demo app distributes searching for a word in a given text.  The second app calculates the viewshed of a position.  A viewshed is the geographical area that is visible from a location. It includes all surrounding points that are in line-of-sight with that location and excludes points that are beyond the horizon or obstructed by terrain and other features.
+There are two demos apps.  The first simple demo app parallelizes searching for a word in a given text.  The second complex demo app calculates the viewshed of a position.  A viewshed is the geographical area that is visible from a location. It includes all surrounding points in line-of-sight with the location and excludes points that are beyond the horizon or obstructed by terrain and other features.
 
 FogMachine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the Apache license.
 
@@ -22,14 +22,16 @@ pod install
 
 ## Usage
 
-The Fog machine framework provides a simple lifecycle for your app to use.  Just extend FMTool, and start running you task in parallel immediately.
+The Fog Machine framework provides a simple lifecycle for your app to use.  After extending FMTool, you can immediately start running your tasks in parallel.
 
 ```swift
-// what do I need help with?
+// What do I need help with?
 FogMachine.fogMachineInstance.setTool(MyCoolTool())
-// look for friends/devices to help me
+
+// Look for friends/devices to help me
 FogMachine.fogMachineInstance.startSearchForPeers()
-// run MyCoolTool on all the nodes in the network
+
+// Run MyCoolTool on all the nodes in the Fog Machine mesh-network
 FogMachine.fogMachineInstance.execute()
 ```
 

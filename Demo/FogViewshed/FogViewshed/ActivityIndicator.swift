@@ -237,7 +237,7 @@ private extension UIScreen {
 
 private var topMostController: UIViewController? {
     var presentedVC = UIApplication.sharedApplication().keyWindow?.rootViewController
-    while let pVC = presentedVC?.presentedViewController {
+    while let pVC = presentedVC?.presentingViewController {
         presentedVC = pVC
     }
     

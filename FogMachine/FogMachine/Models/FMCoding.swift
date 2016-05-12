@@ -2,7 +2,7 @@ import Foundation
 
 public class FMCoding: NSObject, NSCoding {
     
-    // keep a uuid for possible identification purposes, may not be needed
+    // Keep a uuid for possible identification purposes, may not be needed
     public private(set) var uuid: String = NSUUID().UUIDString
     
     public override init() {

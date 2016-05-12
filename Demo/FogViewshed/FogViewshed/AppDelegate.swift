@@ -47,11 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         try fileManager.removeItemAtPath(inboxFolderPath + "/" + hgtFileName)
                     }
                     catch let error as NSError {
-                        print("Error Deleting the " + hgtFileName + "HGT file after the import: \(error)")
+                        print("Error deleting the " + hgtFileName + " HGT file after the import: \(error)")
                     }
                 }
                 catch let error as NSError {
-                    print("Error! Something went wrong: \(error)")
+                    print("Error: \(error)")
                 }
             } else {
                 // file already exists in the Documents folder
@@ -61,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     try fileManager.removeItemAtPath(inboxFolderPath + "/" + hgtFileName)
                 }
                 catch let error as NSError {
-                    print("Error Deleting the " + hgtFileName + "HGT file after the import: \(error)")
+                    print("Error deleting the " + hgtFileName + " HGT file after the import: \(error)")
                 }
             }
         }

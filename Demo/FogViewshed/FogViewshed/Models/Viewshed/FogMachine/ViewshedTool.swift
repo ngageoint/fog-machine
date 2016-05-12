@@ -66,7 +66,7 @@ public class ViewshedTool : FMTool {
     }
     
     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
-        SwiftEventBus.post("viewShedComplete")
+        SwiftEventBus.post("viewshedComplete")
         
         for (n, result) in nodeToResult {
             let viewshedResult = result as! ViewshedResult

@@ -18,10 +18,11 @@ class ViewshedImageUtility: NSObject {
         let height = elevationGrid.count
         let width = elevationGrid[0].count
 
-        // how tall everest is?  not more than 9000 meters, right?
+        // Reference: https://en.wikipedia.org/wiki/Extreme_points_of_Earth
+        // Tallest point from sea level is <9000 meters (Mount Everest at 8,848m)
         let maxBound = 9000
-        // the elevation of death valley???  prob not less than 100 meters below sea level
-        let minBound = -100
+        // Lowest point on dry land >450 meters (The shore of the Dead Sea at -418m)
+        let minBound = -450
 
 
         var maxElevation = minBound
@@ -45,7 +46,7 @@ class ViewshedImageUtility: NSObject {
                 }
             }
         }
-        // bound them, if ouside range
+        // bound them, if outside range
         maxElevation = min(maxBound, maxElevation)
         minElevation = max(minBound, minElevation)
 

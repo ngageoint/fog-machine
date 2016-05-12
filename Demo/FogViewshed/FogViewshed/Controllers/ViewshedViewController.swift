@@ -30,7 +30,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         mapView.addGestureRecognizer(gesture)
 
         // TODO: What should happen when the viewshed is done?
-        SwiftEventBus.onMainThread(self, name: "viewShedComplete") { result in
+        SwiftEventBus.onMainThread(self, name: "viewshedComplete") { result in
             ActivityIndicator.hide(success: true, animated: true)
         }
         

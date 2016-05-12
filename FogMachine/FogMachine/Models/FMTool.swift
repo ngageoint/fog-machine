@@ -2,7 +2,7 @@ import Foundation
 import MultipeerConnectivity
 
 /**
- Base class for applications that use FogMachine to overwrite.  Has a lifecycle that you should abide by.  You should extend this class and provide implmentations for the following routines:
+ Base class to overwrite for applications using FogMachine.  FMTool has a lifecycle that you should abide by.  You should extend this class and provide implementations for the following routines:
  createWork
  processWork
  mergeResults
@@ -20,7 +20,7 @@ public class FMTool {
     
     /**
      
-     This gets called n times by FogMachine on the initiator node, where n is the number of nodes in the network (including yourself)
+     This gets called n times by FogMachine on the initiator node, where n is the number of nodes in the network (including yourself).
      This function creates the information that will be sent to each node in the network.  As a user of Fog Machine, you must provide an implmentation for this routine!
      
      @param node The node in the network that will process this piece of work
@@ -36,7 +36,7 @@ public class FMTool {
     
     /**
      
-     This funciton will get called with one piece of work that was created in createWork.  Each node will process it's own work, and therefore this funtion will get called once on each device, each call with a different piece of work. (excluding the retry logic)
+     This funciton will get called with one piece of work that was created in createWork.  Each node will process it's own work, and therefore this funtion will get called once on each device, each call with a different piece of work (excluding the retry logic).
      
      @param node The node that is processing this piece of work
      @param work The work to be processed by this node

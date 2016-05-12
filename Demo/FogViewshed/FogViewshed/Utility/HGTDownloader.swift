@@ -32,9 +32,9 @@ public class HGTDownloader: NSObject, NSURLSessionDownloadDelegate {
     public func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
         let response = downloadTask.response as! NSHTTPURLResponse
         let statusCode = response.statusCode
-        // URL not found.. do not proceed.
+        // URL not found, do not proceed
         if (statusCode == 200) {
-            //copy downloaded data to your documents directory with same names as source file
+            //copy downloaded data to your documents directory with same name as source file
             let documentsUrl =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
             let destinationUrl = documentsUrl!.URLByAppendingPathComponent(location.lastPathComponent!)
             let dataFromURL:NSData = NSData(contentsOfURL: location)!
@@ -59,7 +59,7 @@ public class HGTDownloader: NSObject, NSURLSessionDownloadDelegate {
             try fileManager.removeItemAtPath(fileName)
         }
         catch let error as NSError {
-            NSLog("Error deleteing file: " + fileName + ": \(error)")
+            NSLog("Error deleting file: " + fileName + ": \(error)")
         }
     }
 

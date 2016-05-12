@@ -56,7 +56,7 @@ class RectangularPerimeter : Perimeter {
                             cell = (rowSize - 1 - i, 0)
                         } else {
                             i = i - (rowSize - 1)
-                            NSLog("Error! index: \(perimeterCellIndex) is out of bounds")
+                            NSLog("Error: Index \(perimeterCellIndex) is out of bounds")
                         }
                     }
                 }
