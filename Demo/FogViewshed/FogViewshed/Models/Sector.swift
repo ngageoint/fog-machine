@@ -30,18 +30,18 @@ class Sector : CustomStringConvertible {
         return center
     }
 
-    private func angleToBearing(angle:Double) -> Double {
+    private func angleInRadiansToBearingInDegrees(angle:Double) -> Double {
         // convert the angle to a bearing
         return ((90 - GeoUtility.radianToDegree(angle)) + 360)%360
     }
     
     func getStartPosition() -> CLLocationCoordinate2D {
-        let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleToBearing(startAngleInRadans), distanceInMeters: radiusInMeters)
+        let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(startAngleInRadans), distanceInMeters: radiusInMeters)
         return CLLocationCoordinate2DMake(lat,lon)
     }
     
     func getEndPosition() -> CLLocationCoordinate2D {
-        let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleToBearing(endAngleInRadans), distanceInMeters: radiusInMeters)
+        let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(endAngleInRadans), distanceInMeters: radiusInMeters)
         return CLLocationCoordinate2DMake(lat,lon)
     }
     
@@ -66,7 +66,7 @@ class Sector : CustomStringConvertible {
         var angle:Double = 0
         for _ in 0..<4 {
             if(angle <= endAngleInRadans && angle > startAngleInRadans) {
-                let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleToBearing(angle), distanceInMeters: radiusInMeters)
+                let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(angle), distanceInMeters: radiusInMeters)
                 lats.append(lat)
                 lons.append(lon)
             }

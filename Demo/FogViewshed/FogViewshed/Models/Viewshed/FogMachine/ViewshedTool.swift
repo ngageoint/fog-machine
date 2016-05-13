@@ -56,10 +56,9 @@ public class ViewshedTool : FMTool {
         let viewshedTimer:FMTimer = FMTimer()
         viewshedTimer.start()
         let franklinRayViewshed:FranklinRayViewshed = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, perimeter: perimeter, observer: viewshedWork.observer)
-        let viewshed:[[Int]] = franklinRayViewshed.runViewshed()
+        let viewshedDataGrid:DataGrid = franklinRayViewshed.runViewshed()
         viewshedLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
-        let viewshedDataGrid:DataGrid = DataGrid(data: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: elevationDataGrid.resolution)
         SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedDataGrid))
         
         return ViewshedResult(dataGrid: viewshedDataGrid)

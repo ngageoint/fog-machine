@@ -18,7 +18,7 @@ class SectorPerimeter : RectangularPerimeter {
         
         // remember that the sector angles are measured counter-clockwise, and the perimeter is given as clockwise from lower left
         
-        // IMPORTANT: we can only assume that the start and end positions will intersect the edge of the boundingbox when the angle of the sector is <= 180 degrees.  example of non-intersection: startangle = 0 degrees, endangle = 315 degrees.
+        // IMPORTANT: we can only assume that the start and end positions will intersect the edge of the boundingbox when the angle of the sector is <= 180 degrees.  example of non-intersection: startangle = 0 degrees, endangle = 315 degrees.  The nature of sectioning a cirlce equal parts does not allow for these tpyes of situations.  (The case where there is one device, where a sector is a circle, is taken care of by different means)
         let startXY:(Int,Int) = dataGrid.latLonToIndex(sector.getEndPosition())
         self.perimeterCellIndex = XYToIndex(startXY)
         self.startIndex = Int(perimeterCellIndex)

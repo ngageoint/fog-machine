@@ -27,7 +27,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
      Given a terrain T represented by an n × n elevation matrix M, a point p on T, a radius of interest r, and a height h above the local terrain for the observer and target, this algorithm computes the viewshed of p within a distance r of p.
      
      */
-    public func runViewshed() -> [[Int]] {
+    public func runViewshed() -> DataGrid {
         // inputs
         let elevationGrid: [[Int]] = elevationDataGrid.data
         
@@ -115,6 +115,6 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
             }
         }
         
-        return viewshed
+        return DataGrid(data: viewshed, boundingBoxAreaExtent: elevationDataGrid.boundingBoxAreaExtent, resolution: elevationDataGrid.resolution)
     }
 }
