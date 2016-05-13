@@ -11,6 +11,10 @@ public class ViewshedTool : FMTool {
         super.init()
     }
     
+    public override func id() -> NSUUID {
+        return NSUUID(UUIDString: "0674E6D5-239C-4376-9836-D12F18A277D3")!
+    }
+    
     public override func name() -> String {
         return "Viewshed Tool with " + createWorkViewshedAlgorithmName!.rawValue + " algorithm for observer at (\(createWorkViewshedObserver!.position.latitude), \(createWorkViewshedObserver!.position.longitude))"
     }

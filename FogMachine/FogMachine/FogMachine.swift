@@ -21,6 +21,7 @@ public class FogMachine {
     private var fmTool: FMTool = FMTool()
     
     // event names to be used with PeerKit
+    // this event name will be concatenated with the tool id.  This makes sure peers only offer help for the same tools
     private let sendWorkEvent: String = "sendWorkEvent"
     // this event name will be concatenated with the session id to allow execute of mulitple session at once
     private let sendResultEvent: String = "sendResultEvent"
@@ -68,7 +69,7 @@ public class FogMachine {
         }
         
         // when a work request comes over the air, have the tool process the work
-        PeerKit.eventBlocks[self.sendWorkEvent] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
+        PeerKit.eventBlocks[self.sendWorkEvent + fmTool.id().UUIDString] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
             // run on background thread
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
                 let selfNode:FMNode = self.getSelfNode()
@@ -133,6 +134,8 @@ public class FogMachine {
         return nodes
     }
     
+    
+    // TODO, should this be 'tool' dependant?  Only look for peers with the same tool set?
     public func startSearchForPeers() {
         self.FMLog("Searching for peers")
         // Service type can contain only ASCII lowercase letters, numbers, and hyphens.
@@ -263,7 +266,7 @@ public class FogMachine {
                 dispatch_sync(self.lock) {
                     self.nodeToRoundTripTimer[sessionUUID]![node]?.start()
                 }
-                PeerKit.sendEvent(self.sendWorkEvent, object: NSKeyedArchiver.archivedDataWithRootObject(data), toPeers: [node.mcPeerID])
+                PeerKit.sendEvent(self.sendWorkEvent + fmTool.id().UUIDString, object: NSKeyedArchiver.archivedDataWithRootObject(data), toPeers: [node.mcPeerID])
             }
         }
         
