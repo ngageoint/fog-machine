@@ -179,8 +179,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         if overlay is MKPolygon {
             polygonView = MKPolygonRenderer(overlay: overlay)
             polygonView!.lineWidth = 0.5
-            // FIXME : if fill color is set, the viewsheds combine with the yellow tint and look like crap.  We should look at the compositing of the views/images to fix this.
-            //polygonView!.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.08)
+            polygonView!.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.08)
             polygonView!.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.6)
         } else if overlay is ViewshedOverlay {
             let imageToUse = (overlay as! ViewshedOverlay).image
