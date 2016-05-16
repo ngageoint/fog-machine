@@ -101,6 +101,7 @@ public class FogMachine {
                 
                 // send the result back to the session
                 PeerKit.sendEvent(self.sendResultEvent + sessionUUID, object: NSKeyedArchiver.archivedDataWithRootObject(dataToSend), toPeers: [fromPeerID])
+                self.FMLog("Sent result.")
             }
         }
     }

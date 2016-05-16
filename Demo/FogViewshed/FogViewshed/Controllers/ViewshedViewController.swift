@@ -39,12 +39,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             let format:String = result.object as! String
             self.ViewshedLog(format)
         }
-        
-        // for debugging only
-        SwiftEventBus.onMainThread(self, name: "drawDebugging") { result in
-            let polygon:MKPolygon = result.object as! MKPolygon
-            self.mapView.addOverlay(polygon)
-        }
 
         // for debugging only
         SwiftEventBus.onMainThread(self, name: "drawViewshed") { result in
@@ -163,11 +157,20 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     func addAnnotationGesture(gestureRecognizer: UIGestureRecognizer) {
         if (gestureRecognizer.state == UIGestureRecognizerState.Began) {
-            let newObserver = Observer()
-            newObserver.name = "Observer \(model.getObservers().count + 1)"
-            newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
-            model.add(newObserver)
-            drawPin(newObserver)
+            if(HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView), resolution: Srtm.SRTM3_RESOLUTION)) != nil) {
+                let newObserver = Observer()
+                newObserver.name = "Observer \(model.getObservers().count + 1)"
+                newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
+                model.add(newObserver)
+                drawPin(newObserver)
+            } else {
+                var style = ToastStyle()
+                style.messageColor = UIColor.redColor()
+                style.backgroundColor = UIColor.whiteColor()
+                style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
+                self.view.makeToast("No elevation data here.  Go downloading some.", duration: 1.5, position: .Center, style: style)
+                return
+            }
         }
     }
 

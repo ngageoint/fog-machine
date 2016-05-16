@@ -63,21 +63,21 @@ public class ViewshedTool : FMTool {
         let viewshedDataGrid:DataGrid = franklinRayViewshed.runViewshed()
         viewshedLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
-        SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedDataGrid))
+        // if this is not me
+        if(node != fromNode) {
+            SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedDataGrid))
+        }
         
         return ViewshedResult(dataGrid: viewshedDataGrid)
     }
     
     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
-        SwiftEventBus.post("viewshedComplete")
-        
         for (n, result) in nodeToResult {
             let viewshedResult = result as! ViewshedResult
-            NSLog("Received result from node " + node.description)
-            if(n != node) {
-                SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
-            }
+            NSLog("Received result from node " + n.description)
+            SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
         }
+        SwiftEventBus.post("viewshedComplete")
     }
     
     public override func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {

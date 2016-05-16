@@ -186,7 +186,6 @@ public class HGTManager {
      */
     static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox, resolution resolutioni:Int) -> DataGrid {
         
-        //SwiftEventBus.post("drawDebugging", sender:axisOrientedBoundingBox.asMKPolygon())
         let resolutiond:Double = Double(resolutioni)
         
         // this is the size of a cell in degrees
@@ -215,8 +214,6 @@ public class HGTManager {
         
         // this is the bounding box, expanded and snapped to the grid
         let griddedAxisOrientedBoundingBox:AxisOrientedBoundingBox = AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLatCellGrided, llLonCellGrided), upperRight: CLLocationCoordinate2DMake(urLatCellGrided, urLonCellGrided))
-        
-        //SwiftEventBus.post("drawDebugging", sender:griddedAxisOrientedBoundingBox.asMKPolygon())
         
         // get hgt files of interest
         var hgtFilesOfInterest:[HGTFile] = [HGTFile]()
@@ -265,8 +262,6 @@ public class HGTManager {
                 let hgtAreaOfInterest:AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
                 
                 NSLog("hgtAreaOfInterest: " + hgtAreaOfInterest.description)
-                
-                SwiftEventBus.post("drawDebugging", sender:hgtAreaOfInterest.asMKPolygon())
                 
                 // we need to read data from the upper left of the intersection to the lower right of the intersection
                 var upperLeftIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())

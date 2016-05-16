@@ -25,7 +25,7 @@ class SectorPerimeter : RectangularPerimeter {
         
         let endXY:(Int,Int) = dataGrid.latLonToIndex(sector.getStartPosition())
         endIndex = XYToIndex(endXY)
-        endIndex = (endIndex+1)%perimeterSize
+        //endIndex = (endIndex+1)%perimeterSize
         
         self.sectorSizeCount = endIndex - startIndex
         if(self.startIndex > self.endIndex) {
