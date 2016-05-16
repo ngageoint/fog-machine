@@ -7,12 +7,8 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var gpsButton: UIButton!
     
-    var hgtCoordinate:CLLocationCoordinate2D!
-    var pickerData: [String] = [String]()
-    var hgtFilename:String = String()
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
-    let zoomLevelDegrees:Double = 5
     let arrowPressedImg = UIImage(named: "ArrowPressed")! as UIImage
     let arrowImg = UIImage(named: "Arrow")! as UIImage
     
@@ -24,11 +20,9 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         self.tableView.dataSource = self
         self.mapView.delegate = self
         
-//        let lpgr = UILongPressGestureRecognizer(target: self, action:#selector(DataViewController.handleLongPress(_:)))
-//        lpgr.minimumPressDuration = 0.5
-//        lpgr.delaysTouchesBegan = true
-//        lpgr.delegate = self
-//        self.mapView.addGestureRecognizer(lpgr)
+        let onPressGesture = UILongPressGestureRecognizer(target: self, action:#selector(DataViewController.onPress(_:)))
+        onPressGesture.minimumPressDuration = 0.15
+        mapView.addGestureRecognizer(onPressGesture)
         
         if (self.locationManager == nil) {
             self.locationManager = CLLocationManager()
@@ -43,11 +37,11 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
             self.mapView.tintColor = UIColor.blueColor()
         }
         gpsButton.setImage(arrowPressedImg, forState: UIControlState.Normal)
+        redraw()
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        // redraw
     }
     
     override func didReceiveMemoryWarning() {
@@ -89,27 +83,36 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         }
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if (self.isInitialAuthorizationCheck) {
-            //self.pinDownloadeAnnotation(locations.last!)
-            let title = "Download Current Location?"
-            self.pinAnnotation(title, coordinate: locations.last!.coordinate)
-            self.locationManager.stopUpdatingLocation()
-        }
-    }
-    
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error: " + error.localizedDescription)
     }
    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let dataCell = tableView.dequeueReusableCellWithIdentifier("dataCell", forIndexPath: indexPath)
-        dataCell.textLabel!.text = self.pickerData[indexPath.row]
+        dataCell.textLabel!.text = HGTManager.getLocalHGTFiles()[indexPath.row].filename
         return dataCell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.pickerData.count
+        return HGTManager.getLocalHGTFiles().count
+    }
+    
+    func drawDataRegions() {
+        var dataRegionOverlays = [MKOverlay]()
+        for overlay in mapView.overlays {
+            if overlay is MKPolygon {
+                dataRegionOverlays.append(overlay)
+            }
+        }
+        mapView.removeOverlays(dataRegionOverlays)
+        
+        for hgtFile in HGTManager.getLocalHGTFiles() {
+            self.mapView.addOverlay(hgtFile.getBoundingBox().asMKPolygon())
+        }
+    }
+    
+    func redraw() {
+        drawDataRegions()
     }
     
     func refresh() {
@@ -146,12 +149,6 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
             return polygonView
         }
         return defaultOverlay
-    }
-    
-    
-    func removeAllFromMap() {
-        self.mapView.removeAnnotations(mapView.annotations)
-        self.mapView.removeOverlays(mapView.overlays)
     }
 
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
@@ -207,31 +204,34 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         return view
     }
     
-    func initiateDownload(annotationView view: MKAnnotationView, tableCellItem2Add: String, hgtFileName: String) {
-        // check if the data already downloaded and exists in the table..
-        // don't download if its there already
-        if (pickerData.contains(tableCellItem2Add)) {
-            let alertController = UIAlertController(title: hgtFileName, message: "File Already Exists.", preferredStyle: .Alert)
-            let ok = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
-            })
-            alertController.addAction(ok)
-            presentViewController(alertController, animated: true, completion: nil)
-        } else{
-            ActivityIndicator.show("Downloading")
-            let hgtDownloader:HGTDownloader = HGTDownloader(onDownload: { path in
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    () -> Void in
-                    ActivityIndicator.hide(success: true, animated: true)
-                    self.mapView.removeAnnotations(self.mapView.annotations)
-                    self.refresh()
-                }
-                
-                }, onError: { filename in
-                    ActivityIndicator.hide(success: false, animated: true, errorMsg: "Could not retrive file")
-            })
-            hgtDownloader.downloadFile(hgtFileName)
+    func initiateDelete(hgtFileName: String?) {
+        let alertController = UIAlertController(title: "Delete file?", message: "", preferredStyle: .Alert)
+        let ok = UIAlertAction(title: "OK", style: .Default, handler: {
+            (action) -> Void in
+            //self.deleteFile(hgtFileName)
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) {
+            (action) -> Void in
         }
+        alertController.addAction(ok)
+        alertController.addAction(cancel)
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func initiateDownload(filename: String) {
+        ActivityIndicator.show("Downloading")
+        let hgtDownloader:HGTDownloader = HGTDownloader(onDownload: { path in
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                () -> Void in
+                ActivityIndicator.hide(success: true, animated: true)
+                self.refresh()
+            }
+            
+            }, onError: { filename in
+                ActivityIndicator.hide(success: false, animated: true, errorMsg: "Could not retrive file")
+        })
+        hgtDownloader.downloadFile(filename)
     }
     
     func didFailToReceieveResponse(error: String) {
@@ -239,47 +239,25 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         print("\(error)")
     }
     
-//    func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
-//        if gestureRecognizer.state == UIGestureRecognizerState.Began {
-//            gestureRecognizerStateBegan(gestureRecognizer)
-//        }
-//    }
-    
-//    func gestureRecognizerStateBegan(gestureRecognizer: UILongPressGestureRecognizer) {
-//        let touchLocation:CGPoint = gestureRecognizer.locationInView(mapView)
-//        self.mapView.removeAnnotations(mapView.annotations)
-//        let locationCoordinate = mapView.convertPoint(touchLocation,toCoordinateFromView: mapView)
-//        let tempHgt = Hgt(coordinate: locationCoordinate)
-//        
-//        if tempHgt.hasHgtFileInDocuments() {
-//            let title = "Delete \(tempHgt.filenameWithExtension) File?"
-//            pinAnnotation(title, coordinate:locationCoordinate)
-//        } else if (!getHgtRegion(tempHgt.filenameWithExtension).isEmpty) {
-//            let title = "Download Tile?"
-//            pinAnnotation(title, subtitle: tempHgt.filenameWithExtension, coordinate:locationCoordinate)
-//        } else {
-//            var style = ToastStyle()
-//            style.messageColor = UIColor.redColor()
-//            style.backgroundColor = UIColor.whiteColor()
-//            style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
-//            self.view.makeToast("Data unavailable for this location", duration: 1.5, position: .Center, style: style)
-//        }
-//    }
-    
-    
-    func initiateDelete(hgtFileName: String?) {
-        let alertController = UIAlertController(title: "Delete selected data File?", message: "", preferredStyle: .Alert)
-        let ok = UIAlertAction(title: "OK", style: .Default, handler: {
-            (action) -> Void in
-            //self.deleteFile(hgtFileName)
-        })
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel) {
-            (action) -> Void in
-            print("Delete cancelled!")
+    func onPress(gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
+
+            let filename:String = HGTFile.coordinateToFilename(mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView), resolution: Srtm.SRTM3_RESOLUTION)
+            if let hgtFile = HGTManager.getLocalHGTFileByName(filename) {
+                pinAnnotation("Delete " + hgtFile.filename + "?", coordinate:hgtFile.getBoundingBox().getCentroid())
+            } else {
+                let srtmDataRegion:String = HGTRegions().getRegion(filename)
+                if (srtmDataRegion.isEmpty == false) {
+                    pinAnnotation("Download elevation data?", subtitle: filename, coordinate:mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView))
+                } else {
+                    var style = ToastStyle()
+                    style.messageColor = UIColor.redColor()
+                    style.backgroundColor = UIColor.whiteColor()
+                    style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
+                    self.view.makeToast("No data available here.", duration: 1.5, position: .Center, style: style)
+                }
+            }
         }
-        alertController.addAction(ok)
-        alertController.addAction(cancel)
-        presentViewController(alertController, animated: true, completion: nil)
     }
 }
 

@@ -25,9 +25,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
         self.tabBarController!.delegate = self
         mapView.delegate = self
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(ViewshedViewController.addAnnotationGesture(_:)))
-        gesture.minimumPressDuration = 1.0
-        mapView.addGestureRecognizer(gesture)
+        let onLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ViewshedViewController.onLongPress(_:)))
+        onLongPressGesture.minimumPressDuration = 1.0
+        mapView.addGestureRecognizer(onLongPressGesture)
 
         // TODO: What should happen when the viewshed is done?
         SwiftEventBus.onMainThread(self, name: "viewshedComplete") { result in
@@ -80,7 +80,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-
         if (self.isInitialAuthorizationCheck) {
             let location = locations.last
             let center = CLLocationCoordinate2D(latitude: location!.coordinate.latitude, longitude: location!.coordinate.longitude)
@@ -123,9 +122,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-
-    // MARK: Display Stuff
-
     func drawObservers() {
         mapView.removeAnnotations(mapView.annotations)
         
@@ -154,8 +150,14 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         dropPin.title = observer.name
         mapView.addAnnotation(dropPin)
     }
+    
+    
+    func redraw() {
+        drawObservers()
+        drawDataRegions()
+    }
 
-    func addAnnotationGesture(gestureRecognizer: UIGestureRecognizer) {
+    func onLongPress(gestureRecognizer: UIGestureRecognizer) {
         if (gestureRecognizer.state == UIGestureRecognizerState.Began) {
             if(HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView), resolution: Srtm.SRTM3_RESOLUTION)) != nil) {
                 let newObserver = Observer()
@@ -274,11 +276,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         return foundObserver
     }
 
-    func redraw() {
-        drawObservers()
-        drawDataRegions()
-    }
-
 
     // MARK: Viewshed
 
@@ -348,7 +345,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
 
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
-        redraw()
         self.initiateFogViewshed(self.settingsObserver)
     }
 

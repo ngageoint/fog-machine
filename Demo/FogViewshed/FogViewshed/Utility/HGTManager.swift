@@ -58,11 +58,26 @@ public class HGTManager {
     }
     
     static func getLocalHGTFiles() -> [HGTFile] {
-        return Array(getLocalHGTFileMap().values)
+        var files:[HGTFile] = Array(getLocalHGTFileMap().values)
+        
+        files.sortInPlace { (obj1, obj2) -> Bool in
+            return obj1.filename < obj2.filename
+        }
+        return files
     }
     
     static func getLocalHGTFileByName(filename:String) -> HGTFile? {
         return getLocalHGTFileMap()[filename]
+    }
+    
+    static func deleteFile(hgtFile: HGTFile) {
+        if NSFileManager.defaultManager().fileExistsAtPath(hgtFile.path.absoluteString) {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(hgtFile.path.absoluteString)
+            } catch let error as NSError  {
+                print("Error occurred during file delete : \(error.localizedDescription)")
+            }
+        }
     }
 
     /**

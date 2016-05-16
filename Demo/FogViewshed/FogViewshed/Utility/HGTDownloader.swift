@@ -16,8 +16,7 @@ public class HGTDownloader: NSObject, NSURLSessionDownloadDelegate {
     }
     
     func downloadFile(hgtFileName: String) {
-        let srtmDataRegion = HGTRegions.filePrefixToRegion[hgtFileName]!
-        
+        let srtmDataRegion:String = HGTRegions().getRegion(hgtFileName)
         if (srtmDataRegion.isEmpty == false) {
             let hgtFilePath: String = HGTDownloader.DOWNLOAD_SERVER + srtmDataRegion + "/" + hgtFileName + ".zip"
             let hgtURL = NSURL(string: hgtFilePath)
