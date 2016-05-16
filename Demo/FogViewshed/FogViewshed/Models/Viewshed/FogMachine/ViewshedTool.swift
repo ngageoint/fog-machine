@@ -11,8 +11,8 @@ public class ViewshedTool : FMTool {
         super.init()
     }
     
-    public override func id() -> NSUUID {
-        return NSUUID(UUIDString: "0674E6D5-239C-4376-9836-D12F18A277D3")!
+    public override func id() -> UInt32 {
+        return 4230345579
     }
     
     public override func name() -> String {

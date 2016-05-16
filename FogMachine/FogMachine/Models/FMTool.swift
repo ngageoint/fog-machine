@@ -19,8 +19,8 @@ public class FMTool {
      This should return a unique identified for this tool!  It should be consistent.
  
      */
-    public func id() -> NSUUID {
-        return NSUUID(UUIDString: "76030804-8007-45DA-BD22-7C9A3B59A90A")!
+    public func id() -> UInt32 {
+        return 4229232399
     }
     
     public func name() -> String {

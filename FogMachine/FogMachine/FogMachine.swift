@@ -69,7 +69,7 @@ public class FogMachine {
         }
         
         // when a work request comes over the air, have the tool process the work
-        PeerKit.eventBlocks[self.sendWorkEvent + fmTool.id().UUIDString] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
+        PeerKit.eventBlocks[self.sendWorkEvent + String(fmTool.id())] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
             // run on background thread
             dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
                 let selfNode:FMNode = self.getSelfNode()
@@ -134,14 +134,13 @@ public class FogMachine {
         return nodes
     }
     
-    
     // TODO, should this be 'tool' dependant?  Only look for peers with the same tool set?
     public func startSearchForPeers() {
-        self.FMLog("Searching for peers")
         // Service type can contain only ASCII lowercase letters, numbers, and hyphens.
         // It must be a unique string, at most 15 characters long
         // Note: Devices will only connect to other devices with the same serviceType value.
-        let SERVICE_TYPE = "fog-machine"
+        let SERVICE_TYPE = "FM" + String(fmTool.id())
+        self.FMLog("Searching for peers with service type " + SERVICE_TYPE)
         transceiver.startTransceiving(serviceType: SERVICE_TYPE)
     }
     
@@ -266,7 +265,7 @@ public class FogMachine {
                 dispatch_sync(self.lock) {
                     self.nodeToRoundTripTimer[sessionUUID]![node]?.start()
                 }
-                PeerKit.sendEvent(self.sendWorkEvent + fmTool.id().UUIDString, object: NSKeyedArchiver.archivedDataWithRootObject(data), toPeers: [node.mcPeerID])
+                PeerKit.sendEvent(self.sendWorkEvent + String(fmTool.id()), object: NSKeyedArchiver.archivedDataWithRootObject(data), toPeers: [node.mcPeerID])
             }
         }
         
