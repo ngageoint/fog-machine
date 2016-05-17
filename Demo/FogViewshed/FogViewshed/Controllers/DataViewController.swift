@@ -88,14 +88,23 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     }
    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let dataCell = tableView.dequeueReusableCellWithIdentifier("dataCell", forIndexPath: indexPath)
+        let dataCell:UITableViewCell = tableView.dequeueReusableCellWithIdentifier("dataCell", forIndexPath: indexPath)
         dataCell.textLabel!.text = HGTManager.getLocalHGTFiles()[indexPath.row].filename
+        dataCell.tag = indexPath.row
         return dataCell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return HGTManager.getLocalHGTFiles().count
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let currentCell = tableView.cellForRowAtIndexPath(indexPath)! as UITableViewCell
+        
+        let hgtFile:HGTFile = HGTManager.getLocalHGTFiles()[currentCell.tag]
+        pinAnnotation("Delete " + hgtFile.filename + "?", coordinate:hgtFile.getBoundingBox().getCentroid())
+    }
+    
     
     func drawDataRegions() {
         var dataRegionOverlays = [MKOverlay]()
@@ -112,10 +121,12 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     }
     
     func redraw() {
+        self.mapView.removeAnnotations(mapView.annotations)
         drawDataRegions()
     }
     
     func refresh() {
+        redraw()
         self.tableView?.reloadData()
     }
     
@@ -123,10 +134,8 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         // remove all the annotations on the map
         self.mapView.removeAnnotations(mapView.annotations)
         
-        // Get the span that the mapView is set to by the user.
-        let span = self.mapView.region.span
         // Now setup the region based on the lat/lon and retain the span that already exists.
-        let region = MKCoordinateRegion(center: coordinate, span: span)
+        let region = MKCoordinateRegion(center: coordinate, span: self.mapView.region.span)
         //Center the view with some animation.
         self.mapView.setRegion(region, animated: true)
         
@@ -180,6 +189,19 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         return view
     }
     
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let annotation = view.annotation!
+        let filename:String = HGTFile.coordinateToFilename(annotation.coordinate, resolution: Srtm.SRTM3_RESOLUTION)
+        
+        if view.reuseIdentifier == "downloadFile" {
+            self.initiateDownload(filename)
+        } else if view.reuseIdentifier == "deleteFile" {
+            if let hgtFile = HGTManager.getLocalHGTFileByName(filename) {
+                self.initiateDelete(hgtFile)
+            }
+        }
+    }
+    
     func mapViewCalloutAccessoryAction(calloutAction: String, annotation: MKAnnotation, identifier: String)-> MKAnnotationView? {
         var view : MKAnnotationView! = nil
         view = self.mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
@@ -187,28 +209,21 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view.canShowCallout = true
             view.calloutOffset = CGPoint(x: -5, y: 5)
-            //view!.animatesDrop = true
             
             let image = UIImage(named:calloutAction)
             let button = UIButton(type: UIButtonType.DetailDisclosure)
             button.setImage(image, forState: UIControlState.Normal)
             view!.leftCalloutAccessoryView = button as UIView
-            
-            // if the annotation title contains Download, allow drag option
-            if (calloutAction.containsString("Download")) {
-                view.draggable = true
-            } else {
-                view.draggable = false
-            }
         }
         return view
     }
     
-    func initiateDelete(hgtFileName: String?) {
-        let alertController = UIAlertController(title: "Delete file?", message: "", preferredStyle: .Alert)
+    func initiateDelete(hgtfile: HGTFile) {
+        let alertController = UIAlertController(title: "Delete " + hgtfile.filename + "?", message: "", preferredStyle: .Alert)
         let ok = UIAlertAction(title: "OK", style: .Default, handler: {
             (action) -> Void in
-            //self.deleteFile(hgtFileName)
+            HGTManager.deleteFile(hgtfile)
+            self.refresh()
         })
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel) {
             (action) -> Void in
@@ -219,7 +234,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     }
     
     func initiateDownload(filename: String) {
-        ActivityIndicator.show("Downloading")
+        ActivityIndicator.show("Downloading " + filename)
         let hgtDownloader:HGTDownloader = HGTDownloader(onDownload: { path in
             
             dispatch_async(dispatch_get_main_queue()) {

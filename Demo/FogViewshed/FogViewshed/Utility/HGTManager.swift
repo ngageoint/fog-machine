@@ -71,9 +71,9 @@ public class HGTManager {
     }
     
     static func deleteFile(hgtFile: HGTFile) {
-        if NSFileManager.defaultManager().fileExistsAtPath(hgtFile.path.absoluteString) {
+        if NSFileManager.defaultManager().fileExistsAtPath(hgtFile.path.relativePath!) {
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(hgtFile.path.absoluteString)
+                try NSFileManager.defaultManager().removeItemAtPath(hgtFile.path.relativePath!)
             } catch let error as NSError  {
                 print("Error occurred during file delete : \(error.localizedDescription)")
             }

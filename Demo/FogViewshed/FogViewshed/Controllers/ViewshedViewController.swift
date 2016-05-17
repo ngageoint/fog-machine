@@ -26,7 +26,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         self.tabBarController!.delegate = self
         mapView.delegate = self
         let onLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ViewshedViewController.onLongPress(_:)))
-        onLongPressGesture.minimumPressDuration = 1.0
+        onLongPressGesture.minimumPressDuration = 0.15
         mapView.addGestureRecognizer(onLongPressGesture)
 
         // TODO: What should happen when the viewshed is done?
