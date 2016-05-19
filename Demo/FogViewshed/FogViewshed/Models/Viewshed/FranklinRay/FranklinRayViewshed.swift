@@ -51,13 +51,21 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         var viewshed:[[Int]] = [[Int]](count:rowSize, repeatedValue:[Int](count:columnSize, repeatedValue:Viewshed.NO_DATA))
         viewshed[oyi][oxi] = Viewshed.OBSERVER
         
+        
+        // vars
         let oRadius:Double = observer.radiusInMeters
         
         let latAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().latitude + (resolutionInverse*0.5)
         let lonAdjust:Double = elevationDataGrid.boundingBoxAreaExtent.getLowerLeft().longitude + (resolutionInverse*0.5)
         
+        // at the center of the cell
         let olat:Double = (Double(oyi)*resolutionInverse) + latAdjust
         let olon:Double = (Double(oxi)*resolutionInverse) + lonAdjust
+        
+        let radiusOfEarth:Double = GeoUtility.earthRadiusAtLat(olat)
+        let radiusOfEarthSquared:Double = pow(radiusOfEarth, 2)
+        
+        let euclideanDistanceToHorizonInMeters:Double = sqrt(pow(radiusOfEarth + oh,2) - radiusOfEarthSquared)
         
         // iterate through the cells c of the perimeter. Each c has coordinates (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
         while(perimeter.hasAnotherPerimeterCell()) {
@@ -91,19 +99,29 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 let xlon:Double = (Double(xi)*resolutionInverse) + lonAdjust
                 
                 let oppositeInMeters:Double = xyh - oh
-                // FIXME : should this use haversine or vincenty?
-                let adjacent:Double = GeoUtility.haversineDistanceInMeters(ylat, lon1: xlon, lat2: olat, lon2: olon)
+                // FIXME : should this likely use euclidean distance based on a ecef or spherical model of the earth...
+                let adjacentInMeters:Double = GeoUtility.haversineDistanceInMeters(ylat, lon1: xlon, lat2: olat, lon2: olon)
+                
+                // FIXME : make sure points beyond the horizon can be seen
+                var beyondHorizonAndNotVisible:Bool = false
+                
+//                if(adjacentInMeters > euclideanDistanceToHorizonInMeters) {
+//                    let minimumElevationToBeVisible:Double = sqrt(pow((adjacentInMeters - euclideanDistanceToHorizonInMeters),2) + radiusOfEarthSquared) - radiusOfEarth
+//                    if(xyh < minimumElevationToBeVisible) {
+//                        beyondHorizonAndNotVisible = true
+//                    }
+//                }
                 
                 // is the cell within the area of interest?
-                if(adjacent > oRadius) {
+                if(adjacentInMeters > oRadius) {
                     // neither visible or non-visible, outisde of the area of interest. Already set to no_data, break the inner loop.
                     break;
                 } else {
                     // find the slope of the line from the current cell to the observer
-                    let xymu:Double = oppositeInMeters/adjacent
+                    let xymu:Double = oppositeInMeters/adjacentInMeters
                     
                     // If xymu < mu, then this cell is not visible, otherwise, mark the cell visible
-                    if (xymu < mu) {
+                    if (beyondHorizonAndNotVisible || xymu < mu) {
                         // not visible
                         viewshed[yi][xi] = Viewshed.NOT_VISIBLE
                     } else {

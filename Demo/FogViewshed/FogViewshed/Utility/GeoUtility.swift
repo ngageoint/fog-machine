@@ -3,7 +3,7 @@ import MapKit
 
 // This class does geospatial stuff
 class GeoUtility {
-
+    
     private static let a = 6378137.0 // WGS-84 geoidal semi-major axis of earth in meters
     private static let e:Double = 8.1819190842622e-2  // eccentricity
     private static let asq:Double = a * a
@@ -19,12 +19,15 @@ class GeoUtility {
         return 180.0 * radians / M_PI
     }
 
-    // Earth radius at a given latitude, according to the WGS-84 ellipsoid in meters
+    // Earth radius at a given latitude in degrees, according to the WGS-84 ellipsoid in meters
     static func earthRadiusAtLat(lat: Double) -> Double {
-        let An = asq * cos(lat)
-        let Bn = b * b * sin(lat)
-        let Ad = a * cos(lat)
-        let Bd = b * sin(lat)
+        
+        let latRadians:Double = degreeToRadian(lat)
+        
+        let An = asq * cos(latRadians)
+        let Bn = b * b * sin(latRadians)
+        let Ad = a * cos(latRadians)
+        let Bd = b * sin(latRadians)
 
         return sqrt((An*An + Bn*Bn) / (Ad*Ad + Bd*Bd))
     }
@@ -81,6 +84,28 @@ class GeoUtility {
         return s
     }
 
+    static func euclideanDistanceInMeters(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double {
+        let lat1rad:Double = degreeToRadian(lat1)
+        let lon1rad:Double = degreeToRadian(lon1)
+        
+        let radiusAtLat1:Double = earthRadiusAtLat(lat1)
+        let x1:Double = radiusAtLat1*cos(lat1rad)*cos(lon1rad)
+        let y1:Double = radiusAtLat1*cos(lat1rad)*sin(lon1rad)
+        let z1:Double = radiusAtLat1*sin(lat1rad)
+        
+        let lat2rad:Double = degreeToRadian(lat2)
+        let lon2rad:Double = degreeToRadian(lon2)
+        
+        let radiusAtLat2:Double = earthRadiusAtLat(lat2)
+        let x2:Double = radiusAtLat2*cos(lat2rad)*cos(lon2rad)
+        let y2:Double = radiusAtLat2*cos(lat2rad)*sin(lon2rad)
+        let z2:Double = radiusAtLat2*sin(lat2rad)
+        
+        let d:Double = sqrt(pow((x2-x1),2) + pow((y2-y1),2) + pow((z2-z1),2))
+        
+        return d
+    }
+    
     // see https://rosettacode.org/wiki/Haversine_formula#Swift
     static func haversineDistanceInMeters(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double {
         let lat1rad:Double = degreeToRadian(lat1)
@@ -92,7 +117,8 @@ class GeoUtility {
         let dLon:Double = lon2rad - lon1rad
         let a:Double = sin(dLat/2) * sin(dLat/2) + sin(dLon/2) * sin(dLon/2) * cos(lat1rad) * cos(lat2rad)
         let c:Double = 2 * asin(sqrt(a))
-        let R:Double = 6371000.0
+        // find radius at average lat
+        let R:Double = earthRadiusAtLat(radianToDegree((lat1rad + lat2rad)/2))
 
         return R * c
     }
@@ -104,7 +130,7 @@ class GeoUtility {
         let lat1R:Double = degreeToRadian(lat1)
         let lon1R:Double = degreeToRadian(lon1)
         
-        let R:Double = 6371000.0
+        let R:Double = earthRadiusAtLat(lat1)
         
         let lat2R:Double = asin( sin(lat1R)*cos(distanceInMeters/R) + cos(lat1R)*sin(distanceInMeters/R)*cos(bearingInRadians))
         let lon2R:Double = lon1R + atan2(sin(bearingInRadians)*sin(distanceInMeters/R)*cos(lat1R), cos(distanceInMeters/R)-sin(lat1R)*sin(lat2R))

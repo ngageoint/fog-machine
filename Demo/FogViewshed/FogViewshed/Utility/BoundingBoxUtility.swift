@@ -3,11 +3,12 @@ import MapKit
 
 class BoundingBoxUtility {
     static func getBoundingBox(center: CLLocationCoordinate2D, radiusInMeters: Double) -> AxisOrientedBoundingBox  {
+        let eradius = GeoUtility.earthRadiusAtLat(center.latitude)
+        
         // Bounding box surrounding the point at given coordinates, assuming local approximation of Earth surface as a sphere of radius given by WGS84
         let lat = GeoUtility.degreeToRadian(center.latitude)
         let lon = GeoUtility.degreeToRadian(center.longitude)
         
-        let eradius = GeoUtility.earthRadiusAtLat(lat)
         // Radius of the parallel at given latitude
         let pradius = eradius * cos(lat)
         

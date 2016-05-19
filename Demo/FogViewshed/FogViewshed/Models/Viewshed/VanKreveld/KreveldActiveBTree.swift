@@ -10,34 +10,34 @@ public struct KreveldActiveBTree {
         self.reference = reference
     }
     
-    public mutating func insert (value: ElevationPoint) {
-        let key : Double = self.reference!.calcDistance(value)
-        let slope: Double = self.reference!.calcSlope(value);
-        
-        var y: StatusEntry? = nil
-        var x: StatusEntry? = self.root
-        while x !== nil {
-            y = x
-            y!.maxSlope = max(y!.maxSlope, slope)
-            if (key < x!.key) {
-                x = x!.left
-            } else {
-                x = x!.right
-            }
-        }
-        
-        let z: StatusEntry = StatusEntry(key: key, value: value, slope: slope, parent: y)
-        if (y == nil) {
-            self.root = z;
-        } else {
-            if (key < y!.key) {
-                y!.left = z
-            } else {
-                y!.right = z
-            }
-        }
-        self.fixAfterInsertion(z)
-    }
+//    public mutating func insert (value: ElevationPoint) {
+//        let key : Double = self.reference!.calcDistance(value)
+//        let slope: Double = self.reference!.calcSlope(value);
+//        
+//        var y: StatusEntry? = nil
+//        var x: StatusEntry? = self.root
+//        while x !== nil {
+//            y = x
+//            y!.maxSlope = max(y!.maxSlope, slope)
+//            if (key < x!.key) {
+//                x = x!.left
+//            } else {
+//                x = x!.right
+//            }
+//        }
+//        
+//        let z: StatusEntry = StatusEntry(key: key, value: value, slope: slope, parent: y)
+//        if (y == nil) {
+//            self.root = z;
+//        } else {
+//            if (key < y!.key) {
+//                y!.left = z
+//            } else {
+//                y!.right = z
+//            }
+//        }
+//        self.fixAfterInsertion(z)
+//    }
     
     private mutating func fixAfterInsertion(xx: StatusEntry?) {
         var xx = xx
@@ -83,99 +83,99 @@ public struct KreveldActiveBTree {
         }
     }
     
-    public mutating func delete (pt: ElevationPoint) {
-        
-        // verify if all the 'nil' check necessary
-        var p: StatusEntry? = self.getEntry(pt)
-        if p == nil {
-            return
-        }
-        // If strictly internal, copy successor's element to p and then make p
-        // point to successor.
-        // Because of (p.right != null) the successor of p is the minimum of p.right
-        if p!.left != nil && p!.right != nil {
-            let s:StatusEntry! = self.getMinimum(p!.right) // = successor(p)
-            p!.key = s.key
-            p!.value = s.value
-            p!.slope = s.slope
-            p = s
-        }
-        // update maxSlope
-        p!.maxSlope = max(self.maxSlopeOf(p!.left), self.maxSlopeOf(p!.right)); // dummy value
-        var x: StatusEntry? = p!.parent;
-        while (x != nil) {
-            x!.maxSlope = max( x!.slope, max(self.maxSlopeOf(x!.left), self.maxSlopeOf(x!.right)) );
-            x = x!.parent;
-        }
-        // Start fixup at replacement node, if it exists.
-        let replacement: StatusEntry? = (p!.left != nil ? p!.left : p!.right);
-        
-        if (replacement != nil) {
-            // Here p has exactly one child. Otherwise p would point to its successor, which has no left child.
-            // Link replacement to parent
-            replacement!.parent = p!.parent;
-            if (p!.parent == nil) {
-                self.root = replacement
-            } else if (p === p!.parent!.left) {
-                p!.parent!.left  = replacement
-            }
-            else {
-                p!.parent!.right = replacement
-            }
-            // nil out links so they are OK to use by fixAfterDeletion.
-            p!.left = nil
-            p!.right = nil
-            p!.parent = nil
-            
-            // Fix replacement
-            if (p!.flag == KreveldActiveBTree.FLAG_TRUE) {
-                self.fixAfterDeletion(replacement)
-            }
-        } else if (p!.parent == nil) { // return if we are the only node.
-            self.root = nil
-        } else { //  No children. Use self as phantom replacement and unlink.
-            if (p!.flag == KreveldActiveBTree.FLAG_TRUE) {
-                self.fixAfterDeletion(p)
-            }
-            if (p!.parent != nil) {
-                if (p === p!.parent!.left) {
-                    p!.parent!.left = nil
-                }
-                else if (p === p!.parent!.right) {
-                    p!.parent!.right = nil
-                }
-                p!.parent = nil
-            }
-        }
-    }
+//    public mutating func delete (pt: ElevationPoint) {
+//        
+//        // verify if all the 'nil' check necessary
+//        var p: StatusEntry? = self.getEntry(pt)
+//        if p == nil {
+//            return
+//        }
+//        // If strictly internal, copy successor's element to p and then make p
+//        // point to successor.
+//        // Because of (p.right != null) the successor of p is the minimum of p.right
+//        if p!.left != nil && p!.right != nil {
+//            let s:StatusEntry! = self.getMinimum(p!.right) // = successor(p)
+//            p!.key = s.key
+//            p!.value = s.value
+//            p!.slope = s.slope
+//            p = s
+//        }
+//        // update maxSlope
+//        p!.maxSlope = max(self.maxSlopeOf(p!.left), self.maxSlopeOf(p!.right)); // dummy value
+//        var x: StatusEntry? = p!.parent;
+//        while (x != nil) {
+//            x!.maxSlope = max( x!.slope, max(self.maxSlopeOf(x!.left), self.maxSlopeOf(x!.right)) );
+//            x = x!.parent;
+//        }
+//        // Start fixup at replacement node, if it exists.
+//        let replacement: StatusEntry? = (p!.left != nil ? p!.left : p!.right);
+//        
+//        if (replacement != nil) {
+//            // Here p has exactly one child. Otherwise p would point to its successor, which has no left child.
+//            // Link replacement to parent
+//            replacement!.parent = p!.parent;
+//            if (p!.parent == nil) {
+//                self.root = replacement
+//            } else if (p === p!.parent!.left) {
+//                p!.parent!.left  = replacement
+//            }
+//            else {
+//                p!.parent!.right = replacement
+//            }
+//            // nil out links so they are OK to use by fixAfterDeletion.
+//            p!.left = nil
+//            p!.right = nil
+//            p!.parent = nil
+//            
+//            // Fix replacement
+//            if (p!.flag == KreveldActiveBTree.FLAG_TRUE) {
+//                self.fixAfterDeletion(replacement)
+//            }
+//        } else if (p!.parent == nil) { // return if we are the only node.
+//            self.root = nil
+//        } else { //  No children. Use self as phantom replacement and unlink.
+//            if (p!.flag == KreveldActiveBTree.FLAG_TRUE) {
+//                self.fixAfterDeletion(p)
+//            }
+//            if (p!.parent != nil) {
+//                if (p === p!.parent!.left) {
+//                    p!.parent!.left = nil
+//                }
+//                else if (p === p!.parent!.right) {
+//                    p!.parent!.right = nil
+//                }
+//                p!.parent = nil
+//            }
+//        }
+//    }
     
     // Searches the status structure for a point p and returns the corresponding StatusEntry.
     // param p HeightedPoint to be searched
     // returns StatusEntry
-    private func getEntry(let p: ElevationPoint) -> StatusEntry? {
-        let key: Double = self.reference!.calcDistance(p)
-        var t: StatusEntry? = self.root
-        
-        while (t != nil) {
-            if (key < t!.key) {
-                t = t!.left
-            } else if (key > t!.key) {
-                t = t!.right
-            } else if (p.equalsPosition(t!.value)) {
-                return t // found it!
-            } else {
-                //search to the left and to the right
-                if (t!.left != nil && p.equalsPosition(t!.left!.value)) {
-                    return t!.left
-                }
-                if (t!.right != nil && p.equalsPosition(t!.right!.value)) {
-                    return t!.right
-                }
-                return nil // assuming the searched point can only be in one of the children
-            }
-        }
-        return nil
-    }
+//    private func getEntry(let p: ElevationPoint) -> StatusEntry? {
+//        let key: Double = self.reference!.calcDistance(p)
+//        var t: StatusEntry? = self.root
+//        
+//        while (t != nil) {
+//            if (key < t!.key) {
+//                t = t!.left
+//            } else if (key > t!.key) {
+//                t = t!.right
+//            } else if (p.equalsPosition(t!.value)) {
+//                return t // found it!
+//            } else {
+//                //search to the left and to the right
+//                if (t!.left != nil && p.equalsPosition(t!.left!.value)) {
+//                    return t!.left
+//                }
+//                if (t!.right != nil && p.equalsPosition(t!.right!.value)) {
+//                    return t!.right
+//                }
+//                return nil // assuming the searched point can only be in one of the children
+//            }
+//        }
+//        return nil
+//    }
     
     private func getMinimum (let p: StatusEntry?) -> StatusEntry? {
         if (p == nil) {
@@ -368,36 +368,36 @@ public struct KreveldActiveBTree {
     }
     
     // check the visibility of this cell to the observer
-    public func isVisible(let pt: ElevationPoint) -> Bool {
-        let key: Double = self.reference!.calcDistance(pt)
-        var p: StatusEntry? = nil
-        var x: StatusEntry? = self.root
-        var maxSlope: Double = -1.0 / 0.0 //NEGATIVE_INFINITY - TODO: find out if any constant in Swift
-        var retValue: Bool = false
-        
-        while (x !== nil && !(pt.equalsPosition(x!.value))) {
-            p = x
-            if (key < x!.key) {
-                x = x!.left
-            } else {
-                x = x!.right
-                let tmpSlope :Double = max(self.maxSlopeOf(p!.left), p!.slope)
-                maxSlope = max(maxSlope, tmpSlope)
-            }
-        }
-        
-        if (x === nil) {
-            return retValue
-        }
-        maxSlope = max(maxSlope, self.maxSlopeOf(x!.left))
-        // when the elevations are "0.0" the slope will be "0.0" at this point....
-        // need to return true when the slopes are less than or equal..
-        //if maxSlope < x.slope {
-        if maxSlope <= x!.slope {
-            retValue = true
-        } else {
-            retValue = false
-        }
-        return retValue
-    }
+//    public func isVisible(let pt: ElevationPoint) -> Bool {
+//        let key: Double = self.reference!.calcDistance(pt)
+//        var p: StatusEntry? = nil
+//        var x: StatusEntry? = self.root
+//        var maxSlope: Double = -1.0 / 0.0 //NEGATIVE_INFINITY - TODO: find out if any constant in Swift
+//        var retValue: Bool = false
+//        
+//        while (x !== nil && !(pt.equalsPosition(x!.value))) {
+//            p = x
+//            if (key < x!.key) {
+//                x = x!.left
+//            } else {
+//                x = x!.right
+//                let tmpSlope :Double = max(self.maxSlopeOf(p!.left), p!.slope)
+//                maxSlope = max(maxSlope, tmpSlope)
+//            }
+//        }
+//        
+//        if (x === nil) {
+//            return retValue
+//        }
+//        maxSlope = max(maxSlope, self.maxSlopeOf(x!.left))
+//        // when the elevations are "0.0" the slope will be "0.0" at this point....
+//        // need to return true when the slopes are less than or equal..
+//        //if maxSlope < x.slope {
+//        if maxSlope <= x!.slope {
+//            retValue = true
+//        } else {
+//            retValue = false
+//        }
+//        return retValue
+//    }
 }
