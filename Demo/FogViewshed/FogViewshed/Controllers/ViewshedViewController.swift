@@ -39,10 +39,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             self.ViewshedLog(format)
         }
 
-        // for debugging only
-        SwiftEventBus.onMainThread(self, name: "drawViewshed") { result in
-            let viewshedOverlay:ViewshedOverlay = result.object as! ViewshedOverlay
-            self.mapView.addOverlay(viewshedOverlay)
+        SwiftEventBus.onMainThread(self, name: "drawGridOverlay") { result in
+            let gridOverlay:GridOverlay = result.object as! GridOverlay
+            self.mapView.addOverlay(gridOverlay)
         }
 
         locationManagerSettings()
@@ -184,9 +183,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             polygonView!.lineWidth = 0.5
             polygonView!.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.08)
             polygonView!.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.6)
-        } else if overlay is ViewshedOverlay {
-            let imageToUse = (overlay as! ViewshedOverlay).image
-            let overlayView = ViewshedOverlayView(overlay: overlay, overlayImage: imageToUse)
+        } else if overlay is GridOverlay {
+            let imageToUse = (overlay as! GridOverlay).image
+            let overlayView = GridOverlayView(overlay: overlay, overlayImage: imageToUse)
 
             return overlayView
         }
@@ -329,12 +328,14 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         redraw()
     }
 
-
     @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
         self.initiateFogViewshed(self.settingsObserver)
     }
 
-
+    @IBAction func drawElevationData(segue: UIStoryboardSegue) {
+        ElevationTool(elevationObserver: self.settingsObserver).drawElevationData()
+    }
+    
     @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {
         if segue.sourceViewController.isKindOfClass(ObserverSettingsViewController) {
             mapView.removeAnnotations(mapView.annotations)

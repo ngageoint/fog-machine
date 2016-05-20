@@ -475,6 +475,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G4W-g5-zVA">
                                                 <rect key="frame" x="182" y="347" width="236" height="30"/>
                                                 <state key="normal" title="Draw Elevation Data"/>
+                                                <connections>
+                                                    <segue destination="zPC-SU-HQn" kind="unwind" identifier="drawElevationData" unwindAction="drawElevationData:" id="MwR-yi-fE9"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>

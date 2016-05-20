@@ -3,14 +3,14 @@ import MapKit
 import UIKit
 import FogMachine
 
-class ViewshedImageUtility: NSObject {
+class ImageUtility: NSObject {
 
-    static func generateElevationOverlay(elevationDataGrid: DataGrid) -> ViewshedOverlay {
-        return ViewshedOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data))
+    static func generateElevationOverlay(elevationDataGrid: DataGrid) -> GridOverlay {
+        return GridOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data))
     }
     
-    static func generateViewshedOverlay(viewshedDataGrid: DataGrid) -> ViewshedOverlay {
-        return ViewshedOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data))
+    static func generateViewshedOverlay(viewshedDataGrid: DataGrid) -> GridOverlay {
+        return GridOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data))
     }
 
     static func elevationToUIImage(elevationGrid: [[Int]]) -> UIImage {
@@ -61,7 +61,8 @@ class ViewshedImageUtility: NSObject {
                 // this is a number between minElevation and maxElevation
                 let elevation_at_xy = max(min(elevationGrid[(height - 1) - x][y], maxElevation), minElevation)
 
-                let percent_elevation_at_xy = Double(elevation_at_xy - minElevation) / Double(maxElevation - minElevation)
+                let elevationRange = max(Double(maxElevation - minElevation), 1.0)
+                let percent_elevation_at_xy = Double(elevation_at_xy - minElevation) / elevationRange
 
                 // find color between green and red based on percentage
                 let colorR = UInt8((percent_elevation_at_xy * Double(maxElevationColor.red)) + ((1.0 - percent_elevation_at_xy) * Double(minElevationColor.red)))

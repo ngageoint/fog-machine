@@ -1,7 +1,7 @@
 import UIKit
 import MapKit
 
-class ViewshedOverlayView: MKOverlayRenderer {
+class GridOverlayView: MKOverlayRenderer {
     var overlayImage: UIImage
     
     init(overlay:MKOverlay, overlayImage:UIImage) {

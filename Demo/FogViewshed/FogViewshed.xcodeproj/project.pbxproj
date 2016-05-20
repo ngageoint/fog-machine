@@ -76,10 +76,11 @@
 		F91D476B1CEA9AFD00AB483E /* HGTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47291CEA9AFD00AB483E /* HGTManager.swift */; };
 		F91D476C1CEA9AFD00AB483E /* HGTRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */; };
 		F91D476D1CEA9AFD00AB483E /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472B1CEA9AFD00AB483E /* Toast.swift */; };
-		F91D476E1CEA9AFD00AB483E /* ViewshedImageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472C1CEA9AFD00AB483E /* ViewshedImageUtility.swift */; };
+		F91D476E1CEA9AFD00AB483E /* ImageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */; };
 		F91D476F1CEA9AFD00AB483E /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472E1CEA9AFD00AB483E /* Pixel.swift */; };
-		F91D47701CEA9AFD00AB483E /* ViewshedOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472F1CEA9AFD00AB483E /* ViewshedOverlay.swift */; };
-		F91D47711CEA9AFD00AB483E /* ViewshedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47301CEA9AFD00AB483E /* ViewshedOverlayView.swift */; };
+		F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */; };
+		F91D47711CEA9AFD00AB483E /* GridOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */; };
+		F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92D253C1CEFC55000C109AE /* ElevationTool.swift */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
 /* End PBXBuildFile section */
 
@@ -172,10 +173,11 @@
 		F91D47291CEA9AFD00AB483E /* HGTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTManager.swift; sourceTree = "<group>"; };
 		F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTRegions.swift; sourceTree = "<group>"; };
 		F91D472B1CEA9AFD00AB483E /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
-		F91D472C1CEA9AFD00AB483E /* ViewshedImageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedImageUtility.swift; sourceTree = "<group>"; };
+		F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtility.swift; sourceTree = "<group>"; };
 		F91D472E1CEA9AFD00AB483E /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
-		F91D472F1CEA9AFD00AB483E /* ViewshedOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlay.swift; sourceTree = "<group>"; };
-		F91D47301CEA9AFD00AB483E /* ViewshedOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedOverlayView.swift; sourceTree = "<group>"; };
+		F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
+		F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlayView.swift; sourceTree = "<group>"; };
+		F92D253C1CEFC55000C109AE /* ElevationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationTool.swift; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -342,6 +344,7 @@
 		F91D47061CEA9AFD00AB483E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F92D253B1CEFC55000C109AE /* Elevation */,
 				F91D47071CEA9AFD00AB483E /* Coredata */,
 				F91D470A1CEA9AFD00AB483E /* Geometries */,
 				F91D470D1CEA9AFD00AB483E /* Grid */,
@@ -441,7 +444,7 @@
 				F91D47291CEA9AFD00AB483E /* HGTManager.swift */,
 				F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */,
 				F91D472B1CEA9AFD00AB483E /* Toast.swift */,
-				F91D472C1CEA9AFD00AB483E /* ViewshedImageUtility.swift */,
+				F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -450,10 +453,18 @@
 			isa = PBXGroup;
 			children = (
 				F91D472E1CEA9AFD00AB483E /* Pixel.swift */,
-				F91D472F1CEA9AFD00AB483E /* ViewshedOverlay.swift */,
-				F91D47301CEA9AFD00AB483E /* ViewshedOverlayView.swift */,
+				F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */,
+				F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F92D253B1CEFC55000C109AE /* Elevation */ = {
+			isa = PBXGroup;
+			children = (
+				F92D253C1CEFC55000C109AE /* ElevationTool.swift */,
+			);
+			path = Elevation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -639,7 +650,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F91D47311CEA9AFD00AB483E /* ConnectionsViewController.swift in Sources */,
-				F91D476E1CEA9AFD00AB483E /* ViewshedImageUtility.swift in Sources */,
+				F91D476E1CEA9AFD00AB483E /* ImageUtility.swift in Sources */,
 				F91D476A1CEA9AFD00AB483E /* HGTDownloader.swift in Sources */,
 				F91D47531CEA9AFD00AB483E /* ObserverFacade.swift in Sources */,
 				F91D46E01CEA9AED00AB483E /* AppDelegate.swift in Sources */,
@@ -654,12 +665,12 @@
 				F91D47611CEA9AFD00AB483E /* ElevationPoint.swift in Sources */,
 				F91D47571CEA9AFD00AB483E /* DataGrid.swift in Sources */,
 				F91D475D1CEA9AFD00AB483E /* ViewshedResult.swift in Sources */,
-				F91D47711CEA9AFD00AB483E /* ViewshedOverlayView.swift in Sources */,
+				F91D47711CEA9AFD00AB483E /* GridOverlayView.swift in Sources */,
 				F91D47601CEA9AFD00AB483E /* FranklinRayViewshed.swift in Sources */,
 				F91D47641CEA9AFD00AB483E /* StatusEntry.swift in Sources */,
 				F91D475C1CEA9AFD00AB483E /* Observer.swift in Sources */,
 				F91D47521CEA9AFD00AB483E /* ObserverEntity.swift in Sources */,
-				F91D47701CEA9AFD00AB483E /* ViewshedOverlay.swift in Sources */,
+				F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */,
 				F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */,
 				F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */,
 				F91D47591CEA9AFD00AB483E /* RectangularPerimeter.swift in Sources */,
@@ -674,6 +685,7 @@
 				F91D46E11CEA9AED00AB483E /* Constants.swift in Sources */,
 				F91D47691CEA9AFD00AB483E /* GeoUtility.swift in Sources */,
 				F91D47621CEA9AFD00AB483E /* KreveldActiveBTree.swift in Sources */,
+				F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */,
 				F91D47551CEA9AFD00AB483E /* Sector.swift in Sources */,
 				F91D47561CEA9AFD00AB483E /* BresenhamsLineAlgoritm.swift in Sources */,
 				F91D475A1CEA9AFD00AB483E /* SectorPerimeter.swift in Sources */,

@@ -1,7 +1,7 @@
 import UIKit
 import MapKit
 
-class ViewshedOverlay: NSObject, MKOverlay {
+class GridOverlay: NSObject, MKOverlay {
     var coordinate: CLLocationCoordinate2D
     var boundingMapRect: MKMapRect
     var image: UIImage

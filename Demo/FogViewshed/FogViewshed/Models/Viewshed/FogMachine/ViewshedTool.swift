@@ -65,7 +65,7 @@ public class ViewshedTool : FMTool {
         
         // if this is not me
         if(node != fromNode) {
-            SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedDataGrid))
+            SwiftEventBus.post("drawGridOverlay", sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid))
         }
         
         return ViewshedResult(dataGrid: viewshedDataGrid)
@@ -75,7 +75,7 @@ public class ViewshedTool : FMTool {
         for (n, result) in nodeToResult {
             let viewshedResult = result as! ViewshedResult
             NSLog("Received result from node " + n.description)
-            SwiftEventBus.post("drawViewshed", sender:ViewshedImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
+            SwiftEventBus.post("drawGridOverlay", sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
         }
         SwiftEventBus.post("viewshedComplete")
     }
