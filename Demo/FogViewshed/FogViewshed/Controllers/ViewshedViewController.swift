@@ -9,7 +9,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     var model = ObserverFacade()
     var settingsObserver = Observer() //Only use for segue from ObserverSettings
-    var isLogShown: Bool!
     var locationManager: CLLocationManager!
     var isInitialAuthorizationCheck = false
 
@@ -45,13 +44,15 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             let viewshedOverlay:ViewshedOverlay = result.object as! ViewshedOverlay
             self.mapView.addOverlay(viewshedOverlay)
         }
-        
-        isLogShown = false
-
-        drawObservers()
-        drawDataRegions()
 
         locationManagerSettings()
+    }
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        setMapLogDisplay()
+        drawObservers()
+        drawDataRegions()
     }
 
     override func didReceiveMemoryWarning() {
@@ -252,12 +253,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
     func setMapLogDisplay() {
-        guard let isLogShown = self.isLogShown else {
-            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
-            return
-        }
-
-        if(isLogShown) {
+        if(NSUserDefaults.standardUserDefaults().boolForKey("isLogShown")) {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.8)
         } else {
             mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
@@ -305,24 +301,14 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         locationManagerSettings()
     }
 
-
+    
     // MARK: Segue
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "observerSettings" {
-            let navController = segue.destinationViewController as! UINavigationController
-            let viewController: ObserverSettingsViewController = navController.topViewController as! ObserverSettingsViewController
+            let viewController: ObserverSettingsViewController = segue.destinationViewController as! ObserverSettingsViewController
             viewController.originalObserver = sender as! Observer?
-        } else if segue.identifier == "settings" {
-            let navController = segue.destinationViewController as! UINavigationController
-            let viewController: SettingsViewController = navController.topViewController as! SettingsViewController
-            viewController.isLogShown = self.isLogShown
         }
-    }
-
-    @IBAction func unwindFromModal(segue: UIStoryboardSegue) {
-        setMapLogDisplay()
-        drawDataRegions()
     }
 
     @IBAction func applyOptions(segue: UIStoryboardSegue) {

@@ -11,32 +11,25 @@ public class HGTManager {
     }
     
     static func copyHGTFilesToDocumentsDir() {
-        let prefs = NSUserDefaults.standardUserDefaults()
+        let fromPath:String = NSBundle.mainBundle().resourcePath!
+        let toPath: String = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
         
-        // copy the data over to documents dir, if it's never been done.
-        if !prefs.boolForKey("hasCopyData") {
+        do {
+            let fileManager = NSFileManager.defaultManager()
+            let resourceFiles:[String] = try fileManager.contentsOfDirectoryAtPath(fromPath)
             
-            let fromPath:String = NSBundle.mainBundle().resourcePath!
-            let toPath: String = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-            
-            do {
-                let fileManager = NSFileManager.defaultManager()
-                let resourceFiles:[String] = try fileManager.contentsOfDirectoryAtPath(fromPath)
-                
-                for file in resourceFiles {
-                    if file.hasSuffix(".hgt") {
-                        let fromFilePath = fromPath + "/" + file
-                        let toFilePath = toPath + "/" + file
-                        if (fileManager.fileExistsAtPath(toFilePath) == false) {
-                            try fileManager.copyItemAtPath(fromFilePath, toPath: toFilePath)
-                            NSLog("Copying " + file + " to documents directory.")
-                        }
+            for file in resourceFiles {
+                if file.hasSuffix(".hgt") {
+                    let fromFilePath = fromPath + "/" + file
+                    let toFilePath = toPath + "/" + file
+                    if (fileManager.fileExistsAtPath(toFilePath) == false) {
+                        try fileManager.copyItemAtPath(fromFilePath, toPath: toFilePath)
+                        NSLog("Copying " + file + " to documents directory.")
                     }
                 }
-                prefs.setValue(true, forKey: "hasCopyData")
-            } catch let error as NSError  {
-                NSLog("Problem copying files: \(error.localizedDescription)")
             }
+        } catch let error as NSError  {
+            NSLog("Problem copying files: \(error.localizedDescription)")
         }
     }
     

@@ -15,7 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         // copy hgt files to documents dir
-        HGTManager.copyHGTFilesToDocumentsDir()
+        let prefs = NSUserDefaults.standardUserDefaults()
+        prefs.registerDefaults(["isLogShown" : true])
+        
+        // copy the data over to documents dir, if it's never been done.
+        if !prefs.boolForKey("hasCopyData") {
+            HGTManager.copyHGTFilesToDocumentsDir()
+            prefs.setValue(true, forKey: "hasCopyData")
+        }
         
         // init fog machine
         FogMachine.fogMachineInstance.setTool(ViewshedTool())

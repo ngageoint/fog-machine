@@ -3,19 +3,10 @@ import MapKit
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
     
-    
-    // MARK: Class Variables
-    
-    
-    var isLogShown: Bool!
-    let defaults = NSUserDefaults.standardUserDefaults()
-    
-    
     // MARK: IBOutlets
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var mapLogSwitch: UISwitch!
-
     
     // MARK: IBActions
     
@@ -26,7 +17,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setMapLogSwitch()
+        mapLogSwitch.setOn(NSUserDefaults.standardUserDefaults().boolForKey("isLogShown"), animated: false)
     }
     
     
@@ -35,24 +26,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-
-    // MARK: Functions
-
-    
-    func setMapLogSwitch() {
-        guard let isLogShown = self.isLogShown else {
-            return
-        }
-
-        mapLogSwitch.setOn(isLogShown, animated: true)
+    @IBAction func onDisplayMapLog(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setValue(mapLogSwitch.on, forKey: "isLogShown")
     }
-    
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let viewController: ViewshedViewController = segue.destinationViewController as! ViewshedViewController
-        viewController.isLogShown = mapLogSwitch.on
-    }
-    
 }
 
 
