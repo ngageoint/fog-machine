@@ -21,7 +21,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         self.mapView.delegate = self
         
         let onPressGesture = UILongPressGestureRecognizer(target: self, action:#selector(DataViewController.onPress(_:)))
-        onPressGesture.minimumPressDuration = 0.15
+        onPressGesture.minimumPressDuration = 0.2
         mapView.addGestureRecognizer(onPressGesture)
         
         if (self.locationManager == nil) {
