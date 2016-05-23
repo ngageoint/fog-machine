@@ -7,10 +7,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Class Variables
 
-    var model = ObserverFacade()
-    var settingsObserver = Observer() //Only use for segue from ObserverSettings
-    var locationManager: CLLocationManager!
-    var isInitialAuthorizationCheck = false
+    var model:ObserverFacade = ObserverFacade()
+    // Only used for segue from ObserverSettings
+    var settingsObserver:Observer = Observer()
+    var locationManager:CLLocationManager = CLLocationManager()
+    var isInitialAuthorizationCheck:Bool = false
 
     // MARK: IBOutlets
 
@@ -44,12 +45,21 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             self.mapView.addOverlay(gridOverlay)
         }
 
-        locationManagerSettings()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        self.locationManager.startUpdatingLocation();
+        let status = CLLocationManager.authorizationStatus()
+        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
+            // present an alert indicating location authorization required
+            // and offer to take the user to Settings for the app via
+            self.locationManager.requestWhenInUseAuthorization()
+            self.mapView.tintColor = UIColor.blueColor()
+        }
+        focusOnMyCurrentLocation()
     }
     
-    
     override func viewWillAppear(animated: Bool) {
-        setMapLogDisplay()
+        setupMapLog()
         drawObservers()
         drawDataRegions()
     }
@@ -93,33 +103,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
 
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print("Error: " + error.localizedDescription)
-    }
-    
-    
-    func centerMapOnLocation(location: CLLocationCoordinate2D) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location, 10000, 10000)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-    
-    func locationManagerSettings() {
-        if (self.locationManager == nil) {
-            self.locationManager = CLLocationManager()
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            self.locationManager.delegate = self
-        }
-        let status = CLLocationManager.authorizationStatus()
-        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
-            // present an alert indicating location authorization required
-            // and offer to take the user to Settings for the app via
-            self.locationManager.requestWhenInUseAuthorization()
-            self.mapView.tintColor = UIColor.blueColor()
-        }
-        if let coordinate = mapView.userLocation.location?.coordinate {
-            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
-            self.mapView.setRegion(region, animated: true)
-        }
+        NSLog("Error: " + error.localizedDescription)
     }
 
     func drawObservers() {
@@ -233,30 +217,28 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-    func changeMultiplier(constraint: NSLayoutConstraint, multiplier: CGFloat) -> NSLayoutConstraint {
-        let newConstraint = NSLayoutConstraint(
-            item: constraint.firstItem,
-            attribute: constraint.firstAttribute,
-            relatedBy: constraint.relation,
-            toItem: constraint.secondItem,
-            attribute: constraint.secondAttribute,
-            multiplier: multiplier,
-            constant: constraint.constant)
-
-        newConstraint.priority = constraint.priority
-
-        NSLayoutConstraint.deactivateConstraints([constraint])
-        NSLayoutConstraint.activateConstraints([newConstraint])
-
-        return newConstraint
-    }
-
-    func setMapLogDisplay() {
+    private func setupMapLog() {
+        var multiplier:CGFloat = 1.0
         if(NSUserDefaults.standardUserDefaults().boolForKey("isLogShown")) {
-            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 0.8)
-        } else {
-            mapViewProportionalHeight = changeMultiplier(mapViewProportionalHeight, multiplier: 1.0)
+            multiplier = 0.8
         }
+        
+        // change the constraint multiplier
+        let newMapViewProportionalHeight = NSLayoutConstraint(
+            item: mapViewProportionalHeight.firstItem,
+            attribute: mapViewProportionalHeight.firstAttribute,
+            relatedBy: mapViewProportionalHeight.relation,
+            toItem: mapViewProportionalHeight.secondItem,
+            attribute: mapViewProportionalHeight.secondAttribute,
+            multiplier: multiplier,
+            constant: mapViewProportionalHeight.constant)
+
+        newMapViewProportionalHeight.priority = mapViewProportionalHeight.priority
+
+        NSLayoutConstraint.deactivateConstraints([mapViewProportionalHeight])
+        NSLayoutConstraint.activateConstraints([newMapViewProportionalHeight])
+
+        mapViewProportionalHeight = newMapViewProportionalHeight
     }
 
     func retrieveObserver(coordinate: CLLocationCoordinate2D) -> Observer? {
@@ -297,9 +279,16 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
 
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
-        locationManagerSettings()
+        focusOnMyCurrentLocation()
     }
-
+    
+    private func focusOnMyCurrentLocation() {
+        if let coordinate = mapView.userLocation.location?.coordinate {
+            let center = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+            self.mapView.setRegion(region, animated: true)
+        }
+    }
     
     // MARK: Segue
 

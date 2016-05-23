@@ -26,11 +26,11 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         
         if (self.locationManager == nil) {
             self.locationManager = CLLocationManager()
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             self.locationManager.delegate = self
         }
         let status = CLLocationManager.authorizationStatus()
-        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
+        if (status == .NotDetermined || status == .Restricted)  {
             // present an alert indicating location authorization required
             // and offer to take the user to Settings for the app via
             self.locationManager.requestWhenInUseAuthorization()
@@ -51,6 +51,21 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
         gpsButton.setImage(arrowPressedImg, forState: UIControlState.Normal)
+        
+        let status = CLLocationManager.authorizationStatus()
+        if (status == .Denied) {
+            let alertController = UIAlertController(title: NSLocalizedString("Location Services Off", comment: ""),
+                                                    message: NSLocalizedString("Turn on Location Services in Settings > Privacy to allow FogMachine to determine your current location", comment: ""),
+                                                    preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: ""), style: UIAlertActionStyle.Default,
+                handler: {(alert: UIAlertAction!) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+                    })}
+                ))
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
         
         if let coordinate = mapView.userLocation.location?.coordinate {
             // Get the span that the mapView is set to by the user.
