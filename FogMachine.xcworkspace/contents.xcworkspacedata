@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Demo/FogSearch/FogSearch.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Demo/FogViewshed/FogViewshed.xcodeproj">
    </FileRef>
    <FileRef

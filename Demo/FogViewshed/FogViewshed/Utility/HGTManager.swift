@@ -44,7 +44,7 @@ public class HGTManager {
                 
             }
         } catch let error as NSError {
-            NSLog("Error displaying HGT file: \(error.localizedDescription)")
+            NSLog("Error reading file: \(error.localizedDescription)")
         }
 
         return hgtFiles

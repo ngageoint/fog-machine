@@ -80,6 +80,8 @@
 		F91D476F1CEA9AFD00AB483E /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472E1CEA9AFD00AB483E /* Pixel.swift */; };
 		F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */; };
 		F91D47711CEA9AFD00AB483E /* GridOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */; };
+		F924C2001CF3B51E00905FBC /* HGTRegions.txt in Resources */ = {isa = PBXBuildFile; fileRef = F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */; };
+		F924C2031CF3B82C00905FBC /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F924C2021CF3B82C00905FBC /* StreamReader.swift */; };
 		F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92D253C1CEFC55000C109AE /* ElevationTool.swift */; };
 		F9CF416E1CC857F5003F5405 /* FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CF416D1CC857F5003F5405 /* FogMachine.framework */; };
 /* End PBXBuildFile section */
@@ -177,6 +179,9 @@
 		F91D472E1CEA9AFD00AB483E /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
 		F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
 		F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlayView.swift; sourceTree = "<group>"; };
+		F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HGTRegions.txt; sourceTree = "<group>"; };
+		F924C2011CF3B5EC00905FBC /* HGTRegions.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = HGTRegions.txt; path = FogViewshed/Data/HGT/HGTRegions.txt; sourceTree = "<group>"; };
+		F924C2021CF3B82C00905FBC /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F92D253C1CEFC55000C109AE /* ElevationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationTool.swift; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -223,6 +228,7 @@
 		E314F6B21B79023D005B75C6 = {
 			isa = PBXGroup;
 			children = (
+				F924C2011CF3B5EC00905FBC /* HGTRegions.txt */,
 				F904248C1CC942330034AAC4 /* PeerKit.framework */,
 				E314F6BD1B79023D005B75C6 /* FogViewshed */,
 				E314F6D51B79023D005B75C6 /* FogViewshedTests */,
@@ -337,6 +343,7 @@
 				F91D47031CEA9AFD00AB483E /* N40W105.hgt */,
 				F91D47041CEA9AFD00AB483E /* N40W106.hgt */,
 				F91D47051CEA9AFD00AB483E /* README.txt */,
+				F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */,
 			);
 			path = HGT;
 			sourceTree = "<group>";
@@ -445,6 +452,7 @@
 				F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */,
 				F91D472B1CEA9AFD00AB483E /* Toast.swift */,
 				F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */,
+				F924C2021CF3B82C00905FBC /* StreamReader.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -553,6 +561,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F924C2001CF3B51E00905FBC /* HGTRegions.txt in Resources */,
 				F91D47451CEA9AFD00AB483E /* N37W122.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				F91D47411CEA9AFD00AB483E /* N34W119.hgt in Resources */,
@@ -673,6 +682,7 @@
 				F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */,
 				F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */,
 				F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */,
+				F924C2031CF3B82C00905FBC /* StreamReader.swift in Sources */,
 				F91D47591CEA9AFD00AB483E /* RectangularPerimeter.swift in Sources */,
 				F91D475E1CEA9AFD00AB483E /* ViewshedTool.swift in Sources */,
 				F91D47351CEA9AFD00AB483E /* ViewshedViewController.swift in Sources */,
