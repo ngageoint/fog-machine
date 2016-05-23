@@ -180,7 +180,6 @@
 		F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
 		F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlayView.swift; sourceTree = "<group>"; };
 		F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HGTRegions.txt; sourceTree = "<group>"; };
-		F924C2011CF3B5EC00905FBC /* HGTRegions.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = HGTRegions.txt; path = FogViewshed/Data/HGT/HGTRegions.txt; sourceTree = "<group>"; };
 		F924C2021CF3B82C00905FBC /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F92D253C1CEFC55000C109AE /* ElevationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationTool.swift; sourceTree = "<group>"; };
 		F9CF416D1CC857F5003F5405 /* FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FogMachine.framework; path = "../../FogMachine/build/Debug-iphoneos/FogMachine.framework"; sourceTree = "<group>"; };
@@ -228,7 +227,6 @@
 		E314F6B21B79023D005B75C6 = {
 			isa = PBXGroup;
 			children = (
-				F924C2011CF3B5EC00905FBC /* HGTRegions.txt */,
 				F904248C1CC942330034AAC4 /* PeerKit.framework */,
 				E314F6BD1B79023D005B75C6 /* FogViewshed */,
 				E314F6D51B79023D005B75C6 /* FogViewshedTests */,
