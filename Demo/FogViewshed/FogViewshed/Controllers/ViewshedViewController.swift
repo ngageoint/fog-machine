@@ -170,7 +170,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
                 style.messageColor = UIColor.redColor()
                 style.backgroundColor = UIColor.whiteColor()
                 style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
-                self.view.makeToast("No elevation data here.  Go downloading some.", duration: 1.5, position: .Center, style: style)
+                self.view.makeToast("No elevation data here.  Go download some.", duration: 1.5, position: .Center, style: style)
                 return
             }
         }

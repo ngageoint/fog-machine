@@ -345,8 +345,8 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="92i-js-eLQ">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="92i-js-eLQ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dLM-i8-oAa" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
@@ -452,15 +452,15 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CYh-vk-RQi">
-                                                <rect key="frame" x="182" y="271" width="236" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CYh-vk-RQi">
+                                                <rect key="frame" x="225" y="271" width="150" height="30"/>
                                                 <state key="normal" title="Remove Pin from Map"/>
                                                 <connections>
                                                     <segue destination="zPC-SU-HQn" kind="unwind" identifier="removePinFromSettings" unwindAction="removePinFromSettings:" id="q56-Du-TZO"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lu5-E1-Xx6">
-                                                <rect key="frame" x="182" y="309" width="236" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lu5-E1-Xx6">
+                                                <rect key="frame" x="251" y="309" width="98" height="30"/>
                                                 <state key="normal" title="Run Viewshed"/>
                                                 <connections>
                                                     <segue destination="zPC-SU-HQn" kind="unwind" identifier="runSelectedFogViewshed" unwindAction="runSelectedFogViewshed:" id="onP-uX-h2v"/>
@@ -472,8 +472,8 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G4W-g5-zVA">
-                                                <rect key="frame" x="182" y="347" width="236" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G4W-g5-zVA">
+                                                <rect key="frame" x="231" y="347" width="138" height="30"/>
                                                 <state key="normal" title="Draw Elevation Data"/>
                                                 <connections>
                                                     <segue destination="zPC-SU-HQn" kind="unwind" identifier="drawElevationData" unwindAction="drawElevationData:" id="MwR-yi-fE9"/>
@@ -613,14 +613,14 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="5ST-rc-8jS">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="5ST-rc-8jS">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUU-dh-4tg" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTT-Lj-IHi">
-                                                <rect key="frame" x="209" y="20" width="184" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTT-Lj-IHi">
+                                                <rect key="frame" x="208" y="20" width="184" height="30"/>
                                                 <state key="normal" title="Clear Viewsheds from Map"/>
                                                 <connections>
                                                     <segue destination="Mfb-3w-qql" kind="unwind" identifier="removeViewshedFromSettings" unwindAction="removeViewshedFromSettings:" id="zcX-zX-NtR"/>
@@ -641,8 +641,8 @@
                                                     <action selector="onDisplayMapLog:" destination="V4j-6L-7be" eventType="valueChanged" id="eEh-DC-h6O"/>
                                                 </connections>
                                             </switch>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
-                                                <rect key="frame" x="206" y="69" width="189" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
+                                                <rect key="frame" x="206" y="70" width="189" height="30"/>
                                                 <state key="normal" title="Delete Observers from Map"/>
                                                 <connections>
                                                     <segue destination="Mfb-3w-qql" kind="unwind" identifier="deleteAllPins" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
