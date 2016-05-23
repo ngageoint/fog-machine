@@ -25,6 +25,14 @@ enum MapType: Int {
 }
 
 public enum ViewshedAlgorithmName: String {
-    case FranklinRay = "FranklinRay"
-    case VanKreveld = "VanKreveld"
+    case FranklinRay = "Franklin and Ray's"
+    case VanKreveld = "Van Kreveld"
+}
+
+struct ViewshedEventBusEvents {
+    static let viewshedComplete:String = "viewshedComplete"
+    static let onPeerConnect:String = "onPeerConnect"
+    static let onPeerDisconnect:String = "onPeerDisconnect"
+    static let onLog:String = "onLog"
+    static let drawGridOverlay:String = "drawGridOverlay"
 }

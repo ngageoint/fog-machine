@@ -22,11 +22,11 @@ class ConnectionsViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        SwiftEventBus.onMainThread(self, name: "onPeerConnect") { result in
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onPeerConnect) { result in
             self.updateWorkers()
         }
         
-        SwiftEventBus.onMainThread(self, name: "onPeerDisconnect") { result in
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onPeerDisconnect) { result in
             self.updateWorkers()
         }
     }

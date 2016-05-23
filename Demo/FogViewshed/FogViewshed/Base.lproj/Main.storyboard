@@ -352,10 +352,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="428"/>
                                         <subviews>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="I1s-0H-aDB">
-                                                <rect key="frame" x="415" y="15" width="177" height="29"/>
+                                                <rect key="frame" x="343" y="15" width="249" height="29"/>
                                                 <segments>
-                                                    <segment title="Franklin Ray"/>
-                                                    <segment title="VanKreveld"/>
+                                                    <segment title="Franklin and Ray's"/>
+                                                    <segment title="Van Kreveld's"/>
                                                 </segments>
                                             </segmentedControl>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Algorithm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdI-4t-bmM">

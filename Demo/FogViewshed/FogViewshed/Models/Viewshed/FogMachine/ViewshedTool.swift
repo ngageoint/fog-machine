@@ -65,7 +65,7 @@ public class ViewshedTool : FMTool {
         
         // if this is not me
         if(node != fromNode) {
-            SwiftEventBus.post("drawGridOverlay", sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid))
+            SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid))
         }
         
         return ViewshedResult(dataGrid: viewshedDataGrid)
@@ -75,17 +75,17 @@ public class ViewshedTool : FMTool {
         for (n, result) in nodeToResult {
             let viewshedResult = result as! ViewshedResult
             NSLog("Received result from node " + n.description)
-            SwiftEventBus.post("drawGridOverlay", sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
+            SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
         }
-        SwiftEventBus.post("viewshedComplete")
+        SwiftEventBus.post(ViewshedEventBusEvents.viewshedComplete)
     }
     
     public override func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {
-        SwiftEventBus.post("onPeerConnect")
+        SwiftEventBus.post(ViewshedEventBusEvents.onPeerConnect)
     }
     
     public override func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
-        SwiftEventBus.post("onPeerDisconnect")
+        SwiftEventBus.post(ViewshedEventBusEvents.onPeerDisconnect)
     }
     
     public func viewshedLog(format:String) {
@@ -94,6 +94,6 @@ public class ViewshedTool : FMTool {
     }
     
     public override func onLog(format:String) {
-        SwiftEventBus.post("onLog", sender:format)
+        SwiftEventBus.post(ViewshedEventBusEvents.onLog, sender:format)
     }
 }

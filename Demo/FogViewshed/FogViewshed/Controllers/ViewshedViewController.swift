@@ -29,17 +29,17 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         mapView.addGestureRecognizer(onLongPressGesture)
 
         // TODO: What should happen when the viewshed is done?
-        SwiftEventBus.onMainThread(self, name: "viewshedComplete") { result in
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshedComplete) { result in
             ActivityIndicator.hide(success: true, animated: true)
         }
         
         // log any info from Fog Machine to our textbox
-        SwiftEventBus.onMainThread(self, name: "onLog") { result in
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onLog) { result in
             let format:String = result.object as! String
             self.ViewshedLog(format)
         }
 
-        SwiftEventBus.onMainThread(self, name: "drawGridOverlay") { result in
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
             let gridOverlay:GridOverlay = result.object as! GridOverlay
             self.mapView.addOverlay(gridOverlay)
         }

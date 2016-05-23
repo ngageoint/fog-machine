@@ -19,11 +19,11 @@ public class ElevationTool {
         dataReadTimer.start()
         let elevationDataGrid:DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox, resolution: Srtm.SRTM3_RESOLUTION)
         elevationLog("Read elevation data in " + String(format: "%.3f", dataReadTimer.stop()) + " seconds")
-        SwiftEventBus.post("drawGridOverlay", sender:ImageUtility.generateElevationOverlay(elevationDataGrid))
+        SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateElevationOverlay(elevationDataGrid))
     }
 
     public func elevationLog(format:String) {
         NSLog(format)
-        SwiftEventBus.post("onLog", sender:format)
+        SwiftEventBus.post(ViewshedEventBusEvents.onLog, sender:format)
     }
 }
