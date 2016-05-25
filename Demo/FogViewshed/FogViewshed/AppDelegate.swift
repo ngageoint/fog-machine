@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // copy hgt files to documents dir
         let prefs = NSUserDefaults.standardUserDefaults()
-        prefs.registerDefaults(["isLogShown" : true])
+        prefs.registerDefaults(["isLogShown" : false])
         
         // copy the data over to documents dir, if it's never been done.
         if !prefs.boolForKey("hasCopyData") {
