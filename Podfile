@@ -11,7 +11,7 @@ target 'FogViewshed' do
     xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
     pod 'SSZipArchive', '~> 1.1'
     #pod 'GEOSwift'
-    pod 'SwiftEventBus', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
+    pod 'SwiftEventBus', :git => 'https://github.com/cesarferreira/SwiftEventBus.git', :tag => '1.1.0'
     pod 'FogMachine', :path => 'FogMachine/'
     # Even though FogMachine depends on peerkit already, we must add peerkit here again.  This is because the dependency directive in the podspec only supports the name of the dependency and any optional version requirement. The :git option is not supported.
     pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.1'
