@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
 	s.version          = '4.0.0'
 	s.summary          = 'iOS Framework for parallel processing'
 	s.homepage         = 'https://github.com/ngageoint/fog-machine'
-	s.license          = {:type => 'MIT', :file => 'LICENSE' }
+	s.license          = {:type => 'MIT', :file => '../LICENSE' }
 	s.authors          = { 'NGA' => '', 'BIT Systems' => '', 'Scott Wiedemann' => 'lemmingapex@gmail.com', 'Chris Wasko' => 'cwasko@caci.com' }
 	s.social_media_url = 'https://twitter.com/NGA_GEOINT'
 	s.source           = { :git => 'https://github.com/ngageoint/fog-machine', :tag => s.version }
