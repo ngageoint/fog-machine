@@ -12,7 +12,7 @@ FogMachine was developed at the National Geospatial-Intelligence Agency (NGA) in
 
 ## Build
 
-Fog Machine uses CocoaPods for dependency management.   
+Fog Machine uses [CocoaPods](https://cocoapods.org/) for dependency management.   
 
 Install all dependencies:
 ```bash
