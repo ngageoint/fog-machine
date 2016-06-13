@@ -3,10 +3,10 @@ import MapKit
 
 public class Observer : NSObject, NSCoding {
     
-    var name: String = "ObserverName"
+    var name:String = "ObserverName"
     var elevationInMeters:Double = 1.6
     var radiusInMeters:Double = 30000.0
-    var position: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
+    var position:CLLocationCoordinate2D = CLLocationCoordinate2DMake(0.0, 0.0)
     
     override init() {
         

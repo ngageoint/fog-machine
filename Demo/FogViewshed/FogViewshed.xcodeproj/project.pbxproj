@@ -63,10 +63,10 @@
 		F91D475E1CEA9AFD00AB483E /* ViewshedTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47191CEA9AFD00AB483E /* ViewshedTool.swift */; };
 		F91D475F1CEA9AFD00AB483E /* ViewshedWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D471A1CEA9AFD00AB483E /* ViewshedWork.swift */; };
 		F91D47601CEA9AFD00AB483E /* FranklinRayViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D471C1CEA9AFD00AB483E /* FranklinRayViewshed.swift */; };
-		F91D47611CEA9AFD00AB483E /* ElevationPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D471E1CEA9AFD00AB483E /* ElevationPoint.swift */; };
-		F91D47621CEA9AFD00AB483E /* KreveldActiveBTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D471F1CEA9AFD00AB483E /* KreveldActiveBTree.swift */; };
-		F91D47631CEA9AFD00AB483E /* KreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47201CEA9AFD00AB483E /* KreveldSweepEventNode.swift */; };
-		F91D47641CEA9AFD00AB483E /* StatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47211CEA9AFD00AB483E /* StatusEntry.swift */; };
+		F91D47611CEA9AFD00AB483E /* VanKreveldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D471E1CEA9AFD00AB483E /* VanKreveldCell.swift */; };
+		F91D47621CEA9AFD00AB483E /* KreveldActiveBinaryTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D471F1CEA9AFD00AB483E /* KreveldActiveBinaryTree.swift */; };
+		F91D47631CEA9AFD00AB483E /* VanKreveldSweepEventNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47201CEA9AFD00AB483E /* VanKreveldSweepEventNode.swift */; };
+		F91D47641CEA9AFD00AB483E /* VanKreveldStatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */; };
 		F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */; };
 		F91D47661CEA9AFD00AB483E /* ViewshedAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47231CEA9AFD00AB483E /* ViewshedAlgorithm.swift */; };
 		F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */; };
@@ -83,6 +83,7 @@
 		F924C2001CF3B51E00905FBC /* HGTRegions.txt in Resources */ = {isa = PBXBuildFile; fileRef = F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */; };
 		F924C2031CF3B82C00905FBC /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F924C2021CF3B82C00905FBC /* StreamReader.swift */; };
 		F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92D253C1CEFC55000C109AE /* ElevationTool.swift */; };
+		F975408D1D09F989005E222E /* VanKreveldEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975408C1D09F989005E222E /* VanKreveldEventType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,10 +161,10 @@
 		F91D47191CEA9AFD00AB483E /* ViewshedTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedTool.swift; sourceTree = "<group>"; };
 		F91D471A1CEA9AFD00AB483E /* ViewshedWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedWork.swift; sourceTree = "<group>"; };
 		F91D471C1CEA9AFD00AB483E /* FranklinRayViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FranklinRayViewshed.swift; sourceTree = "<group>"; };
-		F91D471E1CEA9AFD00AB483E /* ElevationPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationPoint.swift; sourceTree = "<group>"; };
-		F91D471F1CEA9AFD00AB483E /* KreveldActiveBTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldActiveBTree.swift; sourceTree = "<group>"; };
-		F91D47201CEA9AFD00AB483E /* KreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldSweepEventNode.swift; sourceTree = "<group>"; };
-		F91D47211CEA9AFD00AB483E /* StatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusEntry.swift; sourceTree = "<group>"; };
+		F91D471E1CEA9AFD00AB483E /* VanKreveldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldCell.swift; sourceTree = "<group>"; };
+		F91D471F1CEA9AFD00AB483E /* KreveldActiveBinaryTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KreveldActiveBinaryTree.swift; sourceTree = "<group>"; };
+		F91D47201CEA9AFD00AB483E /* VanKreveldSweepEventNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldSweepEventNode.swift; sourceTree = "<group>"; };
+		F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldStatusEntry.swift; sourceTree = "<group>"; };
 		F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldViewshed.swift; sourceTree = "<group>"; };
 		F91D47231CEA9AFD00AB483E /* ViewshedAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedAlgorithm.swift; sourceTree = "<group>"; };
 		F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
@@ -180,6 +181,7 @@
 		F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HGTRegions.txt; sourceTree = "<group>"; };
 		F924C2021CF3B82C00905FBC /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F92D253C1CEFC55000C109AE /* ElevationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationTool.swift; sourceTree = "<group>"; };
+		F975408C1D09F989005E222E /* VanKreveldEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldEventType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -424,11 +426,12 @@
 		F91D471D1CEA9AFD00AB483E /* VanKreveld */ = {
 			isa = PBXGroup;
 			children = (
-				F91D471E1CEA9AFD00AB483E /* ElevationPoint.swift */,
-				F91D471F1CEA9AFD00AB483E /* KreveldActiveBTree.swift */,
-				F91D47201CEA9AFD00AB483E /* KreveldSweepEventNode.swift */,
-				F91D47211CEA9AFD00AB483E /* StatusEntry.swift */,
+				F91D471E1CEA9AFD00AB483E /* VanKreveldCell.swift */,
+				F91D471F1CEA9AFD00AB483E /* KreveldActiveBinaryTree.swift */,
+				F91D47201CEA9AFD00AB483E /* VanKreveldSweepEventNode.swift */,
+				F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */,
 				F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */,
+				F975408C1D09F989005E222E /* VanKreveldEventType.swift */,
 			);
 			path = VanKreveld;
 			sourceTree = "<group>";
@@ -657,18 +660,18 @@
 				F91D46E01CEA9AED00AB483E /* AppDelegate.swift in Sources */,
 				F91D47541CEA9AFD00AB483E /* AxisOrientedBoundingBox.swift in Sources */,
 				F91D47341CEA9AFD00AB483E /* SettingsViewController.swift in Sources */,
-				F91D47631CEA9AFD00AB483E /* KreveldSweepEventNode.swift in Sources */,
+				F91D47631CEA9AFD00AB483E /* VanKreveldSweepEventNode.swift in Sources */,
 				F91D47321CEA9AFD00AB483E /* DataViewController.swift in Sources */,
 				F91D47581CEA9AFD00AB483E /* Perimeter.swift in Sources */,
 				F91D476F1CEA9AFD00AB483E /* Pixel.swift in Sources */,
 				F91D47331CEA9AFD00AB483E /* ObserverSettingsViewController.swift in Sources */,
 				F91D476C1CEA9AFD00AB483E /* HGTRegions.swift in Sources */,
-				F91D47611CEA9AFD00AB483E /* ElevationPoint.swift in Sources */,
+				F91D47611CEA9AFD00AB483E /* VanKreveldCell.swift in Sources */,
 				F91D47571CEA9AFD00AB483E /* DataGrid.swift in Sources */,
 				F91D475D1CEA9AFD00AB483E /* ViewshedResult.swift in Sources */,
 				F91D47711CEA9AFD00AB483E /* GridOverlayView.swift in Sources */,
 				F91D47601CEA9AFD00AB483E /* FranklinRayViewshed.swift in Sources */,
-				F91D47641CEA9AFD00AB483E /* StatusEntry.swift in Sources */,
+				F91D47641CEA9AFD00AB483E /* VanKreveldStatusEntry.swift in Sources */,
 				F91D475C1CEA9AFD00AB483E /* Observer.swift in Sources */,
 				F91D47521CEA9AFD00AB483E /* ObserverEntity.swift in Sources */,
 				F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */,
@@ -681,12 +684,13 @@
 				F91D475F1CEA9AFD00AB483E /* ViewshedWork.swift in Sources */,
 				F91D47681CEA9AFD00AB483E /* BoundingBoxUtility.swift in Sources */,
 				F91D476D1CEA9AFD00AB483E /* Toast.swift in Sources */,
+				F975408D1D09F989005E222E /* VanKreveldEventType.swift in Sources */,
 				7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */,
 				F91D476B1CEA9AFD00AB483E /* HGTManager.swift in Sources */,
 				F91D47661CEA9AFD00AB483E /* ViewshedAlgorithm.swift in Sources */,
 				F91D46E11CEA9AED00AB483E /* Constants.swift in Sources */,
 				F91D47691CEA9AFD00AB483E /* GeoUtility.swift in Sources */,
-				F91D47621CEA9AFD00AB483E /* KreveldActiveBTree.swift in Sources */,
+				F91D47621CEA9AFD00AB483E /* KreveldActiveBinaryTree.swift in Sources */,
 				F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */,
 				F91D47551CEA9AFD00AB483E /* Sector.swift in Sources */,
 				F91D47561CEA9AFD00AB483E /* BresenhamsLineAlgoritm.swift in Sources */,

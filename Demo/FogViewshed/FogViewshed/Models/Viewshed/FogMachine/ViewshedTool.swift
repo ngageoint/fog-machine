@@ -59,8 +59,15 @@ public class ViewshedTool : FMTool {
         viewshedLog("Start running viewshed")
         let viewshedTimer:FMTimer = FMTimer()
         viewshedTimer.start()
-        let franklinRayViewshed:FranklinRayViewshed = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, perimeter: perimeter, observer: viewshedWork.observer)
-        let viewshedDataGrid:DataGrid = franklinRayViewshed.runViewshed()
+        var viewsehdAlgorithm:ViewsehdAlgorithm
+        
+        if(viewshedWork.viewshedAlgorithmName == ViewshedAlgorithmName.VanKreveld) {
+            viewsehdAlgorithm = VanKreveldViewshed(elevationDataGrid: elevationDataGrid, observer: viewshedWork.observer)
+        } else {
+            viewsehdAlgorithm = FranklinRayViewshed(elevationDataGrid: elevationDataGrid, perimeter: perimeter, observer: viewshedWork.observer)
+        }
+        
+        let viewshedDataGrid:DataGrid = viewsehdAlgorithm.runViewshed()
         viewshedLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
         // if this is not me
