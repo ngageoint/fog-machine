@@ -7,8 +7,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var gpsButton: UIButton!
     
-    var locationManager: CLLocationManager!
-    var isInitialAuthorizationCheck = false
+    let locationManager: CLLocationManager = CLLocationManager()
     let arrowPressedImg = UIImage(named: "ArrowPressed")! as UIImage
     let arrowImg = UIImage(named: "Arrow")! as UIImage
     
@@ -18,23 +17,23 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
         self.tableView.backgroundColor = UIColor.clearColor();
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
+        self.mapView.showsUserLocation = true
+        self.mapView.tintColor = UIColor.blueColor()
         self.mapView.delegate = self
         
         let onPressGesture = UILongPressGestureRecognizer(target: self, action:#selector(DataViewController.onPress(_:)))
         onPressGesture.minimumPressDuration = 0.2
         mapView.addGestureRecognizer(onPressGesture)
         
-        if (self.locationManager == nil) {
-            self.locationManager = CLLocationManager()
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-            self.locationManager.delegate = self
-        }
+
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         let status = CLLocationManager.authorizationStatus()
-        if (status == .NotDetermined || status == .Restricted)  {
-            // present an alert indicating location authorization required
-            // and offer to take the user to Settings for the app via
-            self.locationManager.requestWhenInUseAuthorization()
-            self.mapView.tintColor = UIColor.blueColor()
+        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
+            self.locationManager.requestAlwaysAuthorization()
+        } else {
+            self.locationManager.startUpdatingLocation()
         }
         gpsButton.setImage(arrowPressedImg, forState: UIControlState.Normal)
         redraw()
@@ -50,31 +49,8 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     }
     
     @IBAction func focusToCurrentLocation(sender: AnyObject) {
+        self.locationManager.startUpdatingLocation()
         gpsButton.setImage(arrowPressedImg, forState: UIControlState.Normal)
-        
-        let status = CLLocationManager.authorizationStatus()
-        if (status == .Denied) {
-            let alertController = UIAlertController(title: NSLocalizedString("Location Services Off", comment: ""),
-                                                    message: NSLocalizedString("Turn on Location Services in Settings > Privacy to allow FogMachine to determine your current location", comment: ""),
-                                                    preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: ""), style: UIAlertActionStyle.Default,
-                handler: {(alert: UIAlertAction!) -> Void in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
-                    })}
-                ))
-            alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alertController, animated: true, completion: nil)
-        }
-        
-        if let coordinate = mapView.userLocation.location?.coordinate {
-            // Get the span that the mapView is set to by the user.
-            let span = self.mapView.region.span
-            // Now setup the region based on the lat/lon and retain the span that already exists.
-            let region = MKCoordinateRegion(center: coordinate, span: span)
-            //Center the view with some animation.
-            self.mapView.setRegion(region, animated: true)
-        }
     }
     
     func mapView(mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
@@ -93,10 +69,19 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
             self.locationManager.startUpdatingLocation()
-            self.isInitialAuthorizationCheck = true
-            self.mapView.showsUserLocation = true
         }
     }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.locationManager.stopUpdatingLocation()
+        // most recent is at the end
+        let location:CLLocation = locations.last!
+        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1))
+        self.mapView?.centerCoordinate = location.coordinate
+        self.mapView.setRegion(region, animated: true)
+    }
+
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error: " + error.localizedDescription)
