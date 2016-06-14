@@ -31,8 +31,6 @@ public enum ViewshedAlgorithmName: String {
 
 struct ViewshedEventBusEvents {
     static let viewshedComplete:String = "viewshedComplete"
-    static let onPeerConnect:String = "onPeerConnect"
-    static let onPeerDisconnect:String = "onPeerDisconnect"
     static let onLog:String = "onLog"
     static let drawGridOverlay:String = "drawGridOverlay"
 }

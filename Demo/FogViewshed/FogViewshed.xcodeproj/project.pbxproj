@@ -15,7 +15,6 @@
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
 		F91D46E01CEA9AED00AB483E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46DE1CEA9AED00AB483E /* AppDelegate.swift */; };
 		F91D46E11CEA9AED00AB483E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46DF1CEA9AED00AB483E /* Constants.swift */; };
-		F91D47311CEA9AFD00AB483E /* ConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46E31CEA9AFD00AB483E /* ConnectionsViewController.swift */; };
 		F91D47321CEA9AFD00AB483E /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46E41CEA9AFD00AB483E /* DataViewController.swift */; };
 		F91D47331CEA9AFD00AB483E /* ObserverSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46E51CEA9AFD00AB483E /* ObserverSettingsViewController.swift */; };
 		F91D47341CEA9AFD00AB483E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46E61CEA9AFD00AB483E /* SettingsViewController.swift */; };
@@ -82,8 +81,10 @@
 		F91D47711CEA9AFD00AB483E /* GridOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */; };
 		F924C2001CF3B51E00905FBC /* HGTRegions.txt in Resources */ = {isa = PBXBuildFile; fileRef = F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */; };
 		F924C2031CF3B82C00905FBC /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F924C2021CF3B82C00905FBC /* StreamReader.swift */; };
+		F926E7591D10AE4F001AD367 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F926E7581D10AE4F001AD367 /* Images.xcassets */; };
 		F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92D253C1CEFC55000C109AE /* ElevationTool.swift */; };
 		F975408D1D09F989005E222E /* VanKreveldEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975408C1D09F989005E222E /* VanKreveldEventType.swift */; };
+		F9B9FD171D10A46100610CB1 /* FogMachine.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9B9FD151D10A46100610CB1 /* FogMachine.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,7 +114,6 @@
 		F91D46DD1CEA9AED00AB483E /* FogViewshed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FogViewshed-Bridging-Header.h"; sourceTree = "<group>"; };
 		F91D46DE1CEA9AED00AB483E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F91D46DF1CEA9AED00AB483E /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		F91D46E31CEA9AFD00AB483E /* ConnectionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionsViewController.swift; sourceTree = "<group>"; };
 		F91D46E41CEA9AFD00AB483E /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		F91D46E51CEA9AFD00AB483E /* ObserverSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverSettingsViewController.swift; sourceTree = "<group>"; };
 		F91D46E61CEA9AFD00AB483E /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -180,8 +180,10 @@
 		F91D47301CEA9AFD00AB483E /* GridOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlayView.swift; sourceTree = "<group>"; };
 		F924C1FF1CF3B51E00905FBC /* HGTRegions.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HGTRegions.txt; sourceTree = "<group>"; };
 		F924C2021CF3B82C00905FBC /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
+		F926E7581D10AE4F001AD367 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../FogMachine/FogMachine/Images.xcassets; sourceTree = "<group>"; };
 		F92D253C1CEFC55000C109AE /* ElevationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationTool.swift; sourceTree = "<group>"; };
 		F975408C1D09F989005E222E /* VanKreveldEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldEventType.swift; sourceTree = "<group>"; };
+		F9B9FD161D10A46100610CB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = ../../FogMachine/FogMachine/en.lproj/FogMachine.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,8 @@
 		E314F6B21B79023D005B75C6 = {
 			isa = PBXGroup;
 			children = (
+				F926E7581D10AE4F001AD367 /* Images.xcassets */,
+				F9B9FD151D10A46100610CB1 /* FogMachine.storyboard */,
 				F904248C1CC942330034AAC4 /* PeerKit.framework */,
 				E314F6BD1B79023D005B75C6 /* FogViewshed */,
 				E314F6D51B79023D005B75C6 /* FogViewshedTests */,
@@ -289,7 +293,6 @@
 		F91D46E21CEA9AFD00AB483E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				F91D46E31CEA9AFD00AB483E /* ConnectionsViewController.swift */,
 				F91D46E41CEA9AFD00AB483E /* DataViewController.swift */,
 				F91D46E51CEA9AFD00AB483E /* ObserverSettingsViewController.swift */,
 				F91D46E61CEA9AFD00AB483E /* SettingsViewController.swift */,
@@ -556,6 +559,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F926E7591D10AE4F001AD367 /* Images.xcassets in Resources */,
+				F9B9FD171D10A46100610CB1 /* FogMachine.storyboard in Resources */,
 				F924C2001CF3B51E00905FBC /* HGTRegions.txt in Resources */,
 				F91D47451CEA9AFD00AB483E /* N37W122.hgt in Resources */,
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
@@ -653,7 +658,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F91D47311CEA9AFD00AB483E /* ConnectionsViewController.swift in Sources */,
 				F91D476E1CEA9AFD00AB483E /* ImageUtility.swift in Sources */,
 				F91D476A1CEA9AFD00AB483E /* HGTDownloader.swift in Sources */,
 				F91D47531CEA9AFD00AB483E /* ObserverFacade.swift in Sources */,
@@ -732,6 +736,14 @@
 				E314F6CC1B79023D005B75C6 /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		F9B9FD151D10A46100610CB1 /* FogMachine.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F9B9FD161D10A46100610CB1 /* en */,
+			);
+			name = FogMachine.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -830,7 +842,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FogViewshed/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogViewshed;
 				PRODUCT_NAME = FogViewshed;
@@ -849,7 +861,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FogViewshed/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogViewshed;
 				PRODUCT_NAME = FogViewshed;

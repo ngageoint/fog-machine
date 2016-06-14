@@ -37,7 +37,7 @@ FogMachine.fogMachineInstance.execute()
 
 ## Requirements
 
-Fog Machine requires iOS 8.4+.
+Fog Machine requires iOS 9.0+.
 
 ## Pull Requests
 

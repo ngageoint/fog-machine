@@ -1,0 +1,99 @@
+
+/* Class = "UILabel"; text = "Longitude"; ObjectID = "38k-9p-c8a"; */
+"38k-9p-c8a.text" = "Longitude";
+
+/* Class = "UITextField"; text = "-74.4408825978351"; ObjectID = "4Ku-KT-HM5"; */
+"4Ku-KT-HM5.text" = "-74.4408825978351";
+
+/* Class = "UIButton"; normalTitle = "Remove Pin from Map"; ObjectID = "CYh-vk-RQi"; */
+"CYh-vk-RQi.normalTitle" = "Remove Pin from Map";
+
+/* Class = "UIButton"; normalTitle = "Draw Elevation Data"; ObjectID = "G4W-g5-zVA"; */
+"G4W-g5-zVA.normalTitle" = "Draw Elevation Data";
+
+/* Class = "UISegmentedControl"; I1s-0H-aDB.segmentTitles[0] = "Franklin and Ray's"; ObjectID = "I1s-0H-aDB"; */
+"I1s-0H-aDB.segmentTitles[0]" = "Franklin and Ray's";
+
+/* Class = "UISegmentedControl"; I1s-0H-aDB.segmentTitles[1] = "Van Kreveld's"; ObjectID = "I1s-0H-aDB"; */
+"I1s-0H-aDB.segmentTitles[1]" = "Van Kreveld's";
+
+/* Class = "UILabel"; text = "(Degrees)"; ObjectID = "Ip7-af-thW"; */
+"Ip7-af-thW.text" = "(Degrees)";
+
+/* Class = "UILabel"; text = "(Meters)"; ObjectID = "KTL-tW-rzD"; */
+"KTL-tW-rzD.text" = "(Meters)";
+
+/* Class = "UIButton"; normalTitle = "Run Viewshed"; ObjectID = "Lu5-E1-Xx6"; */
+"Lu5-E1-Xx6.normalTitle" = "Run Viewshed";
+
+/* Class = "UILabel"; text = "Algorithm"; ObjectID = "MdI-4t-bmM"; */
+"MdI-4t-bmM.text" = "Algorithm";
+
+/* Class = "UIBarButtonItem"; title = "Reset"; ObjectID = "Q0Z-EG-NUt"; */
+"Q0Z-EG-NUt.title" = "Reset";
+
+/* Class = "UILabel"; text = "Radius"; ObjectID = "Ugw-0e-yGi"; */
+"Ugw-0e-yGi.text" = "Radius";
+
+/* Class = "UITabBarItem"; title = "Item"; ObjectID = "VYC-W6-oYQ"; */
+"VYC-W6-oYQ.title" = "Item";
+
+/* Class = "UITextField"; text = "39.4592006661116"; ObjectID = "WFb-xC-15J"; */
+"WFb-xC-15J.text" = "39.4592006661116";
+
+/* Class = "UILabel"; text = "(Degrees)"; ObjectID = "XY8-t0-Wvq"; */
+"XY8-t0-Wvq.text" = "(Degrees)";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "Xjx-Co-rQa"; */
+"Xjx-Co-rQa.title" = "Settings";
+
+/* Class = "UILabel"; text = "Display Map Log"; ObjectID = "aTx-Dj-7U1"; */
+"aTx-Dj-7U1.text" = "Display Map Log";
+
+/* Class = "UITabBarItem"; title = "Data"; ObjectID = "cPa-gy-q4n"; */
+"cPa-gy-q4n.title" = "Data";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "cWC-8Z-dDT"; */
+"cWC-8Z-dDT.text" = "Name";
+
+/* Class = "UITextField"; text = "30000"; ObjectID = "cc0-xr-QW6"; */
+"cc0-xr-QW6.text" = "30000";
+
+/* Class = "UILabel"; text = "Elevation"; ObjectID = "chq-dY-agV"; */
+"chq-dY-agV.text" = "Elevation";
+
+/* Class = "UILabel"; text = "(Meters)"; ObjectID = "gNu-dS-IVx"; */
+"gNu-dS-IVx.text" = "(Meters)";
+
+/* Class = "UISegmentedControl"; nzQ-pP-oJH.segmentTitles[0] = "Map"; ObjectID = "nzQ-pP-oJH"; */
+"nzQ-pP-oJH.segmentTitles[0]" = "Map";
+
+/* Class = "UISegmentedControl"; nzQ-pP-oJH.segmentTitles[1] = "Hybrid"; ObjectID = "nzQ-pP-oJH"; */
+"nzQ-pP-oJH.segmentTitles[1]" = "Hybrid";
+
+/* Class = "UISegmentedControl"; nzQ-pP-oJH.segmentTitles[2] = "Satellite"; ObjectID = "nzQ-pP-oJH"; */
+"nzQ-pP-oJH.segmentTitles[2]" = "Satellite";
+
+/* Class = "UIBarButtonItem"; title = "Apply"; ObjectID = "oUQ-Hf-9VC"; */
+"oUQ-Hf-9VC.title" = "Apply";
+
+/* Class = "UITabBarItem"; title = "Viewshed"; ObjectID = "sFM-Ol-itb"; */
+"sFM-Ol-itb.title" = "Viewshed";
+
+/* Class = "UIButton"; normalTitle = "Clear Viewsheds from Map"; ObjectID = "sTT-Lj-IHi"; */
+"sTT-Lj-IHi.normalTitle" = "Clear Viewsheds from Map";
+
+/* Class = "UILabel"; text = "Latitude"; ObjectID = "uxc-WO-twz"; */
+"uxc-WO-twz.text" = "Latitude";
+
+/* Class = "UIButton"; normalTitle = "Delete Observers from Map"; ObjectID = "wfz-Ba-OPZ"; */
+"wfz-Ba-OPZ.normalTitle" = "Delete Observers from Map";
+
+/* Class = "UITextField"; text = "25"; ObjectID = "xTl-8d-jWv"; */
+"xTl-8d-jWv.text" = "25";
+
+/* Class = "UITextField"; text = "Observer 1"; ObjectID = "yds-81-aks"; */
+"yds-81-aks.text" = "Observer 1";
+
+/* Class = "UINavigationItem"; title = "Observer Settings"; ObjectID = "yip-Mv-qfd"; */
+"yip-Mv-qfd.title" = "Observer Settings";

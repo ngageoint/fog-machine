@@ -1,5 +1,4 @@
 import UIKit
-import FogMachine
 import SwiftEventBus
 
 class ConnectionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -22,20 +21,20 @@ class ConnectionsViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onPeerConnect) { result in
+        SwiftEventBus.onMainThread(self, name: FogMachineEventBusEvents.onPeerConnect) { result in
             self.updateWorkers()
         }
         
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onPeerDisconnect) { result in
+        SwiftEventBus.onMainThread(self, name: FogMachineEventBusEvents.onPeerDisconnect) { result in
             self.updateWorkers()
         }
     }
-
+    
     
     func findPeers(refreshControl: UIRefreshControl) {
         refreshControl.endRefreshing()
     }
-
+    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FogMachine.fogMachineInstance.getAllNodes().count
@@ -60,7 +59,7 @@ class ConnectionsViewController: UIViewController, UITableViewDataSource, UITabl
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    
+        
     }
     
     func setupTableView() {

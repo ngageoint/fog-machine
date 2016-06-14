@@ -88,11 +88,11 @@ public class ViewshedTool : FMTool {
     }
     
     public override func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {
-        SwiftEventBus.post(ViewshedEventBusEvents.onPeerConnect)
+        SwiftEventBus.post(FogMachineEventBusEvents.onPeerConnect)
     }
     
     public override func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
-        SwiftEventBus.post(ViewshedEventBusEvents.onPeerDisconnect)
+        SwiftEventBus.post(FogMachineEventBusEvents.onPeerDisconnect)
     }
     
     public func viewshedLog(format:String) {

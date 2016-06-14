@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // init fog machine
         FogMachine.fogMachineInstance.setTool(ViewshedTool())
-        FogMachine.fogMachineInstance.startSearchForPeers()        
+        FogMachine.fogMachineInstance.startSearchForPeers()
         
         return true
     }
