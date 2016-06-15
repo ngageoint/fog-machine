@@ -1,13 +1,21 @@
 import UIKit
+import FogMachine
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
+    /**
+     
+     This is the entry point into the application
+     
+     */
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        // init fog machine
+        FogMachine.fogMachineInstance.setTool(SearchTool())
+        FogMachine.fogMachineInstance.startSearchForPeers()
+        
         return true
     }
 

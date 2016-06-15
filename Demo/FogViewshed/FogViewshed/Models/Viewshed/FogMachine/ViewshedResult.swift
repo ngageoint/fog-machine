@@ -1,5 +1,4 @@
 import Foundation
-import MapKit
 import FogMachine
 
 public class ViewshedResult: FMResult {

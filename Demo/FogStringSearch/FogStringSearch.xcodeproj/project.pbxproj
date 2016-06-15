@@ -8,10 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		C37596602A06DA83EEB0EB56 /* Pods_FogStringSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1572E132A4F6B64F536DB250 /* Pods_FogStringSearch.framework */; };
+		F903AFB81D11CE0B00F90D9E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFB71D11CE0B00F90D9E /* Constants.swift */; };
+		F903AFC11D11CE6300F90D9E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */; };
+		F903AFC21D11CE6300F90D9E /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFBE1D11CE6300F90D9E /* SearchResult.swift */; };
+		F903AFC31D11CE6300F90D9E /* SearchTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFBF1D11CE6300F90D9E /* SearchTool.swift */; };
+		F903AFC41D11CE6300F90D9E /* SearchWork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFC01D11CE6300F90D9E /* SearchWork.swift */; };
+		F903AFC71D11D74100F90D9E /* MobyDick.txt in Resources */ = {isa = PBXBuildFile; fileRef = F903AFC61D11D74100F90D9E /* MobyDick.txt */; };
+		F903AFCA1D11DB6200F90D9E /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFC91D11DB6200F90D9E /* StreamReader.swift */; };
 		F979A1A51D10C34700C0981E /* FogMachine.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F979A1A21D10C34700C0981E /* FogMachine.storyboard */; };
 		F979A1A61D10C34700C0981E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F979A1A41D10C34700C0981E /* Images.xcassets */; };
 		F9D40BE11D1089B60099B550 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D40BE01D1089B60099B550 /* AppDelegate.swift */; };
-		F9D40BE51D1089B60099B550 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D40BE41D1089B60099B550 /* SecondViewController.swift */; };
 		F9D40BE81D1089B60099B550 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D40BE61D1089B60099B550 /* Main.storyboard */; };
 		F9D40BEA1D1089B60099B550 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9D40BE91D1089B60099B550 /* Assets.xcassets */; };
 		F9D40BED1D1089B60099B550 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D40BEB1D1089B60099B550 /* LaunchScreen.storyboard */; };
@@ -40,11 +46,17 @@
 		1572E132A4F6B64F536DB250 /* Pods_FogStringSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogStringSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B8B793145E70697C25A0B5B /* Pods-FogStringSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.release.xcconfig"; sourceTree = "<group>"; };
 		AE34769722CEC5D67589ED94 /* Pods-FogStringSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		F903AFB71D11CE0B00F90D9E /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		F903AFBE1D11CE6300F90D9E /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		F903AFBF1D11CE6300F90D9E /* SearchTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTool.swift; sourceTree = "<group>"; };
+		F903AFC01D11CE6300F90D9E /* SearchWork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchWork.swift; sourceTree = "<group>"; };
+		F903AFC61D11D74100F90D9E /* MobyDick.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MobyDick.txt; sourceTree = "<group>"; };
+		F903AFC91D11DB6200F90D9E /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F979A1A31D10C34700C0981E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = ../../FogMachine/FogMachine/en.lproj/FogMachine.storyboard; sourceTree = "<group>"; };
 		F979A1A41D10C34700C0981E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../FogMachine/FogMachine/Images.xcassets; sourceTree = "<group>"; };
 		F9D40BDD1D1089B60099B550 /* FogStringSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogStringSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D40BE01D1089B60099B550 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F9D40BE41D1089B60099B550 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		F9D40BE71D1089B60099B550 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F9D40BE91D1089B60099B550 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9D40BEC1D1089B60099B550 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -100,6 +112,56 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		F903AFB91D11CE6300F90D9E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		F903AFBB1D11CE6300F90D9E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F903AFBC1D11CE6300F90D9E /* Search */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F903AFBC1D11CE6300F90D9E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				F903AFBD1D11CE6300F90D9E /* FogMachine */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		F903AFBD1D11CE6300F90D9E /* FogMachine */ = {
+			isa = PBXGroup;
+			children = (
+				F903AFBE1D11CE6300F90D9E /* SearchResult.swift */,
+				F903AFBF1D11CE6300F90D9E /* SearchTool.swift */,
+				F903AFC01D11CE6300F90D9E /* SearchWork.swift */,
+			);
+			path = FogMachine;
+			sourceTree = "<group>";
+		};
+		F903AFC51D11D74100F90D9E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F903AFC61D11D74100F90D9E /* MobyDick.txt */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		F903AFC81D11DB6200F90D9E /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F903AFC91D11DB6200F90D9E /* StreamReader.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		F9D40BD41D1089B60099B550 = {
 			isa = PBXGroup;
 			children = (
@@ -127,12 +189,16 @@
 		F9D40BDF1D1089B60099B550 /* FogStringSearch */ = {
 			isa = PBXGroup;
 			children = (
+				F903AFB91D11CE6300F90D9E /* Controllers */,
+				F903AFC51D11D74100F90D9E /* Data */,
+				F903AFBB1D11CE6300F90D9E /* Models */,
+				F903AFC81D11DB6200F90D9E /* Utility */,
 				F9D40BE01D1089B60099B550 /* AppDelegate.swift */,
-				F9D40BE41D1089B60099B550 /* SecondViewController.swift */,
 				F9D40BE61D1089B60099B550 /* Main.storyboard */,
 				F9D40BE91D1089B60099B550 /* Assets.xcassets */,
 				F9D40BEB1D1089B60099B550 /* LaunchScreen.storyboard */,
 				F9D40BEE1D1089B60099B550 /* Info.plist */,
+				F903AFB71D11CE0B00F90D9E /* Constants.swift */,
 			);
 			path = FogStringSearch;
 			sourceTree = "<group>";
@@ -262,6 +328,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F903AFC71D11D74100F90D9E /* MobyDick.txt in Resources */,
 				F979A1A51D10C34700C0981E /* FogMachine.storyboard in Resources */,
 				F979A1A61D10C34700C0981E /* Images.xcassets in Resources */,
 				F9D40BED1D1089B60099B550 /* LaunchScreen.storyboard in Resources */,
@@ -339,8 +406,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9D40BE51D1089B60099B550 /* SecondViewController.swift in Sources */,
+				F903AFC11D11CE6300F90D9E /* SearchViewController.swift in Sources */,
 				F9D40BE11D1089B60099B550 /* AppDelegate.swift in Sources */,
+				F903AFC21D11CE6300F90D9E /* SearchResult.swift in Sources */,
+				F903AFCA1D11DB6200F90D9E /* StreamReader.swift in Sources */,
+				F903AFC31D11CE6300F90D9E /* SearchTool.swift in Sources */,
+				F903AFC41D11CE6300F90D9E /* SearchWork.swift in Sources */,
+				F903AFB81D11CE0B00F90D9E /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
