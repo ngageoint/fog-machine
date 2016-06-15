@@ -24,6 +24,7 @@ public class SearchTool : FMTool {
     
     private func getTextToSearch(peerCount:Int, peerNumber:Int) -> String {
         var resourceURL:NSURL = NSURL(string: NSBundle.mainBundle().resourcePath!)!
+        
         var textToSearch:String = ""
         do {
         let textToSearchFile:NSURL = try (NSFileManager.defaultManager().contentsOfDirectoryAtURL(resourceURL, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions()).filter{ $0.lastPathComponent == "MobyDick.txt" }).first!
@@ -34,12 +35,41 @@ public class SearchTool : FMTool {
                 }
                 while let line = aStreamReader.nextLine() {
                     textToSearch += line
+                    textToSearch += "\n"
                 }
             }
         } catch let error as NSError {
-            NSLog("Error reading file: \(error.localizedDescription)")
+            searchLog("Error reading file: \(error.localizedDescription)")
         }
-        return textToSearch
+        
+        let peerCountD:Double = Double(peerCount)
+        let peerNumberD:Double = Double(peerNumber)
+        
+        let newline:Character = "\n"
+        let numberOfCharacters:Int = textToSearch.characters.count
+        var startIndex:String.CharacterView.Index
+        var endIndex:String.CharacterView.Index
+        if(peerNumber == 0) {
+            startIndex = textToSearch.startIndex
+        } else {
+            startIndex = textToSearch.startIndex.advancedBy(Int(floor((peerNumberD/peerCountD)*Double(numberOfCharacters))))
+            while(startIndex > textToSearch.startIndex && (textToSearch[startIndex] != newline)) {
+                startIndex = startIndex.advancedBy(-1)
+            }
+        }
+        
+        if(peerNumber + 1 == peerCount) {
+            endIndex = textToSearch.endIndex
+        } else {
+            endIndex = textToSearch.startIndex.advancedBy(Int(floor(((peerNumberD + 1)/peerCountD)*Double(numberOfCharacters))))
+            while(endIndex > textToSearch.startIndex && (textToSearch[endIndex] != newline)) {
+                endIndex = endIndex.advancedBy(-1)
+            }
+        }
+        
+        searchLog("startIndex \(startIndex), endIndex \(endIndex)")
+        
+        return textToSearch[startIndex..<endIndex]
     }
 
     // used for KMP, Build pi function of prefixes
@@ -91,11 +121,6 @@ public class SearchTool : FMTool {
         let searchWork:SearchWork = work as! SearchWork
         let textFoundAt:[Int] = KMP(getTextToSearch(searchWork.peerCount, peerNumber: searchWork.peerNumber), pattern: searchWork.searchTerm)
         
-        NSLog("\(searchWork.searchTerm) found in text \(textFoundAt.count) times.")
-//        for i in 0..<textFoundAt.count {
-//            NSLog("\(textFoundAt[i])")
-//        }
-        
         return SearchResult(numberOfOccurrences: textFoundAt.count)
     }
     
@@ -106,6 +131,7 @@ public class SearchTool : FMTool {
             NSLog("Received result from node " + n.description)
             totalNumberOfOccurrences += searchResult.numberOfOccurrences
         }
+                searchLog("The word '\(self.searchTerm!)' was found in \(totalNumberOfOccurrences) times in the text.\n")
         SwiftEventBus.post(SearchEventBusEvents.searchComplete)
     }
 
@@ -117,7 +143,7 @@ public class SearchTool : FMTool {
         SwiftEventBus.post(FogMachineEventBusEvents.onPeerDisconnect)
     }
 
-    public func viewshedLog(format:String) {
+    public func searchLog(format:String) {
         NSLog(format)
         self.onLog(format)
     }

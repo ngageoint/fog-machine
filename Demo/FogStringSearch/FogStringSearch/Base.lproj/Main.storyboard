@@ -14,45 +14,85 @@
                         <viewControllerLayoutGuide type="top" id="L7p-HK-0SC"/>
                         <viewControllerLayoutGuide type="bottom" id="Djb-ko-YwX"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="QS5-Rx-YEW">
+                    <view key="view" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="QS5-Rx-YEW">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Log?" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="kXX-b2-cNW">
-                                <rect key="frame" x="0.0" y="383" width="600" height="168"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Text to Find:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phH-HO-rh6">
-                                <rect key="frame" x="20" y="28" width="131" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Text Search" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="VX8-an-AZg">
+                                <rect key="frame" x="20" y="20" width="560" height="42"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="YyY-WF-koG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="20"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n1y-XY-ebj">
-                                <rect key="frame" x="312" y="24" width="268" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text to Find" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phH-HO-rh6">
+                                <rect key="frame" x="20" y="70" width="62" height="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n1y-XY-ebj">
+                                <rect key="frame" x="20" y="92" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vcR-Cy-MTH">
-                                <rect key="frame" x="247" y="62" width="106" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vcR-Cy-MTH">
+                                <rect key="frame" x="247" y="130" width="106" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="106" id="AN8-ro-dTe"/>
+                                </constraints>
                                 <state key="normal" title="Search"/>
                                 <connections>
                                     <action selector="onSearch:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="N9Z-JV-csv"/>
                                 </connections>
                             </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="kXX-b2-cNW">
+                                <rect key="frame" x="20" y="168" width="560" height="383"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="phH-HO-rh6" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="8" id="XGE-ld-6Hx"/>
-                            <constraint firstItem="n1y-XY-ebj" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" constant="4" id="dOh-Cj-dO0"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="phH-HO-rh6" secondAttribute="leading" id="eWC-Kp-rhj"/>
-                            <constraint firstItem="vcR-Cy-MTH" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="gtj-eY-krs"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="n1y-XY-ebj" secondAttribute="trailing" id="hPd-7y-NxE"/>
+                            <constraint firstItem="n1y-XY-ebj" firstAttribute="top" secondItem="phH-HO-rh6" secondAttribute="bottom" constant="8" id="40l-Me-foc"/>
+                            <constraint firstItem="vcR-Cy-MTH" firstAttribute="top" secondItem="n1y-XY-ebj" secondAttribute="bottom" constant="8" id="ASQ-N7-0SY"/>
+                            <constraint firstItem="kXX-b2-cNW" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leadingMargin" constant="-20" id="Ak5-KS-n10"/>
+                            <constraint firstItem="kXX-b2-cNW" firstAttribute="leading" secondItem="QS5-Rx-YEW" secondAttribute="leading" id="B2U-GV-nIP"/>
+                            <constraint firstItem="vcR-Cy-MTH" firstAttribute="centerX" secondItem="QS5-Rx-YEW" secondAttribute="centerX" id="Jl3-td-MyV"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="n1y-XY-ebj" secondAttribute="leading" id="Mca-90-3RY"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="kXX-b2-cNW" secondAttribute="leading" id="N8r-4G-3t5"/>
+                            <constraint firstItem="Djb-ko-YwX" firstAttribute="top" secondItem="kXX-b2-cNW" secondAttribute="bottom" id="Ni6-II-6h7"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="n1y-XY-ebj" secondAttribute="trailing" id="Qct-Yq-d8z"/>
+                            <constraint firstItem="phH-HO-rh6" firstAttribute="top" secondItem="VX8-an-AZg" secondAttribute="bottom" constant="8" id="ZNH-Gh-9lk"/>
+                            <constraint firstItem="kXX-b2-cNW" firstAttribute="top" secondItem="vcR-Cy-MTH" secondAttribute="bottom" constant="8" id="ZcY-au-ODi"/>
+                            <constraint firstItem="VX8-an-AZg" firstAttribute="top" secondItem="L7p-HK-0SC" secondAttribute="bottom" id="ZoX-Mo-Shk"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="VX8-an-AZg" secondAttribute="leading" id="crQ-q6-yJw"/>
+                            <constraint firstAttribute="trailing" secondItem="kXX-b2-cNW" secondAttribute="trailing" id="g8P-hz-l86"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kXX-b2-cNW" secondAttribute="trailing" id="hJE-uB-rYR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="VX8-an-AZg" secondAttribute="trailing" id="lTR-n9-TT4"/>
+                            <constraint firstItem="phH-HO-rh6" firstAttribute="top" secondItem="VX8-an-AZg" secondAttribute="bottom" constant="8" id="nFD-iD-mmc"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="phH-HO-rh6" secondAttribute="leading" id="pIi-01-KS8"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kXX-b2-cNW" secondAttribute="trailing" constant="-20" id="v82-NY-0It"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="ZNH-Gh-9lk"/>
+                                <exclude reference="Ak5-KS-n10"/>
+                                <exclude reference="B2U-GV-nIP"/>
+                                <exclude reference="g8P-hz-l86"/>
+                                <exclude reference="v82-NY-0It"/>
+                            </mask>
+                        </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Search" image="second" id="cPa-gy-q4n"/>
+                    <tabBarItem key="tabBarItem" title="Search" image="Search" selectedImage="Search" id="cPa-gy-q4n"/>
+                    <connections>
+                        <outlet property="logBox" destination="kXX-b2-cNW" id="YCw-7j-apn"/>
+                        <outlet property="textToFind" destination="n1y-XY-ebj" id="ZgH-I6-sxB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
@@ -89,6 +129,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="second" width="30" height="30"/>
+        <image name="Search" width="20" height="20"/>
     </resources>
 </document>
