@@ -1,31 +1,28 @@
 PODS:
   - Buckets (1.2.1)
   - FogMachine (4.0.0):
+    - PeerKit
     - SwiftEventBus (~> 1.1.0)
   - PeerKit (2.0.1)
-  - SSZipArchive (1.1)
+  - SSZipArchive (1.2)
   - SwiftEventBus (1.1.0)
 
 DEPENDENCIES:
   - Buckets (from `https://github.com/mauriciosantos/Buckets-Swift.git`, tag `1.2.1`)
-  - FogMachine (from `FogMachine/`)
+  - FogMachine (from `.`)
   - PeerKit (from `https://github.com/cwas/PeerKit.git`, tag `2.0.1`)
   - SSZipArchive (~> 1.1)
-  - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag
-    `1.1.0`)
+  - SwiftEventBus (~> 1.1.0)
 
 EXTERNAL SOURCES:
   Buckets:
     :git: https://github.com/mauriciosantos/Buckets-Swift.git
     :tag: 1.2.1
   FogMachine:
-    :path: FogMachine/
+    :path: .
   PeerKit:
     :git: https://github.com/cwas/PeerKit.git
     :tag: 2.0.1
-  SwiftEventBus:
-    :git: https://github.com/cesarferreira/SwiftEventBus.git
-    :tag: 1.1.0
 
 CHECKOUT OPTIONS:
   Buckets:
@@ -34,15 +31,12 @@ CHECKOUT OPTIONS:
   PeerKit:
     :git: https://github.com/cwas/PeerKit.git
     :tag: 2.0.1
-  SwiftEventBus:
-    :git: https://github.com/cesarferreira/SwiftEventBus.git
-    :tag: 1.1.0
 
 SPEC CHECKSUMS:
   Buckets: 92a8850454575d86d0de268b8ee08c5fd9821598
-  FogMachine: eb9f2cda67338ddfd395bff02d1b46fbfd7f3988
+  FogMachine: f9c5b6069d952eb6a41d402c79ef27b28e85b984
   PeerKit: afeefbde5a660a085749ab28bfcba515c07191bf
-  SSZipArchive: de3d215ab73f87db627f81f2ce24f1731e3886c3
-  SwiftEventBus: d334f7aecbddbd995c3de5c262cf35c72db550f3
+  SSZipArchive: 251093c65f98d6ea282c50bc404bfa631d9fd721
+  SwiftEventBus: d33b51752d4e3e994f0ea7b31873f0beca7eada0
 
 COCOAPODS: 0.39.0

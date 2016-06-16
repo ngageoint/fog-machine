@@ -1,4 +1,4 @@
-import PeerKit
+import Foundation
 import MultipeerConnectivity
 
 public class FMNode : CustomStringConvertible, Hashable, Equatable {

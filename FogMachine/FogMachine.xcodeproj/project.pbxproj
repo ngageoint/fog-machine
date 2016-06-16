@@ -10,7 +10,6 @@
 		A9EF919AE587405155A5845B /* Pods_FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */; };
 		F9647BF21CC850920070893F /* FogMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = F9647BE91CC850920070893F /* FogMachine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9647BF31CC850920070893F /* FogMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BEA1CC850920070893F /* FogMachine.swift */; };
-		F9647BF41CC850920070893F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9647BEB1CC850920070893F /* Info.plist */; };
 		F9A954A91D10989500F756D3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A954A81D10989500F756D3 /* Constants.swift */; };
 		F9B9FD0D1D1099F900610CB1 /* FogMachine.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9B9FD0F1D1099F900610CB1 /* FogMachine.storyboard */; };
 		F9B9FD191D10A70300610CB1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9B9FD181D10A70300610CB1 /* Images.xcassets */; };
@@ -178,7 +177,7 @@
 		75802C751C7F37AE00DAE8BD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = NGA;
 				TargetAttributes = {
 					75802C7D1C7F37AE00DAE8BD = {
@@ -209,7 +208,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9B9FD191D10A70300610CB1 /* Images.xcassets in Resources */,
-				F9647BF41CC850920070893F /* Info.plist in Resources */,
 				F9B9FD0D1D1099F900610CB1 /* FogMachine.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -317,7 +315,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -359,7 +357,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

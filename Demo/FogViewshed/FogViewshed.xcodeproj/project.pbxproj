@@ -11,7 +11,6 @@
 		9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
 		E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C61B79023D005B75C6 /* Main.storyboard */; };
 		E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C91B79023D005B75C6 /* Images.xcassets */; };
-		E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */; };
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
 		F91D46E01CEA9AED00AB483E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46DE1CEA9AED00AB483E /* AppDelegate.swift */; };
 		F91D46E11CEA9AED00AB483E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46DF1CEA9AED00AB483E /* Constants.swift */; };
@@ -84,6 +83,7 @@
 		F926E7591D10AE4F001AD367 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F926E7581D10AE4F001AD367 /* Images.xcassets */; };
 		F92D253D1CEFC55000C109AE /* ElevationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92D253C1CEFC55000C109AE /* ElevationTool.swift */; };
 		F975408D1D09F989005E222E /* VanKreveldEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975408C1D09F989005E222E /* VanKreveldEventType.swift */; };
+		F99D8C0A1D13594300DD754F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F99D8C081D13594300DD754F /* LaunchScreen.storyboard */; };
 		F9B9FD171D10A46100610CB1 /* FogMachine.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9B9FD151D10A46100610CB1 /* FogMachine.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -106,7 +106,6 @@
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C71B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E314F6C91B79023D005B75C6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E314F6CC1B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E314F6D21B79023D005B75C6 /* FogViewshed.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FogViewshed.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6D71B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogViewshedTests.swift; sourceTree = "<group>"; };
@@ -183,6 +182,7 @@
 		F926E7581D10AE4F001AD367 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../FogMachine/FogMachine/Images.xcassets; sourceTree = "<group>"; };
 		F92D253C1CEFC55000C109AE /* ElevationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationTool.swift; sourceTree = "<group>"; };
 		F975408C1D09F989005E222E /* VanKreveldEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldEventType.swift; sourceTree = "<group>"; };
+		F99D8C091D13594300DD754F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = FogViewshed/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9B9FD161D10A46100610CB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = ../../FogMachine/FogMachine/en.lproj/FogMachine.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -258,7 +258,7 @@
 				754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */,
 				E314F6C61B79023D005B75C6 /* Main.storyboard */,
 				E314F6C91B79023D005B75C6 /* Images.xcassets */,
-				E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */,
+				F99D8C081D13594300DD754F /* LaunchScreen.storyboard */,
 				E314F6BE1B79023D005B75C6 /* Supporting Files */,
 				F91D46DD1CEA9AED00AB483E /* FogViewshed-Bridging-Header.h */,
 			);
@@ -566,6 +566,7 @@
 				E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */,
 				F91D47411CEA9AFD00AB483E /* N34W119.hgt in Resources */,
 				F91D474A1CEA9AFD00AB483E /* N38W124.hgt in Resources */,
+				F99D8C0A1D13594300DD754F /* LaunchScreen.storyboard in Resources */,
 				F91D474E1CEA9AFD00AB483E /* N39W106.hgt in Resources */,
 				F91D47481CEA9AFD00AB483E /* N38W078.hgt in Resources */,
 				F91D47501CEA9AFD00AB483E /* N40W106.hgt in Resources */,
@@ -580,7 +581,6 @@
 				F91D474F1CEA9AFD00AB483E /* N40W105.hgt in Resources */,
 				F91D47441CEA9AFD00AB483E /* N37W078.hgt in Resources */,
 				F91D473C1CEA9AFD00AB483E /* N33W117.hgt in Resources */,
-				E314F6CD1B79023D005B75C6 /* LaunchScreen.xib in Resources */,
 				E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */,
 				F91D47511CEA9AFD00AB483E /* README.txt in Resources */,
 				F91D473F1CEA9AFD00AB483E /* N34W117.hgt in Resources */,
@@ -730,12 +730,13 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		E314F6CB1B79023D005B75C6 /* LaunchScreen.xib */ = {
+		F99D8C081D13594300DD754F /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E314F6CC1B79023D005B75C6 /* Base */,
+				F99D8C091D13594300DD754F /* Base */,
 			);
-			name = LaunchScreen.xib;
+			name = LaunchScreen.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		F9B9FD151D10A46100610CB1 /* FogMachine.storyboard */ = {

@@ -1,5 +1,4 @@
 import Foundation
-import MultipeerConnectivity
 
 /**
  Base class to overwrite for applications using FogMachine.  FMTool has a lifecycle that you should abide by.  You should extend this class and provide implementations for the following routines:
