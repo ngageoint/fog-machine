@@ -2,7 +2,7 @@ import UIKit
 import FogMachine
 import SwiftEventBus
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var textToFind: UITextField!
     @IBOutlet weak var logBox: UITextView!
@@ -10,11 +10,19 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        textToFind.delegate = self
+        
         // log any info from Fog Machine to our textbox
         SwiftEventBus.onMainThread(self, name: SearchEventBusEvents.onLog) { result in
             let format:String = result.object as! String
             self.SearchLog(format)
         }
+    }
+    
+    // called when 'return' key pressed in textToFind.
+    func textFieldShouldReturn(textField: UITextField ) -> Bool {
+        textField.resignFirstResponder()
+        return true;
     }
     
     override func didReceiveMemoryWarning() {
