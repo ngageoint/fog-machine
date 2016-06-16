@@ -18,5 +18,4 @@ Pod::Spec.new do |s|
 	s.frameworks = 'Foundation'
 
 	s.dependency 'SwiftEventBus', '~> 1.1.0'
-	s.dependency 'PeerKit'
 end
