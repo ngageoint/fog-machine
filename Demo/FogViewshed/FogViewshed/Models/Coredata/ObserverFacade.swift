@@ -31,7 +31,7 @@ class ObserverFacade {
     
     func delete(observer: Observer) {
         for observerEntity:ObserverEntity in getObserverEntities() {
-            if(observer.name == observerEntity.name) {
+            if(observer.id == Int(observerEntity.id)) {
                 managedContext.deleteObject(observerEntity)
                 saveContext()
                 break;
@@ -41,7 +41,7 @@ class ObserverFacade {
     
     func add(observer: Observer) {
         let managedObject = NSEntityDescription.insertNewObjectForEntityForName("Observer", inManagedObjectContext: managedContext) as NSManagedObject
-        managedObject.setValue(observer.name, forKey: "name")
+        managedObject.setValue(observer.id, forKey: "id")
         managedObject.setValue(observer.elevationInMeters, forKey: "elevationInMeters")
         managedObject.setValue(observer.radiusInMeters, forKey: "radiusInMeters")
         managedObject.setValue(observer.position.latitude, forKey: "latitude")
@@ -86,6 +86,22 @@ class ObserverFacade {
         for observerEntity:ObserverEntity in getObserverEntities() {
             observers.append(observerEntity.asObserver())
         }
+        observers.sortInPlace { (obj1, obj2) -> Bool in
+            return obj1.id < obj2.id
+        }
+
         return observers
+    }
+    
+    func getNextObserverId() -> Int {
+        var id:Int = 1
+        for observer:Observer in getObservers() {
+            if(observer.id == id) {
+                id += 1;
+            } else {
+                break;
+            }
+        }
+        return id;
     }
 }

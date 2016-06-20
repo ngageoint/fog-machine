@@ -19,4 +19,7 @@
    <FileRef
       location = "group:README.md">
    </FileRef>
+   <FileRef
+      location = "group:FogMachine.podspec">
+   </FileRef>
 </Workspace>

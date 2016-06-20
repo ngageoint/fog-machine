@@ -12,6 +12,7 @@
 		E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C61B79023D005B75C6 /* Main.storyboard */; };
 		E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C91B79023D005B75C6 /* Images.xcassets */; };
 		E314F6D91B79023D005B75C6 /* FogViewshedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */; };
+		F913E2571D1869F30012A431 /* Pods_FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F913E2561D1869F30012A431 /* Pods_FogMachine.framework */; };
 		F91D46E01CEA9AED00AB483E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46DE1CEA9AED00AB483E /* AppDelegate.swift */; };
 		F91D46E11CEA9AED00AB483E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46DF1CEA9AED00AB483E /* Constants.swift */; };
 		F91D47321CEA9AFD00AB483E /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D46E41CEA9AFD00AB483E /* DataViewController.swift */; };
@@ -109,7 +110,7 @@
 		E314F6D21B79023D005B75C6 /* FogViewshed.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FogViewshed.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6D71B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6D81B79023D005B75C6 /* FogViewshedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogViewshedTests.swift; sourceTree = "<group>"; };
-		F904248C1CC942330034AAC4 /* PeerKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = PeerKit.framework; path = "/Users/wiedemanns/Library/Developer/Xcode/DerivedData/FogMachine-ehakjtromnjnlkdndgtxzwnwrxhg/Build/Products/Debug-iphoneos/PeerKit.framework"; sourceTree = "<absolute>"; };
+		F913E2561D1869F30012A431 /* Pods_FogMachine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_FogMachine.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/FogMachine-fhlmkgncpzqeezchvlnipwbdziia/Build/Products/Debug-iphoneos/Pods_FogMachine.framework"; sourceTree = "<group>"; };
 		F91D46DD1CEA9AED00AB483E /* FogViewshed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FogViewshed-Bridging-Header.h"; sourceTree = "<group>"; };
 		F91D46DE1CEA9AED00AB483E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F91D46DF1CEA9AED00AB483E /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -191,6 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F913E2571D1869F30012A431 /* Pods_FogMachine.framework in Frameworks */,
 				9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,6 +210,7 @@
 		401D5B75ECC7ACCCF10B7514 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F913E2561D1869F30012A431 /* Pods_FogMachine.framework */,
 				23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */,
 			);
 			name = Frameworks;
@@ -227,7 +230,6 @@
 			children = (
 				F926E7581D10AE4F001AD367 /* Images.xcassets */,
 				F9B9FD151D10A46100610CB1 /* FogMachine.storyboard */,
-				F904248C1CC942330034AAC4 /* PeerKit.framework */,
 				E314F6BD1B79023D005B75C6 /* FogViewshed */,
 				E314F6D51B79023D005B75C6 /* FogViewshedTests */,
 				E314F6BC1B79023D005B75C6 /* Products */,

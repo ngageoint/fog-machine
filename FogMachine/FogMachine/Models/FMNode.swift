@@ -8,7 +8,7 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
     public var uniqueId: String
     public private(set) var mcPeerID: MCPeerID
     
-    public var description: String{
+    public var description: String {
         return name + " " + uniqueId
     }
     public var hashValue: Int

@@ -27,7 +27,6 @@
 		81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig"; sourceTree = "<group>"; };
 		BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9446EBD1CC85A02000F8A17 /* FogMachine.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = FogMachine.podspec; sourceTree = "<group>"; };
 		F9647BE91CC850920070893F /* FogMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FogMachine.h; sourceTree = "<group>"; };
 		F9647BEA1CC850920070893F /* FogMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogMachine.swift; sourceTree = "<group>"; };
 		F9647BEB1CC850920070893F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -68,7 +67,6 @@
 		75802C741C7F37AE00DAE8BD = {
 			isa = PBXGroup;
 			children = (
-				F9446EBD1CC85A02000F8A17 /* FogMachine.podspec */,
 				F9647BE21CC850920070893F /* FogMachine */,
 				75802C7F1C7F37AE00DAE8BD /* Products */,
 				A3F6200A0272446E4CEF7C25 /* Pods */,

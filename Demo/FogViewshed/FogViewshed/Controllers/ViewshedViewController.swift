@@ -138,7 +138,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         if (gestureRecognizer.state == UIGestureRecognizerState.Began) {
             if(HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView), resolution: Srtm.SRTM3_RESOLUTION)) != nil) {
                 let newObserver = Observer()
-                newObserver.name = "Observer \(model.getObservers().count + 1)"
+                newObserver.id = model.getNextObserverId()
                 newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
                 model.add(newObserver)
                 drawPin(newObserver)

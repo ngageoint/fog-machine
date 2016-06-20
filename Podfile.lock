@@ -1,7 +1,6 @@
 PODS:
   - Buckets (1.2.1)
   - FogMachine (4.0.0):
-    - PeerKit
     - SwiftEventBus (~> 1.1.0)
   - PeerKit (2.0.1)
   - SSZipArchive (1.2)
@@ -34,7 +33,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Buckets: 92a8850454575d86d0de268b8ee08c5fd9821598
-  FogMachine: f9c5b6069d952eb6a41d402c79ef27b28e85b984
+  FogMachine: 213289498d1140dd91f432f516e3347f2449e936
   PeerKit: afeefbde5a660a085749ab28bfcba515c07191bf
   SSZipArchive: 251093c65f98d6ea282c50bc404bfa631d9fd721
   SwiftEventBus: d33b51752d4e3e994f0ea7b31873f0beca7eada0
