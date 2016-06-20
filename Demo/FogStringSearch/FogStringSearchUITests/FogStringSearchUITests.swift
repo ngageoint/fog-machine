@@ -1,11 +1,3 @@
-//
-//  FogStringSearchUITests.swift
-//  FogStringSearchUITests
-//
-//  Created by Scott Wiedemann on 6/14/16.
-//  Copyright © 2016 Scott Wiedemann. All rights reserved.
-//
-
 import XCTest
 
 class FogStringSearchUITests: XCTestCase {
