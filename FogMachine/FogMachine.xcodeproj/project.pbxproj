@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		A9EF919AE587405155A5845B /* Pods_FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */; };
+		F9628E901D19DA89003A5D7B /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E871D19DA89003A5D7B /* Advertiser.swift */; };
+		F9628E911D19DA89003A5D7B /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E881D19DA89003A5D7B /* Browser.swift */; };
+		F9628E931D19DA89003A5D7B /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F9628E8A1D19DA89003A5D7B /* LICENSE */; };
+		F9628E951D19DA89003A5D7B /* PeerPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E8C1D19DA89003A5D7B /* PeerPack.swift */; };
+		F9628E961D19DA89003A5D7B /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F9628E8D1D19DA89003A5D7B /* README.md */; };
+		F9628E971D19DA89003A5D7B /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E8E1D19DA89003A5D7B /* Session.swift */; };
+		F9628E981D19DA89003A5D7B /* Transceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E8F1D19DA89003A5D7B /* Transceiver.swift */; };
 		F9647BF21CC850920070893F /* FogMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = F9647BE91CC850920070893F /* FogMachine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F9647BF31CC850920070893F /* FogMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9647BEA1CC850920070893F /* FogMachine.swift */; };
 		F9A954A91D10989500F756D3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A954A81D10989500F756D3 /* Constants.swift */; };
@@ -27,10 +34,16 @@
 		81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig"; sourceTree = "<group>"; };
 		BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9628E871D19DA89003A5D7B /* Advertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
+		F9628E881D19DA89003A5D7B /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
+		F9628E8A1D19DA89003A5D7B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		F9628E8C1D19DA89003A5D7B /* PeerPack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerPack.swift; sourceTree = "<group>"; };
+		F9628E8D1D19DA89003A5D7B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F9628E8E1D19DA89003A5D7B /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		F9628E8F1D19DA89003A5D7B /* Transceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transceiver.swift; sourceTree = "<group>"; };
 		F9647BE91CC850920070893F /* FogMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FogMachine.h; sourceTree = "<group>"; };
 		F9647BEA1CC850920070893F /* FogMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogMachine.swift; sourceTree = "<group>"; };
 		F9647BEB1CC850920070893F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F981F02E1CC85EE1006E724C /* PeerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PeerKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/FogMachine-ehakjtromnjnlkdndgtxzwnwrxhg/Build/Products/Debug-iphoneos/PeerKit.framework"; sourceTree = "<group>"; };
 		F9A954A81D10989500F756D3 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F9B9FD0E1D1099F900610CB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/FogMachine.storyboard; sourceTree = "<group>"; };
 		F9B9FD181D10A70300610CB1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -58,7 +71,6 @@
 		26D88A5F15EF414BB954D885 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F981F02E1CC85EE1006E724C /* PeerKit.framework */,
 				BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */,
 			);
 			name = Frameworks;
@@ -91,12 +103,27 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		F9628E861D19DA89003A5D7B /* PeerPack */ = {
+			isa = PBXGroup;
+			children = (
+				F9628E871D19DA89003A5D7B /* Advertiser.swift */,
+				F9628E881D19DA89003A5D7B /* Browser.swift */,
+				F9628E8A1D19DA89003A5D7B /* LICENSE */,
+				F9628E8C1D19DA89003A5D7B /* PeerPack.swift */,
+				F9628E8D1D19DA89003A5D7B /* README.md */,
+				F9628E8E1D19DA89003A5D7B /* Session.swift */,
+				F9628E8F1D19DA89003A5D7B /* Transceiver.swift */,
+			);
+			path = PeerPack;
+			sourceTree = "<group>";
+		};
 		F9647BE21CC850920070893F /* FogMachine */ = {
 			isa = PBXGroup;
 			children = (
 				F9D40C121D1091EF0099B550 /* Controllers */,
-				F9DD38A11CC94C9400F1AC50 /* Utility */,
 				F9DD38961CC94BE400F1AC50 /* Models */,
+				F9628E861D19DA89003A5D7B /* PeerPack */,
+				F9DD38A11CC94C9400F1AC50 /* Utility */,
 				F9647BE91CC850920070893F /* FogMachine.h */,
 				F9647BEA1CC850920070893F /* FogMachine.swift */,
 				F9647BEB1CC850920070893F /* Info.plist */,
@@ -207,6 +234,7 @@
 			files = (
 				F9B9FD191D10A70300610CB1 /* Images.xcassets in Resources */,
 				F9B9FD0D1D1099F900610CB1 /* FogMachine.storyboard in Resources */,
+				F9628E931D19DA89003A5D7B /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,13 +278,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9628E971D19DA89003A5D7B /* Session.swift in Sources */,
+				F9628E901D19DA89003A5D7B /* Advertiser.swift in Sources */,
 				F9DD38A01CC94C7500F1AC50 /* FMWork.swift in Sources */,
+				F9628E981D19DA89003A5D7B /* Transceiver.swift in Sources */,
 				F9DD389F1CC94C7500F1AC50 /* FMTool.swift in Sources */,
 				F9DD389D1CC94C7500F1AC50 /* FMNode.swift in Sources */,
+				F9628E961D19DA89003A5D7B /* README.md in Sources */,
 				F9DD389C1CC94C7500F1AC50 /* FMCoding.swift in Sources */,
 				F9D40C141D1092150099B550 /* ConnectionsViewController.swift in Sources */,
 				F9DD389E1CC94C7500F1AC50 /* FMResult.swift in Sources */,
 				F9DD38A31CC94CA200F1AC50 /* FMTimer.swift in Sources */,
+				F9628E951D19DA89003A5D7B /* PeerPack.swift in Sources */,
+				F9628E911D19DA89003A5D7B /* Browser.swift in Sources */,
 				F9647BF31CC850920070893F /* FogMachine.swift in Sources */,
 				F9A954A91D10989500F756D3 /* Constants.swift in Sources */,
 			);

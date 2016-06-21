@@ -10,25 +10,24 @@ xcodeproj 'Demo/FogStringSearch/FogStringSearch.xcodeproj'
 target 'FogMachine' do
     platform :ios, '9.0'
     xcodeproj 'FogMachine/FogMachine.xcodeproj'
-    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.1'
     pod 'SwiftEventBus', '~> 1.1.0'
-    # pod 'PeerKit', :path => '../PeerKit'
 end
 
 target 'FogStringSearch' do
     platform :ios, '9.0'
     xcodeproj 'Demo/FogStringSearch/FogStringSearch.xcodeproj'
     pod 'FogMachine', :path => '.'
-    # Even though FogMachine depends on peerkit already, we must add peerkit here again.  This is because the dependency directive in the podspec only supports the name of the dependency and any optional version requirement. The :git option is not supported.
-    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.1'
+end
+
+target 'FogStringSearchTests' do
+    platform :ios, '9.0'
+    xcodeproj 'Demo/FogStringSearch/FogStringSearch.xcodeproj'
 end
 
 target 'FogViewshed' do
     platform :ios, '9.0'
     xcodeproj 'Demo/FogViewshed/FogViewshed.xcodeproj'
     pod 'FogMachine', :path => '.'
-    # Even though FogMachine depends on peerkit already, we must add peerkit here again.  This is because the dependency directive in the podspec only supports the name of the dependency and any optional version requirement. The :git option is not supported.
-    pod 'PeerKit', :git => 'https://github.com/cwas/PeerKit.git', :tag => '2.0.1'
     pod 'SSZipArchive', '~> 1.1'
     pod 'Buckets', :git => 'https://github.com/mauriciosantos/Buckets-Swift.git', :tag => '1.2.1'
 end
