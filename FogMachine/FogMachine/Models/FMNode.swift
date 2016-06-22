@@ -41,6 +41,14 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
     }
 }
 
+/**
+ Determines if two FMNodes are equivalent
+ 
+ - parameter lhs: left-hand FMNode
+ - parameter rhs: right-hand FMNode
+ 
+ - returns: true iff the lhs.uniqueId == rhs.uniqueId, false otherwise
+ */
 public func ==(lhs: FMNode, rhs: FMNode) -> Bool {
     return lhs.uniqueId == rhs.uniqueId
 }

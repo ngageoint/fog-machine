@@ -149,8 +149,6 @@ public class FogMachine {
         }
     }
 
-    // MARK: Properties
-
     /**
      
      Returns information about this particular device.
