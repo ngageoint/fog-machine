@@ -17,13 +17,6 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
     /// The id used for multipeer connectivity.
     public private(set) var mcPeerID: MCPeerID
     
-    /// name and id of this node
-    public var description: String {
-        return name + " " + uniqueId
-    }
-    
-    public var hashValue: Int
-    
     /**
      Create a new node.  Used by FogMachine.
      
@@ -39,6 +32,16 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
         self.mcPeerID = mcPeerID;
         self.hashValue = uniqueId.hash
     }
+    
+    // MARK: CustomStringConvertible
+    
+    /// name and id of this node
+    public var description: String {
+        return name + " " + uniqueId
+    }
+    
+    // MARK: Hashable
+    public var hashValue: Int
 }
 
 /**
