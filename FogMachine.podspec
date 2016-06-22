@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name             = 'FogMachine'
-	s.version          = '4.0.0'
+	s.version          = '4.0.1'
 	s.summary          = 'iOS Framework for parallel processing'
 	s.homepage         = 'https://github.com/ngageoint/fog-machine'
 	s.license          = {:type => 'MIT', :file => 'LICENSE' }
