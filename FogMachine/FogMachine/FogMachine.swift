@@ -3,37 +3,81 @@ import MultipeerConnectivity
 
 /**
 
- FogMachine is a singleton! Please use accordingly.
+ To utilize the FogMachine framework, your app should interface with this class.  It will handle the network connections and the distribution of processing.
 
- This is the class your app should interface with.  It will handle all the connection stuff and the distribution of processing in your network.
+ This class, FogMachine, is a singleton! Please use it as such.  Extend FogTool and pass an instance into this class using setTool().
 
- You should extend FogTool and pass an instance into this class.
-
- Call fogMachineInstance.execute() to run your tool in your network!
-
+ Example:
+ 
+ // What do I need help with?  How about saying hello?
+ public class HelloWorldTool : FMTool {
+     public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> HelloWorldWork {
+         return HelloWorldWork(nodeNumber: nodeNumber)
+     }
+     
+     public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> HelloWorldResult {
+         let helloWorldWork:HelloWorldWork = work as! HelloWorldWork
+         print("Hello world, this is node \(helloWorldWork.nodeNumber).")
+         return HelloWorldResult(didSayHello: true)
+     }
+     
+     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
+         var totalNumberOfHellos:Int = 0
+         for (n, result) in nodeToResult {
+             let helloWorldResult = result as! HelloWorldResult
+             if(helloWorldResult.didSayHello) {
+                 totalNumberOfHellos += 1
+             }
+         }
+         print("Said hello \(totalNumberOfHellos) times.  It's a good day. :)")
+     }
+ }
+ 
+ 
+ // Tell Fog Machine what we need help with
+ FogMachine.fogMachineInstance.setTool(HelloWorldTool())
+ 
+ // Look for friends/devices to help me
+ FogMachine.fogMachineInstance.startSearchForPeers()
+ 
+ // Run HelloWorldTool on all the nodes in the Fog Machine mesh-network and say hello to everyone!
+ FogMachine.fogMachineInstance.execute()
+ 
+ 
  */
 public class FogMachine {
 
+    /// The singleton instance of FogMachine.  Ex: FogMachine.fogMachineInstance.execute()
     public static let fogMachineInstance = FogMachine()
 
     // Your application will set this
     private var fmTool: FMTool = FMTool()
 
     // event names to be used with PeerPack
-    // this event name will be concatenated with the tool id.  This makes sure peers only offer help for the same tools
+    // this event name will be concatenated with the tool id.  This makes sure peers only offer help for the same tools.
     private let sendWorkEvent: String = "sendWorkEvent"
-    // this event name will be concatenated with the session id to allow execute of mulitple session at once
+    // this event name will be concatenated with the session id.  This allows execution of mulitple session at once.
     private let sendResultEvent: String = "sendResultEvent"
 
     private init() {
     }
 
-    // get your tool
+    /**
+     Get the `FMTool` you set with setTool().
+     
+     - returns: FMTool
+     */
     public func getTool() -> FMTool {
         return fmTool
     }
 
-    // set the tool you want to use with FogMachine
+    /**
+     
+     Set the `FMTool` you want to use with FogMachine
+     
+     - parameter fmTool: The tool you want to use with FogMachine.
+     
+     */
     public func setTool(fmTool: FMTool) {
         self.fmTool = fmTool
 
@@ -107,10 +151,24 @@ public class FogMachine {
 
     // MARK: Properties
 
+    /**
+     
+     Returns information about this particular device.
+     
+     - returns: The FMNode that is your device.
+     
+     */
     public func getSelfNode() -> FMNode {
         return FMNode(uniqueId: PeerPack.myName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[1], name: PeerPack.myName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[0], mcPeerID: PeerPack.masterSession.myPeerId)
     }
 
+    /**
+     
+     Returns information about the other nodes in the current network that can provide help.
+     
+     - returns: Array of FMNode that can provide help.
+     
+     */
     public func getPeerNodes() -> [FMNode] {
         var nodes: [FMNode] = []
 
@@ -124,6 +182,13 @@ public class FogMachine {
         return nodes
     }
 
+    /**
+     
+     All Nodes
+     
+     - returns: All nodes (including yourself) in the current network.
+     
+     */
     public func getAllNodes() -> [FMNode] {
         var nodes: [FMNode] = []
         nodes.append(getSelfNode())
@@ -134,7 +199,11 @@ public class FogMachine {
         return nodes
     }
 
-    // TODO, should this be 'tool' dependant?  Only look for peers with the same tool set?
+    /**
+     
+     Tell FogMachine to start looking for peers to help with your tool.  Only peers with the same tool set can provide help. See the README for more information.
+     
+     */
     public func startSearchForPeers() {
         // Service type can contain only ASCII lowercase letters, numbers, and hyphens.
         // It must be a unique string, at most 15 characters long
@@ -146,15 +215,12 @@ public class FogMachine {
 
 
     // used to time stuff
-    // TODO : replace with a better metric utility?
     private let executionTimer:FMTimer = FMTimer()
 
     // how long should the initiator wait after completing it's work to start resechduling work
     private let reprocessingScheduleWaitTimeInSeconds:Double = 5.0
 
-    // TODO : Might refactor this into a FogMachineData api ...
     // all the data structures below are session dependant!
-
     // used to control concurrency.  It synchronizes many of the data structures below
     private let lock = dispatch_queue_create("mil.nga.giat.fogmachine", nil)
 
@@ -173,7 +239,7 @@ public class FogMachine {
 
     /**
 
-     This runs a FogTool!  Your app should call this!
+    Runs your FMTool.  Your app should call this.
 
      */
     public func execute() -> Void {
@@ -183,6 +249,11 @@ public class FogMachine {
         }
     }
 
+    /**
+     
+     Runs your FMTool.
+     
+     */
     private func executeOnThread() -> Void {
         // time how long the entire execution takes
         executionTimer.start()
@@ -239,7 +310,7 @@ public class FogMachine {
         var selfWork:FMWork?
         // make the work for each node
         var nodeCount:UInt = 0
-        for (mcPeerId, node) in mcPeerIDToNode[sessionUUID]! {
+        for (_, node) in mcPeerIDToNode[sessionUUID]! {
             if(node == getSelfNode()) {
                 self.FMLog("Creating self work.")
             } else {
@@ -292,13 +363,16 @@ public class FogMachine {
             }
         }
     }
-
+    
     /**
-
-     This method is called whenever a result comes back.  If all the results have come in, this method will delegate the merge to the FogTool.
-
-     @return True if all the results are in and the merge occured, false otherwise
-
+     
+     This method is called whenever a result comes in on the network (or from yourself).  If all the results have come in, this method will delegate the merge to the FogTool.
+     
+     - parameter callerNode:  The node that returned the FMresult that resulted in this call
+     - parameter sessionUUID: The session that this information is for
+     
+     - returns: true if all the results are in and the merge occured, false otherwise
+     
      */
     private func finishAndMerge(callerNode:FMNode, sessionUUID:String) -> Bool {
         var status:Bool = false
@@ -327,9 +401,11 @@ public class FogMachine {
     }
 
     /**
-
+     
      Set up future reprocessing stuff for nodes that might fail
-
+     
+     - parameter timer: <#timer description#>
+     
      */
     @objc private func scheduleReprocessWork(timer: NSTimer) {
         dispatch_sync(self.lock) {
@@ -343,7 +419,7 @@ public class FogMachine {
                 totalTimeToFinish += selfTimeToFinish
                 var pendingNodes:[FMNode] = []
                 // get work that has not been completed
-                for (node, work) in self.nodeToWork[sessionUUID]! {
+                for (node, _) in self.nodeToWork[sessionUUID]! {
                     if(node != self.getSelfNode()) {
                         if(self.nodeToResult[sessionUUID]!.keys.contains(node) == false) {
                             pendingNodes.append(node)
@@ -382,9 +458,11 @@ public class FogMachine {
     }
 
     /**
-
+     
      This method re-processes work on the initiator node that may not come back from other nodes
-
+     
+     - parameter timer: <#timer description#>
+     
      */
     @objc private func reprocessWork(timer: NSTimer) {
         dispatch_sync(self.lock) {
@@ -416,6 +494,13 @@ public class FogMachine {
         timer.invalidate()
     }
 
+    /**
+     
+     Log information to both NSLog and delegate it up to the FMTool
+     
+     - parameter format: The message you want to send/log
+     
+     */
     private func FMLog(format:String) {
         NSLog(format)
         fmTool.onLog(format)

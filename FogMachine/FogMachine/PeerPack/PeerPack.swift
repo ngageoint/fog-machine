@@ -12,6 +12,11 @@ import MultipeerConnectivity
     import UIKit
 #endif
 
+/**
+ 
+ PeerPack used by FogMachine.  Developers using FogMachine will not need to use this.
+ 
+ */
 public class PeerPack {
 
     // MARK: Type Aliases
@@ -70,14 +75,5 @@ public class PeerPack {
         let data = NSKeyedArchiver.archivedDataWithRootObject(rootObject)
 
         masterSession.sendData(data, toPeers: peers, withMode: .Reliable)
-    }
-
-
-    // MARK: Development
-
-    static func debugPrint(message: String, function: String = #function) {
-        #if DEBUG
-            print("\(function): \(message)")
-        #endif
     }
 }

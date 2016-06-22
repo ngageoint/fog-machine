@@ -1,9 +1,16 @@
 import Foundation
 
+/**
+ 
+ Used to encode and decode information for classes extending FMWork and FMResult
+ 
+ */
 public class FMCoding: NSObject, NSCoding {
     
-    // Keep a uuid for possible identification purposes, may not be needed
+    /// A uuid to identify this information
     public private(set) var uuid: String = NSUUID().UUIDString
+    
+    // MARK: NSObject
     
     public override init() {
         super.init()

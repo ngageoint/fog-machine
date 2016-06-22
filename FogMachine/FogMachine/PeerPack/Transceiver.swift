@@ -8,6 +8,12 @@
 import Foundation
 import MultipeerConnectivity
 
+
+/**
+ 
+ Part of PeerPack used by FogMachine.  Developers using FogMachine will not need to use this.
+ 
+ */
 public class Transceiver: SessionDelegate {
 
     let advertiser: Advertiser

@@ -8,6 +8,11 @@
 import Foundation
 import MultipeerConnectivity
 
+/**
+ 
+ Part of PeerPack used by FogMachine.  Developers using FogMachine will not need to use this.
+ 
+ */
 public protocol SessionDelegate {
     func connecting(myPeerID: MCPeerID, toPeer peer: MCPeerID)
     func connected(myPeerID: MCPeerID, toPeer peer: MCPeerID)
@@ -16,6 +21,11 @@ public protocol SessionDelegate {
     func finishReceivingResource(myPeerID: MCPeerID, resourceName: String, fromPeer peer: MCPeerID, atURL localURL: NSURL)
 }
 
+/**
+ 
+ Part of PeerPack.  Developers using FogMachine will not need to use this.
+ 
+ */
 public class Session: NSObject, MCSessionDelegate {
     var delegate: SessionDelegate?
     var myPeerSessions = [String: MCSession]()
@@ -124,7 +134,6 @@ public class Session: NSObject, MCSessionDelegate {
     // MARK: MCSessionDelegate
 
     public func session(session: MCSession, peer peerID: MCPeerID, didChangeState state: MCSessionState) {
-        let ids = "from \(session.myPeerID.displayName) to peer \(peerID.displayName)"
         switch state {
         case .Connecting:
             delegate?.connecting(session.myPeerID, toPeer: peerID)
