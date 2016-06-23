@@ -8,7 +8,6 @@
 import Foundation
 import MultipeerConnectivity
 
-
 /**
  
  Part of PeerPack used by FogMachine.  Developers using FogMachine will not need to use this.

@@ -8,7 +8,7 @@ import MultipeerConnectivity
  This class, FogMachine, is a singleton! Please use it as such.  Extend FogTool and pass an instance into this class using setTool().
 
  Example:
- 
+ ```
  // What do I need help with?  How about saying hello?
  public class HelloWorldTool : FMTool {
      public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> HelloWorldWork {
@@ -42,7 +42,7 @@ import MultipeerConnectivity
  
  // Run HelloWorldTool on all the nodes in the Fog Machine mesh-network and say hello to everyone!
  FogMachine.fogMachineInstance.execute()
- 
+ ```
  
  */
 public class FogMachine {
