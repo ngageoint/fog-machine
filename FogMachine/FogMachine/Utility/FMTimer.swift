@@ -7,9 +7,9 @@ import Foundation
  */
 public class FMTimer {
     
-    var startTime: CFAbsoluteTime
-    var stopTime: CFAbsoluteTime
-    var stopped: Bool = false
+    private var startTime: CFAbsoluteTime
+    private var stopTime: CFAbsoluteTime
+    private var stopped: Bool = false
     
     public init() {
         stopped = false;
@@ -19,18 +19,31 @@ public class FMTimer {
     
     // MARK: Functions
     
+    /**
+     Start the timer
+     */
     public func start() {
         stopped = false;
         startTime = CFAbsoluteTimeGetCurrent()
         stopTime = Double(startTime)
     }
-    
+
+    /**
+     Stop the timer
+     
+     - returns: the elapsed time in seconds
+     */
     public func stop() -> CFAbsoluteTime {
         stopTime = CFAbsoluteTimeGetCurrent()
         stopped = true;
         return getElapsedTimeInSeconds()
     }
     
+    /**
+     Get the elapsed time in seconds
+     
+     - returns: the elapsed time in seconds
+     */
     public func getElapsedTimeInSeconds() -> CFAbsoluteTime {
         if(stopped) {
             return stopTime - startTime
