@@ -1,5 +1,10 @@
 import Foundation
 
+/**
+ 
+ A Utility to help time requests and responses in FogMachine
+ 
+ */
 public class FMTimer {
     
     var startTime: CFAbsoluteTime
