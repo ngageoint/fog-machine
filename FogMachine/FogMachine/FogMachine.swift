@@ -8,41 +8,40 @@ import MultipeerConnectivity
  This class, FogMachine, is a singleton! Please use it as such.  Extend FogTool and pass an instance into this class using setTool().
 
  Example:
- ```
- // What do I need help with?  How about saying hello?
- public class HelloWorldTool : FMTool {
-     public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> HelloWorldWork {
-         return HelloWorldWork(nodeNumber: nodeNumber)
-     }
-     
-     public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> HelloWorldResult {
-         let helloWorldWork:HelloWorldWork = work as! HelloWorldWork
-         print("Hello world, this is node \(helloWorldWork.nodeNumber).")
-         return HelloWorldResult(didSayHello: true)
-     }
-     
-     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
-         var totalNumberOfHellos:Int = 0
-         for (n, result) in nodeToResult {
-             let helloWorldResult = result as! HelloWorldResult
-             if(helloWorldResult.didSayHello) {
-                 totalNumberOfHellos += 1
-             }
+ 
+     // What do I need help with?  How about saying hello?
+     public class HelloWorldTool : FMTool {
+         public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> HelloWorldWork {
+             return HelloWorldWork(nodeNumber: nodeNumber)
          }
-         print("Said hello \(totalNumberOfHellos) times.  It's a good day. :)")
+         
+         public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> HelloWorldResult {
+             let helloWorldWork:HelloWorldWork = work as! HelloWorldWork
+             print("Hello world, this is node \(helloWorldWork.nodeNumber).")
+             return HelloWorldResult(didSayHello: true)
+         }
+         
+         public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
+             var totalNumberOfHellos:Int = 0
+             for (n, result) in nodeToResult {
+                 let helloWorldResult = result as! HelloWorldResult
+                 if(helloWorldResult.didSayHello) {
+                     totalNumberOfHellos += 1
+                 }
+             }
+             print("Said hello \(totalNumberOfHellos) times.  It's a good day. :)")
+         }
      }
- }
- 
- 
- // Tell Fog Machine what we need help with
- FogMachine.fogMachineInstance.setTool(HelloWorldTool())
- 
- // Look for friends/devices to help me
- FogMachine.fogMachineInstance.startSearchForPeers()
- 
- // Run HelloWorldTool on all the nodes in the Fog Machine mesh-network and say hello to everyone!
- FogMachine.fogMachineInstance.execute()
- ```
+     
+     
+     // Tell Fog Machine what we need help with
+     FogMachine.fogMachineInstance.setTool(HelloWorldTool())
+     
+     // Look for friends/devices to help me
+     FogMachine.fogMachineInstance.startSearchForPeers()
+     
+     // Run HelloWorldTool on all the nodes in the Fog Machine mesh-network and say hello to everyone!
+     FogMachine.fogMachineInstance.execute()
  
  */
 public class FogMachine {
