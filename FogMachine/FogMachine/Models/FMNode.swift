@@ -18,6 +18,7 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
     public private(set) var mcPeerID: MCPeerID
     
     /**
+     
      Create a new node.  Used by FogMachine.
      
      - parameter uniqueId:
@@ -25,6 +26,7 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
      - parameter mcPeerID: The id used for multipeer connectivity.
      
      - returns: A new FMNode
+     
      */
     public init(uniqueId:String, name:String, mcPeerID:MCPeerID) {
         self.name = name
@@ -45,12 +47,14 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
 }
 
 /**
+ 
  Determines if two FMNodes are equivalent
  
  - parameter lhs: left-hand FMNode
  - parameter rhs: right-hand FMNode
  
  - returns: true iff the lhs.uniqueId == rhs.uniqueId, false otherwise
+ 
  */
 public func ==(lhs: FMNode, rhs: FMNode) -> Bool {
     return lhs.uniqueId == rhs.uniqueId

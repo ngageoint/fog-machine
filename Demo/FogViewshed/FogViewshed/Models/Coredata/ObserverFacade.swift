@@ -28,10 +28,9 @@ class ObserverFacade {
         }
     }
     
-    
     func delete(observer: Observer) {
         for observerEntity:ObserverEntity in getObserverEntities() {
-            if(observer.id == Int(observerEntity.id)) {
+            if(observer == observerEntity.asObserver()) {
                 managedContext.deleteObject(observerEntity)
                 saveContext()
                 break;
@@ -39,15 +38,19 @@ class ObserverFacade {
         }
     }
     
-    func add(observer: Observer) {
-        let managedObject = NSEntityDescription.insertNewObjectForEntityForName("Observer", inManagedObjectContext: managedContext) as NSManagedObject
-        managedObject.setValue(observer.id, forKey: "id")
-        managedObject.setValue(observer.elevationInMeters, forKey: "elevationInMeters")
-        managedObject.setValue(observer.radiusInMeters, forKey: "radiusInMeters")
-        managedObject.setValue(observer.position.latitude, forKey: "latitude")
-        managedObject.setValue(observer.position.longitude, forKey: "longitude")
-        
-        saveContext()
+    func add(observer: Observer) -> Bool {
+        if(getObservers().contains(observer)) {
+            return false
+        } else {
+            let managedObject = NSEntityDescription.insertNewObjectForEntityForName("Observer", inManagedObjectContext: managedContext) as NSManagedObject
+            managedObject.setValue(observer.uniqueId, forKey: "uniqueId")
+            managedObject.setValue(observer.elevationInMeters, forKey: "elevationInMeters")
+            managedObject.setValue(observer.radiusInMeters, forKey: "radiusInMeters")
+            managedObject.setValue(observer.position.latitude, forKey: "latitude")
+            managedObject.setValue(observer.position.longitude, forKey: "longitude")
+            saveContext()
+            return true
+        }
     }
     
     func add(observers: [Observer]) {
@@ -87,21 +90,9 @@ class ObserverFacade {
             observers.append(observerEntity.asObserver())
         }
         observers.sortInPlace { (obj1, obj2) -> Bool in
-            return obj1.id < obj2.id
+            return obj1.uniqueId < obj2.uniqueId
         }
 
         return observers
-    }
-    
-    func getNextObserverId() -> Int {
-        var id:Int = 1
-        for observer:Observer in getObservers() {
-            if(observer.id == id) {
-                id += 1;
-            } else {
-                break;
-            }
-        }
-        return id;
     }
 }

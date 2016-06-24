@@ -26,6 +26,9 @@ public class ViewshedTool : FMTool {
     public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> ViewshedResult {
         let viewshedWork = work as! ViewshedWork
         
+        // draw the pin if it doesn't exist
+        SwiftEventBus.post(ViewshedEventBusEvents.addObserverPin, sender:viewshedWork.observer)
+        
         // make the sector
         let angleSize:Double = (2*M_PI)/Double(viewshedWork.sectorCount)
         let startAngle:Double = angleSize*Double(viewshedWork.sectorNumber)

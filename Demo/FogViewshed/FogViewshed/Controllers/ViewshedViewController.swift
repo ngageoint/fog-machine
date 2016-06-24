@@ -46,6 +46,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             self.mapView.addOverlay(gridOverlay)
         }
 
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.addObserverPin) { result in
+            let observer:Observer = result.object as! Observer
+            self.addObserver(observer)
+        }
+
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         let status = CLLocationManager.authorizationStatus()
@@ -99,7 +104,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         NSLog("Error: " + error.localizedDescription)
     }
 
-    func drawObservers() {
+    private func drawObservers() {
         mapView.removeAnnotations(mapView.annotations)
         
         for observer in model.getObservers() {
@@ -107,7 +112,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-    func drawDataRegions() {
+    private func drawDataRegions() {
         var dataRegionOverlays = [MKOverlay]()
         for overlay in mapView.overlays {
             if overlay is MKPolygon {
@@ -121,27 +126,31 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-    func drawPin(observer: Observer) {
+    private func drawPin(observer: Observer) {
         let dropPin = MKPointAnnotation()
         dropPin.coordinate = observer.position
-        dropPin.title = observer.name
+        dropPin.title = observer.description
         mapView.addAnnotation(dropPin)
     }
     
     
-    func redraw() {
+    private func redraw() {
         drawObservers()
         drawDataRegions()
+    }
+    
+    private func addObserver(observer:Observer) {
+        if(model.add(observer)) {
+            drawPin(observer)
+        }
     }
 
     func onLongPress(gestureRecognizer: UIGestureRecognizer) {
         if (gestureRecognizer.state == UIGestureRecognizerState.Began) {
             if(HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView), resolution: Srtm.SRTM3_RESOLUTION)) != nil) {
                 let newObserver = Observer()
-                newObserver.id = model.getNextObserverId()
                 newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
-                model.add(newObserver)
-                drawPin(newObserver)
+                addObserver(newObserver)
             } else {
                 var style = ToastStyle()
                 style.messageColor = UIColor.redColor()

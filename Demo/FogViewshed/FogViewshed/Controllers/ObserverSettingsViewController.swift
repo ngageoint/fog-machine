@@ -75,8 +75,6 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     
     func createObserverFromSettings() -> Observer {
         let editedObserver = Observer()
-        
-        editedObserver.id = model.getNextObserverId()
 
         let elevationValue = getDoubleValue("elevation", value: elevation.text, warningMessage: Warning.DECIMAL)
         let radiusValue = getDoubleValue("radius", value: radius.text, warningMessage: Warning.DECIMAL)
@@ -101,9 +99,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         return doubleValue
     }
     
-    func loadObserverSettings() {
-        self.navigationItem.title = originalObserver!.name + " Settings";
-        
+    func loadObserverSettings() {        
         algorithm.selectedSegmentIndex = 0
         elevation.text = String(originalObserver!.elevationInMeters)
         radius.text = String(originalObserver!.radiusInMeters)

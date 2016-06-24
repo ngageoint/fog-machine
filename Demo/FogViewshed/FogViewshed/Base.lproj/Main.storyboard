@@ -558,8 +558,8 @@
                                                 </connections>
                                             </switch>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wfz-Ba-OPZ">
-                                                <rect key="frame" x="206" y="70" width="189" height="30"/>
-                                                <state key="normal" title="Delete Observers from Map"/>
+                                                <rect key="frame" x="227" y="70" width="147" height="30"/>
+                                                <state key="normal" title="Delete Pins from Map"/>
                                                 <connections>
                                                     <segue destination="Mfb-3w-qql" kind="unwind" identifier="deleteAllPins" unwindAction="deleteAllPins:" id="Jcc-oz-PWl"/>
                                                 </connections>
