@@ -10,14 +10,48 @@ There are two demo apps provided. The first demo app is a simple text search tha
 
 Fog Machine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the MIT license.
 
-## Build
+## Installation with CocoaPods
 
-Fog Machine uses [CocoaPods](https://cocoapods.org/) for dependency management.   
+[CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C and Swift. You can install CocoaPods with the following command:
 
-Install all dependencies:
+```bash
+$ gem install cocoapods
+```
+
+#### Podfile
+
+To integrate Fog Machine into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+
+target 'TargetName' do
+pod 'FogMachine', '~> 4.0.1'
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+## Build from source
+
+Pull down the latest source:
+git clone git@github.com:ngageoint/fog-machine.git
+
+Download the [CocoaPods](https://cocoapods.org/) dependencies that Fog Machine needs:   
+
 ```bash
 pod cache clean --all
 pod install
+```
+
+Launch xcode and smile, you're all done:
+```bash
+open FogMachine.xcworkspace
 ```
 
 ## Usage
