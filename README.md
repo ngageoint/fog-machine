@@ -40,7 +40,9 @@ $ pod install
 ## Build from source
 
 Pull down the latest source:
+```bash
 git clone git@github.com:ngageoint/fog-machine.git
+```
 
 Download the [CocoaPods](https://cocoapods.org/) dependencies that Fog Machine needs:   
 
