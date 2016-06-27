@@ -110,7 +110,7 @@ Software source code previously released under an open source license and then m
 
 Fog Machine makes use of the following open source projects:
 - **PeerKit**  
-*https://github.com/cwas/PeerKit*
+*https://github.com/jpsim/PeerKit*
 This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
 - **SwiftEventBus**  
 *https://github.com/cesarferreira/SwiftEventBus*
