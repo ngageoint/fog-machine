@@ -96,7 +96,7 @@ FogMachine.fogMachineInstance.startSearchForPeers()
 FogMachine.fogMachineInstance.execute()
 ```
 
-## Pros and Cons
+## Pros & Cons
 
 Parallel processing over mesh-networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  There are pros and cons to using the Fog Machine framework, some of which are below.
 
