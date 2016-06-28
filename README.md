@@ -96,6 +96,43 @@ FogMachine.fogMachineInstance.startSearchForPeers()
 FogMachine.fogMachineInstance.execute()
 ```
 
+## Pros and Cons
+
+Parallel processing over mesh-networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  There are pros and cons to using the Fog Machine framework, some of which are below.
+
+#### Pros
+
+* You can easily take advantage of the shared resources like processors, memory, and storage of all the devices in your network.  This can considerably increase performance.  The table below show how increasing the number of devices in the network decreases the overall time for the search app.
+
+<table>
+    <tr>
+        <td># of devices</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>demo app runtime in seconds</td>
+        <td>42.5</td>
+        <td>33.6</td>
+        <td>32.7</td>
+        <td>30.0</td>
+    </tr>
+</table>
+
+* Works entirely disconnect.  The framework does not rely on any backend connection.  No need for LTE or Wi-Fi.
+* At its core, the Fog Machine framework uses Apple's Multipeer Connectivity framework.  MPC is well supported across all iOS devices which means great interoperability within the iOS family.
+* If, for whatever reason, a device in your network fails to process its piece of work, that piece of work will automatically get reprocessed elsewhere.  This reprocessing provides transparent flexibility in your network.
+* Although not the primary focus of Fog Machine, the framework allows you to easily share information across devices as well.
+
+#### Cons
+
+* Communication relies on a wifi or bluetooth chipset and may not be reliable enough if your devices are not in close enough proximity to one another.  
+* Introducing a considerably slower device to your network (relative to the other devices) could result in worse performance.  Consider a network with two iPhone 6s and one iPhone 4s.  If each processor has to process the same number of instructions, the two 6s could finish considerably faster than the 4s and then wait idly for the 4s to finish processing.  If this is a large concern in your situation, you can easily add logic to your tool's lifecycle to account for these types of discrepancies.
+* The communication overhead between devices is based on the size of your FMWork and FMResult.  The size of these components are likely small, but in a case where it is necessary to send a very large amount of information between devices, the increase in communication time could exceed the decrease gained by parallel processing.  If this is the case, you will likely need to re-evaluate your design and determine whether Fog Machine is the right fit for your needs.
+* A network is currently limited to 8 devices
+
 ## Requirements
 
 Fog Machine requires iOS 9.0+.
