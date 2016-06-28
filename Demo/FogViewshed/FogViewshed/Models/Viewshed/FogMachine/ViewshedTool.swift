@@ -73,19 +73,20 @@ public class ViewshedTool : FMTool {
         let viewshedDataGrid:DataGrid = viewsehdAlgorithm.runViewshed()
         viewshedLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
-        // if this is not me
-        if(node != fromNode) {
-            SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid))
-        }
+
+        SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid))
         
         return ViewshedResult(dataGrid: viewshedDataGrid)
     }
     
     public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
         for (n, result) in nodeToResult {
-            let viewshedResult = result as! ViewshedResult
-            NSLog("Received result from node " + n.description)
-            SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
+            // if this is not me
+            if(node != n) {
+                let viewshedResult = result as! ViewshedResult
+                NSLog("Received result from node " + n.description)
+                SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
+            }
         }
         SwiftEventBus.post(ViewshedEventBusEvents.viewshedComplete)
     }
