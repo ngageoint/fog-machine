@@ -213,9 +213,25 @@ public class FogMachine {
 
     // used to time stuff
     private let executionTimer:FMTimer = FMTimer()
-
-    // how long should the initiator wait after completing it's work to start resechduling work
-    private let reprocessingScheduleWaitTimeInSeconds:Double = 5.0
+    
+    // the shortest time in seconds that FogMachine should wait before re-processing other nodes work.  The initiator will wait after completing it's work to start resechduling work.
+    private var minWaitTimeToStartReprocessingWorkInSeconds:Double = 8.0
+    
+    // the longest time in seconds that Fog Machine should wait before re-processing other nodes work.  The initiator will wait after completing it's work to start resechduling work.
+    private var maxWaitTimeToStartReprocessingWorkInSeconds:Double = 60.0*5.0
+    
+    /**
+     The shortest time in seconds that FogMachine should wait before re-processing other nodes work.  (The default is set to 8 seconds)  The initiator will wait after completing it's work to start resechduling work.  Unless strict is set to true, Fog Machine will wait a bit longer to start reprocessing work based on the performance of the nodes in the network.
+     
+     - parameter time:   the shortest time in seconds that FogMachine should wait before re-processing other nodes work.
+     - parameter strict: if true, the time provided as the first argument will be the exact time that re-processing the other nodes work begins.
+     */
+    public func setWaitTimeUntilStartReprocessingWork(time:Double, strict:Bool = false) {
+        minWaitTimeToStartReprocessingWorkInSeconds = max(time,0)
+        if(strict) {
+            maxWaitTimeToStartReprocessingWorkInSeconds = max(time,0)
+        }
+    }
 
     // all the data structures below are session dependant!
     // used to control concurrency.  It synchronizes many of the data structures below
@@ -355,7 +371,8 @@ public class FogMachine {
             if(status == false) {
                 let data:[String:NSObject] = ["SessionID": sessionUUID, "SelfTimeToFinish":selfTimeToFinish]
                 dispatch_async(dispatch_get_main_queue()) {
-                    NSTimer.scheduledTimerWithTimeInterval(self.reprocessingScheduleWaitTimeInSeconds, target: self, selector: #selector(FogMachine.scheduleReprocessWork(_:)), userInfo: data, repeats: false)
+                    // wait the minTime before startinf to reprocess
+                    NSTimer.scheduledTimerWithTimeInterval(self.minWaitTimeToStartReprocessingWorkInSeconds, target: self, selector: #selector(FogMachine.scheduleReprocessWork(_:)), userInfo: data, repeats: false)
                 }
             }
         }
@@ -432,8 +449,8 @@ public class FogMachine {
                 let nodeCount:Int = self.nodeToRoundTripTimer[sessionUUID]!.count
                 let averageTimeToFinish:Double = totalTimeToFinish/Double(nodeCount)
 
-                // give peers 50% more time to finish that the current average time. min time to wait is 8 seconds. max time to wait is 5 minutes.
-                let waitTime:Double = min(max((averageTimeToFinish * 0.5) - self.reprocessingScheduleWaitTimeInSeconds, 8), 60*5)
+                // give peers 40% more time to finish that the current average time.
+                let waitTime:Double = min(max(((averageTimeToFinish * 1.4) - selfTimeToFinish) - self.minWaitTimeToStartReprocessingWorkInSeconds, 0), self.maxWaitTimeToStartReprocessingWorkInSeconds)
                 var i:Int = 0
                 for node in pendingNodes {
                     let work:FMWork = self.nodeToWork[sessionUUID]![node]!
