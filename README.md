@@ -98,16 +98,16 @@ FogMachine.fogMachineInstance.execute()
 
 ## Pros & Cons
 
-Parallel processing over a mesh-network reduces the overall time to solve problems by taking advantage of each peer's resources, such as processors and memory, and sharing them to solve a problem.  Some of the pros and cons to using the Fog Machine framework are listed below.
+Parallel processing over a mesh-network reduces the overall time to solve problems by taking advantage of shared resources provided by each peer, such as processors and memory.  Some of the pros and cons of using the Fog Machine framework are listed below.
 
 #### Pros
 
-* In the peer network, each device can easily take advantage of each peer's resources like processors, memory, and storage.  When processing a problem, the shared resources can considerably increase performance.  The table below shows how increasing the number of devices in the peer network decreases the overall search time for the Demo app FogStringSearch.
+* Fog Machine allows your applicaiton to easily take advantage of the shared resources like processors, memory, and storage of all the devices in the mesh network which can considerably increase performance.  The table below shows how increasing the number of devices in the peer network decreases the overall search time for the FogStringSearch app provided.
 
-<table style="text-align:center">
+<table>
   <tr>
-    <th rowspan="2" style="text-align:center"># of Devices</th>
-    <th rowspan="2" style="text-align:center">FogStringSearch <br>Runtime (seconds)</th>
+    <th style="text-align:center"># of Devices</th>
+    <th style="text-align:center">FogStringSearch runtime in seconds</th>
   </tr>
   <tr></tr>
   <tr>
@@ -128,11 +128,10 @@ Parallel processing over a mesh-network reduces the overall time to solve proble
   </tr>
 </table>
 
-* The Fog Machine framework uses Apple's [Multipeer Connectivity framework](https://developer.apple.com/library/ios/documentation/MultipeerConnectivity/Reference/MultipeerConnectivityFramework/).  Multipeer Connectivity is supported across all iOS devices, which means great interoperability within the iOS family.
-* The framework does not rely on any backend connection and works entirely disconnected from any LTE network or Wi-Fi signal.  
-  * Note: Wi-Fi or Bluetooth must be enabled on the device to make use of Apple's Multipeer Connectivity.
-* If, for whatever reason, a device in the Fog Machine peer network fails to process its piece of work, that piece of work will automatically get reprocessed on another device in the peer network.  The reprocessing provides transparent flexibility in the network.
-* Although not the primary focus of Fog Machine, the framework allows users to easily share data across connected devices.
+* The Fog Machine framework uses Apple's [Multipeer Connectivity framework](https://developer.apple.com/library/ios/documentation/MultipeerConnectivity/Reference/MultipeerConnectivityFramework/).  Multipeer Connectivity is supported across all iOS devices, which means great interoperability within the iOS family.  
+* The framework works entirely disconnected.  It does not rely on any backend connection like LTE or Wi-Fi.  
+* If, for whatever reason, a device in the peer network fails to process its piece of work, that piece of work will automatically get reprocessed on the initiating device.  Reprocessing provides transparent flexibility in the network.
+* Although not the primary focus of Fog Machine, the framework allows devices to easily share data within the peer network.
 
 #### Cons
 
@@ -140,8 +139,8 @@ Parallel processing over a mesh-network reduces the overall time to solve proble
 * Introducing a considerably slower device (relative to the other devices) to your network could result in worse performance.  
     * Example: Consider a peer network with two iPhone 6s and one iPhone 4s.  If each peer device has to process the same number of instructions, then the two iPhone 6s will finish considerably faster than the iPhone 4s. After the two iPhone 6s devices finish they will wait idly for the iPhone 4s to finish processing.  
     * If using peer devices of varying processing power is a concern, then logic can easily be added to the FMTool's lifecycle to account for the discrepancy.
-* The communication overhead between devices is based on the size of your FMWork and FMResult.  The size of these components are likely small, but in a case where it is necessary to send a very large amount of data between devices, then the increase in communication time could exceed the runtime decrease gained by parallel processing.  If this is the case, you will likely need to re-evaluate your design and how data is transmitted in order to determine whether there is a benefit from parallel processing.
-* A peer network is currently limited to 8 devices
+* The communication overhead between devices is based on the size of your FMWork and FMResult.  The size of these components are likely small, but in a case where it is necessary to send a very large amount of data between devices, then the increase in communication time could exceed the decrease gained by parallel processing.  If this is the case, you will likely need to re-evaluate your design.
+* A peer network is currently limited to 8 devices.
 
 ## Requirements
 
