@@ -4,7 +4,7 @@
 
 Fog Machine is an iOS Swift framework for parallel processing.  Solve hard problems fast with the Fog Machine framework.
 
-The Fog Machine framework is a research and development effort to harness the computing power of multiple, locally connected iOS devices.  By using a mesh-network of mobile devices, parallel processing techniques allows Fog Machine to analyze data and answer complex questions quickly and efficiently.  Parallel processing over mesh-networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  The communication relies on a wifi or bluetooth chipset and is built on Apple's Multipeer Connectivity framework.
+The Fog Machine framework is a research and development effort to harness the computing power of multiple, locally connected iOS devices.  By using a mesh-network of mobile devices, parallel processing techniques allows Fog Machine to analyze data and answer complex questions quickly and efficiently.  Parallel processing over mesh-networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  The communication relies on a Wi-Fi or Bluetooth chipset and is built on Apple's Multipeer Connectivity framework.
 
 There are two demo apps provided. The first demo app is a simple text search that uses the [Knuth–Morris–Pratt](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm) string search algorithm to find a search term within a given text.  The second app calculates the [viewshed](https://en.wikipedia.org/wiki/Viewshed) of a position.  A viewshed is the geographical area that is visible from a location. It includes all surrounding points in line-of-sight with the location and excludes points that are beyond the horizon or obstructed by terrain and other features.  The viewshed app demonstrates the true power and flexibility of the Fog Machine framework.
 
@@ -98,40 +98,50 @@ FogMachine.fogMachineInstance.execute()
 
 ## Pros & Cons
 
-Parallel processing over mesh-networks reduces the overall time to solve problems by taking advantage of shared resources (processors, memory, etc.).  There are pros and cons to using the Fog Machine framework, some of which are below.
+Parallel processing over a mesh-network reduces the overall time to solve problems by taking advantage of each peer's resources, such as processors and memory, and sharing them to solve a problem.  Some of the pros and cons to using the Fog Machine framework are listed below.
 
 #### Pros
 
-* You can easily take advantage of the shared resources like processors, memory, and storage of all the devices in your network.  This can considerably increase performance.  The table below show how increasing the number of devices in the network decreases the overall time for the search app.
+* In the peer network, each device can easily take advantage of each peer's resources like processors, memory, and storage.  When processing a problem, the shared resources can considerably increase performance.  The table below shows how increasing the number of devices in the peer network decreases the overall search time for the Demo app FogStringSearch.
 
-<table>
-    <tr>
-        <td># of devices</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-    </tr>
-    <tr>
-        <td>demo app runtime in seconds</td>
-        <td>42.5</td>
-        <td>33.6</td>
-        <td>32.7</td>
-        <td>30.0</td>
-    </tr>
+<table style="text-align:center">
+  <tr>
+    <th rowspan="2" style="text-align:center"># of Devices</th>
+    <th rowspan="2" style="text-align:center">FogStringSearch <br>Runtime (seconds)</th>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td>1</td>
+    <td>42.5</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>33.6</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>32.7</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>30.0</td>
+  </tr>
 </table>
 
-* Works entirely disconnect.  The framework does not rely on any backend connection.  No need for LTE or Wi-Fi.
-* At its core, the Fog Machine framework uses Apple's Multipeer Connectivity framework.  MPC is well supported across all iOS devices which means great interoperability within the iOS family.
-* If, for whatever reason, a device in your network fails to process its piece of work, that piece of work will automatically get reprocessed elsewhere.  This reprocessing provides transparent flexibility in your network.
-* Although not the primary focus of Fog Machine, the framework allows you to easily share information across devices as well.
+* The Fog Machine framework uses Apple's [Multipeer Connectivity framework](https://developer.apple.com/library/ios/documentation/MultipeerConnectivity/Reference/MultipeerConnectivityFramework/).  Multipeer Connectivity is supported across all iOS devices, which means great interoperability within the iOS family.
+* The framework does not rely on any backend connection and works entirely disconnected from any LTE network or Wi-Fi signal.  
+  * Note: Wi-Fi or Bluetooth must be enabled on the device to make use of Apple's Multipeer Connectivity.
+* If, for whatever reason, a device in the Fog Machine peer network fails to process its piece of work, that piece of work will automatically get reprocessed on another device in the peer network.  The reprocessing provides transparent flexibility in the network.
+* Although not the primary focus of Fog Machine, the framework allows users to easily share data across connected devices.
 
 #### Cons
 
-* Communication relies on a wifi or bluetooth chipset and may not be reliable enough if your devices are not in close enough proximity to one another.  
-* Introducing a considerably slower device to your network (relative to the other devices) could result in worse performance.  Consider a network with two iPhone 6s and one iPhone 4s.  If each processor has to process the same number of instructions, the two 6s could finish considerably faster than the 4s and then wait idly for the 4s to finish processing.  If this is a large concern in your situation, you can easily add logic to your tool's lifecycle to account for these types of discrepancies.
-* The communication overhead between devices is based on the size of your FMWork and FMResult.  The size of these components are likely small, but in a case where it is necessary to send a very large amount of information between devices, the increase in communication time could exceed the decrease gained by parallel processing.  If this is the case, you will likely need to re-evaluate your design and determine whether Fog Machine is the right fit for your needs.
-* A network is currently limited to 8 devices
+* The peer network communication relies on Wi-Fi or Bluetooth chipset and may not be reliable enough if your devices are not in close enough proximity to one another.  
+* Introducing a considerably slower device (relative to the other devices) to your network could result in worse performance.  
+    * Example: Consider a peer network with two iPhone 6s and one iPhone 4s.  If each peer device has to process the same number of instructions, then the two iPhone 6s will finish considerably faster than the iPhone 4s. After the two iPhone 6s devices finish they will wait idly for the iPhone 4s to finish processing.  
+    * If using peer devices of varying processing power is a concern, then logic can easily be added to the FMTool's lifecycle to account for the discrepancy.
+* The communication overhead between devices is based on the size of your FMWork and FMResult.  The size of these components are likely small, but in a case where it is necessary to send a very large amount of data between devices, then the increase in communication time could exceed the runtime decrease gained by parallel processing.  If this is the case, you will likely need to re-evaluate your design and how data is transmitted in order to determine whether there is a benefit from parallel processing.
+* A peer network is currently limited to 8 devices
 
 ## Requirements
 
