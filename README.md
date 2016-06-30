@@ -107,7 +107,7 @@ Parallel processing over a mesh-network reduces the overall time to solve proble
 <table>
   <tr>
     <th style="text-align:center"># of Devices</th>
-    <th style="text-align:center">FogStringSearch runtime in seconds</th>
+    <th style="text-align:center">FogStringSearch Runtime (seconds)</th>
   </tr>
   <tr></tr>
   <tr>
