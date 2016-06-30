@@ -27,7 +27,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-pod 'FogMachine', '~> 4.0.2'
+pod 'FogMachine', '~> 4.0.3'
 end
 ```
 
