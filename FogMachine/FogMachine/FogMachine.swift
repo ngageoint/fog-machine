@@ -258,7 +258,30 @@ public class FogMachine {
     public func execute() -> Void {
         // run on background thread
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-            self.executeOnThread()
+            self.executeOnThread(self.getAllNodes())
+        }
+    }
+    
+    /**
+     Runs your FMTool on a subset of the nodes in the network.  Your app should call this or execute().
+     
+     - parameter onNodes: A subset of the nodes in your network that should run your tool.
+     */
+    public func execute(onNodes:[FMNode]) -> Void {
+        
+        // make sure the nodes your app passed in are actually still in the network
+        var nodesInNetwork:[FMNode] = []
+        for n in onNodes {
+            if(self.getAllNodes().contains(n)) {
+                nodesInNetwork.append(n)
+            } else {
+                FMLog("Network does not contain node \(n.description).  Excluding this node from execution.")
+            }
+        }
+        
+        // run on background thread
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+            self.executeOnThread(nodesInNetwork)
         }
     }
 
@@ -267,7 +290,7 @@ public class FogMachine {
      Runs your FMTool.
      
      */
-    private func executeOnThread() -> Void {
+    private func executeOnThread(onNodes:[FMNode]) -> Void {
         // time how long the entire execution takes
         executionTimer.start()
 
@@ -280,7 +303,7 @@ public class FogMachine {
         nodeToResult[sessionUUID] = [FMNode:FMResult]()
         nodeToRoundTripTimer[sessionUUID] = [FMNode:FMTimer]()
 
-        for node in getAllNodes() {
+        for node in onNodes {
             mcPeerIDToNode[sessionUUID]![node.mcPeerID] = node
         }
 
@@ -353,19 +376,26 @@ public class FogMachine {
             }
         }
 
-        // process your own work
-        self.FMLog("Processing self work.")
-        dispatch_sync(self.lock) {
-            self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.start()
+        var selfResult:FMResult?
+        if(selfWork != nil) {
+            // process your own work
+            self.FMLog("Processing self work.")
+            dispatch_sync(self.lock) {
+                self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.start()
+            }
+        
+            selfResult = self.fmTool.processWork(getSelfNode(), fromNode: getSelfNode(), work: selfWork!)
         }
-        let selfResult:FMResult = self.fmTool.processWork(getSelfNode(), fromNode: getSelfNode(), work: selfWork!)
 
         // store the result and merge results if needed
         dispatch_sync(self.lock) {
-            let selfTimeToFinish:Double = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.stop())!
-            self.FMLog(self.getSelfNode().description + " process work time: " + String(format: "%.3f", selfTimeToFinish) + " seconds.")
-            self.FMLog("Storing self work result.")
-            self.nodeToResult[sessionUUID]![self.getSelfNode()] = selfResult
+            var selfTimeToFinish:Double = 0
+            if(selfResult != nil) {
+                selfTimeToFinish = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.stop())!
+                self.FMLog(self.getSelfNode().description + " process work time: " + String(format: "%.3f", selfTimeToFinish) + " seconds.")
+                self.FMLog("Storing self work result.")
+                self.nodeToResult[sessionUUID]![self.getSelfNode()] = selfResult!
+            }
             let status = self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
             // schedule the reprocessing stuff
             if(status == false) {
