@@ -4,8 +4,7 @@ import SSZipArchive
 
 public class HGTDownloader: NSObject, NSURLSessionDownloadDelegate {
 
-    static let DOWNLOAD_SERVER = "https://fogmachine.geointapps.org/version2_1/SRTM3/"
-    static let ALTERNATE_DOWNLOAD_SERVER = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
+    static let DOWNLOAD_SERVER = "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/"
     
     let onDownload:(String)->()
     let onError:(String)->()
