@@ -1,6 +1,6 @@
 PODS:
   - Buckets (1.2.1)
-  - FogMachine (4.0.0):
+  - FogMachine (4.0.3):
     - SwiftEventBus (~> 1.1.0)
   - SSZipArchive (1.2)
   - SwiftEventBus (1.1.0)
@@ -25,8 +25,10 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Buckets: 92a8850454575d86d0de268b8ee08c5fd9821598
-  FogMachine: 213289498d1140dd91f432f516e3347f2449e936
+  FogMachine: 464b461a766743703e00a6903e427b9b093fefd3
   SSZipArchive: 251093c65f98d6ea282c50bc404bfa631d9fd721
   SwiftEventBus: d33b51752d4e3e994f0ea7b31873f0beca7eada0
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: e0d1a61b0a615ba277a56e318a127c25788bc287
+
+COCOAPODS: 1.0.1
