@@ -69,13 +69,11 @@
 		F91D47641CEA9AFD00AB483E /* VanKreveldStatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */; };
 		F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */; };
 		F91D47661CEA9AFD00AB483E /* ViewshedAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47231CEA9AFD00AB483E /* ViewshedAlgorithm.swift */; };
-		F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */; };
 		F91D47681CEA9AFD00AB483E /* BoundingBoxUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47261CEA9AFD00AB483E /* BoundingBoxUtility.swift */; };
 		F91D47691CEA9AFD00AB483E /* GeoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47271CEA9AFD00AB483E /* GeoUtility.swift */; };
 		F91D476A1CEA9AFD00AB483E /* HGTDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47281CEA9AFD00AB483E /* HGTDownloader.swift */; };
 		F91D476B1CEA9AFD00AB483E /* HGTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47291CEA9AFD00AB483E /* HGTManager.swift */; };
 		F91D476C1CEA9AFD00AB483E /* HGTRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */; };
-		F91D476D1CEA9AFD00AB483E /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472B1CEA9AFD00AB483E /* Toast.swift */; };
 		F91D476E1CEA9AFD00AB483E /* ImageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */; };
 		F91D476F1CEA9AFD00AB483E /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472E1CEA9AFD00AB483E /* Pixel.swift */; };
 		F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */; };
@@ -171,13 +169,11 @@
 		F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldStatusEntry.swift; sourceTree = "<group>"; };
 		F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldViewshed.swift; sourceTree = "<group>"; };
 		F91D47231CEA9AFD00AB483E /* ViewshedAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedAlgorithm.swift; sourceTree = "<group>"; };
-		F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		F91D47261CEA9AFD00AB483E /* BoundingBoxUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxUtility.swift; sourceTree = "<group>"; };
 		F91D47271CEA9AFD00AB483E /* GeoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoUtility.swift; sourceTree = "<group>"; };
 		F91D47281CEA9AFD00AB483E /* HGTDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTDownloader.swift; sourceTree = "<group>"; };
 		F91D47291CEA9AFD00AB483E /* HGTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTManager.swift; sourceTree = "<group>"; };
 		F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTRegions.swift; sourceTree = "<group>"; };
-		F91D472B1CEA9AFD00AB483E /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtility.swift; sourceTree = "<group>"; };
 		F91D472E1CEA9AFD00AB483E /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
 		F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
@@ -452,13 +448,11 @@
 		F91D47241CEA9AFD00AB483E /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */,
 				F91D47261CEA9AFD00AB483E /* BoundingBoxUtility.swift */,
 				F91D47271CEA9AFD00AB483E /* GeoUtility.swift */,
 				F91D47281CEA9AFD00AB483E /* HGTDownloader.swift */,
 				F91D47291CEA9AFD00AB483E /* HGTManager.swift */,
 				F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */,
-				F91D472B1CEA9AFD00AB483E /* Toast.swift */,
 				F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */,
 				F924C2021CF3B82C00905FBC /* StreamReader.swift */,
 			);
@@ -737,7 +731,6 @@
 				F91D475C1CEA9AFD00AB483E /* Observer.swift in Sources */,
 				F91D47521CEA9AFD00AB483E /* ObserverEntity.swift in Sources */,
 				F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */,
-				F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */,
 				F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */,
 				F924C2031CF3B82C00905FBC /* StreamReader.swift in Sources */,
 				F91D47591CEA9AFD00AB483E /* RectangularPerimeter.swift in Sources */,
@@ -745,7 +738,6 @@
 				F91D47351CEA9AFD00AB483E /* ViewshedViewController.swift in Sources */,
 				F91D475F1CEA9AFD00AB483E /* ViewshedWork.swift in Sources */,
 				F91D47681CEA9AFD00AB483E /* BoundingBoxUtility.swift in Sources */,
-				F91D476D1CEA9AFD00AB483E /* Toast.swift in Sources */,
 				F975408D1D09F989005E222E /* VanKreveldEventType.swift in Sources */,
 				7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */,
 				F91D476B1CEA9AFD00AB483E /* HGTManager.swift in Sources */,

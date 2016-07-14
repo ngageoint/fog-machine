@@ -1,5 +1,7 @@
 import UIKit
 import MapKit
+import Toast_Swift
+import EZLoadingActivity
 
 class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
 
@@ -234,23 +236,23 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
     }
     
     func initiateDownload(filename: String) {
-        ActivityIndicator.show("Downloading " + filename)
+        EZLoadingActivity.show("Downloading " + filename, disableUI: false)
         let hgtDownloader:HGTDownloader = HGTDownloader(onDownload: { path in
             
             dispatch_async(dispatch_get_main_queue()) {
                 () -> Void in
-                ActivityIndicator.hide(success: true, animated: true)
+                EZLoadingActivity.hide(success: true, animated: false)
                 self.refresh()
             }
             
             }, onError: { filename in
-                ActivityIndicator.hide(success: false, animated: true, errorMsg: "Could not retrive file")
+              EZLoadingActivity.hide(success: false, animated: false)
         })
         hgtDownloader.downloadFile(filename)
     }
     
     func didFailToReceieveResponse(error: String) {
-        ActivityIndicator.hide(success: false, animated: true, errorMsg: error)
+       EZLoadingActivity.hide(success: false, animated: false)
         print("\(error)")
     }
     
@@ -265,11 +267,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate, UITableViewDel
                 if (srtmDataRegion.isEmpty == false) {
                     pinAnnotation("Download elevation data?", subtitle: filename, coordinate:mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView))
                 } else {
-                    var style = ToastStyle()
-                    style.messageColor = UIColor.redColor()
-                    style.backgroundColor = UIColor.whiteColor()
-                    style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
-                    self.view.makeToast("No data available here.", duration: 1.5, position: .Center, style: style)
+                    self.view.makeToast("No data available here.", duration: 1.5, position: ToastPosition.Center)
                 }
             }
         }

@@ -30,6 +30,8 @@ target 'FogViewshed' do
     pod 'FogMachine', :path => '.'
     pod 'SSZipArchive', '~> 1.1'
     pod 'Buckets', :git => 'https://github.com/mauriciosantos/Buckets-Swift.git', :tag => '1.2.1'
+    pod 'Toast-Swift', '~> 1.3.0'
+    pod 'EZLoadingActivity', '~> 0.8'
 end
 
 target 'FogViewshedTests' do

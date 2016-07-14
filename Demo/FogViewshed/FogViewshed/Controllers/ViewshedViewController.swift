@@ -2,6 +2,9 @@ import UIKit
 import MapKit
 import FogMachine
 import SwiftEventBus
+import Toast_Swift
+import EZLoadingActivity
+
 
 class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
 
@@ -32,7 +35,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
         // TODO: What should happen when the viewshed is done?
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshedComplete) { result in
-            ActivityIndicator.hide(success: true, animated: true)
+            EZLoadingActivity.hide(success: true, animated: false)
         }
         
         // log any info from Fog Machine to our textbox
@@ -152,11 +155,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
                 newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
                 addObserver(newObserver)
             } else {
-                var style = ToastStyle()
-                style.messageColor = UIColor.redColor()
-                style.backgroundColor = UIColor.whiteColor()
-                style.messageFont = UIFont(name: "HelveticaNeue", size: 16)
-                self.view.makeToast("No elevation data here.  Go download some.", duration: 1.5, position: .Center, style: style)
+                self.view.makeToast("No elevation data here.\nDownload from the Data tab.", duration: 2.0, position: ToastPosition.Center)
                 return
             }
         }
@@ -259,7 +258,8 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     // MARK: Viewshed
 
     func initiateFogViewshed(observer: Observer) {
-        ActivityIndicator.show("Calculating Viewshed")
+        EZLoadingActivity.show("Calculating Viewshed", disableUI: false)
+        
         self.ViewshedLog("Running viewshed")
         (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedObserver = observer
         (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedAlgorithmName = ViewshedAlgorithmName.FranklinRay
