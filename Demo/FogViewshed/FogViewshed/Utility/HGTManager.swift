@@ -264,7 +264,7 @@ public class HGTManager {
             
             let hgtFileBoundingBox:AxisOrientedBoundingBox = hgtFileOfInterest.getBoundingBox()
             
-            // make sure this hgtfile intersets the bounding box
+            // make sure this hgtfile intersects the bounding box
             if(hgtFileBoundingBox.intersectionExists(griddedAxisOrientedBoundingBox)) {
                 // find the intersection
                 let hgtAreaOfInterest:AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
