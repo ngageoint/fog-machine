@@ -157,9 +157,21 @@ Software source code previously released under an open source license and then m
 ## Acknowledgements
 
 Fog Machine makes use of the following open source projects:
+- **Buckets**  
+*https://github.com/mauriciosantos/Buckets-Swift*  
+This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
+- **EZLoadingActivity**  
+*https://github.com/goktugyil/EZLoadingActivity*  
+This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
 - **PeerKit**  
-*https://github.com/jpsim/PeerKit*
+*https://github.com/jpsim/PeerKit*  
 This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
 - **SwiftEventBus**  
-*https://github.com/cesarferreira/SwiftEventBus*
+*https://github.com/cesarferreira/SwiftEventBus*  
+This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
+- **Toast-Swift**  
+*https://github.com/scalessec/Toast-Swift*  
+This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
+- **ZipArchive**  
+*https://github.com/ZipArchive/ZipArchive*  
 This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
