@@ -328,12 +328,12 @@ public class HGTManager {
                         data.getBytes(&oneRowOfElevation, range: dataRange)
                         
                         // the byte order is backwards, so flip it.  Don't think there's a faster way to do this
-                        for j in 0 ..< (data.length/2) {
+                        for cell in 0 ..< (data.length/2) {
                             // find the index where this row should be indexed into the large elevationData structure
-                            let ii:Int = elevationDataIndex.1 + hgtAreaOfInterestHeight - 1 - rowNumber;
-                            let jj:Int = elevationDataIndex.0 + j
-                            if(jj < elevationDataWidth && jj >= 0 && ii < elevationDataHeight && ii >= 0) {
-                                elevationData[ii][jj] = Int(oneRowOfElevation[j].bigEndian)
+                            let column:Int = elevationDataIndex.1 + hgtAreaOfInterestHeight - 1 - rowNumber;
+                            let row:Int = elevationDataIndex.0 + cell
+                            if(row < elevationDataWidth && row >= 0 && column < elevationDataHeight && column >= 0) {
+                                elevationData[column][row] = Int(oneRowOfElevation[cell].bigEndian)
                             }
                         }
                         
