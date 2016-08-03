@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
+		8FCD187673E8E4E1B8D2E742 /* Pods_FogViewshedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E1E23DF8E70DE8ABA2403F1 /* Pods_FogViewshedTests.framework */; };
 		9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
 		E314F6C81B79023D005B75C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C61B79023D005B75C6 /* Main.storyboard */; };
 		E314F6CA1B79023D005B75C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E314F6C91B79023D005B75C6 /* Images.xcassets */; };
@@ -68,13 +69,11 @@
 		F91D47641CEA9AFD00AB483E /* VanKreveldStatusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */; };
 		F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */; };
 		F91D47661CEA9AFD00AB483E /* ViewshedAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47231CEA9AFD00AB483E /* ViewshedAlgorithm.swift */; };
-		F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */; };
 		F91D47681CEA9AFD00AB483E /* BoundingBoxUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47261CEA9AFD00AB483E /* BoundingBoxUtility.swift */; };
 		F91D47691CEA9AFD00AB483E /* GeoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47271CEA9AFD00AB483E /* GeoUtility.swift */; };
 		F91D476A1CEA9AFD00AB483E /* HGTDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47281CEA9AFD00AB483E /* HGTDownloader.swift */; };
 		F91D476B1CEA9AFD00AB483E /* HGTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D47291CEA9AFD00AB483E /* HGTManager.swift */; };
 		F91D476C1CEA9AFD00AB483E /* HGTRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */; };
-		F91D476D1CEA9AFD00AB483E /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472B1CEA9AFD00AB483E /* Toast.swift */; };
 		F91D476E1CEA9AFD00AB483E /* ImageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */; };
 		F91D476F1CEA9AFD00AB483E /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472E1CEA9AFD00AB483E /* Pixel.swift */; };
 		F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */; };
@@ -100,9 +99,12 @@
 
 /* Begin PBXFileReference section */
 		23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E1E23DF8E70DE8ABA2403F1 /* Pods_FogViewshedTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshedTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
 		754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FogMachine.xcdatamodel; sourceTree = "<group>"; };
 		8B12973A4FECB067D196E0B8 /* Pods-FogViewshed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.release.xcconfig"; sourceTree = "<group>"; };
+		AE397663EC1C7C47F3260FC9 /* Pods-FogViewshedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshedTests.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshedTests/Pods-FogViewshedTests.release.xcconfig"; sourceTree = "<group>"; };
+		CF19853ABE6182E0957665AC /* Pods-FogViewshedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshedTests.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshedTests/Pods-FogViewshedTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E314F6BB1B79023D005B75C6 /* FogViewshed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogViewshed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E314F6BF1B79023D005B75C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E314F6C71B79023D005B75C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -167,13 +169,11 @@
 		F91D47211CEA9AFD00AB483E /* VanKreveldStatusEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldStatusEntry.swift; sourceTree = "<group>"; };
 		F91D47221CEA9AFD00AB483E /* VanKreveldViewshed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VanKreveldViewshed.swift; sourceTree = "<group>"; };
 		F91D47231CEA9AFD00AB483E /* ViewshedAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewshedAlgorithm.swift; sourceTree = "<group>"; };
-		F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		F91D47261CEA9AFD00AB483E /* BoundingBoxUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxUtility.swift; sourceTree = "<group>"; };
 		F91D47271CEA9AFD00AB483E /* GeoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoUtility.swift; sourceTree = "<group>"; };
 		F91D47281CEA9AFD00AB483E /* HGTDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTDownloader.swift; sourceTree = "<group>"; };
 		F91D47291CEA9AFD00AB483E /* HGTManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTManager.swift; sourceTree = "<group>"; };
 		F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HGTRegions.swift; sourceTree = "<group>"; };
-		F91D472B1CEA9AFD00AB483E /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtility.swift; sourceTree = "<group>"; };
 		F91D472E1CEA9AFD00AB483E /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
 		F91D472F1CEA9AFD00AB483E /* GridOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridOverlay.swift; sourceTree = "<group>"; };
@@ -201,6 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FCD187673E8E4E1B8D2E742 /* Pods_FogViewshedTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +213,7 @@
 			children = (
 				F913E2561D1869F30012A431 /* Pods_FogMachine.framework */,
 				23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */,
+				2E1E23DF8E70DE8ABA2403F1 /* Pods_FogViewshedTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -221,6 +223,8 @@
 			children = (
 				67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */,
 				8B12973A4FECB067D196E0B8 /* Pods-FogViewshed.release.xcconfig */,
+				CF19853ABE6182E0957665AC /* Pods-FogViewshedTests.debug.xcconfig */,
+				AE397663EC1C7C47F3260FC9 /* Pods-FogViewshedTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -444,13 +448,11 @@
 		F91D47241CEA9AFD00AB483E /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				F91D47251CEA9AFD00AB483E /* ActivityIndicator.swift */,
 				F91D47261CEA9AFD00AB483E /* BoundingBoxUtility.swift */,
 				F91D47271CEA9AFD00AB483E /* GeoUtility.swift */,
 				F91D47281CEA9AFD00AB483E /* HGTDownloader.swift */,
 				F91D47291CEA9AFD00AB483E /* HGTManager.swift */,
 				F91D472A1CEA9AFD00AB483E /* HGTRegions.swift */,
-				F91D472B1CEA9AFD00AB483E /* Toast.swift */,
 				F91D472C1CEA9AFD00AB483E /* ImageUtility.swift */,
 				F924C2021CF3B82C00905FBC /* StreamReader.swift */,
 			);
@@ -482,12 +484,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E314F6DC1B79023D005B75C6 /* Build configuration list for PBXNativeTarget "FogViewshed" */;
 			buildPhases = (
-				DD9411F991E2ABAC4A9BF42D /* Check Pods Manifest.lock */,
+				DD9411F991E2ABAC4A9BF42D /* [CP] Check Pods Manifest.lock */,
 				E314F6B71B79023D005B75C6 /* Sources */,
 				E314F6B81B79023D005B75C6 /* Frameworks */,
 				E314F6B91B79023D005B75C6 /* Resources */,
-				082DCADF35E586762BD71722 /* Embed Pods Frameworks */,
-				D66151F748EF8EDB277C83AE /* Copy Pods Resources */,
+				082DCADF35E586762BD71722 /* [CP] Embed Pods Frameworks */,
+				D66151F748EF8EDB277C83AE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -502,9 +504,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E314F6DF1B79023D005B75C6 /* Build configuration list for PBXNativeTarget "FogViewshedTests" */;
 			buildPhases = (
+				1ABBC06D347DA05EDEF919F4 /* [CP] Check Pods Manifest.lock */,
 				E314F6CE1B79023D005B75C6 /* Sources */,
 				E314F6CF1B79023D005B75C6 /* Frameworks */,
 				E314F6D01B79023D005B75C6 /* Resources */,
+				58747BFE38D45614BCFB701A /* [CP] Embed Pods Frameworks */,
+				FEA9EC330605CBB0E03BCE78 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -608,14 +613,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		082DCADF35E586762BD71722 /* Embed Pods Frameworks */ = {
+		082DCADF35E586762BD71722 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -623,14 +628,44 @@
 			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D66151F748EF8EDB277C83AE /* Copy Pods Resources */ = {
+		1ABBC06D347DA05EDEF919F4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		58747BFE38D45614BCFB701A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogViewshedTests/Pods-FogViewshedTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D66151F748EF8EDB277C83AE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -638,19 +673,34 @@
 			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DD9411F991E2ABAC4A9BF42D /* Check Pods Manifest.lock */ = {
+		DD9411F991E2ABAC4A9BF42D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FEA9EC330605CBB0E03BCE78 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogViewshedTests/Pods-FogViewshedTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -681,7 +731,6 @@
 				F91D475C1CEA9AFD00AB483E /* Observer.swift in Sources */,
 				F91D47521CEA9AFD00AB483E /* ObserverEntity.swift in Sources */,
 				F91D47701CEA9AFD00AB483E /* GridOverlay.swift in Sources */,
-				F91D47671CEA9AFD00AB483E /* ActivityIndicator.swift in Sources */,
 				F91D47651CEA9AFD00AB483E /* VanKreveldViewshed.swift in Sources */,
 				F924C2031CF3B82C00905FBC /* StreamReader.swift in Sources */,
 				F91D47591CEA9AFD00AB483E /* RectangularPerimeter.swift in Sources */,
@@ -689,7 +738,6 @@
 				F91D47351CEA9AFD00AB483E /* ViewshedViewController.swift in Sources */,
 				F91D475F1CEA9AFD00AB483E /* ViewshedWork.swift in Sources */,
 				F91D47681CEA9AFD00AB483E /* BoundingBoxUtility.swift in Sources */,
-				F91D476D1CEA9AFD00AB483E /* Toast.swift in Sources */,
 				F975408D1D09F989005E222E /* VanKreveldEventType.swift in Sources */,
 				7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */,
 				F91D476B1CEA9AFD00AB483E /* HGTManager.swift in Sources */,
@@ -875,6 +923,7 @@
 		};
 		E314F6E01B79023D005B75C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF19853ABE6182E0957665AC /* Pods-FogViewshedTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -895,6 +944,7 @@
 		};
 		E314F6E11B79023D005B75C6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE397663EC1C7C47F3260FC9 /* Pods-FogViewshedTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

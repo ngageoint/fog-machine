@@ -1,15 +1,19 @@
 PODS:
   - Buckets (1.2.1)
-  - FogMachine (4.0.0):
+  - EZLoadingActivity (0.8)
+  - FogMachine (4.0.3):
     - SwiftEventBus (~> 1.1.0)
   - SSZipArchive (1.2)
   - SwiftEventBus (1.1.0)
+  - Toast-Swift (1.3.0)
 
 DEPENDENCIES:
   - Buckets (from `https://github.com/mauriciosantos/Buckets-Swift.git`, tag `1.2.1`)
+  - EZLoadingActivity (~> 0.8)
   - FogMachine (from `.`)
   - SSZipArchive (~> 1.1)
   - SwiftEventBus (~> 1.1.0)
+  - Toast-Swift (~> 1.3.0)
 
 EXTERNAL SOURCES:
   Buckets:
@@ -25,8 +29,12 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Buckets: 92a8850454575d86d0de268b8ee08c5fd9821598
-  FogMachine: 213289498d1140dd91f432f516e3347f2449e936
+  EZLoadingActivity: 6fd75a05765a4085f4b6fef6f62edf9f144b3139
+  FogMachine: 464b461a766743703e00a6903e427b9b093fefd3
   SSZipArchive: 251093c65f98d6ea282c50bc404bfa631d9fd721
   SwiftEventBus: d33b51752d4e3e994f0ea7b31873f0beca7eada0
+  Toast-Swift: 25c3d98db42dc70d9a77b5006ee000e0becb458e
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: bccf9768c91fb330eaf4c5b4c7f2f6fbd94911fe
+
+COCOAPODS: 1.0.1

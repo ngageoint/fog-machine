@@ -180,12 +180,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75802C861C7F37AE00DAE8BD /* Build configuration list for PBXNativeTarget "FogMachine" */;
 			buildPhases = (
-				CD618FA772D6703F501A4481 /* Check Pods Manifest.lock */,
+				CD618FA772D6703F501A4481 /* [CP] Check Pods Manifest.lock */,
 				75802C791C7F37AE00DAE8BD /* Sources */,
 				75802C7A1C7F37AE00DAE8BD /* Frameworks */,
 				75802C7B1C7F37AE00DAE8BD /* Headers */,
 				75802C7C1C7F37AE00DAE8BD /* Resources */,
-				6186874FDBA0FFC00D1AB459 /* Copy Pods Resources */,
+				6186874FDBA0FFC00D1AB459 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -241,14 +241,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6186874FDBA0FFC00D1AB459 /* Copy Pods Resources */ = {
+		6186874FDBA0FFC00D1AB459 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,14 +256,14 @@
 			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CD618FA772D6703F501A4481 /* Check Pods Manifest.lock */ = {
+		CD618FA772D6703F501A4481 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

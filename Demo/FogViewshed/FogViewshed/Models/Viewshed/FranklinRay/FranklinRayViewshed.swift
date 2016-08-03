@@ -62,10 +62,10 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
         let olat:Double = (Double(oyi)*resolutionInverse) + latAdjust
         let olon:Double = (Double(oxi)*resolutionInverse) + lonAdjust
         
-        let radiusOfEarth:Double = GeoUtility.earthRadiusAtLat(olat)
-        let radiusOfEarthSquared:Double = pow(radiusOfEarth, 2)
+        //let radiusOfEarth:Double = GeoUtility.earthRadiusAtLat(olat)
+        //let radiusOfEarthSquared:Double = pow(radiusOfEarth, 2)
         
-        let euclideanDistanceToHorizonInMeters:Double = sqrt(pow(radiusOfEarth + oh,2) - radiusOfEarthSquared)
+        //let euclideanDistanceToHorizonInMeters:Double = sqrt(pow(radiusOfEarth + oh,2) - radiusOfEarthSquared)
         
         // iterate through the cells c of the perimeter. Each c has coordinates (xc, yc, 0), where the corresponding point on the terrain is (xc, yc, zc).
         while(perimeter.hasAnotherPerimeterCell()) {
@@ -103,7 +103,7 @@ public class FranklinRayViewshed : ViewsehdAlgorithm {
                 let adjacentInMeters:Double = GeoUtility.haversineDistanceInMeters(ylat, lon1: xlon, lat2: olat, lon2: olon)
                 
                 // FIXME : make sure points beyond the horizon can be seen
-                var beyondHorizonAndNotVisible:Bool = false
+                let beyondHorizonAndNotVisible:Bool = false
                 
 //                if(adjacentInMeters > euclideanDistanceToHorizonInMeters) {
 //                    let minimumElevationToBeVisible:Double = sqrt(pow((adjacentInMeters - euclideanDistanceToHorizonInMeters),2) + radiusOfEarthSquared) - radiusOfEarth

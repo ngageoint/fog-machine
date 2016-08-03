@@ -1,6 +1,8 @@
 import UIKit
 import CoreData
 import FogMachine
+import Toast_Swift
+import EZLoadingActivity
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +29,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // init fog machine
         FogMachine.fogMachineInstance.setTool(ViewshedTool())
         FogMachine.fogMachineInstance.startSearchForPeers()
+        
+        var toastStyle = ToastStyle()
+        toastStyle.messageAlignment = NSTextAlignment.Center
+        toastStyle.backgroundColor = UIColor.whiteColor()
+        toastStyle.messageColor = UIColor.redColor()
+        toastStyle.displayShadow = true
+        toastStyle.shadowOffset = CGSizeMake(0, 0)
+        toastStyle.shadowRadius = 5
+        toastStyle.shadowOpacity = 0.5
+        if let toastFont = UIFont(name: "HelveticaNeue-Light", size: 16) {
+            toastStyle.messageFont = toastFont
+        }
+        ToastManager.shared.style = toastStyle
+        
+        EZLoadingActivity.Settings.BackgroundColor = UIColor.whiteColor()
+        EZLoadingActivity.Settings.ActivityColor = UIColor.blackColor()
+        EZLoadingActivity.Settings.TextColor = UIColor.blackColor()
+        EZLoadingActivity.Settings.ActivityHeight = EZLoadingActivity.Settings.ActivityWidth / 5
         
         return true
     }
@@ -153,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if coordinator == nil {
             return nil
         }
-        var managedObjectContext = NSManagedObjectContext()
+        var managedObjectContext = NSManagedObjectContext(concurrencyType: NSManagedObjectContextConcurrencyType.MainQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()
