@@ -108,7 +108,7 @@ public class Session: NSObject, MCSessionDelegate {
     }
 
     func newSession(displayName: String, peerName: String) -> MCSession {
-        let newSession = MCSession(peer: myPeerId)
+        let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.Required)
 
         newSession.delegate = self
         myPeerSessions[String(myPeerSessions.count)] = newSession
