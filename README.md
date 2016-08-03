@@ -129,6 +129,7 @@ Parallel processing over a mesh-network reduces the overall time to solve proble
 </table>
 
 * The Fog Machine framework uses Apple's [Multipeer Connectivity framework](https://developer.apple.com/library/ios/documentation/MultipeerConnectivity/Reference/MultipeerConnectivityFramework/).  Multipeer Connectivity is supported across all iOS devices, which means great interoperability within the iOS family.  
+* The traffic between peers is encrypted by default with [TDLS](https://en.wikipedia.org/wiki/TDLS) provided by Apple's Multipeer Connectivity framework.  
 * The framework works entirely disconnected.  It does not rely on any backend connection like LTE or Wi-Fi.  
 * If, for whatever reason, a device in the peer network fails to process its piece of work, that piece of work will automatically get reprocessed on the initiating device.  Reprocessing provides transparent flexibility in the network.
 * Although not the primary focus of Fog Machine, the framework allows devices to easily share data within the peer network.
