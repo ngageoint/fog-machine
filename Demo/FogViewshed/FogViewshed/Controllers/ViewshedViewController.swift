@@ -284,30 +284,51 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     
     func display3dViewshed(elevationDataGrid: DataGrid) {
         let rawElevation:[[Int]] = elevationDataGrid.data
-        let upperLeftCoordinate: CLLocationCoordinate2D = elevationDataGrid.boundingBoxAreaExtent.getUpperLeft()
+        let cameraCoordinate: CLLocationCoordinate2D = elevationDataGrid.boundingBoxAreaExtent.getUpperLeft()
 
         viewshedSceneView = SCNView(frame: self.view.frame)
         viewshedSceneView.allowsCameraControl = true
+        viewshedSceneView.autoenablesDefaultLighting = true
+        viewshedSceneView.backgroundColor = UIColor.lightGrayColor()
+        viewshedSceneView.antialiasingMode = .Multisampling4X
         
         let viewshedScene = SCNScene()
         viewshedSceneView.scene = viewshedScene
         
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        //TODO: Update camera vector
-        let cameraZ = Float(rawElevation.count * 2)
-        let cameraX = Float(upperLeftCoordinate.longitude) + Float(rawElevation[0].count / 2)
-        let cameraY = Float(upperLeftCoordinate.latitude) - Float(rawElevation.count / 2)
-        cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
-        viewshedScene.rootNode.addChildNode(cameraNode)
-        
-        //TODO: Update increment
-        let increment:Float = 1.0//1.0/Float(elevationDataGrid.resolution)
-        
-        let elevationNode:ElevationScene = ElevationScene(upperLeftCoordinate: upperLeftCoordinate, elevation: rawElevation, increment: increment)
+        let increment:Float = 1.0
+        let incrementXFactor: Float = Float(rawElevation[0].count / 2)
+        let incrementYFactor: Float = Float(rawElevation.count / 2)
+
+        let elevationNode:ElevationScene = ElevationScene(upperLeftCoordinate: elevationDataGrid.boundingBoxAreaExtent.getUpperLeft(), elevation: rawElevation, increment: increment)
         elevationNode.generateScene()
         elevationNode.drawVerticies()
+        elevationNode.addObserver(settingsObserver.elevationInMeters)
         viewshedScene.rootNode.addChildNode(elevationNode)
+        
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        let cameraZ = Float(elevationNode.getCameraElevation())
+        let cameraX = Float(cameraCoordinate.longitude) + incrementXFactor
+        let cameraY = Float(cameraCoordinate.latitude) - incrementYFactor
+        cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
+        //TODO: Add camera rotation for Observer
+        //cameraNode.eulerAngles = SCNVector3Make(0, 0, 0)
+        //cameraNode.rotation = SCNVector4Make(1, 0, 0, Float(M_PI_2))
+        viewshedScene.rootNode.addChildNode(cameraNode)
+        
+        //TODO: Add Spot light
+//        let spotLight = SCNLight()
+//        spotLight.type = SCNLightTypeSpot
+//        spotLight.spotInnerAngle = 5.0
+//        spotLight.spotOuterAngle = 10.0
+//        spotLight.castsShadow = true
+//        spotLight.color = UIColor.whiteColor()
+//        let spotLightNode = SCNNode()
+//        spotLightNode.light = spotLight
+//        spotLightNode.position = SCNVector3(x: X, y: Y, z: -Z)
+//        viewshedScene.rootNode.addChildNode(spotLightNode)
+        
+        
         self.view.addSubview(viewshedSceneView)
     }
 
