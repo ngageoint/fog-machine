@@ -6,11 +6,11 @@ import FogMachine
 class ImageUtility: NSObject {
 
     static func generateElevationOverlay(elevationDataGrid: DataGrid) -> GridOverlay {
-        return GridOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data), rawElevation: elevationDataGrid.data, elevationCoordinate: elevationDataGrid.boundingBoxAreaExtent.getUpperLeft())
+        return GridOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data))
     }
     
-    static func generateViewshedOverlay(viewshedDataGrid: DataGrid, rawElevation: [[Int]]) -> GridOverlay {
-        return GridOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data), rawElevation: rawElevation, elevationCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getUpperLeft())
+    static func generateViewshedOverlay(viewshedDataGrid: DataGrid) -> GridOverlay {
+        return GridOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data))
     }
 
     static func elevationToUIImage(elevationGrid: [[Int]]) -> UIImage {
@@ -18,19 +18,11 @@ class ImageUtility: NSObject {
         let height = elevationGrid.count
         let width = elevationGrid[0].count
 
-        // Reference: https://en.wikipedia.org/wiki/Extreme_points_of_Earth
-        // Tallest point from sea level is <9000 meters (Mount Everest at 8,848m)
-        let maxBound = 9000
-        // Lowest point on dry land >450 meters (The shore of the Dead Sea at -418m)
-        let minBound = -450
-
-
-        var maxElevation = minBound
+        var maxElevation = Elevation.MIN_BOUND
         // high stuff is red
         let maxElevationColor = Pixel(alpha:50, red: 255, green: 0, blue: 0)
 
-
-        var minElevation = maxBound
+        var minElevation = Elevation.MAX_BOUND
         // low stuff is green
         let minElevationColor = Pixel(alpha:50, red: 0, green: 255, blue: 0)
 
@@ -51,8 +43,8 @@ class ImageUtility: NSObject {
             }
         }
         // bound them, if outside range
-        maxElevation = min(maxBound, maxElevation)
-        minElevation = max(minBound, minElevation)
+        maxElevation = min(Elevation.MAX_BOUND, maxElevation)
+        minElevation = max(Elevation.MIN_BOUND, minElevation)
 
         var elevationImage: [Pixel] = []
 

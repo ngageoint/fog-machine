@@ -74,7 +74,7 @@ public class ViewshedTool : FMTool {
         viewshedLog("Ran viewshed in " + String(format: "%.3f", viewshedTimer.stop()) + " seconds")
         
 
-        SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid, rawElevation: elevationDataGrid.data))
+        SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedDataGrid))
         
         return ViewshedResult(dataGrid: viewshedDataGrid)
     }
@@ -85,7 +85,7 @@ public class ViewshedTool : FMTool {
             if(node != n) {
                 let viewshedResult = result as! ViewshedResult
                 NSLog("Received result from node " + n.description)
-                SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid, rawElevation: [[]]))
+                SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateViewshedOverlay(viewshedResult.dataGrid))
             }
         }
         SwiftEventBus.post(ViewshedEventBusEvents.viewshedComplete)

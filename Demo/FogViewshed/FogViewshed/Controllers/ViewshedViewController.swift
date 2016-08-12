@@ -49,12 +49,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
             let gridOverlay:GridOverlay = result.object as! GridOverlay
             self.mapView.addOverlay(gridOverlay)
-            SwiftEventBus.post(ViewshedEventBusEvents.viewshed3D, sender: gridOverlay)
         }
 
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshed3D) { result in
-            let gridOverLay:GridOverlay = result.object as! GridOverlay
-            self.displayViewshed3D(gridOverLay.image, rawElevation: gridOverLay.rawElevation, elevationCoordinate: gridOverLay.elevationCoordinate)
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshed3d) { result in
+            let elevationDataGrid:DataGrid = result.object as! DataGrid
+            self.display3dViewshed(elevationDataGrid)
         }
 
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.addObserverPin) { result in
@@ -99,7 +98,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             drawDataRegions()
             //Remove the viewshed 3D scene
             self.viewshedSceneView.removeFromSuperview()
-            self.viewshedSceneView = SCNView()
         }
     }
 
@@ -284,7 +282,10 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         FogMachine.fogMachineInstance.execute()
     }
     
-    func displayViewshed3D(image: UIImage, rawElevation: [[Int]], elevationCoordinate upperLeftCoordinate: CLLocationCoordinate2D) {
+    func display3dViewshed(elevationDataGrid: DataGrid) {
+        let rawElevation:[[Int]] = elevationDataGrid.data
+        let upperLeftCoordinate: CLLocationCoordinate2D = elevationDataGrid.boundingBoxAreaExtent.getUpperLeft()
+
         viewshedSceneView = SCNView(frame: self.view.frame)
         viewshedSceneView.allowsCameraControl = true
         
@@ -301,7 +302,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         viewshedScene.rootNode.addChildNode(cameraNode)
         
         //TODO: Update increment
-        let increment:Float = 1.0//1.0/Float(Srtm.SRTM3_RESOLUTION)
+        let increment:Float = 1.0//1.0/Float(elevationDataGrid.resolution)
         
         let elevationNode:ElevationScene = ElevationScene(upperLeftCoordinate: upperLeftCoordinate, elevation: rawElevation, increment: increment)
         elevationNode.generateScene()
@@ -361,6 +362,10 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     @IBAction func drawElevationData(segue: UIStoryboardSegue) {
         ElevationTool(elevationObserver: self.settingsObserver).drawElevationData()
+    }
+    
+    @IBAction func draw3dElevationData(segue: UIStoryboardSegue) {
+        ElevationTool(elevationObserver: self.settingsObserver).draw3dElevationData()
     }
     
     @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {

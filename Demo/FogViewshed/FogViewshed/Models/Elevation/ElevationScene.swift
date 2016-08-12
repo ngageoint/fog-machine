@@ -10,11 +10,14 @@ import MapKit
 
 class ElevationScene: SCNNode {
     
+    // MARK: Variables
+    
     var upperLeftCoordinate:CLLocationCoordinate2D
     var elevation:[[Int]]
     var increment:Float
     var vertexSource:SCNGeometrySource
     
+    // MARK: Initializer
     
     init(upperLeftCoordinate: CLLocationCoordinate2D, elevation: [[Int]], increment: Float) {
         self.upperLeftCoordinate = upperLeftCoordinate
@@ -28,6 +31,8 @@ class ElevationScene: SCNNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Process Functions
+    
     func generateScene() {
         self.addChildNode(SCNNode(geometry: calculateGeometry()))
     }
@@ -35,6 +40,8 @@ class ElevationScene: SCNNode {
     func drawVerticies() {
         self.addChildNode(generateLineNode(vertexSource, vertexCount: vertexSource.vectorCount))
     }
+    
+    // MARK: Private Functions
     
     private func calculateGeometry() -> SCNGeometry {
         let maxRows = elevation.count
@@ -45,41 +52,25 @@ class ElevationScene: SCNNode {
         for row in 0..<maxRows - 1 {
             for column in 0..<maxColumns - 1 {
                 //For vertices
-                var elevationValue = elevation[row][column]
-                if (elevationValue < 0) {
-                    elevationValue = 0
-                }
                 let upperLeftVector: SCNVector3 = SCNVector3Make(
                     Float(upperLeftCoordinate.longitude) + (Float(column) * increment),
                     Float(upperLeftCoordinate.latitude) - (Float(row) * increment),
-                    Float(elevationValue))
+                    Float(boundElevation(elevation[row][column])))
                 
-                elevationValue = elevation[row][column + 1]
-                if (elevationValue < 0) {
-                    elevationValue = 0
-                }
                 let upperRightVector: SCNVector3 = SCNVector3Make(
                     Float(upperLeftCoordinate.longitude) + (Float(column + 1) * increment),
                     Float(upperLeftCoordinate.latitude) - (Float(row) * increment),
-                    Float(elevationValue))
+                    Float(boundElevation(elevation[row][column + 1])))
                 
-                elevationValue = elevation[row + 1][column]
-                if (elevationValue < 0) {
-                    elevationValue = 0
-                }
                 let lowerLeftVector: SCNVector3 = SCNVector3Make(
                     Float(upperLeftCoordinate.longitude) + (Float(column) * increment),
                     Float(upperLeftCoordinate.latitude) - (Float(row + 1) * increment),
-                    Float(elevationValue))
-                
-                elevationValue = elevation[row + 1][column + 1]
-                if (elevationValue < 0) {
-                    elevationValue = 0
-                }
+                    Float(boundElevation(elevation[row + 1][column])))
+
                 let lowerRightVector: SCNVector3 = SCNVector3Make(
                     Float(upperLeftCoordinate.longitude) + (Float(column + 1) * increment),
                     Float(upperLeftCoordinate.latitude) - (Float(row + 1) * increment),
-                    Float(elevationValue))
+                    Float(boundElevation(elevation[row + 1][column + 1])))
                 
                 verticies.append(lowerLeftVector)
                 verticies.append(upperLeftVector)
@@ -173,6 +164,18 @@ class ElevationScene: SCNNode {
         lineGeo.materials = [whiteMaterial]
 
         return SCNNode(geometry: lineGeo)
+    }
+    
+    private func boundElevation(elevation:Int) -> Int {
+        var boundedElevation:Int = elevation
+        
+        if (elevation < Elevation.MIN_BOUND) {
+            boundedElevation = Elevation.MIN_BOUND
+        } else if (elevation > Elevation.MAX_BOUND) {
+            boundedElevation = Elevation.MAX_BOUND
+        }
+        
+        return boundedElevation
     }
     
 }
