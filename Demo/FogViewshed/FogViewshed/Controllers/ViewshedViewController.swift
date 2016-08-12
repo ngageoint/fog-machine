@@ -4,6 +4,7 @@ import FogMachine
 import SwiftEventBus
 import Toast_Swift
 import EZLoadingActivity
+import SceneKit
 
 
 class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
@@ -14,6 +15,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     // Only used for segue from ObserverSettings
     var settingsObserver:Observer = Observer()
     let locationManager:CLLocationManager = CLLocationManager()
+    var viewshedSceneView:SCNView = SCNView()
 
     // MARK: IBOutlets
 
@@ -47,6 +49,12 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
             let gridOverlay:GridOverlay = result.object as! GridOverlay
             self.mapView.addOverlay(gridOverlay)
+            SwiftEventBus.post(ViewshedEventBusEvents.viewshed3D, sender: gridOverlay)
+        }
+
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshed3D) { result in
+            let gridOverLay:GridOverlay = result.object as! GridOverlay
+            self.displayViewshed3D(gridOverLay.image, rawElevation: gridOverLay.rawElevation, elevationCoordinate: gridOverLay.elevationCoordinate)
         }
 
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.addObserverPin) { result in
@@ -62,6 +70,13 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         } else {
             self.locationManager.startUpdatingLocation()
         }
+        
+        //TODO: Added for testing purposes
+        let location:CLLocation = CLLocation(latitude: 38.5, longitude: -76.5)
+        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 4, longitudeDelta: 4))
+        self.mapView?.centerCoordinate = location.coordinate
+        self.mapView.setRegion(region, animated: true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,6 +97,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
             drawDataRegions()
+            //Remove the viewshed 3D scene
+            self.viewshedSceneView.removeFromSuperview()
+            self.viewshedSceneView = SCNView()
         }
     }
 
@@ -264,6 +282,32 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedObserver = observer
         (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedAlgorithmName = ViewshedAlgorithmName.FranklinRay
         FogMachine.fogMachineInstance.execute()
+    }
+    
+    func displayViewshed3D(image: UIImage, rawElevation: [[Int]], elevationCoordinate upperLeftCoordinate: CLLocationCoordinate2D) {
+        viewshedSceneView = SCNView(frame: self.view.frame)
+        viewshedSceneView.allowsCameraControl = true
+        
+        let viewshedScene = SCNScene()
+        viewshedSceneView.scene = viewshedScene
+        
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        //TODO: Update camera vector
+        let cameraZ = Float(rawElevation.count * 2)
+        let cameraX = Float(upperLeftCoordinate.longitude) + Float(rawElevation[0].count / 2)
+        let cameraY = Float(upperLeftCoordinate.latitude) - Float(rawElevation.count / 2)
+        cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
+        viewshedScene.rootNode.addChildNode(cameraNode)
+        
+        //TODO: Update increment
+        let increment:Float = 1.0//1.0/Float(Srtm.SRTM3_RESOLUTION)
+        
+        let elevationNode:ElevationScene = ElevationScene(upperLeftCoordinate: upperLeftCoordinate, elevation: rawElevation, increment: increment)
+        elevationNode.generateScene()
+        elevationNode.drawVerticies()
+        viewshedScene.rootNode.addChildNode(elevationNode)
+        self.view.addSubview(viewshedSceneView)
     }
 
     // MARK: IBActions

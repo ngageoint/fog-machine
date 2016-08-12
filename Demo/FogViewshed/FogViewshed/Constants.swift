@@ -34,4 +34,5 @@ struct ViewshedEventBusEvents {
     static let onLog:String = "onLog"
     static let drawGridOverlay:String = "drawGridOverlay"
     static let addObserverPin:String = "addObserverPin"
+    static let viewshed3D: String = "viewshed3D"
 }

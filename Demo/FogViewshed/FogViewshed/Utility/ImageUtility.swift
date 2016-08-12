@@ -6,11 +6,11 @@ import FogMachine
 class ImageUtility: NSObject {
 
     static func generateElevationOverlay(elevationDataGrid: DataGrid) -> GridOverlay {
-        return GridOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data))
+        return GridOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data), rawElevation: elevationDataGrid.data, elevationCoordinate: elevationDataGrid.boundingBoxAreaExtent.getUpperLeft())
     }
     
-    static func generateViewshedOverlay(viewshedDataGrid: DataGrid) -> GridOverlay {
-        return GridOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data))
+    static func generateViewshedOverlay(viewshedDataGrid: DataGrid, rawElevation: [[Int]]) -> GridOverlay {
+        return GridOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data), rawElevation: rawElevation, elevationCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getUpperLeft())
     }
 
     static func elevationToUIImage(elevationGrid: [[Int]]) -> UIImage {
