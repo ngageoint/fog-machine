@@ -16,7 +16,7 @@ class ElevationScene: SCNNode {
     var elevation:[[Int]]
     var increment:Float
     var vertexSource:SCNGeometrySource
-    var maxElevation:Int
+    var maxScaledElevation:Float
     
     // MARK: Initializer
     
@@ -25,7 +25,7 @@ class ElevationScene: SCNNode {
         self.elevation = elevation
         self.increment = increment
         self.vertexSource = SCNGeometrySource()
-        self.maxElevation = 0
+        self.maxScaledElevation = 1.0
         super.init()
     }
     
@@ -44,12 +44,12 @@ class ElevationScene: SCNNode {
     }
     
     func addObserver(altitude: Double) {
-        self.addChildNode(generateObserverNode(Int(altitude)))
+        self.addChildNode(generateObserverNode(altitude))
     }
     
     func getCameraElevation() -> Int {
         let cameraFactor = 20
-        return maxElevation + cameraFactor
+        return Int(maxScaledElevation) + cameraFactor
     }
     
     // MARK: Private Functions
@@ -93,7 +93,6 @@ class ElevationScene: SCNNode {
                 textures.append((x:Float(column + 1), y:Float(row)))
                 textures.append((x:Float(column), y:Float(row + 1)))
                 textures.append((x:Float(column + 1), y:Float(row + 1)))
-                
             }
         }
         
@@ -112,7 +111,6 @@ class ElevationScene: SCNNode {
         let normalSource:SCNGeometrySource = SCNGeometrySource(vertices: normals, count: normals.count)
         geometrySources.append(normalSource)
         
-
         //Add textures
         let textureData = NSData(bytes: textures, length: (sizeof((x:Float, y:Float)) * textures.count))
         let textureSource = SCNGeometrySource(data: textureData,
@@ -124,7 +122,6 @@ class ElevationScene: SCNNode {
                                               dataOffset: 0,
                                               dataStride: sizeof((x:Float, y:Float)))
         geometrySources.append(textureSource)
-        
         
         // Create Indices
         var geometryData:[CInt] = []
@@ -140,28 +137,30 @@ class ElevationScene: SCNNode {
         }
         let element:SCNGeometryElement = SCNGeometryElement(indices: geometryData, primitiveType: .Triangles)
         
-        //Create final SCNGeometry
+        //Create SCNGeometry
         let geometry:SCNGeometry = SCNGeometry(sources: geometrySources, elements: [element])
         
         //Add some color
         let colorMaterial = SCNMaterial()
         colorMaterial.diffuse.contents = UIColor.greenColor()
+        colorMaterial.doubleSided = true
         geometry.materials = [colorMaterial]
 
         return geometry
     }
     
-    
-    func generateObserverNode(altitude: Int) -> SCNNode {
-        let observerCapsule = SCNCapsule(capRadius: 0.5, height: 2.0)
+    func generateObserverNode(altitude: Double) -> SCNNode {
+        let observerCapsule = SCNCapsule(capRadius: 0.125, height: 0.5)
+        let capsuleSizeFactor:Float = 0.25
         let observerNode = SCNNode(geometry: observerCapsule)
         
         let incrementXFactor: Int = elevation[0].count / 2
         let incrementYFactor: Int = elevation.count / 2
+        //TODO: Location of observer is inaccurate
         let observerX = Float(upperLeftCoordinate.longitude) + Float(incrementXFactor)
         let observerY = Float(upperLeftCoordinate.latitude) - Float(incrementYFactor)
-        //TODO: Verify elevation location of observer is accurate
-        let observerZ: Float = Float(elevation[incrementXFactor][incrementYFactor] + altitude)
+        let boundedElevation:Float = boundElevation(elevation[incrementXFactor][incrementYFactor], altitude: Float(altitude))
+        let observerZ: Float = Float(boundedElevation) + capsuleSizeFactor
         observerNode.position = SCNVector3Make(observerX, observerY, observerZ)
         observerNode.eulerAngles = SCNVector3Make(Float(M_PI_2), 0, 0)
         return observerNode
@@ -194,20 +193,26 @@ class ElevationScene: SCNNode {
     }
     
     // Bound elevation to remove data voids and unknown values
-    private func boundElevation(elevation:Int) -> Int {
-        var boundedElevation:Int = elevation
-        
-        if (elevation < Elevation.MIN_BOUND) {
-            boundedElevation = Elevation.MIN_BOUND
-        } else if (elevation > Elevation.MAX_BOUND) {
-            boundedElevation = Elevation.MAX_BOUND
+    private func boundElevation(unboundElevation:Int, altitude:Float = 0.0) -> Float {
+        var boundedElevation:Float = Float(unboundElevation)
+
+        // Remove data voids and invalid elevations
+        if (unboundElevation < Elevation.MIN_BOUND) {
+            boundedElevation = Float(Elevation.MIN_BOUND)
+        } else if (unboundElevation > Elevation.MAX_BOUND) {
+            boundedElevation = Float(Elevation.MAX_BOUND)
         }
+
+        // Resolution of each increment
+        let sizeFactor:Float = 30.0
         
-        //While checking each elevation, record the maxElevation
-        if (maxElevation < boundedElevation) {
-            maxElevation = boundedElevation
+        boundedElevation = (boundedElevation + altitude) / sizeFactor
+        
+        //While checking each elevation, record the maxScaledElevation
+        if (maxScaledElevation < boundedElevation) {
+            maxScaledElevation = boundedElevation
         }
-        
+            
         return boundedElevation
     }
     
