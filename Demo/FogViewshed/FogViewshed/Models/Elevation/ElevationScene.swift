@@ -12,7 +12,6 @@ class ElevationScene: SCNNode {
     
     // MARK: Variables
     
-    var upperLeftCoordinate:CLLocationCoordinate2D
     var elevation:[[Int]]
     var increment:Float
     var vertexSource:SCNGeometrySource
@@ -20,13 +19,13 @@ class ElevationScene: SCNNode {
     
     // MARK: Initializer
     
-    init(upperLeftCoordinate: CLLocationCoordinate2D, elevation: [[Int]], increment: Float) {
-        self.upperLeftCoordinate = upperLeftCoordinate
-        self.elevation = elevation
+    init(elevation: [[Int]], increment: Float) {
+        self.elevation = []
         self.increment = increment
         self.vertexSource = SCNGeometrySource()
         self.maxScaledElevation = 1.0
         super.init()
+        self.elevation = rotateElevationXAxis(elevation)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,7 +38,7 @@ class ElevationScene: SCNNode {
         self.addChildNode(SCNNode(geometry: calculateGeometry()))
     }
     
-    func drawVerticies() {
+    func drawVertices() {
         self.addChildNode(generateLineNode(vertexSource, vertexCount: vertexSource.vectorCount))
     }
     
@@ -47,59 +46,79 @@ class ElevationScene: SCNNode {
         self.addChildNode(generateObserverNode(altitude))
     }
     
-    func getCameraElevation() -> Int {
-        let cameraFactor = 20
-        return Int(maxScaledElevation) + cameraFactor
+    func addCamera() {
+        self.addChildNode(generateCameraNode())
     }
     
     // MARK: Private Functions
     
+    private func rotateElevationXAxis(inElevation:[[Int]]) -> [[Int]] {
+        var outElevation:[[Int]] = []
+        var rows = inElevation.count - 1
+        while (rows >= 0) {
+            outElevation.append(inElevation[rows])
+            rows = rows - 1
+        }
+        return outElevation
+    }
+    
     private func calculateGeometry() -> SCNGeometry {
         let maxRows = elevation.count
         let maxColumns = elevation[0].count
-        var verticies:[SCNVector3] = []
+        var vertices:[SCNVector3] = []
         var textures:[(x:Float, y:Float)] = []
-        
-        for row in 0..<maxRows - 1 {
-            for column in 0..<maxColumns - 1 {
-                //For vertices
-                let upperLeftVector: SCNVector3 = SCNVector3Make(
-                    Float(upperLeftCoordinate.longitude) + (Float(column) * increment),
-                    Float(upperLeftCoordinate.latitude) - (Float(row) * increment),
-                    Float(boundElevation(elevation[row][column])))
-                
-                let upperRightVector: SCNVector3 = SCNVector3Make(
-                    Float(upperLeftCoordinate.longitude) + (Float(column + 1) * increment),
-                    Float(upperLeftCoordinate.latitude) - (Float(row) * increment),
-                    Float(boundElevation(elevation[row][column + 1])))
-                
-                let lowerLeftVector: SCNVector3 = SCNVector3Make(
-                    Float(upperLeftCoordinate.longitude) + (Float(column) * increment),
-                    Float(upperLeftCoordinate.latitude) - (Float(row + 1) * increment),
-                    Float(boundElevation(elevation[row + 1][column])))
 
-                let lowerRightVector: SCNVector3 = SCNVector3Make(
-                    Float(upperLeftCoordinate.longitude) + (Float(column + 1) * increment),
-                    Float(upperLeftCoordinate.latitude) - (Float(row + 1) * increment),
-                    Float(boundElevation(elevation[row + 1][column + 1])))
+        for row in 0..<(maxRows - 1) {
+            for column in 0..<(maxColumns - 1) {
                 
-                verticies.append(upperLeftVector)
-                verticies.append(upperRightVector)
-                verticies.append(lowerLeftVector)
-                verticies.append(lowerRightVector)
+                let topLeftZ = Float(boundElevation(elevation[row][column]))
+                let topRightZ = Float(boundElevation(elevation[row][column + 1]))
+                let bottomLeftZ = Float(boundElevation(elevation[row + 1][column]))
+                let bottomRightZ = Float(boundElevation(elevation[row + 1][column + 1]))
 
-                //For Textures
-                textures.append((x:Float(column), y:Float(row)))
-                textures.append((x:Float(column + 1), y:Float(row)))
-                textures.append((x:Float(column), y:Float(row + 1)))
-                textures.append((x:Float(column + 1), y:Float(row + 1)))
+                let coordX = Float(column)
+                let coordY = Float(row)
+                
+                let topLeft = SCNVector3Make(Float(coordX),
+                                             Float(-coordY),
+                                             Float(topLeftZ))
+                
+                let topRight = SCNVector3Make(Float(coordX)+Float(increment),
+                                              Float(-coordY),
+                                              Float(topRightZ))
+                
+                let bottomLeft = SCNVector3Make(Float(coordX),
+                                                Float(-coordY)-Float(increment),
+                                                Float(bottomLeftZ))
+                
+                let bottomRight = SCNVector3Make(Float(coordX)+Float(increment),
+                                                 Float(-coordY)-Float(increment),
+                                                 Float(bottomRightZ))
+                
+                vertices.append(topLeft)
+                vertices.append(topRight)
+                vertices.append(bottomRight)
+                vertices.append(bottomLeft)
+                
+                let columnScale = Float(maxColumns) - 1
+                let rowScale = Float(maxRows) - 1
+                
+                let topLeftTexture =  (x:Float(coordX / columnScale), y:Float(coordY / rowScale))
+                let bottomLeftTexture =  (x:Float((coordX + 1) / columnScale), y:Float(coordY / rowScale))
+                let topRightTexture =  (x:Float(coordX / columnScale), y:Float((coordY + 1) / rowScale))
+                let bottomRightTexture = (x:Float((coordX + 1) / columnScale), y:Float((coordY + 1) / rowScale))
+                
+                textures.append(topLeftTexture)
+                textures.append(bottomLeftTexture)
+                textures.append(bottomRightTexture)
+                textures.append(topRightTexture)
             }
         }
         
         var geometrySources:[SCNGeometrySource] = []
         
         //Add vertex
-        vertexSource = SCNGeometrySource(vertices: verticies, count: verticies.count)
+        vertexSource = SCNGeometrySource(vertices: vertices, count: vertices.count)
         geometrySources.append(vertexSource)
 
         //Add normal
@@ -121,6 +140,7 @@ class ElevationScene: SCNNode {
                                               bytesPerComponent: sizeof(Float),
                                               dataOffset: 0,
                                               dataStride: sizeof((x:Float, y:Float)))
+        
         geometrySources.append(textureSource)
         
         // Create Indices
@@ -129,10 +149,10 @@ class ElevationScene: SCNNode {
         while (geometryCount < CInt(vertexSource.vectorCount)) {
             geometryData.append(geometryCount)
             geometryData.append(geometryCount+2)
-            geometryData.append(geometryCount+3)
+            geometryData.append(geometryCount+1)
             geometryData.append(geometryCount)
             geometryData.append(geometryCount+3)
-            geometryData.append(geometryCount+1)
+            geometryData.append(geometryCount+2)
             geometryCount += 4
         }
         let element:SCNGeometryElement = SCNGeometryElement(indices: geometryData, primitiveType: .Triangles)
@@ -153,12 +173,10 @@ class ElevationScene: SCNNode {
         let observerCapsule = SCNCapsule(capRadius: 0.125, height: 0.5)
         let capsuleSizeFactor:Float = 0.25
         let observerNode = SCNNode(geometry: observerCapsule)
-        
-        let incrementXFactor: Int = elevation[0].count / 2
-        let incrementYFactor: Int = elevation.count / 2
-        //TODO: Location of observer is inaccurate
-        let observerX = Float(upperLeftCoordinate.longitude) + Float(incrementXFactor)
-        let observerY = Float(upperLeftCoordinate.latitude) - Float(incrementYFactor)
+        let incrementXFactor: Int = (elevation.count) / 2
+        let incrementYFactor: Int = (elevation[0].count) / 2
+        let observerX:Float = Float(incrementXFactor)
+        let observerY:Float = -Float(incrementYFactor)
         let boundedElevation:Float = boundElevation(elevation[incrementXFactor][incrementYFactor], altitude: Float(altitude))
         let observerZ: Float = Float(boundedElevation) + capsuleSizeFactor
         observerNode.position = SCNVector3Make(observerX, observerY, observerZ)
@@ -173,12 +191,12 @@ class ElevationScene: SCNNode {
             lineData.append(lineCount)
             lineData.append(lineCount+1)
             lineData.append(lineCount+1)
-            lineData.append(lineCount+3)
-            lineData.append(lineCount+3)
             lineData.append(lineCount+2)
             lineData.append(lineCount+2)
+            lineData.append(lineCount+3)
+            lineData.append(lineCount+3)
             lineData.append(lineCount)
-            lineData.append(lineCount+1)
+            lineData.append(lineCount+0)
             lineData.append(lineCount+2)
             lineCount = lineCount + 4
         }
@@ -190,6 +208,18 @@ class ElevationScene: SCNNode {
         lineGeo.materials = [whiteMaterial]
 
         return SCNNode(geometry: lineGeo)
+    }
+    
+    private func generateCameraNode() -> SCNNode {
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        let cameraFactor = 20
+        let cameraZ = Float(Int(maxScaledElevation) + cameraFactor)
+        let cameraX:Float = Float(elevation.count / 2)
+        let cameraY:Float = -Float(elevation[0].count / 2)
+        cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
+        
+        return cameraNode
     }
     
     // Bound elevation to remove data voids and unknown values

@@ -283,9 +283,6 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
     
     func display3dViewshed(elevationDataGrid: DataGrid) {
-        let rawElevation:[[Int]] = elevationDataGrid.data
-        let cameraCoordinate: CLLocationCoordinate2D = elevationDataGrid.boundingBoxAreaExtent.getUpperLeft()
-
         viewshedSceneView = SCNView(frame: self.view.frame)
         viewshedSceneView.allowsCameraControl = true
         viewshedSceneView.autoenablesDefaultLighting = true
@@ -296,38 +293,12 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         viewshedSceneView.scene = viewshedScene
         
         let increment:Float = 1.0
-        let incrementXFactor: Float = Float(rawElevation[0].count / 2)
-        let incrementYFactor: Float = Float(rawElevation.count / 2)
-
-        let elevationNode:ElevationScene = ElevationScene(upperLeftCoordinate: elevationDataGrid.boundingBoxAreaExtent.getUpperLeft(), elevation: rawElevation, increment: increment)
+        let elevationNode:ElevationScene = ElevationScene(elevation: elevationDataGrid.data, increment: increment)
         elevationNode.generateScene()
-        elevationNode.drawVerticies()
+        elevationNode.drawVertices()
         elevationNode.addObserver(settingsObserver.elevationInMeters)
+        elevationNode.addCamera()
         viewshedScene.rootNode.addChildNode(elevationNode)
-        
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        let cameraZ = Float(elevationNode.getCameraElevation())
-        let cameraX = Float(cameraCoordinate.longitude) + incrementXFactor
-        let cameraY = Float(cameraCoordinate.latitude) - incrementYFactor
-        cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
-        //TODO: Add camera rotation for Observer
-        //cameraNode.eulerAngles = SCNVector3Make(0, 0, 0)
-        //cameraNode.rotation = SCNVector4Make(1, 0, 0, Float(M_PI_2))
-        viewshedScene.rootNode.addChildNode(cameraNode)
-        
-        //TODO: Add Spot light
-//        let spotLight = SCNLight()
-//        spotLight.type = SCNLightTypeSpot
-//        spotLight.spotInnerAngle = 5.0
-//        spotLight.spotOuterAngle = 10.0
-//        spotLight.castsShadow = true
-//        spotLight.color = UIColor.whiteColor()
-//        let spotLightNode = SCNNode()
-//        spotLightNode.light = spotLight
-//        spotLightNode.position = SCNVector3(x: X, y: Y, z: -Z)
-//        viewshedScene.rootNode.addChildNode(spotLightNode)
-        
         
         self.view.addSubview(viewshedSceneView)
     }
