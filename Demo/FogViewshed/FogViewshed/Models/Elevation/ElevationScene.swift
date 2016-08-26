@@ -173,11 +173,11 @@ class ElevationScene: SCNNode {
         let observerCapsule = SCNCapsule(capRadius: 0.125, height: 0.5)
         let capsuleSizeFactor:Float = 0.25
         let observerNode = SCNNode(geometry: observerCapsule)
-        let incrementXFactor: Int = (elevation.count) / 2
-        let incrementYFactor: Int = (elevation[0].count) / 2
-        let observerX:Float = Float(incrementXFactor)
-        let observerY:Float = -Float(incrementYFactor)
-        let boundedElevation:Float = boundElevation(elevation[incrementXFactor][incrementYFactor], altitude: Float(altitude))
+        let column: Int = elevation[0].count / 2
+        let row: Int = elevation.count / 2
+        let observerY:Float = -Float(row + 1)
+        let observerX:Float = Float(column - 1)
+        let boundedElevation:Float = boundElevation(elevation[row - 1][column - 1], altitude: Float(altitude))
         let observerZ: Float = Float(boundedElevation) + capsuleSizeFactor
         observerNode.position = SCNVector3Make(observerX, observerY, observerZ)
         observerNode.eulerAngles = SCNVector3Make(Float(M_PI_2), 0, 0)
