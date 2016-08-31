@@ -16,7 +16,8 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     var settingsObserver:Observer = Observer()
     let locationManager:CLLocationManager = CLLocationManager()
     var viewshedSceneView:SCNView = SCNView()
-
+    var viewshedResultImage:[String:UIImage] = [:]
+    
     // MARK: IBOutlets
 
     @IBOutlet weak var mapView: MKMapView!
@@ -48,6 +49,8 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
             let gridOverlay:GridOverlay = result.object as! GridOverlay
+            let location:CGPoint = CGPoint.init(x: gridOverlay.coordinate.latitude, y: gridOverlay.coordinate.longitude)
+            self.viewshedResultImage[String(location)] = gridOverlay.image
             self.mapView.addOverlay(gridOverlay)
         }
 
@@ -287,13 +290,20 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         viewshedSceneView.allowsCameraControl = true
         viewshedSceneView.autoenablesDefaultLighting = true
         viewshedSceneView.backgroundColor = UIColor.lightGrayColor()
-        viewshedSceneView.antialiasingMode = .Multisampling4X
+        viewshedSceneView.antialiasingMode = SCNAntialiasingMode.Multisampling4X
         
         let viewshedScene = SCNScene()
         viewshedSceneView.scene = viewshedScene
         
         let increment:Float = 1.0
-        let elevationNode:ElevationScene = ElevationScene(elevation: elevationDataGrid.data, increment: increment)
+        let location:CGPoint = CGPoint.init(x: elevationDataGrid.boundingBoxAreaExtent.getCentroid().latitude, y: elevationDataGrid.boundingBoxAreaExtent.getCentroid().longitude)
+
+        var viewshedImage:UIImage? = nil
+        if let image = viewshedResultImage[String(location)] {
+            viewshedImage = image
+        }
+        
+        let elevationNode:ElevationScene = ElevationScene(elevation: elevationDataGrid.data, increment: increment, viewshedImage: viewshedImage)
         elevationNode.generateScene()
         elevationNode.drawVertices()
         elevationNode.addObserver(settingsObserver.elevationInMeters)

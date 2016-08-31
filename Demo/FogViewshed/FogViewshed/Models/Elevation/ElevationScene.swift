@@ -16,14 +16,16 @@ class ElevationScene: SCNNode {
     var increment:Float
     var vertexSource:SCNGeometrySource
     var maxScaledElevation:Float
+    var image:UIImage?
     
     // MARK: Initializer
     
-    init(elevation: [[Int]], increment: Float) {
+    init(elevation: [[Int]], increment: Float, viewshedImage: UIImage?) {
         self.elevation = []
         self.increment = increment
         self.vertexSource = SCNGeometrySource()
         self.maxScaledElevation = 1.0
+        self.image = viewshedImage
         super.init()
         self.elevation = rotateElevationXAxis(elevation)
     }
@@ -35,7 +37,7 @@ class ElevationScene: SCNNode {
     // MARK: Process Functions
     
     func generateScene() {
-        self.addChildNode(SCNNode(geometry: calculateGeometry()))
+        self.addChildNode(SCNNode(geometry: createGeometry()))
     }
     
     func drawVertices() {
@@ -60,6 +62,13 @@ class ElevationScene: SCNNode {
             rows = rows - 1
         }
         return outElevation
+    }
+    
+    private func createGeometry() -> SCNGeometry {
+        let geometry:SCNGeometry = calculateGeometry()
+        addImageToGeometry(geometry)
+        
+        return geometry
     }
     
     private func calculateGeometry() -> SCNGeometry {
@@ -143,7 +152,7 @@ class ElevationScene: SCNNode {
         
         geometrySources.append(textureSource)
         
-        // Create Indices
+        //Create Indices
         var geometryData:[CInt] = []
         var geometryCount: CInt = 0
         while (geometryCount < CInt(vertexSource.vectorCount)) {
@@ -160,27 +169,35 @@ class ElevationScene: SCNNode {
         //Create SCNGeometry
         let geometry:SCNGeometry = SCNGeometry(sources: geometrySources, elements: [element])
         
-        //Add some color
-        let colorMaterial = SCNMaterial()
-        colorMaterial.diffuse.contents = UIColor.greenColor()
-        colorMaterial.doubleSided = true
-        geometry.materials = [colorMaterial]
-
         return geometry
     }
     
-    func generateObserverNode(altitude: Double) -> SCNNode {
+    private func addImageToGeometry(geometry: SCNGeometry) -> SCNGeometry {
+        let imageMaterial = SCNMaterial()
+        if let viewshedImage = self.image {
+            imageMaterial.diffuse.contents = viewshedImage
+        } else {
+            imageMaterial.diffuse.contents = UIColor.darkGrayColor()
+        }
+        imageMaterial.doubleSided = true
+        geometry.materials = [imageMaterial]
+        
+        return geometry
+    }
+    
+    private func generateObserverNode(altitude: Double) -> SCNNode {
         let observerCapsule = SCNCapsule(capRadius: 0.125, height: 0.5)
         let capsuleSizeFactor:Float = 0.25
         let observerNode = SCNNode(geometry: observerCapsule)
-        let column: Int = elevation[0].count / 2
-        let row: Int = elevation.count / 2
-        let observerY:Float = -Float(row + 1)
-        let observerX:Float = Float(column - 1)
-        let boundedElevation:Float = boundElevation(elevation[row - 1][column - 1], altitude: Float(altitude))
+        let column: Int = (elevation.count) / 2
+        let row: Int = (elevation[0].count) / 2
+        let observerY:Float = -Float(column)
+        let observerX:Float = Float(row)
+        let boundedElevation:Float = boundElevation(elevation[column - 1][row - 1], altitude: Float(altitude))
         let observerZ: Float = Float(boundedElevation) + capsuleSizeFactor
         observerNode.position = SCNVector3Make(observerX, observerY, observerZ)
         observerNode.eulerAngles = SCNVector3Make(Float(M_PI_2), 0, 0)
+        
         return observerNode
     }
     
@@ -204,7 +221,11 @@ class ElevationScene: SCNNode {
         let lineEle = SCNGeometryElement(indices: lineData, primitiveType: .Line)
         let lineGeo = SCNGeometry(sources: [vertexSource], elements: [lineEle])
         let whiteMaterial = SCNMaterial()
-        whiteMaterial.diffuse.contents = UIColor.darkGrayColor()
+        if self.image != nil {
+            whiteMaterial.diffuse.contents = UIColor.darkGrayColor()
+        } else {
+            whiteMaterial.diffuse.contents = UIColor.whiteColor()
+        }
         lineGeo.materials = [whiteMaterial]
 
         return SCNNode(geometry: lineGeo)
@@ -215,8 +236,8 @@ class ElevationScene: SCNNode {
         cameraNode.camera = SCNCamera()
         let cameraFactor = 20
         let cameraZ = Float(Int(maxScaledElevation) + cameraFactor)
-        let cameraX:Float = Float(elevation.count / 2)
-        let cameraY:Float = -Float(elevation[0].count / 2)
+        let cameraX:Float = Float(elevation[0].count / 2)
+        let cameraY:Float = -Float(elevation.count / 2)
         cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
         
         return cameraNode
