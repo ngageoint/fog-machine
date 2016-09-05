@@ -9,10 +9,12 @@ The Fog Machine framework is a research and development effort to harness the co
 There are two demo apps provided to showcase the Fog Machine framework:  
   1. The FogStringSearch app is a simple text search that uses the [Knuth–Morris–Pratt](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm) string search algorithm to find a search term within a given text.  
   2. The FogViewshed app calculates the [viewshed](https://en.wikipedia.org/wiki/Viewshed) of a position.  A viewshed is the geographical area that is visible from a location. It includes all surrounding points in line-of-sight with the location and excludes points that are beyond the horizon or obstructed by terrain and other features.  The viewshed app demonstrates the true power and flexibility of the Fog Machine framework.
-    1. The FogViewshed app also has a 3D rendering of the elevation.
+    1. The FogViewshed app will also provide a 2D and 3D rendering of the [digital elevation model](https://en.wikipedia.org/wiki/Digital_elevation_model) (DEM) data. The 3D rendering will overlay the last generated DEM or viewshed for the position.
 
-    ![viewshed on phones](Screenshots/viewshed/viewshed.png)
-    ![viewshed3D on phones](Screenshots/viewshed/viewshed3D.png)
+        ![dem2D on phone](Screenshots/viewshed/dem2D.png)
+        ![dem3D on phone](Screenshots/viewshed/dem3D.png)
+        ![viewshed on phone](Screenshots/viewshed/viewshed2D.png)
+        ![viewshedDem3D gif on phone](Screenshots/viewshed/viewshed3D.png)
 
 
 Fog Machine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the MIT license.
@@ -34,7 +36,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-pod 'FogMachine', '~> 4.0.3'
+pod 'FogMachine', '~> 4.0.4'
 end
 ```
 

@@ -72,13 +72,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         } else {
             self.locationManager.startUpdatingLocation()
         }
-        
-        //TODO: Added for testing purposes
-        let location:CLLocation = CLLocation(latitude: 38.5, longitude: -76.5)
-        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 4, longitudeDelta: 4))
-        self.mapView?.centerCoordinate = location.coordinate
-        self.mapView.setRegion(region, animated: true)
+
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -295,18 +289,17 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         let viewshedScene = SCNScene()
         viewshedSceneView.scene = viewshedScene
         
-        let increment:Float = 1.0
         let location:CGPoint = CGPoint.init(x: elevationDataGrid.boundingBoxAreaExtent.getCentroid().latitude, y: elevationDataGrid.boundingBoxAreaExtent.getCentroid().longitude)
-
+        let observerGridLocation:(Int, Int) = HGTManager.latLonToIndex(elevationDataGrid.boundingBoxAreaExtent.getCentroid(), boundingBox: elevationDataGrid.boundingBoxAreaExtent, resolution: elevationDataGrid.resolution)
         var viewshedImage:UIImage? = nil
         if let image = viewshedResultImage[String(location)] {
             viewshedImage = image
         }
         
-        let elevationNode:ElevationScene = ElevationScene(elevation: elevationDataGrid.data, increment: increment, viewshedImage: viewshedImage)
+        let elevationNode:ElevationScene = ElevationScene(elevation: elevationDataGrid.data, viewshedImage: viewshedImage)
         elevationNode.generateScene()
         elevationNode.drawVertices()
-        elevationNode.addObserver(settingsObserver.elevationInMeters)
+        elevationNode.addObserver(observerGridLocation, altitude: settingsObserver.elevationInMeters)
         elevationNode.addCamera()
         viewshedScene.rootNode.addChildNode(elevationNode)
         

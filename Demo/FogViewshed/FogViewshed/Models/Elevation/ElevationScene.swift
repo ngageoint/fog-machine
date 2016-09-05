@@ -11,23 +11,21 @@ import MapKit
 class ElevationScene: SCNNode {
     
     // MARK: Variables
-    
+
     var elevation:[[Int]]
-    var increment:Float
     var vertexSource:SCNGeometrySource
     var maxScaledElevation:Float
     var image:UIImage?
+    let cellSize:Float = 1.0
     
     // MARK: Initializer
     
-    init(elevation: [[Int]], increment: Float, viewshedImage: UIImage?) {
-        self.elevation = []
-        self.increment = increment
+    init(elevation: [[Int]], viewshedImage: UIImage?) {
+        self.elevation = elevation
         self.vertexSource = SCNGeometrySource()
         self.maxScaledElevation = 1.0
         self.image = viewshedImage
         super.init()
-        self.elevation = rotateElevationXAxis(elevation)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,8 +42,8 @@ class ElevationScene: SCNNode {
         self.addChildNode(generateLineNode(vertexSource, vertexCount: vertexSource.vectorCount))
     }
     
-    func addObserver(altitude: Double) {
-        self.addChildNode(generateObserverNode(altitude))
+    func addObserver(location: (Int, Int), altitude: Double) {
+        self.addChildNode(generateObserverNode(location, altitude: altitude))
     }
     
     func addCamera() {
@@ -53,16 +51,6 @@ class ElevationScene: SCNNode {
     }
     
     // MARK: Private Functions
-    
-    private func rotateElevationXAxis(inElevation:[[Int]]) -> [[Int]] {
-        var outElevation:[[Int]] = []
-        var rows = inElevation.count - 1
-        while (rows >= 0) {
-            outElevation.append(inElevation[rows])
-            rows = rows - 1
-        }
-        return outElevation
-    }
     
     private func createGeometry() -> SCNGeometry {
         let geometry:SCNGeometry = calculateGeometry()
@@ -79,11 +67,10 @@ class ElevationScene: SCNNode {
 
         for row in 0..<(maxRows - 1) {
             for column in 0..<(maxColumns - 1) {
-                
-                let topLeftZ = Float(boundElevation(elevation[row][column]))
-                let topRightZ = Float(boundElevation(elevation[row][column + 1]))
-                let bottomLeftZ = Float(boundElevation(elevation[row + 1][column]))
-                let bottomRightZ = Float(boundElevation(elevation[row + 1][column + 1]))
+                let topLeftZ = getElevationValue(row, column: column)
+                let topRightZ = getElevationValue(row, column: column + 1)
+                let bottomLeftZ = getElevationValue(row + 1, column: column)
+                let bottomRightZ = getElevationValue(row + 1, column: column + 1)
 
                 let coordX = Float(column)
                 let coordY = Float(row)
@@ -92,16 +79,16 @@ class ElevationScene: SCNNode {
                                              Float(-coordY),
                                              Float(topLeftZ))
                 
-                let topRight = SCNVector3Make(Float(coordX)+Float(increment),
+                let topRight = SCNVector3Make(Float(coordX) + cellSize,
                                               Float(-coordY),
                                               Float(topRightZ))
                 
                 let bottomLeft = SCNVector3Make(Float(coordX),
-                                                Float(-coordY)-Float(increment),
+                                                Float(-coordY) - cellSize,
                                                 Float(bottomLeftZ))
                 
-                let bottomRight = SCNVector3Make(Float(coordX)+Float(increment),
-                                                 Float(-coordY)-Float(increment),
+                let bottomRight = SCNVector3Make(Float(coordX) + cellSize,
+                                                 Float(-coordY) - cellSize,
                                                  Float(bottomRightZ))
                 
                 vertices.append(topLeft)
@@ -157,11 +144,11 @@ class ElevationScene: SCNNode {
         var geometryCount: CInt = 0
         while (geometryCount < CInt(vertexSource.vectorCount)) {
             geometryData.append(geometryCount)
-            geometryData.append(geometryCount+2)
-            geometryData.append(geometryCount+1)
+            geometryData.append(geometryCount + 2)
+            geometryData.append(geometryCount + 1)
             geometryData.append(geometryCount)
-            geometryData.append(geometryCount+3)
-            geometryData.append(geometryCount+2)
+            geometryData.append(geometryCount + 3)
+            geometryData.append(geometryCount + 2)
             geometryCount += 4
         }
         let element:SCNGeometryElement = SCNGeometryElement(indices: geometryData, primitiveType: .Triangles)
@@ -185,15 +172,15 @@ class ElevationScene: SCNNode {
         return geometry
     }
     
-    private func generateObserverNode(altitude: Double) -> SCNNode {
+    private func generateObserverNode(location: (Int, Int), altitude: Double) -> SCNNode {
         let observerCapsule = SCNCapsule(capRadius: 0.125, height: 0.5)
         let capsuleSizeFactor:Float = 0.25
         let observerNode = SCNNode(geometry: observerCapsule)
-        let column: Int = (elevation.count) / 2
-        let row: Int = (elevation[0].count) / 2
-        let observerY:Float = -Float(column)
-        let observerX:Float = Float(row)
-        let boundedElevation:Float = boundElevation(elevation[column - 1][row - 1], altitude: Float(altitude))
+        let row: Int = location.1
+        let column: Int = location.0
+        let observerY:Float = -Float(row)
+        let observerX:Float = Float(column)
+        let boundedElevation:Float = getElevationValue(row - 1, column: column - 1, altitude: Float(altitude))
         let observerZ: Float = Float(boundedElevation) + capsuleSizeFactor
         observerNode.position = SCNVector3Make(observerX, observerY, observerZ)
         observerNode.eulerAngles = SCNVector3Make(Float(M_PI_2), 0, 0)
@@ -206,15 +193,15 @@ class ElevationScene: SCNNode {
         var lineCount: CInt = 0
         while (lineCount < CInt(vertexCount)) {
             lineData.append(lineCount)
-            lineData.append(lineCount+1)
-            lineData.append(lineCount+1)
-            lineData.append(lineCount+2)
-            lineData.append(lineCount+2)
-            lineData.append(lineCount+3)
-            lineData.append(lineCount+3)
+            lineData.append(lineCount + 1)
+            lineData.append(lineCount + 1)
+            lineData.append(lineCount + 2)
+            lineData.append(lineCount + 2)
+            lineData.append(lineCount + 3)
+            lineData.append(lineCount + 3)
             lineData.append(lineCount)
-            lineData.append(lineCount+0)
-            lineData.append(lineCount+2)
+            lineData.append(lineCount + 0)
+            lineData.append(lineCount + 2)
             lineCount = lineCount + 4
         }
         
@@ -234,13 +221,22 @@ class ElevationScene: SCNNode {
     private func generateCameraNode() -> SCNNode {
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        let cameraFactor = 20
-        let cameraZ = Float(Int(maxScaledElevation) + cameraFactor)
+        // Add an additional 20 cellSize units to set the camera above the scene
+        let cameraFactor:Float = self.cellSize * 20
+        let cameraZ = maxScaledElevation + cameraFactor
         let cameraX:Float = Float(elevation[0].count / 2)
         let cameraY:Float = -Float(elevation.count / 2)
         cameraNode.position = SCNVector3Make(cameraX, cameraY, cameraZ)
         
         return cameraNode
+    }
+    
+    private func getElevationValue(row: Int, column: Int, altitude:Float = 0.0) -> Float {
+        let maxRows:Int = elevation.count - 1
+        let actualRow:Int = maxRows - row
+        let elevationValue: Float = boundElevation(elevation[actualRow][column])
+        
+        return elevationValue
     }
     
     // Bound elevation to remove data voids and unknown values
@@ -254,8 +250,10 @@ class ElevationScene: SCNNode {
             boundedElevation = Float(Elevation.MAX_BOUND)
         }
 
-        // Resolution of each increment
-        let sizeFactor:Float = 30.0
+        // Scale elevation by 99.7% to render in the Scene
+        let scaleFactor:Float = 0.997
+        let elevationRange:Float = Float(Elevation.MAX_BOUND - Elevation.MIN_BOUND)
+        let sizeFactor:Float = elevationRange - elevationRange * scaleFactor
         
         boundedElevation = (boundedElevation + altitude) / sizeFactor
         
