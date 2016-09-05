@@ -67,10 +67,10 @@ class ElevationScene: SCNNode {
 
         for row in 0..<(maxRows - 1) {
             for column in 0..<(maxColumns - 1) {
-                let topLeftZ = getElevationValue(row, column: column)
-                let topRightZ = getElevationValue(row, column: column + 1)
-                let bottomLeftZ = getElevationValue(row + 1, column: column)
-                let bottomRightZ = getElevationValue(row + 1, column: column + 1)
+                let topLeftZ = getElevationAtLocation(row, column: column)
+                let topRightZ = getElevationAtLocation(row, column: column + 1)
+                let bottomLeftZ = getElevationAtLocation(row + 1, column: column)
+                let bottomRightZ = getElevationAtLocation(row + 1, column: column + 1)
 
                 let coordX = Float(column)
                 let coordY = Float(row)
@@ -180,7 +180,7 @@ class ElevationScene: SCNNode {
         let column: Int = location.0
         let observerY:Float = -Float(row)
         let observerX:Float = Float(column)
-        let boundedElevation:Float = getElevationValue(row - 1, column: column - 1, altitude: Float(altitude))
+        let boundedElevation:Float = getElevationAtLocation(row - 1, column: column - 1, additionalAltitude: Float(altitude))
         let observerZ: Float = Float(boundedElevation) + capsuleSizeFactor
         observerNode.position = SCNVector3Make(observerX, observerY, observerZ)
         observerNode.eulerAngles = SCNVector3Make(Float(M_PI_2), 0, 0)
@@ -231,7 +231,7 @@ class ElevationScene: SCNNode {
         return cameraNode
     }
     
-    private func getElevationValue(row: Int, column: Int, altitude:Float = 0.0) -> Float {
+    private func getElevationAtLocation(row: Int, column: Int, additionalAltitude:Float = 0.0) -> Float {
         let maxRows:Int = elevation.count - 1
         let actualRow:Int = maxRows - row
         let elevationValue: Float = boundElevation(elevation[actualRow][column])
