@@ -47,7 +47,9 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
             saveObserverSettings(editedObserver)
         } else if segue.identifier == "removePinFromSettings" {
             model.delete(originalObserver!)
-        } else if(segue.identifier == "runSelectedFogViewshed" || segue.identifier == "drawElevationData") {
+        } else if(segue.identifier == "runSelectedFogViewshed"
+            || segue.identifier == "drawElevationData"
+            || segue.identifier == "draw3dElevationData") {
             let editedObserver = createObserverFromSettings()
             saveObserverSettings(editedObserver)
             let mapViewController = segue.destinationViewController as! ViewshedViewController

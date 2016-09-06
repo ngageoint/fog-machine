@@ -58,7 +58,7 @@ class HGTFile: NSObject {
         return fileSize
     }
     
-    // this is the adjusted resoultion of the file.  files contain signed two byte integers
+    // Get adjusted resolution of the file.  Files contain signed two byte integers
     func getResolution() -> Int {
         return Int(sqrt(Double(getFileSizeInBytes()/2))) - 1
     }

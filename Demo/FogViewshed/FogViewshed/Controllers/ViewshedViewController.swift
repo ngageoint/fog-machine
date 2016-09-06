@@ -4,6 +4,7 @@ import FogMachine
 import SwiftEventBus
 import Toast_Swift
 import EZLoadingActivity
+import SceneKit
 
 
 class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITabBarControllerDelegate {
@@ -14,7 +15,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     // Only used for segue from ObserverSettings
     var settingsObserver:Observer = Observer()
     let locationManager:CLLocationManager = CLLocationManager()
-
+    var viewshedSceneView:SCNView = SCNView()
+    var viewshedResultImage:[String:UIImage] = [:]
+    
     // MARK: IBOutlets
 
     @IBOutlet weak var mapView: MKMapView!
@@ -46,7 +49,14 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
             let gridOverlay:GridOverlay = result.object as! GridOverlay
+            let location:CGPoint = CGPoint.init(x: gridOverlay.coordinate.latitude, y: gridOverlay.coordinate.longitude)
+            self.viewshedResultImage[String(location)] = gridOverlay.image
             self.mapView.addOverlay(gridOverlay)
+        }
+
+        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshed3d) { result in
+            let elevationDataGrid:DataGrid = result.object as! DataGrid
+            self.display3dViewshed(elevationDataGrid)
         }
 
         SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.addObserverPin) { result in
@@ -62,6 +72,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         } else {
             self.locationManager.startUpdatingLocation()
         }
+
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,6 +93,8 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
             drawDataRegions()
+            //Remove the viewshed 3D scene
+            self.viewshedSceneView.removeFromSuperview()
         }
     }
 
@@ -265,6 +278,33 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedAlgorithmName = ViewshedAlgorithmName.FranklinRay
         FogMachine.fogMachineInstance.execute()
     }
+    
+    func display3dViewshed(elevationDataGrid: DataGrid) {
+        viewshedSceneView = SCNView(frame: self.view.frame)
+        viewshedSceneView.allowsCameraControl = true
+        viewshedSceneView.autoenablesDefaultLighting = true
+        viewshedSceneView.backgroundColor = UIColor.lightGrayColor()
+        viewshedSceneView.antialiasingMode = SCNAntialiasingMode.Multisampling4X
+        
+        let viewshedScene = SCNScene()
+        viewshedSceneView.scene = viewshedScene
+        
+        let location:CGPoint = CGPoint.init(x: elevationDataGrid.boundingBoxAreaExtent.getCentroid().latitude, y: elevationDataGrid.boundingBoxAreaExtent.getCentroid().longitude)
+        let observerGridLocation:(Int, Int) = HGTManager.latLonToIndex(elevationDataGrid.boundingBoxAreaExtent.getCentroid(), boundingBox: elevationDataGrid.boundingBoxAreaExtent, resolution: elevationDataGrid.resolution)
+        var viewshedImage:UIImage? = nil
+        if let image = viewshedResultImage[String(location)] {
+            viewshedImage = image
+        }
+        
+        let elevationNode:ElevationScene = ElevationScene(elevation: elevationDataGrid.data, viewshedImage: viewshedImage)
+        elevationNode.generateScene()
+        elevationNode.drawVertices()
+        elevationNode.addObserver(observerGridLocation, altitude: settingsObserver.elevationInMeters)
+        elevationNode.addCamera()
+        viewshedScene.rootNode.addChildNode(elevationNode)
+        
+        self.view.addSubview(viewshedSceneView)
+    }
 
     // MARK: IBActions
 
@@ -317,6 +357,10 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     @IBAction func drawElevationData(segue: UIStoryboardSegue) {
         ElevationTool(elevationObserver: self.settingsObserver).drawElevationData()
+    }
+    
+    @IBAction func draw3dElevationData(segue: UIStoryboardSegue) {
+        ElevationTool(elevationObserver: self.settingsObserver).draw3dElevationData()
     }
     
     @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {

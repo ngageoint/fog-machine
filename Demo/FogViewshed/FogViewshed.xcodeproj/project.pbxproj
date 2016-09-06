@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		756FDB611D5D27F000B7569A /* ElevationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756FDB601D5D27F000B7569A /* ElevationScene.swift */; };
 		7575B3E21C5963C100FE32E9 /* FogMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 754175861C57C84B000D51E0 /* FogMachine.xcdatamodeld */; };
 		8FCD187673E8E4E1B8D2E742 /* Pods_FogViewshedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E1E23DF8E70DE8ABA2403F1 /* Pods_FogViewshedTests.framework */; };
 		9C087DEA9387C323CF6DAE62 /* Pods_FogViewshed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23ACD3D789C87F8790B278E1 /* Pods_FogViewshed.framework */; };
@@ -102,6 +103,7 @@
 		2E1E23DF8E70DE8ABA2403F1 /* Pods_FogViewshedTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogViewshedTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B94BD07B1840DDFEF8600A /* Pods-FogViewshed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.debug.xcconfig"; sourceTree = "<group>"; };
 		754175871C57C84B000D51E0 /* FogMachine.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FogMachine.xcdatamodel; sourceTree = "<group>"; };
+		756FDB601D5D27F000B7569A /* ElevationScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElevationScene.swift; sourceTree = "<group>"; };
 		8B12973A4FECB067D196E0B8 /* Pods-FogViewshed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshed.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshed/Pods-FogViewshed.release.xcconfig"; sourceTree = "<group>"; };
 		AE397663EC1C7C47F3260FC9 /* Pods-FogViewshedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshedTests.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshedTests/Pods-FogViewshedTests.release.xcconfig"; sourceTree = "<group>"; };
 		CF19853ABE6182E0957665AC /* Pods-FogViewshedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogViewshedTests.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogViewshedTests/Pods-FogViewshedTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 			isa = PBXGroup;
 			children = (
 				F92D253C1CEFC55000C109AE /* ElevationTool.swift */,
+				756FDB601D5D27F000B7569A /* ElevationScene.swift */,
 			);
 			path = Elevation;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 				F91D47551CEA9AFD00AB483E /* Sector.swift in Sources */,
 				F91D47561CEA9AFD00AB483E /* BresenhamsLineAlgoritm.swift in Sources */,
 				F91D475A1CEA9AFD00AB483E /* SectorPerimeter.swift in Sources */,
+				756FDB611D5D27F000B7569A /* ElevationScene.swift in Sources */,
 				F91D475B1CEA9AFD00AB483E /* HGTFile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

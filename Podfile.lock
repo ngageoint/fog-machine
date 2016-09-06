@@ -1,7 +1,7 @@
 PODS:
   - Buckets (1.2.1)
   - EZLoadingActivity (0.8)
-  - FogMachine (4.0.3):
+  - FogMachine (4.0.4):
     - SwiftEventBus (~> 1.1.0)
   - SSZipArchive (1.2)
   - SwiftEventBus (1.1.0)
@@ -30,7 +30,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Buckets: 92a8850454575d86d0de268b8ee08c5fd9821598
   EZLoadingActivity: 6fd75a05765a4085f4b6fef6f62edf9f144b3139
-  FogMachine: 464b461a766743703e00a6903e427b9b093fefd3
+  FogMachine: 0d6e7ff81c8c72014f44d68033f6162a0f9b87d4
   SSZipArchive: 251093c65f98d6ea282c50bc404bfa631d9fd721
   SwiftEventBus: d33b51752d4e3e994f0ea7b31873f0beca7eada0
   Toast-Swift: 25c3d98db42dc70d9a77b5006ee000e0becb458e

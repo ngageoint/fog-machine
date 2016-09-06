@@ -34,4 +34,14 @@ struct ViewshedEventBusEvents {
     static let onLog:String = "onLog"
     static let drawGridOverlay:String = "drawGridOverlay"
     static let addObserverPin:String = "addObserverPin"
+    static let viewshed3d: String = "viewshed3d"
+}
+
+struct Elevation {
+    // Reference: https://en.wikipedia.org/wiki/Extreme_points_of_Earth
+    // Tallest point from sea level is <9000 meters (Mount Everest at 8,848m)
+    static let MAX_BOUND = 9000
+    // Lowest point on dry land >-450 meters (The shore of the Dead Sea at -418m)
+    static let MIN_BOUND = -450
+    
 }
