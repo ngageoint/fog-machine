@@ -11,10 +11,10 @@ There are two demo apps provided to showcase the Fog Machine framework:
   2. The FogViewshed app calculates the [viewshed](https://en.wikipedia.org/wiki/Viewshed) of a position.  A viewshed is the geographical area that is visible from a location. It includes all surrounding points in line-of-sight with the location and excludes points that are beyond the horizon or obstructed by terrain and other features.  The viewshed app demonstrates the true power and flexibility of the Fog Machine framework.
     1. The FogViewshed app will also provide a 2D and 3D rendering of the [digital elevation model](https://en.wikipedia.org/wiki/Digital_elevation_model) (DEM) data. The 3D rendering will overlay the last generated DEM or viewshed for the position.
 
-        ![dem2D on phone](Screenshots/viewshed/dem2D.png)
-        ![dem3D on phone](Screenshots/viewshed/dem3D.png)
-        ![viewshed on phone](Screenshots/viewshed/viewshed2D.png)
-        ![viewshedDem3D gif on phone](Screenshots/viewshed/viewshed3D.png)
+![dem2D on phone](Screenshots/viewshed/dem2D.png)
+![dem3D on phone](Screenshots/viewshed/dem3D.png)
+![viewshed on phone](Screenshots/viewshed/viewshed2D.png)
+![viewshedDem3D gif on phone](Screenshots/viewshed/viewshed3D.png)
 
 
 Fog Machine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the MIT license.
