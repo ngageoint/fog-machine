@@ -2,34 +2,34 @@ import Foundation
 import FogMachine
 import SwiftEventBus
 
-public class SearchTool : FMTool {
+open class SearchTool: FMTool {
 
-    public var searchTerm:String?
+    open var searchTerm: String?
 
     public override init() {
         super.init()
     }
 
-    public override func id() -> UInt32 {
+    open override func id() -> UInt32 {
         return 4149558881
     }
 
-    public override func name() -> String {
+    open override func name() -> String {
         return "Search Tool"
     }
 
-    public override func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> SearchWork {
+    open override func createWork(_ node: FMNode, nodeNumber: UInt, numberOfNodes: UInt) -> SearchWork {
         return SearchWork(peerCount: Int(numberOfNodes), peerNumber: Int(nodeNumber), searchTerm: searchTerm!)
     }
     
-    private func getTextToSearch(peerCount:Int, peerNumber:Int) -> String {
-        var resourceURL:NSURL = NSURL(string: NSBundle.mainBundle().resourcePath!)!
+    fileprivate func getTextToSearch(_ peerCount: Int, peerNumber: Int) -> String {
+        var resourceURL: URL = URL(string: Bundle.main.resourcePath!)!
         
-        var textToSearch:String = ""
+        var textToSearch: String = ""
         do {
-        let textToSearchFile:NSURL = try (NSFileManager.defaultManager().contentsOfDirectoryAtURL(resourceURL, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions()).filter{ $0.lastPathComponent == "MobyDick.txt" }).first!
+        let textToSearchFile: URL = try (FileManager.default.contentsOfDirectory(at: resourceURL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions()).filter{ $0.lastPathComponent == "MobyDick.txt" }).first!
         
-            if let aStreamReader = StreamReader(path: textToSearchFile.path!) {
+            if let aStreamReader = StreamReader(path: textToSearchFile.path) {
                 defer {
                     aStreamReader.close()
                 }
@@ -42,28 +42,28 @@ public class SearchTool : FMTool {
             searchLog("Error reading file: \(error.localizedDescription)")
         }
         
-        let peerCountD:Double = Double(peerCount)
-        let peerNumberD:Double = Double(peerNumber)
+        let peerCountD: Double = Double(peerCount)
+        let peerNumberD: Double = Double(peerNumber)
         
-        let newline:Character = "\n"
-        let numberOfCharacters:Int = textToSearch.characters.count
-        var startIndex:String.CharacterView.Index
-        var endIndex:String.CharacterView.Index
+        let newline: Character = "\n"
+        let numberOfCharacters: Int = textToSearch.characters.count
+        var startIndex: String.CharacterView.Index
+        var endIndex: String.CharacterView.Index
         if(peerNumber == 0) {
             startIndex = textToSearch.startIndex
         } else {
-            startIndex = textToSearch.startIndex.advancedBy(Int(floor((peerNumberD/peerCountD)*Double(numberOfCharacters))))
+            startIndex = textToSearch.characters.index(textToSearch.startIndex, offsetBy: Int(floor((peerNumberD / peerCountD) * Double(numberOfCharacters))))
             while(startIndex > textToSearch.startIndex && (textToSearch[startIndex] != newline)) {
-                startIndex = startIndex.advancedBy(-1)
+                startIndex = textToSearch.index(startIndex, offsetBy: -1)
             }
         }
         
         if(peerNumber + 1 == peerCount) {
             endIndex = textToSearch.endIndex
         } else {
-            endIndex = textToSearch.startIndex.advancedBy(Int(floor(((peerNumberD + 1)/peerCountD)*Double(numberOfCharacters))))
+            endIndex = textToSearch.characters.index(textToSearch.startIndex, offsetBy: Int(floor(((peerNumberD + 1) / peerCountD) * Double(numberOfCharacters))))
             while(endIndex > textToSearch.startIndex && (textToSearch[endIndex] != newline)) {
-                endIndex = endIndex.advancedBy(-1)
+                endIndex = textToSearch.index(endIndex, offsetBy: -1)
             }
         }
         
@@ -73,14 +73,14 @@ public class SearchTool : FMTool {
     }
 
     // used for KMP, Build pi function of prefixes
-    private func build_pi(str: String) -> [Int] {
+    fileprivate func build_pi(_ str: String) -> [Int] {
         let n = str.characters.count
-        var pi = Array(count: n + 1, repeatedValue: 0)
+        var pi = Array(repeating: 0, count: n + 1)
         var k:Int = -1
         pi[0] = -1
         
         for i in 0..<n {
-            while (k >= 0 && (str[str.startIndex.advancedBy(k)] != str[str.startIndex.advancedBy(i)])) {
+            while (k >= 0 && (str[str.characters.index(str.startIndex, offsetBy: k)] != str[str.characters.index(str.startIndex, offsetBy: i)])) {
                 k = pi[k]
             }
             k+=1
@@ -91,7 +91,7 @@ public class SearchTool : FMTool {
     }
     
     // Knuth-Morris Pratt algorithm
-    private func KMP(text:String, pattern: String) -> [Int] {
+    fileprivate func KMP(_ text: String, pattern: String) -> [Int] {
         
         // Convert to Character array to index in O(1)
         var patt = Array(pattern.characters)
@@ -117,15 +117,15 @@ public class SearchTool : FMTool {
         return matches
     }
     
-    public override func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> SearchResult {
+    open override func processWork(_ node: FMNode, fromNode: FMNode, work: FMWork) -> SearchResult {
         let searchWork:SearchWork = work as! SearchWork
         let textFoundAt:[Int] = KMP(getTextToSearch(searchWork.peerCount, peerNumber: searchWork.peerNumber), pattern: searchWork.searchTerm)
         
         return SearchResult(numberOfOccurrences: textFoundAt.count)
     }
     
-    public override func mergeResults(node:FMNode, nodeToResult: [FMNode:FMResult]) -> Void {
-        var totalNumberOfOccurrences:Int = 0
+    open override func mergeResults(_ node: FMNode, nodeToResult: [FMNode: FMResult]) -> Void {
+        var totalNumberOfOccurrences: Int = 0
         for (n, result) in nodeToResult {
             let searchResult = result as! SearchResult
             NSLog("Received result from node " + n.description)
@@ -135,20 +135,20 @@ public class SearchTool : FMTool {
         SwiftEventBus.post(SearchEventBusEvents.searchComplete)
     }
 
-    public override func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {
+    open override func onPeerConnect(_ myNode: FMNode, connectedNode: FMNode) {
         SwiftEventBus.post(FogMachineEventBusEvents.onPeerConnect)
     }
 
-    public override func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
+    open override func onPeerDisconnect(_ myNode: FMNode, disconnectedNode: FMNode) {
         SwiftEventBus.post(FogMachineEventBusEvents.onPeerDisconnect)
     }
 
-    public func searchLog(format:String) {
+    open func searchLog(_ format: String) {
         NSLog(format)
         self.onLog(format)
     }
 
-    public override func onLog(format:String) {
-        SwiftEventBus.post(SearchEventBusEvents.onLog, sender:format)
+    open override func onLog(_ format: String) {
+        SwiftEventBus.post(SearchEventBusEvents.onLog, sender: format as AnyObject)
     }
 }

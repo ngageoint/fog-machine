@@ -28,12 +28,12 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     // MARK: IBActions
     
     
-    @IBAction func hideKeyboard(sender: AnyObject) {
+    @IBAction func hideKeyboard(_ sender: AnyObject) {
         scrollView.endEditing(true)
     }
     
     
-    @IBAction func resetSettings(sender: AnyObject) {
+    @IBAction func resetSettings(_ sender: AnyObject) {
         loadObserverSettings()
     }
     
@@ -41,7 +41,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     // MARK: Functions
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "applyObserverSettings" {
             let editedObserver = createObserverFromSettings()
             saveObserverSettings(editedObserver)
@@ -52,7 +52,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
             || segue.identifier == "draw3dElevationData") {
             let editedObserver = createObserverFromSettings()
             saveObserverSettings(editedObserver)
-            let mapViewController = segue.destinationViewController as! ViewshedViewController
+            let mapViewController = segue.destination as! ViewshedViewController
             mapViewController.settingsObserver = editedObserver
         }
     }
@@ -70,9 +70,9 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    func saveObserverSettings(editedObserver: Observer) {
+    func saveObserverSettings(_ editedObserver: Observer) {
         model.delete(originalObserver!)
-        model.add(editedObserver)
+        _ = model.add(editedObserver)
     }
     
     func createObserverFromSettings() -> Observer {
@@ -92,7 +92,7 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         return editedObserver
     }
     
-    func getDoubleValue(key: String, value: String?, warningMessage: Warning) -> Double? {
+    func getDoubleValue(_ key: String, value: String?, warningMessage: Warning) -> Double? {
         guard let doubleValue = Double(value!) else {
             alertUser("The \(key) requires a \(warningMessage.rawValue).")
             return nil
@@ -109,14 +109,14 @@ class ObserverSettingsViewController: UIViewController, UITextFieldDelegate {
         longitude.text = String(originalObserver!.position.longitude)
     }
     
-    func alertUser(message: String) {
-        let alertController = UIAlertController(title: "Observer Settings Error", message: message, preferredStyle: .Alert)
+    func alertUser(_ message: String) {
+        let alertController = UIAlertController(title: "Observer Settings Error", message: message, preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel) { (action) in
 
         }
         alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true) {
+        self.present(alertController, animated: true) {
             
         }
     }

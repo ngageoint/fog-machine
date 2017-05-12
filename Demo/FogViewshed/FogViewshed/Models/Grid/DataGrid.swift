@@ -1,35 +1,35 @@
 import Foundation
 import MapKit
 
-public class DataGrid : NSObject, NSCoding {
+open class DataGrid: NSObject, NSCoding {
     
     let data: [[Int]]
     
     // Bounding box covers the entirety of the grid
     // When drawing or positioning the data, this information can be used to offset the elevation grid.  It says where the grid is pinned to the earth.
-    let boundingBoxAreaExtent:AxisOrientedBoundingBox
+    let boundingBoxAreaExtent: AxisOrientedBoundingBox
     
-    let resolution:Int
+    let resolution: Int
     
-    init(data: [[Int]], boundingBoxAreaExtent:AxisOrientedBoundingBox, resolution:Int) {
+    init(data: [[Int]], boundingBoxAreaExtent:AxisOrientedBoundingBox, resolution: Int) {
         self.data = data
         self.boundingBoxAreaExtent = boundingBoxAreaExtent
         self.resolution = resolution
     }
     
-    func latLonToIndex(latLon:CLLocationCoordinate2D) -> (Int, Int) {
+    func latLonToIndex(_ latLon:CLLocationCoordinate2D) -> (Int, Int) {
         return HGTManager.latLonToIndex(latLon, boundingBox: boundingBoxAreaExtent, resolution: resolution)
     }
     
     required public init(coder decoder: NSCoder) {
-        self.data = decoder.decodeObjectForKey("data") as! [[Int]]
-        self.boundingBoxAreaExtent = decoder.decodeObjectForKey("boundingBoxAreaExtent") as! AxisOrientedBoundingBox
-        self.resolution = decoder.decodeObjectForKey("resolution") as! Int
+        data = decoder.decodeObject(forKey: "data") as! [[Int]]
+        boundingBoxAreaExtent = decoder.decodeObject(forKey: "boundingBoxAreaExtent") as! AxisOrientedBoundingBox
+        resolution = decoder.decodeObject(forKey: "resolution") as! Int
     }
     
-    public func encodeWithCoder(coder: NSCoder) {
-        coder.encodeObject(self.data, forKey: "data")
-        coder.encodeObject(self.boundingBoxAreaExtent, forKey: "boundingBoxAreaExtent")
-        coder.encodeObject(self.resolution, forKey: "resolution")
+    open func encode(with coder: NSCoder) {
+        coder.encode(data, forKey: "data")
+        coder.encode(boundingBoxAreaExtent, forKey: "boundingBoxAreaExtent")
+        coder.encode(resolution, forKey: "resolution")
     }
 }

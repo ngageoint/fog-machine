@@ -2,40 +2,40 @@ import Foundation
 import SwiftEventBus
 import FogMachine
 
-public class ElevationTool {
+open class ElevationTool {
 
-    public var elevationObserver:Observer
+    open var elevationObserver: Observer
     
-    public init(elevationObserver:Observer) {
+    public init(elevationObserver: Observer) {
         self.elevationObserver = elevationObserver
     }
 
-    public func drawElevationData() {
-        let axisOrientedBoundingBox:AxisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(elevationObserver.position, radiusInMeters: elevationObserver.radiusInMeters)
+    open func drawElevationData() {
+        let axisOrientedBoundingBox: AxisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(elevationObserver.position, radiusInMeters: elevationObserver.radiusInMeters)
 
         // read elevation data
         elevationLog("Start reading in elevation data")
-        let dataReadTimer:FMTimer = FMTimer()
+        let dataReadTimer: FMTimer = FMTimer()
         dataReadTimer.start()
-        let elevationDataGrid:DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox, resolution: Srtm.SRTM3_RESOLUTION)
+        let elevationDataGrid: DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox, resolution: Srtm.SRTM3_RESOLUTION)
         elevationLog("Read elevation data in " + String(format: "%.3f", dataReadTimer.stop()) + " seconds")
         SwiftEventBus.post(ViewshedEventBusEvents.drawGridOverlay, sender:ImageUtility.generateElevationOverlay(elevationDataGrid))
     }
     
-    public func draw3dElevationData() {
-        let axisOrientedBoundingBox:AxisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(elevationObserver.position, radiusInMeters: elevationObserver.radiusInMeters)
+    open func draw3dElevationData() {
+        let axisOrientedBoundingBox: AxisOrientedBoundingBox = BoundingBoxUtility.getBoundingBox(elevationObserver.position, radiusInMeters: elevationObserver.radiusInMeters)
         
         // read elevation data
         elevationLog("Start reading in elevation data")
-        let dataReadTimer:FMTimer = FMTimer()
+        let dataReadTimer: FMTimer = FMTimer()
         dataReadTimer.start()
-        let elevationDataGrid:DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox, resolution: Srtm.SRTM3_RESOLUTION)
+        let elevationDataGrid: DataGrid = HGTManager.getElevationGrid(axisOrientedBoundingBox, resolution: Srtm.SRTM3_RESOLUTION)
         elevationLog("Read elevation data in " + String(format: "%.3f", dataReadTimer.stop()) + " seconds")
-        SwiftEventBus.post(ViewshedEventBusEvents.viewshed3d, sender:elevationDataGrid)
+        SwiftEventBus.post(ViewshedEventBusEvents.viewshed3d, sender: elevationDataGrid)
     }
 
-    public func elevationLog(format:String) {
+    open func elevationLog(_ format: String) {
         NSLog(format)
-        SwiftEventBus.post(ViewshedEventBusEvents.onLog, sender:format)
+        SwiftEventBus.post(ViewshedEventBusEvents.onLog, sender: format as AnyObject)
     }
 }

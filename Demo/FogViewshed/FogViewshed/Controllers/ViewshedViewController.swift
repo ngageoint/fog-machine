@@ -11,12 +11,12 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Class Variables
 
-    var model:ObserverFacade = ObserverFacade()
+    var model: ObserverFacade = ObserverFacade()
     // Only used for segue from ObserverSettings
-    var settingsObserver:Observer = Observer()
-    let locationManager:CLLocationManager = CLLocationManager()
-    var viewshedSceneView:SCNView = SCNView()
-    var viewshedResultImage:[String:UIImage] = [:]
+    var settingsObserver: Observer = Observer()
+    let locationManager: CLLocationManager = CLLocationManager()
+    var viewshedSceneView: SCNView = SCNView()
+    var viewshedResultImage: [String: UIImage] = [:]
     
     // MARK: IBOutlets
 
@@ -30,44 +30,44 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
         self.tabBarController!.delegate = self
         self.mapView.showsUserLocation = true
-        self.mapView.tintColor = UIColor.blueColor()
+        self.mapView.tintColor = UIColor.blue
         self.mapView.delegate = self
         let onLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(ViewshedViewController.onLongPress(_:)))
         onLongPressGesture.minimumPressDuration = 0.2
         self.mapView.addGestureRecognizer(onLongPressGesture)
 
         // TODO: What should happen when the viewshed is done?
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshedComplete) { result in
-            EZLoadingActivity.hide(success: true, animated: false)
+        _ = SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshedComplete) { result in
+            _ = EZLoadingActivity.hide(true, animated: false)
         }
         
         // log any info from Fog Machine to our textbox
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onLog) { result in
-            let format:String = result.object as! String
+        _ = SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.onLog) { result in
+            let format: String = result.object as! String
             self.ViewshedLog(format)
         }
 
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
-            let gridOverlay:GridOverlay = result.object as! GridOverlay
-            let location:CGPoint = CGPoint.init(x: gridOverlay.coordinate.latitude, y: gridOverlay.coordinate.longitude)
-            self.viewshedResultImage[String(location)] = gridOverlay.image
-            self.mapView.addOverlay(gridOverlay)
+        _ = SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.drawGridOverlay) { result in
+            let gridOverlay: GridOverlay = result.object as! GridOverlay
+            let location: CGPoint = CGPoint.init(x: gridOverlay.coordinate.latitude, y: gridOverlay.coordinate.longitude)
+            self.viewshedResultImage[String(describing: location)] = gridOverlay.image
+            self.mapView.add(gridOverlay)
         }
 
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshed3d) { result in
-            let elevationDataGrid:DataGrid = result.object as! DataGrid
+        _ = SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.viewshed3d) { result in
+            let elevationDataGrid: DataGrid = result.object as! DataGrid
             self.display3dViewshed(elevationDataGrid)
         }
 
-        SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.addObserverPin) { result in
-            let observer:Observer = result.object as! Observer
+        _ = SwiftEventBus.onMainThread(self, name: ViewshedEventBusEvents.addObserverPin) { result in
+            let observer: Observer = result.object as! Observer
             self.addObserver(observer)
         }
 
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         let status = CLLocationManager.authorizationStatus()
-        if (status == .NotDetermined || status == .Denied || status == .Restricted)  {
+        if (status == .notDetermined || status == .denied || status == .restricted)  {
             self.locationManager.requestAlwaysAuthorization()
         } else {
             self.locationManager.startUpdatingLocation()
@@ -75,7 +75,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         setupMapLog()
         drawObservers()
         drawDataRegions()
@@ -89,7 +89,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: - TabBarController Delegates
 
-    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         //If the selected viewController is the main mapViewController
         if viewController == tabBarController.viewControllers?[1] {
             drawDataRegions()
@@ -100,13 +100,13 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Location Delegate Methods
 
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if (status == .AuthorizedWhenInUse || status == .AuthorizedAlways) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if (status == .authorizedWhenInUse || status == .authorizedAlways) {
             self.locationManager.startUpdatingLocation()
         }
     }
 
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.locationManager.stopUpdatingLocation()
         // most recent is at the end
         let location:CLLocation = locations.last!
@@ -116,11 +116,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         self.mapView.setRegion(region, animated: true)
     }
 
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         NSLog("Error: " + error.localizedDescription)
     }
 
-    private func drawObservers() {
+    fileprivate func drawObservers() {
         mapView.removeAnnotations(mapView.annotations)
         
         for observer in model.getObservers() {
@@ -128,7 +128,7 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-    private func drawDataRegions() {
+    fileprivate func drawDataRegions() {
         var dataRegionOverlays = [MKOverlay]()
         for overlay in mapView.overlays {
             if overlay is MKPolygon {
@@ -138,11 +138,11 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         mapView.removeOverlays(dataRegionOverlays)
         
         for hgtFile in HGTManager.getLocalHGTFiles() {
-            self.mapView.addOverlay(hgtFile.getBoundingBox().asMKPolygon())
+            self.mapView.add(hgtFile.getBoundingBox().asMKPolygon())
         }
     }
 
-    private func drawPin(observer: Observer) {
+    fileprivate func drawPin(_ observer: Observer) {
         let dropPin = MKPointAnnotation()
         dropPin.coordinate = observer.position
         dropPin.title = observer.description
@@ -150,37 +150,37 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
     }
     
     
-    private func redraw() {
+    fileprivate func redraw() {
         drawObservers()
         drawDataRegions()
     }
     
-    private func addObserver(observer:Observer) {
+    fileprivate func addObserver(_ observer:Observer) {
         if(model.add(observer)) {
             drawPin(observer)
         }
     }
 
-    func onLongPress(gestureRecognizer: UIGestureRecognizer) {
-        if (gestureRecognizer.state == UIGestureRecognizerState.Began) {
-            if(HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView), resolution: Srtm.SRTM3_RESOLUTION)) != nil) {
+    func onLongPress(_ gestureRecognizer: UIGestureRecognizer) {
+        if (gestureRecognizer.state == UIGestureRecognizerState.began) {
+            if(HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(mapView.convert(gestureRecognizer.location(in: mapView), toCoordinateFrom: mapView), resolution: Srtm.SRTM3_RESOLUTION)) != nil) {
                 let newObserver = Observer()
-                newObserver.position = mapView.convertPoint(gestureRecognizer.locationInView(mapView), toCoordinateFromView: mapView)
+                newObserver.position = mapView.convert(gestureRecognizer.location(in: mapView), toCoordinateFrom: mapView)
                 addObserver(newObserver)
             } else {
-                self.view.makeToast("No elevation data here.\nDownload from the Data tab.", duration: 2.0, position: ToastPosition.Center)
+                self.view.makeToast("No elevation data here.\nDownload from the Data tab.", duration: 2.0, position: ToastPosition.center)
                 return
             }
         }
     }
 
-    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
-        var polygonView:MKPolygonRenderer? = nil
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        var polygonView: MKPolygonRenderer? = nil
         if overlay is MKPolygon {
             polygonView = MKPolygonRenderer(overlay: overlay)
             polygonView!.lineWidth = 0.5
-            polygonView!.fillColor = UIColor.yellowColor().colorWithAlphaComponent(0.08)
-            polygonView!.strokeColor = UIColor.redColor().colorWithAlphaComponent(0.6)
+            polygonView!.fillColor = UIColor.yellow.withAlphaComponent(0.08)
+            polygonView!.strokeColor = UIColor.red.withAlphaComponent(0.6)
         } else if overlay is GridOverlay {
             let imageToUse = (overlay as! GridOverlay).image
             let overlayView = GridOverlayView(overlay: overlay, overlayImage: imageToUse)
@@ -191,16 +191,16 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         return polygonView!
     }
 
-    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
-        var view:MKPinAnnotationView? = nil
+        var view: MKPinAnnotationView? = nil
         let identifier = "pin"
         if (annotation is MKUserLocation) {
             //if annotation is not an MKPointAnnotation (eg. MKUserLocation),
             //return nil so map draws default view for it (eg. blue bubble)...
             return nil
         }
-        if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
         } else {
@@ -209,20 +209,20 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
             view!.calloutOffset = CGPoint(x: -5, y: 5)
 
             let image = UIImage(named: "Viewshed")
-            let button = UIButton(type: UIButtonType.DetailDisclosure)
-            button.setImage(image, forState: UIControlState.Normal)
+            let button = UIButton(type: UIButtonType.detailDisclosure)
+            button.setImage(image, for: UIControlState())
 
             view!.leftCalloutAccessoryView = button as UIView
-            view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIView
+            view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.detailDisclosure) as UIView
         }
 
         return view
     }
 
-    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if let selectedObserver = retrieveObserver((view.annotation?.coordinate)!) {
             if control == view.rightCalloutAccessoryView {
-                performSegueWithIdentifier("observerSettings", sender: selectedObserver)
+                performSegue(withIdentifier: "observerSettings", sender: selectedObserver)
             } else if control == view.leftCalloutAccessoryView {
                 self.initiateFogViewshed(selectedObserver)
             }
@@ -231,9 +231,9 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         }
     }
 
-    private func setupMapLog() {
-        var multiplier:CGFloat = 1.0
-        if(NSUserDefaults.standardUserDefaults().boolForKey("isLogShown")) {
+    fileprivate func setupMapLog() {
+        var multiplier: CGFloat = 1.0
+        if(UserDefaults.standard.bool(forKey: "isLogShown")) {
             multiplier = 0.8
         }
         
@@ -249,13 +249,13 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
         newMapViewProportionalHeight.priority = mapViewProportionalHeight.priority
 
-        NSLayoutConstraint.deactivateConstraints([mapViewProportionalHeight])
-        NSLayoutConstraint.activateConstraints([newMapViewProportionalHeight])
+        NSLayoutConstraint.deactivate([mapViewProportionalHeight])
+        NSLayoutConstraint.activate([newMapViewProportionalHeight])
 
         mapViewProportionalHeight = newMapViewProportionalHeight
     }
 
-    func retrieveObserver(coordinate: CLLocationCoordinate2D) -> Observer? {
+    func retrieveObserver(_ coordinate: CLLocationCoordinate2D) -> Observer? {
         var foundObserver: Observer? = nil
 
         for observer in model.getObservers() {
@@ -270,8 +270,8 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Viewshed
 
-    func initiateFogViewshed(observer: Observer) {
-        EZLoadingActivity.show("Calculating Viewshed", disableUI: false)
+    func initiateFogViewshed(_ observer: Observer) {
+        _ = EZLoadingActivity.show("Calculating Viewshed", disableUI: false)
         
         self.ViewshedLog("Running viewshed")
         (FogMachine.fogMachineInstance.getTool() as! ViewshedTool).createWorkViewshedObserver = observer
@@ -279,20 +279,20 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
         FogMachine.fogMachineInstance.execute()
     }
     
-    func display3dViewshed(elevationDataGrid: DataGrid) {
+    func display3dViewshed(_ elevationDataGrid: DataGrid) {
         viewshedSceneView = SCNView(frame: self.view.frame)
         viewshedSceneView.allowsCameraControl = true
         viewshedSceneView.autoenablesDefaultLighting = true
-        viewshedSceneView.backgroundColor = UIColor.lightGrayColor()
-        viewshedSceneView.antialiasingMode = SCNAntialiasingMode.Multisampling4X
+        viewshedSceneView.backgroundColor = UIColor.lightGray
+        viewshedSceneView.antialiasingMode = SCNAntialiasingMode.multisampling4X
         
         let viewshedScene = SCNScene()
         viewshedSceneView.scene = viewshedScene
         
         let location:CGPoint = CGPoint.init(x: elevationDataGrid.boundingBoxAreaExtent.getCentroid().latitude, y: elevationDataGrid.boundingBoxAreaExtent.getCentroid().longitude)
         let observerGridLocation:(Int, Int) = HGTManager.latLonToIndex(elevationDataGrid.boundingBoxAreaExtent.getCentroid(), boundingBox: elevationDataGrid.boundingBoxAreaExtent, resolution: elevationDataGrid.resolution)
-        var viewshedImage:UIImage? = nil
-        if let image = viewshedResultImage[String(location)] {
+        var viewshedImage: UIImage? = nil
+        if let image = viewshedResultImage[String(describing: location)] {
             viewshedImage = image
         }
         
@@ -308,63 +308,63 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: IBActions
 
-    @IBAction func mapTypeChanged(sender: AnyObject) {
+    @IBAction func mapTypeChanged(_ sender: AnyObject) {
         let mapType = MapType(rawValue: mapTypeSelector.selectedSegmentIndex)
         switch (mapType!) {
-        case .Standard:
-            mapView.mapType = MKMapType.Standard
-        case .Hybrid:
-            mapView.mapType = MKMapType.Hybrid
-        case .Satellite:
-            mapView.mapType = MKMapType.Satellite
+        case .standard:
+            mapView.mapType = MKMapType.standard
+        case .hybrid:
+            mapView.mapType = MKMapType.hybrid
+        case .satellite:
+            mapView.mapType = MKMapType.satellite
         }
     }
 
-    @IBAction func focusToCurrentLocation(sender: AnyObject) {
+    @IBAction func focusToCurrentLocation(_ sender: AnyObject) {
         self.locationManager.startUpdatingLocation()
     }
     
     // MARK: Segue
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "observerSettings" {
-            let viewController: ObserverSettingsViewController = segue.destinationViewController as! ObserverSettingsViewController
+            let viewController: ObserverSettingsViewController = segue.destination as! ObserverSettingsViewController
             viewController.originalObserver = sender as! Observer?
         }
     }
 
-    @IBAction func applyOptions(segue: UIStoryboardSegue) {
+    @IBAction func applyOptions(_ segue: UIStoryboardSegue) {
 
     }
 
-    @IBAction func removeViewshedFromSettings(segue: UIStoryboardSegue) {
+    @IBAction func removeViewshedFromSettings(_ segue: UIStoryboardSegue) {
         mapView.removeOverlays(mapView.overlays)
         redraw()
     }
 
-    @IBAction func removePinFromSettings(segue: UIStoryboardSegue) {
+    @IBAction func removePinFromSettings(_ segue: UIStoryboardSegue) {
         redraw()
     }
 
-    @IBAction func deleteAllPins(segue: UIStoryboardSegue) {
+    @IBAction func deleteAllPins(_ segue: UIStoryboardSegue) {
         model.clearEntity()
         redraw()
     }
 
-    @IBAction func runSelectedFogViewshed(segue: UIStoryboardSegue) {
+    @IBAction func runSelectedFogViewshed(_ segue: UIStoryboardSegue) {
         self.initiateFogViewshed(self.settingsObserver)
     }
 
-    @IBAction func drawElevationData(segue: UIStoryboardSegue) {
+    @IBAction func drawElevationData(_ segue: UIStoryboardSegue) {
         ElevationTool(elevationObserver: self.settingsObserver).drawElevationData()
     }
     
-    @IBAction func draw3dElevationData(segue: UIStoryboardSegue) {
+    @IBAction func draw3dElevationData(_ segue: UIStoryboardSegue) {
         ElevationTool(elevationObserver: self.settingsObserver).draw3dElevationData()
     }
     
-    @IBAction func applyObserverSettings(segue:UIStoryboardSegue) {
-        if segue.sourceViewController.isKindOfClass(ObserverSettingsViewController) {
+    @IBAction func applyObserverSettings(_ segue:UIStoryboardSegue) {
+        if segue.source.isKind(of: ObserverSettingsViewController.self) {
             mapView.removeAnnotations(mapView.annotations)
             drawObservers()
         }
@@ -372,20 +372,20 @@ class ViewshedViewController: UIViewController, MKMapViewDelegate, CLLocationMan
 
     // MARK: Logging
 
-    func ViewshedLog(format: String, writeToDebugLog:Bool = false, clearLog: Bool = false) {
+    func ViewshedLog(_ format: String, writeToDebugLog: Bool = false, clearLog: Bool = false) {
         if(writeToDebugLog) {
             NSLog(format)
         }
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             if(clearLog) {
                 self.logBox.text = ""
             }
-            let dateFormater = NSDateFormatter()
-            dateFormater.dateFormat = NSDateFormatter.dateFormatFromTemplate("HH:mm:ss.SSS", options: 0, locale:  NSLocale.currentLocale())
-            let currentTimestamp:String = dateFormater.stringFromDate(NSDate());
-            dispatch_async(dispatch_get_main_queue()) {
-                self.logBox.text.appendContentsOf(currentTimestamp + " " + format + "\n")
-                self.logBox.scrollRangeToVisible(NSMakeRange(self.logBox.text.characters.count - 1, 1));
+            let dateFormater = DateFormatter()
+            dateFormater.dateFormat = DateFormatter.dateFormat(fromTemplate: "HH:mm:ss.SSS", options: 0, locale:  Locale.current)
+            let currentTimestamp: String = dateFormater.string(from: Date())
+            DispatchQueue.main.async {
+                self.logBox.text.append(currentTimestamp + " " + format + "\n")
+                self.logBox.scrollRangeToVisible(NSMakeRange(self.logBox.text.characters.count - 1, 1))
             }
         }
     }

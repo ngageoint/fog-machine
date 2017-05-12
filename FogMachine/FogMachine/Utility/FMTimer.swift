@@ -5,14 +5,14 @@ import Foundation
  A Utility to help time requests and responses in FogMachine
  
  */
-public class FMTimer {
+open class FMTimer {
     
-    private var startTime: CFAbsoluteTime
-    private var stopTime: CFAbsoluteTime
-    private var stopped: Bool = false
+    fileprivate var startTime: CFAbsoluteTime
+    fileprivate var stopTime: CFAbsoluteTime
+    fileprivate var stopped: Bool = false
     
     public init() {
-        stopped = false;
+        stopped = false
         startTime = CFAbsoluteTimeGetCurrent()
         stopTime = Double(startTime)
     }
@@ -22,8 +22,8 @@ public class FMTimer {
     /**
      Start the timer
      */
-    public func start() {
-        stopped = false;
+    open func start() {
+        stopped = false
         startTime = CFAbsoluteTimeGetCurrent()
         stopTime = Double(startTime)
     }
@@ -33,9 +33,9 @@ public class FMTimer {
      
      - returns: the elapsed time in seconds
      */
-    public func stop() -> CFAbsoluteTime {
+    open func stop() -> CFAbsoluteTime {
         stopTime = CFAbsoluteTimeGetCurrent()
-        stopped = true;
+        stopped = true
         return getElapsedTimeInSeconds()
     }
     
@@ -44,7 +44,7 @@ public class FMTimer {
      
      - returns: the elapsed time in seconds
      */
-    public func getElapsedTimeInSeconds() -> CFAbsoluteTime {
+    open func getElapsedTimeInSeconds() -> CFAbsoluteTime {
         if(stopped) {
             return stopTime - startTime
         } else {

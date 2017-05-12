@@ -5,10 +5,10 @@ import Foundation
  Used to encode and decode information for classes extending FMWork and FMResult
  
  */
-public class FMCoding: NSObject, NSCoding {
+open class FMCoding: NSObject, NSCoding {
     
-    /// A uuid to identify this information
-    public private(set) var uuid: String = NSUUID().UUIDString
+    // A uuid to identify this information
+    open fileprivate(set) var uuid: String = UUID().uuidString
     
     // MARK: NSObject
     
@@ -19,10 +19,10 @@ public class FMCoding: NSObject, NSCoding {
     // MARK: NSCoding
     
     required public init(coder decoder: NSCoder) {
-        self.uuid = decoder.decodeObjectForKey("uuid") as! String
+        self.uuid = decoder.decodeObject(forKey: "uuid") as! String
     }
     
-    public func encodeWithCoder(coder: NSCoder) {
-        coder.encodeObject(self.uuid, forKey: "uuid")
+    open func encode(with coder: NSCoder) {
+        coder.encode(self.uuid, forKey: "uuid")
     }
 }

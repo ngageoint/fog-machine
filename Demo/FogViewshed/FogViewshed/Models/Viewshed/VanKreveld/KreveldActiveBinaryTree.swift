@@ -1,27 +1,28 @@
 import Foundation
 
-// based on the paper : http://www.cs.uu.nl/research/techreps/repo/CS-1996/1996-22.pdf
+// based on the paper: http://www.cs.uu.nl/research/techreps/repo/CS-1996/1996-22.pdf
 public struct KreveldActiveBinaryTree {
-    static let FLAG_FALSE: Bool = false
-    static let FLAG_TRUE: Bool = true
-    private var root: VanKreveldStatusEntry?
-    private var reference: VanKreveldCell
+    
+    let FLAG_FALSE: Bool = false
+    let FLAG_TRUE: Bool = true
+    fileprivate var root: VanKreveldStatusEntry?
+    fileprivate var reference: VanKreveldCell
     
     init(reference: VanKreveldCell) {
         self.reference = reference
     }
     
-    public mutating func insert (value: VanKreveldCell) {
+    public mutating func insert (_ value: VanKreveldCell) {
         // ecludian distance in grid units
-        let key : Double = sqrt(pow(Double(self.reference.x) - Double(value.x), 2) + pow(Double(self.reference.y) - Double(value.y), 2))
+        let key: Double = sqrt(pow(Double(reference.x) - Double(value.x), 2) + pow(Double(reference.y) - Double(value.y), 2))
         
-        let oppositeInMeters:Double = value.h - self.reference.h
+        let oppositeInMeters: Double = value.h - reference.h
 
         // find the slope of the line from the current cell to the observer
-        let slopeMonotonicMeasure:Double = oppositeInMeters/key
+        let slopeMonotonicMeasure: Double = oppositeInMeters/key
         
         var y: VanKreveldStatusEntry? = nil
-        var x: VanKreveldStatusEntry? = self.root
+        var x: VanKreveldStatusEntry? = root
         while x !== nil {
             y = x
             y!.maxSlope = max(y!.maxSlope, slopeMonotonicMeasure)
@@ -34,7 +35,7 @@ public struct KreveldActiveBinaryTree {
         
         let z: VanKreveldStatusEntry = VanKreveldStatusEntry(key: key, value: value, slope: slopeMonotonicMeasure, parent: y)
         if (y == nil) {
-            self.root = z;
+            root = z
         } else {
             if (key < y!.key) {
                 y!.left = z
@@ -42,57 +43,57 @@ public struct KreveldActiveBinaryTree {
                 y!.right = z
             }
         }
-        self.fixAfterInsertion(z)
+        fixAfterInsertion(z)
     }
     
-    private mutating func fixAfterInsertion(xx: VanKreveldStatusEntry?) {
+    fileprivate mutating func fixAfterInsertion(_ xx: VanKreveldStatusEntry?) {
         var xx = xx
-        while xx != nil &&  xx !== self.root && xx!.parent !== nil && xx!.parent!.flag == KreveldActiveBinaryTree.FLAG_FALSE {
-            let greatGreatLeft :VanKreveldStatusEntry? = self.leftOf(self.parentOf(self.parentOf(xx)))
+        while xx != nil &&  xx !== root && xx!.parent !== nil && xx!.parent!.flag == FLAG_FALSE {
+            let greatGreatLeft: VanKreveldStatusEntry? = leftOf(parentOf(parentOf(xx)))
             
-            if (self.parentOf(xx) === greatGreatLeft) {
-                let y:VanKreveldStatusEntry? = self.rightOf(self.parentOf(self.parentOf(xx)))
-                if self.flagOf(y) == KreveldActiveBinaryTree.FLAG_FALSE {
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(y, c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.parentOf(self.parentOf(xx)), c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    xx = self.parentOf(self.parentOf(xx))
+            if (parentOf(xx) === greatGreatLeft) {
+                let y:VanKreveldStatusEntry? = rightOf(parentOf(parentOf(xx)))
+                if flagOf(y) == FLAG_FALSE {
+                    setFlag(parentOf(xx), c: FLAG_TRUE)
+                    setFlag(y, c: FLAG_TRUE)
+                    setFlag(parentOf(parentOf(xx)), c: FLAG_FALSE)
+                    xx = parentOf(parentOf(xx))
                 } else {
-                    if xx === self.rightOf(self.parentOf(xx)) {
-                        xx = self.parentOf(xx)
-                        self.rotateLeft(xx)
+                    if xx === rightOf(parentOf(xx)) {
+                        xx = parentOf(xx)
+                        rotateLeft(xx)
                     }
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.parentOf(self.parentOf(xx)), c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    self.rotateRight(self.parentOf(self.parentOf(xx)))
+                    setFlag(parentOf(xx), c: FLAG_TRUE)
+                    setFlag(parentOf(parentOf(xx)), c: FLAG_FALSE)
+                    rotateRight(parentOf(parentOf(xx)))
                 }
             } else {
-                let y:VanKreveldStatusEntry? = self.leftOf(self.parentOf(self.parentOf(xx)))
-                if self.flagOf(y) == KreveldActiveBinaryTree.FLAG_FALSE {
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(y, c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.parentOf(self.parentOf(xx)), c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    xx = self.parentOf(self.parentOf(xx))
+                let y:VanKreveldStatusEntry? = leftOf(parentOf(parentOf(xx)))
+                if flagOf(y) == FLAG_FALSE {
+                    setFlag(parentOf(xx), c: FLAG_TRUE)
+                    setFlag(y, c: FLAG_TRUE)
+                    setFlag(parentOf(parentOf(xx)), c: FLAG_FALSE)
+                    xx = parentOf(parentOf(xx))
                 } else {
-                    if xx === self.leftOf(self.parentOf(xx)) {
-                        xx = self.parentOf(xx)
-                        self.rotateRight(xx)
+                    if xx === leftOf(parentOf(xx)) {
+                        xx = parentOf(xx)
+                        rotateRight(xx)
                     }
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.parentOf(self.parentOf(xx)), c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    self.rotateLeft(self.parentOf(self.parentOf(xx)))
+                    setFlag(parentOf(xx), c: FLAG_TRUE)
+                    setFlag(parentOf(parentOf(xx)), c: FLAG_FALSE)
+                    rotateLeft(parentOf(parentOf(xx)))
                 }
             }
         }
-        if self.root != nil {
-            self.root!.flag = KreveldActiveBinaryTree.FLAG_TRUE
+        if root != nil {
+            root!.flag = FLAG_TRUE
         }
     }
     
-    public mutating func delete (pt: VanKreveldCell) {
+    public mutating func delete (_ pt: VanKreveldCell) {
         
         // verify if all the 'nil' check necessary
-        var p: VanKreveldStatusEntry? = self.getEntry(pt)
+        var p: VanKreveldStatusEntry? = getEntry(pt)
         if p == nil {
             return
         }
@@ -100,28 +101,28 @@ public struct KreveldActiveBinaryTree {
         // point to successor.
         // Because of (p.right != null) the successor of p is the minimum of p.right
         if p!.left != nil && p!.right != nil {
-            let s:VanKreveldStatusEntry! = self.getMinimum(p!.right) // = successor(p)
+            let s:VanKreveldStatusEntry! = getMinimum(p!.right) // = successor(p)
             p!.key = s.key
             p!.value = s.value
             p!.slope = s.slope
             p = s
         }
         // update maxSlope
-        p!.maxSlope = max(self.maxSlopeOf(p!.left), self.maxSlopeOf(p!.right)); // dummy value
-        var x: VanKreveldStatusEntry? = p!.parent;
+        p!.maxSlope = max(maxSlopeOf(p!.left), maxSlopeOf(p!.right)) // dummy value
+        var x: VanKreveldStatusEntry? = p!.parent
         while (x != nil) {
-            x!.maxSlope = max( x!.slope, max(self.maxSlopeOf(x!.left), self.maxSlopeOf(x!.right)) );
-            x = x!.parent;
+            x!.maxSlope = max( x!.slope, max(maxSlopeOf(x!.left), maxSlopeOf(x!.right)) )
+            x = x!.parent
         }
         // Start fixup at replacement node, if it exists.
-        let replacement: VanKreveldStatusEntry? = (p!.left != nil ? p!.left : p!.right);
+        let replacement: VanKreveldStatusEntry? = (p!.left != nil ? p!.left : p!.right)
         
         if (replacement != nil) {
             // Here p has exactly one child. Otherwise p would point to its successor, which has no left child.
             // Link replacement to parent
-            replacement!.parent = p!.parent;
+            replacement!.parent = p!.parent
             if (p!.parent == nil) {
-                self.root = replacement
+                root = replacement
             } else if (p === p!.parent!.left) {
                 p!.parent!.left  = replacement
             }
@@ -134,14 +135,14 @@ public struct KreveldActiveBinaryTree {
             p!.parent = nil
             
             // Fix replacement
-            if (p!.flag == KreveldActiveBinaryTree.FLAG_TRUE) {
-                self.fixAfterDeletion(replacement)
+            if (p!.flag == FLAG_TRUE) {
+                fixAfterDeletion(replacement)
             }
         } else if (p!.parent == nil) { // return if we are the only node.
-            self.root = nil
+            root = nil
         } else { //  No children. Use self as phantom replacement and unlink.
-            if (p!.flag == KreveldActiveBinaryTree.FLAG_TRUE) {
-                self.fixAfterDeletion(p)
+            if (p!.flag == FLAG_TRUE) {
+                fixAfterDeletion(p)
             }
             if (p!.parent != nil) {
                 if (p === p!.parent!.left) {
@@ -158,9 +159,9 @@ public struct KreveldActiveBinaryTree {
 //     Searches the status structure for a point p and returns the corresponding StatusEntry.
 //     param p HeightedPoint to be searched
 //     returns StatusEntry
-    private func getEntry(let p: VanKreveldCell) -> VanKreveldStatusEntry? {
-        let key: Double = sqrt(pow(Double(self.reference.x) - Double(p.x), 2) + pow(Double(self.reference.y) - Double(p.y), 2))
-        var t: VanKreveldStatusEntry? = self.root
+    fileprivate func getEntry(_ p: VanKreveldCell) -> VanKreveldStatusEntry? {
+        let key: Double = sqrt(pow(Double(reference.x) - Double(p.x), 2) + pow(Double(reference.y) - Double(p.y), 2))
+        var t: VanKreveldStatusEntry? = root
         
         while (t != nil) {
             if (key < t!.key) {
@@ -183,7 +184,7 @@ public struct KreveldActiveBinaryTree {
         return nil
     }
     
-    private func getMinimum (let p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
+    fileprivate func getMinimum (_ p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
         if (p == nil) {
             return nil
         }
@@ -194,22 +195,22 @@ public struct KreveldActiveBinaryTree {
         return min!
     }
     
-    private func maxSlopeOf(p: VanKreveldStatusEntry?) -> Double {
-        return (p == nil ? -Double.infinity: p!.maxSlope);
+    fileprivate func maxSlopeOf(_ p: VanKreveldStatusEntry?) -> Double {
+        return (p == nil ? -Double.infinity: p!.maxSlope)
     }
     
-    private func flagOf(p: VanKreveldStatusEntry?) -> Bool {
+    fileprivate func flagOf(_ p: VanKreveldStatusEntry?) -> Bool {
         
-        return (p == nil ? KreveldActiveBinaryTree.FLAG_TRUE : p!.flag);
+        return (p == nil ? FLAG_TRUE : p!.flag)
     }
     
-    private func setFlag(let p: VanKreveldStatusEntry?, c:Bool) {
+    fileprivate func setFlag(_ p: VanKreveldStatusEntry?, c:Bool) {
         if p != nil {
             p!.flag = c
         }
     }
     
-    private func parentOf(let p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
+    fileprivate func parentOf(_ p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
         if p == nil {
             return nil
         } else {
@@ -223,16 +224,16 @@ public struct KreveldActiveBinaryTree {
         }
     }
     
-    private func leftOf(let p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
+    fileprivate func leftOf(_ p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
         return (p == nil) ? nil: p!.left
         
     }
     
-    private func rightOf(let p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
+    fileprivate func rightOf(_ p: VanKreveldStatusEntry?) -> VanKreveldStatusEntry? {
         return (p == nil) ? nil: p!.right
     }
     
-    mutating  private func rotateLeft(let p: VanKreveldStatusEntry?) {
+    mutating  fileprivate func rotateLeft(_ p: VanKreveldStatusEntry?) {
         if p != nil {
             let r: VanKreveldStatusEntry? = p!.right
             // verify if all the 'nil' check necessary
@@ -245,7 +246,7 @@ public struct KreveldActiveBinaryTree {
             }
             // verify if all the 'nil' check necessary
             if p!.parent == nil {
-                self.root = r
+                root = r
             } else if p!.parent!.left === p {
                 p!.parent!.left = r
             } else {
@@ -259,11 +260,11 @@ public struct KreveldActiveBinaryTree {
             if r != nil {
                 r!.maxSlope = p!.maxSlope
             }
-            p!.maxSlope = max( p!.slope, max(self.maxSlopeOf(p!.left), self.maxSlopeOf(p!.right)) )
+            p!.maxSlope = max( p!.slope, max(maxSlopeOf(p!.left), maxSlopeOf(p!.right)) )
         }
     }
     
-    private mutating func rotateRight(let p: VanKreveldStatusEntry?) {
+    fileprivate mutating func rotateRight(_ p: VanKreveldStatusEntry?) {
         if p != nil {
             let l: VanKreveldStatusEntry? = p!.left
             
@@ -291,7 +292,7 @@ public struct KreveldActiveBinaryTree {
                 }
             }
             if p!.parent == nil {
-                self.root = l
+                root = l
             } else if p!.parent!.right === p {
                 p!.parent!.right = l
             } else {
@@ -306,78 +307,78 @@ public struct KreveldActiveBinaryTree {
             if l != nil {
                 l!.maxSlope = p!.maxSlope
             }
-            p!.maxSlope = max( p!.slope, max(self.maxSlopeOf(p!.left), self.maxSlopeOf(p!.right)) )
+            p!.maxSlope = max( p!.slope, max(maxSlopeOf(p!.left), maxSlopeOf(p!.right)) )
         }
     }
     
-    private mutating func fixAfterDeletion(xx: VanKreveldStatusEntry?) {
+    fileprivate mutating func fixAfterDeletion(_ xx: VanKreveldStatusEntry?) {
         var xx = xx
-        while (xx !== self.root && self.flagOf(xx) == KreveldActiveBinaryTree.FLAG_TRUE) {
-            if (xx === self.leftOf(self.parentOf(xx))) {
-                var sib: VanKreveldStatusEntry? = self.rightOf(self.parentOf(xx))
+        while (xx !== root && flagOf(xx) == FLAG_TRUE) {
+            if (xx === leftOf(parentOf(xx))) {
+                var sib: VanKreveldStatusEntry? = rightOf(parentOf(xx))
                 
-                if self.flagOf(sib) == KreveldActiveBinaryTree.FLAG_FALSE {
-                    self.setFlag(sib, c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    self.rotateLeft(self.parentOf(xx))
-                    sib = self.rightOf(self.parentOf(xx))
+                if flagOf(sib) == FLAG_FALSE {
+                    setFlag(sib, c: FLAG_TRUE)
+                    setFlag(parentOf(xx), c: FLAG_FALSE)
+                    rotateLeft(parentOf(xx))
+                    sib = rightOf(parentOf(xx))
                 }
                 
-                if (self.flagOf(self.leftOf(sib))  == KreveldActiveBinaryTree.FLAG_TRUE &&  self.flagOf(self.rightOf(sib)) == KreveldActiveBinaryTree.FLAG_TRUE) {
-                    self.setFlag(sib, c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    xx = self.parentOf(xx)
+                if (flagOf(leftOf(sib))  == FLAG_TRUE &&  flagOf(rightOf(sib)) == FLAG_TRUE) {
+                    setFlag(sib, c: FLAG_FALSE)
+                    xx = parentOf(xx)
                     
                 } else {
-                    if (self.flagOf(self.rightOf(sib)) == KreveldActiveBinaryTree.FLAG_TRUE) {
-                        self.setFlag(self.leftOf(sib), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                        self.setFlag(sib, c: KreveldActiveBinaryTree.FLAG_FALSE)
-                        self.rotateRight(sib)
-                        sib = self.rightOf(self.parentOf(xx))
+                    if (flagOf(rightOf(sib)) == FLAG_TRUE) {
+                        setFlag(leftOf(sib), c: FLAG_TRUE)
+                        setFlag(sib, c: FLAG_FALSE)
+                        rotateRight(sib)
+                        sib = rightOf(parentOf(xx))
                     }
-                    self.setFlag(sib, c: self.flagOf(self.parentOf(xx)))
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.rightOf(sib), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.rotateLeft(self.parentOf(xx))
-                    xx = self.root
+                    setFlag(sib, c: flagOf(parentOf(xx)))
+                    setFlag(parentOf(xx), c: FLAG_TRUE)
+                    setFlag(rightOf(sib), c: FLAG_TRUE)
+                    rotateLeft(parentOf(xx))
+                    xx = root
                 }
             } else { // symmetric
-                var sib: VanKreveldStatusEntry? = self.leftOf(self.parentOf(xx))
+                var sib: VanKreveldStatusEntry? = leftOf(parentOf(xx))
                 
-                if (self.flagOf(sib) == KreveldActiveBinaryTree.FLAG_FALSE) {
-                    self.setFlag(sib, c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_FALSE)
-                    self.rotateRight(self.parentOf(xx))
-                    sib = self.leftOf(self.parentOf(xx))
+                if (flagOf(sib) == FLAG_FALSE) {
+                    setFlag(sib, c: FLAG_TRUE)
+                    setFlag(parentOf(xx), c: FLAG_FALSE)
+                    rotateRight(parentOf(xx))
+                    sib = leftOf(parentOf(xx))
                 }
                 
-                if (self.flagOf(self.rightOf(sib)) == KreveldActiveBinaryTree.FLAG_TRUE &&
-                    self.flagOf(self.leftOf(sib)) == KreveldActiveBinaryTree.FLAG_TRUE) {
-                        self.setFlag(sib, c: KreveldActiveBinaryTree.FLAG_FALSE)
-                        xx = self.parentOf(xx)
+                if (flagOf(rightOf(sib)) == FLAG_TRUE &&
+                    flagOf(leftOf(sib)) == FLAG_TRUE) {
+                        setFlag(sib, c: FLAG_FALSE)
+                        xx = parentOf(xx)
                 } else {
-                    if (self.flagOf(self.leftOf(sib)) == KreveldActiveBinaryTree.FLAG_TRUE) {
-                        self.setFlag(self.rightOf(sib), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                        self.setFlag(sib, c: KreveldActiveBinaryTree.FLAG_FALSE)
-                        self.rotateLeft(sib)
-                        sib = self.leftOf(self.parentOf(xx))
+                    if (flagOf(leftOf(sib)) == FLAG_TRUE) {
+                        setFlag(rightOf(sib), c: FLAG_TRUE)
+                        setFlag(sib, c: FLAG_FALSE)
+                        rotateLeft(sib)
+                        sib = leftOf(parentOf(xx))
                     }
-                    self.setFlag(sib, c: self.flagOf(self.parentOf(xx)))
-                    self.setFlag(self.parentOf(xx), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.setFlag(self.leftOf(sib), c: KreveldActiveBinaryTree.FLAG_TRUE)
-                    self.rotateRight(self.parentOf(xx))
-                    xx = self.root
+                    setFlag(sib, c: flagOf(parentOf(xx)))
+                    setFlag(parentOf(xx), c: FLAG_TRUE)
+                    setFlag(leftOf(sib), c: FLAG_TRUE)
+                    rotateRight(parentOf(xx))
+                    xx = root
                 }
             }
         }
-        self.setFlag(xx, c: KreveldActiveBinaryTree.FLAG_TRUE)
+        setFlag(xx, c: FLAG_TRUE)
     }
     
     // check the visibility of this cell to the observer
-    public func isVisible(pt: VanKreveldCell) -> Bool {
+    public func isVisible(_ pt: VanKreveldCell) -> Bool {
         var isVisible: Bool = false
         
-        let key: Double = sqrt(pow(Double(self.reference.x) - Double(pt.x), 2) + pow(Double(self.reference.y) - Double(pt.y), 2))
-        var x: VanKreveldStatusEntry? = self.root
+        let key: Double = sqrt(pow(Double(reference.x) - Double(pt.x), 2) + pow(Double(reference.y) - Double(pt.y), 2))
+        var x: VanKreveldStatusEntry? = root
         
         if (x === nil) {
             return isVisible
@@ -394,7 +395,7 @@ public struct KreveldActiveBinaryTree {
             } else {
                 parent = x
                 x = x!.right
-                maxSlope = max(maxSlope, self.maxSlopeOf(parent!.left))
+                maxSlope = max(maxSlope, maxSlopeOf(parent!.left))
             }
         }
         

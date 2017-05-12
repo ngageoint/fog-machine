@@ -2,7 +2,8 @@ import Foundation
 import MapKit
 
 class BoundingBoxUtility {
-    static func getBoundingBox(center: CLLocationCoordinate2D, radiusInMeters: Double) -> AxisOrientedBoundingBox  {
+    
+    static func getBoundingBox(_ center: CLLocationCoordinate2D, radiusInMeters: Double) -> AxisOrientedBoundingBox  {
         let eradius = GeoUtility.earthRadiusAtLat(center.latitude)
         
         // Bounding box surrounding the point at given coordinates, assuming local approximation of Earth surface as a sphere of radius given by WGS84

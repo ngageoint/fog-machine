@@ -7,19 +7,19 @@ import UIKit
  see https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
  
  */
-public class BresenhamsLineAlgoritm: NSObject {
+open class BresenhamsLineAlgoritm: NSObject {
     
     /**
      
      see http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm#Java
      
      */
-    public static func findLine(x1 x1arg: Int, y1 y1arg: Int, x2: Int, y2: Int) -> [(x:Int,y:Int)] {
+    open static func findLine(x1 x1arg: Int, y1 y1arg: Int, x2: Int, y2: Int) -> [(x: Int, y: Int)] {
         
         var x1 = x1arg
         var y1 = y1arg
         
-        var line:[(x:Int,y:Int)] = []
+        var line: [(x: Int, y: Int)] = []
         
         // delta of exact value and rounded value of the dependant variable
         var d = 0

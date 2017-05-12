@@ -6,14 +6,14 @@ import MapKit
  Class used to represent a sector
  
  */
-class Sector : CustomStringConvertible {
+class Sector: CustomStringConvertible {
     
-    private var center: CLLocationCoordinate2D
+    fileprivate var center: CLLocationCoordinate2D
     // from +x axis
-    private var startAngleInRadans: Double
+    fileprivate var startAngleInRadans: Double
     // from +x axis
-    private var endAngleInRadans: Double
-    private var radiusInMeters: Double
+    fileprivate var endAngleInRadans: Double
+    fileprivate var radiusInMeters: Double
     
     var description: String{
         return "(\(getCenter().latitude), \(getCenter().longitude))"
@@ -30,31 +30,31 @@ class Sector : CustomStringConvertible {
         return center
     }
 
-    private func angleInRadiansToBearingInDegrees(angle:Double) -> Double {
+    fileprivate func angleInRadiansToBearingInDegrees(_ angle: Double) -> Double {
         // convert the angle to a bearing
-        return ((90 - GeoUtility.radianToDegree(angle)) + 360)%360
+        return ((90 - GeoUtility.radianToDegree(angle)) + 360).truncatingRemainder(dividingBy: 360)
     }
     
     func getStartPosition() -> CLLocationCoordinate2D {
-        let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(startAngleInRadans), distanceInMeters: radiusInMeters)
+        let (lat, lon): (Double, Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(startAngleInRadans), distanceInMeters: radiusInMeters)
         return CLLocationCoordinate2DMake(lat,lon)
     }
     
     func getEndPosition() -> CLLocationCoordinate2D {
-        let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(endAngleInRadans), distanceInMeters: radiusInMeters)
+        let (lat, lon): (Double, Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(endAngleInRadans), distanceInMeters: radiusInMeters)
         return CLLocationCoordinate2DMake(lat,lon)
     }
     
     func getBoundingBox() -> AxisOrientedBoundingBox {
         
-        var lats:[Double] = []
-        var lons:[Double] = []
+        var lats: [Double] = []
+        var lons: [Double] = []
         
-        var minLat:Double = center.latitude
-        var minLon:Double = center.longitude
+        var minLat: Double = center.latitude
+        var minLon: Double = center.longitude
 
-        var maxLat:Double = center.latitude
-        var maxLon:Double = center.longitude
+        var maxLat: Double = center.latitude
+        var maxLon: Double = center.longitude
         
         lats.append(getStartPosition().latitude)
         lons.append(getStartPosition().longitude)
@@ -63,14 +63,14 @@ class Sector : CustomStringConvertible {
         lons.append(getEndPosition().longitude)
         
         // add min and max parts of the circle if we need to
-        var angle:Double = 0
+        var angle: Double = 0
         for _ in 0..<4 {
             if(angle <= endAngleInRadans && angle > startAngleInRadans) {
-                let (lat,lon):(Double,Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(angle), distanceInMeters: radiusInMeters)
+                let (lat, lon): (Double, Double) = GeoUtility.haversineDistanceInMeters(center.latitude, lon1: center.longitude, bearingInDegrees: angleInRadiansToBearingInDegrees(angle), distanceInMeters: radiusInMeters)
                 lats.append(lat)
                 lons.append(lon)
             }
-            angle += (M_PI/2)
+            angle += (Double.pi / 2)
         }
         
         

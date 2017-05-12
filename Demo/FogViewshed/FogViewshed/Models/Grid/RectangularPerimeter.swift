@@ -1,12 +1,12 @@
 import Foundation
 
-class RectangularPerimeter : Perimeter {
+class RectangularPerimeter: Perimeter {
 
-    let dataGrid:DataGrid
-    let rowSize:Int
-    let columnSize:Int
-    var perimeterSize:Int
-    var perimeterCellIndex:Int
+    let dataGrid: DataGrid
+    let rowSize: Int
+    let columnSize: Int
+    var perimeterSize: Int
+    var perimeterCellIndex: Int
     
     init(dataGrid: DataGrid) {
         self.dataGrid = dataGrid
@@ -23,7 +23,7 @@ class RectangularPerimeter : Perimeter {
         } else if(columnSize == 1) {
             perimeterSize = rowSize
         } else {
-            perimeterSize = 2*(rowSize + columnSize - 2)
+            perimeterSize = 2 * (rowSize + columnSize - 2)
         }
     }
 
@@ -35,10 +35,10 @@ class RectangularPerimeter : Perimeter {
         return (perimeterCellIndex < perimeterSize)
     }
 
-    func getNextPerimeterCell() -> (x:Int,y:Int) {
-        var cell:(Int,Int) = (0,0)
+    func getNextPerimeterCell() -> (x: Int, y: Int) {
+        var cell: (Int, Int) = (0, 0)
         if(hasAnotherPerimeterCell()) {
-            var i:Int = Int(perimeterCellIndex)
+            var i: Int = Int(perimeterCellIndex)
             
             if(i >= 0 && i < columnSize - 1) {
                 cell = (0, i)
@@ -66,14 +66,14 @@ class RectangularPerimeter : Perimeter {
         return cell
     }
     
-    func XYToIndex(xy:(Int,Int)) -> Int {
+    func XYToIndex(_ xy: (Int, Int)) -> Int {
         // for the left side and top side, the index is (the row index + the column index)
-        var index:Int = xy.0 + xy.1
+        var index: Int = xy.0 + xy.1
         
         // make sure this is a non-degenerate case
         if(rowSize > 1 && columnSize > 1) {
             // if the index is on the bottom side or the right side, we need to account for the indexes already seen by the left and right side
-            if(((xy.1 == 0) && (xy.0 > 0)) || ((xy.0 == rowSize - 1) && (xy.1 < columnSize-1))) {
+            if(((xy.1 == 0) && (xy.0 > 0)) || ((xy.0 == rowSize - 1) && (xy.1 < columnSize - 1))) {
                 index = perimeterSize - (xy.0 + xy.1)
             }
         }

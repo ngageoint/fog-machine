@@ -7,5 +7,5 @@ protocol Perimeter {
     
     func hasAnotherPerimeterCell() -> Bool
     
-    func getNextPerimeterCell() -> (x:Int,y:Int)
+    func getNextPerimeterCell() -> (x: Int, y: Int)
 }

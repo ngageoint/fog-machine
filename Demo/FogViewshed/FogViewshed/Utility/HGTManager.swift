@@ -2,28 +2,29 @@ import Foundation
 import MapKit
 import SwiftEventBus
 
-public class HGTManager {
-    static func isFileInDocuments(fileName: String) -> Bool {
-        let fileManager: NSFileManager = NSFileManager.defaultManager()
-        let documentsPath: String = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        let url = NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent(fileName)
-        return fileManager.fileExistsAtPath(url.path!)
+open class HGTManager {
+    
+    static func isFileInDocuments(_ fileName: String) -> Bool {
+        let fileManager: FileManager = FileManager.default
+        let documentsPath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let url = URL(fileURLWithPath: documentsPath).appendingPathComponent(fileName)
+        return fileManager.fileExists(atPath: url.path)
     }
     
     static func copyHGTFilesToDocumentsDir() {
-        let fromPath:String = NSBundle.mainBundle().resourcePath!
-        let toPath: String = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let fromPath: String = Bundle.main.resourcePath!
+        let toPath: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         
         do {
-            let fileManager = NSFileManager.defaultManager()
-            let resourceFiles:[String] = try fileManager.contentsOfDirectoryAtPath(fromPath)
+            let fileManager = FileManager.default
+            let resourceFiles: [String] = try fileManager.contentsOfDirectory(atPath: fromPath)
             
             for file in resourceFiles {
                 if file.hasSuffix(".hgt") {
                     let fromFilePath = fromPath + "/" + file
                     let toFilePath = toPath + "/" + file
-                    if (fileManager.fileExistsAtPath(toFilePath) == false) {
-                        try fileManager.copyItemAtPath(fromFilePath, toPath: toFilePath)
+                    if (fileManager.fileExists(atPath: toFilePath) == false) {
+                        try fileManager.copyItem(atPath: fromFilePath, toPath: toFilePath)
                         NSLog("Copying " + file + " to documents directory.")
                     }
                 }
@@ -33,14 +34,14 @@ public class HGTManager {
         }
     }
     
-    static private func getLocalHGTFileMap() -> [String:HGTFile] {
-        var hgtFiles:[String:HGTFile] = [String:HGTFile]()
-        let documentsUrl:NSURL =  NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
+    static fileprivate func getLocalHGTFileMap() -> [String: HGTFile] {
+        var hgtFiles: [String: HGTFile] = [String: HGTFile]()
+        let documentsUrl: URL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         do {
-            let hgtPaths:[NSURL] = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(documentsUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions()).filter{ $0.pathExtension == "hgt" }
+            let hgtPaths: [URL] = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions()).filter{ $0.pathExtension == "hgt" }
 
             for hgtpath in hgtPaths {
-                hgtFiles[hgtpath.lastPathComponent!] = HGTFile(path: hgtpath)
+                hgtFiles[hgtpath.lastPathComponent] = HGTFile(path: hgtpath)
                 
             }
         } catch let error as NSError {
@@ -51,24 +52,24 @@ public class HGTManager {
     }
     
     static func getLocalHGTFiles() -> [HGTFile] {
-        var files:[HGTFile] = Array(getLocalHGTFileMap().values)
+        var files: [HGTFile] = Array(getLocalHGTFileMap().values)
         
-        files.sortInPlace { (obj1, obj2) -> Bool in
+        files.sort { (obj1, obj2) -> Bool in
             return obj1.filename < obj2.filename
         }
         return files
     }
     
-    static func getLocalHGTFileByName(filename:String) -> HGTFile? {
+    static func getLocalHGTFileByName(_ filename: String) -> HGTFile? {
         return getLocalHGTFileMap()[filename]
     }
     
-    static func deleteFile(hgtFile: HGTFile) {
-        if NSFileManager.defaultManager().fileExistsAtPath(hgtFile.path.relativePath!) {
+    static func deleteFile(_ hgtFile: HGTFile) {
+        if FileManager.default.fileExists(atPath: hgtFile.path.relativePath) {
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(hgtFile.path.relativePath!)
+                try FileManager.default.removeItem(atPath: hgtFile.path.relativePath)
             } catch let error as NSError  {
-                print("Error occurred during file delete : \(error.localizedDescription)")
+                print("Error occurred during file delete: \(error.localizedDescription)")
             }
         }
     }
@@ -77,49 +78,49 @@ public class HGTManager {
      
      Converts a (lat,lon) to an index in the grid.  Used by several classes to map data.
      
-     In the indexed returned, (0,0) is lower left; (resolution, resolution) is upper right
+     In the indexed returned, (0,0) is lower left, (resolution, resolution) is upper right
  
     */
-    static func latLonToIndex(latLon:CLLocationCoordinate2D, boundingBox:AxisOrientedBoundingBox, resolution:Int) -> (Int, Int) {
-        let resolutionD:Double = Double(resolution)
+    static func latLonToIndex(_ latLon: CLLocationCoordinate2D, boundingBox: AxisOrientedBoundingBox, resolution: Int) -> (Int, Int) {
+        let resolutionD: Double = Double(resolution)
         
-        let llLat:Double = latLon.latitude
-        let llLatGrid:Double = boundingBox.getLowerLeft().latitude
-        let latDiff:Double = llLat - llLatGrid
-        let latDiffGrid:Double = boundingBox.getUpperRight().latitude - boundingBox.getLowerLeft().latitude
-        var latIndexMax:Int = smartFloorI(latDiffGrid*resolutionD)
+        let llLat: Double = latLon.latitude
+        let llLatGrid: Double = boundingBox.getLowerLeft().latitude
+        let latDiff: Double = llLat - llLatGrid
+        let latDiffGrid: Double = boundingBox.getUpperRight().latitude - boundingBox.getLowerLeft().latitude
+        var latIndexMax: Int = smartFloorI(latDiffGrid * resolutionD)
         if(latDiff == latDiffGrid) {
             latIndexMax -= 1
         }
-        let yIndex:Int = max(min(smartFloorI(latDiff*resolutionD), latIndexMax), 0)
+        let yIndex: Int = max(min(smartFloorI(latDiff * resolutionD), latIndexMax), 0)
         
-        let llLon:Double = latLon.longitude
-        let llLonGrid:Double = boundingBox.getLowerLeft().longitude
-        let lonDiff:Double = llLon - llLonGrid
-        let lonDiffGrid:Double = boundingBox.getUpperRight().longitude - boundingBox.getLowerLeft().longitude
-        var lonIndexMax:Int = smartFloorI(lonDiffGrid*resolutionD)
+        let llLon: Double = latLon.longitude
+        let llLonGrid: Double = boundingBox.getLowerLeft().longitude
+        let lonDiff: Double = llLon - llLonGrid
+        let lonDiffGrid: Double = boundingBox.getUpperRight().longitude - boundingBox.getLowerLeft().longitude
+        var lonIndexMax: Int = smartFloorI(lonDiffGrid * resolutionD)
         if(lonDiff == lonDiffGrid) {
             lonIndexMax -= 1
         }
-        let xIndex:Int = max(min(smartFloorI(lonDiff*resolutionD), lonIndexMax), 0)
+        let xIndex: Int = max(min(smartFloorI(lonDiff * resolutionD), lonIndexMax), 0)
         
         return (xIndex, yIndex)
     }
     
-    static private let NUMERICAL_PRECISION:Double = 8
+    static fileprivate let NUMERICAL_PRECISION: Double = 8
     
     /**
      
      Finds the floor of the number, but will account for the numerical imprecision in doubles, like 37.999999999345 or -102.6666666666234
  
     */
-    static private func smartFloorI(d:Double) -> Int {
+    static fileprivate func smartFloorI(_ d: Double) -> Int {
         return Int(smartFloorD(d))
     }
     
-    static private func smartFloorD(d:Double) -> Double {
-        let precision:Double = pow(10, NUMERICAL_PRECISION)
-        return floor(Double(round(precision*d)/precision))
+    static fileprivate func smartFloorD(_ d: Double) -> Double {
+        let precision: Double = pow(10, NUMERICAL_PRECISION)
+        return floor(Double(round(precision * d) / precision))
     }
     
     /**
@@ -127,13 +128,13 @@ public class HGTManager {
      See smartFloorI
      
      */
-    static private func smartCeilI(d:Double) -> Int {
+    static fileprivate func smartCeilI(_ d: Double) -> Int {
         return Int(smartCeilD(d))
     }
     
-    static private func smartCeilD(d:Double) -> Double {
-        let precision:Double = pow(10, NUMERICAL_PRECISION)
-        return ceil(Double(round(precision*d)/precision))
+    static fileprivate func smartCeilD(_ d: Double) -> Double {
+        let precision: Double = pow(10, NUMERICAL_PRECISION)
+        return ceil(Double(round(precision * d) / precision))
     }
     
     /**
@@ -192,50 +193,50 @@ public class HGTManager {
      cell. SRTM1 files contain 3601 lines and 3601 samples, with similar overlap.
      
      */
-    static func getElevationGrid(axisOrientedBoundingBox:AxisOrientedBoundingBox, resolution resolutioni:Int) -> DataGrid {
+    static func getElevationGrid(_ axisOrientedBoundingBox: AxisOrientedBoundingBox, resolution resolutioni: Int) -> DataGrid {
         
-        let resolutiond:Double = Double(resolutioni)
+        let resolutiond: Double = Double(resolutioni)
         
         // this is the size of a cell in degrees
-        let cellSizeInDegrees:Double = 1.0/resolutiond
-        let halfCellSizeInDegrees:Double = cellSizeInDegrees/2.0
+        let cellSizeInDegrees: Double = 1.0 / resolutiond
+        let halfCellSizeInDegrees: Double = cellSizeInDegrees / 2.0
         
         // expand the bounds of the bounding box to snap to the srtm grid size
         
         // lower left
-        let llLatCell:Double = axisOrientedBoundingBox.getLowerLeft().latitude
-        let llLatGrid:Double = smartFloorD(llLatCell) - halfCellSizeInDegrees
-        let llLatCellGrided:Double = llLatGrid + (smartFloorD((llLatCell - llLatGrid)*resolutiond)*cellSizeInDegrees)
+        let llLatCell: Double = axisOrientedBoundingBox.getLowerLeft().latitude
+        let llLatGrid: Double = smartFloorD(llLatCell) - halfCellSizeInDegrees
+        let llLatCellGrided: Double = llLatGrid + (smartFloorD((llLatCell - llLatGrid) * resolutiond) * cellSizeInDegrees)
         
-        let llLonCell:Double = axisOrientedBoundingBox.getLowerLeft().longitude
-        let llLonGrid:Double = smartFloorD(llLonCell) - halfCellSizeInDegrees
-        let llLonCellGrided:Double = llLonGrid + (smartFloorD((llLonCell - llLonGrid)*resolutiond)*cellSizeInDegrees)
+        let llLonCell: Double = axisOrientedBoundingBox.getLowerLeft().longitude
+        let llLonGrid: Double = smartFloorD(llLonCell) - halfCellSizeInDegrees
+        let llLonCellGrided: Double = llLonGrid + (smartFloorD((llLonCell - llLonGrid) * resolutiond) * cellSizeInDegrees)
         
         // upper right
-        let urLatCell:Double = axisOrientedBoundingBox.getUpperRight().latitude
-        let urLatGrid:Double = smartFloorD(urLatCell) - halfCellSizeInDegrees
-        let urLatCellGrided:Double = urLatGrid + (smartCeilD((urLatCell - urLatGrid)*resolutiond)*cellSizeInDegrees)
+        let urLatCell: Double = axisOrientedBoundingBox.getUpperRight().latitude
+        let urLatGrid: Double = smartFloorD(urLatCell) - halfCellSizeInDegrees
+        let urLatCellGrided: Double = urLatGrid + (smartCeilD((urLatCell - urLatGrid) * resolutiond) * cellSizeInDegrees)
 
-        let urLonCell:Double = axisOrientedBoundingBox.getUpperRight().longitude
-        let urLonGrid:Double = smartFloorD(urLonCell) - halfCellSizeInDegrees
-        let urLonCellGrided:Double = urLonGrid + (smartCeilD((urLonCell - urLonGrid)*resolutiond)*cellSizeInDegrees)
+        let urLonCell: Double = axisOrientedBoundingBox.getUpperRight().longitude
+        let urLonGrid: Double = smartFloorD(urLonCell) - halfCellSizeInDegrees
+        let urLonCellGrided: Double = urLonGrid + (smartCeilD((urLonCell - urLonGrid) * resolutiond) * cellSizeInDegrees)
         
         // this is the bounding box, expanded and snapped to the grid
-        let griddedAxisOrientedBoundingBox:AxisOrientedBoundingBox = AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLatCellGrided, llLonCellGrided), upperRight: CLLocationCoordinate2DMake(urLatCellGrided, urLonCellGrided))
+        let griddedAxisOrientedBoundingBox: AxisOrientedBoundingBox = AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLatCellGrided, llLonCellGrided), upperRight: CLLocationCoordinate2DMake(urLatCellGrided, urLonCellGrided))
         
         // get hgt files of interest
-        var hgtFilesOfInterest:[HGTFile] = [HGTFile]()
+        var hgtFilesOfInterest: [HGTFile] = [HGTFile]()
         
         // looping vars
         
-        var iLat:Double = llLatGrid
-        var iLon:Double = llLonGrid
+        var iLat: Double = llLatGrid
+        var iLon: Double = llLonGrid
 
         // get all the files that are covered by this bounding box
         while(iLat <= urLatGrid) {
             iLon = llLonGrid
             while(iLon <= urLonGrid) {
-                let hgtFile:HGTFile? = HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(CLLocationCoordinate2DMake(iLat, iLon), resolution: resolutioni))
+                let hgtFile: HGTFile? = HGTManager.getLocalHGTFileByName(HGTFile.coordinateToFilename(CLLocationCoordinate2DMake(iLat, iLon), resolution: resolutioni))
                 if(hgtFile != nil) {
                     hgtFilesOfInterest.append(hgtFile!)
                     NSLog("File of interest: " + hgtFile!.filename)
@@ -247,33 +248,33 @@ public class HGTManager {
         
         NSLog("griddedAxisOrientedBoundingBox: " + griddedAxisOrientedBoundingBox.description)
         
-        let elevationDataURIndex:(Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
-        let elevationDataLLIndex:(Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+        let elevationDataURIndex: (Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getUpperRight(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+        let elevationDataLLIndex: (Int, Int) = HGTManager.latLonToIndex(griddedAxisOrientedBoundingBox.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
         
-        let elevationDataWidth:Int = elevationDataURIndex.0 - elevationDataLLIndex.0 + 1
-        let elevationDataHeight:Int = elevationDataURIndex.1 - elevationDataLLIndex.1 + 1
+        let elevationDataWidth: Int = elevationDataURIndex.0 - elevationDataLLIndex.0 + 1
+        let elevationDataHeight: Int = elevationDataURIndex.1 - elevationDataLLIndex.1 + 1
         
 //        NSLog("elevationDataHeight \(elevationDataHeight)")
 //        NSLog("elevationDataWidth \(elevationDataWidth)")
         
         // this is the data structure that will contain the elevation data
-        var elevationData:[[Int]] = [[Int]](count:elevationDataHeight, repeatedValue:[Int](count:elevationDataWidth, repeatedValue:Srtm.NO_DATA))
+        var elevationData: [[Int]] = [[Int]](repeating: [Int](repeating: Srtm.NO_DATA, count: elevationDataWidth), count: elevationDataHeight)
         
         // read sections of each file and fill in the martix as needed
-        for hgtFileOfInterest:HGTFile in hgtFilesOfInterest {
+        for hgtFileOfInterest: HGTFile in hgtFilesOfInterest {
             
             let hgtFileBoundingBox:AxisOrientedBoundingBox = hgtFileOfInterest.getBoundingBox()
             
             // make sure this hgtfile intersects the bounding box
             if(hgtFileBoundingBox.intersectionExists(griddedAxisOrientedBoundingBox)) {
                 // find the intersection
-                let hgtAreaOfInterest:AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
+                let hgtAreaOfInterest: AxisOrientedBoundingBox = hgtFileBoundingBox.intersection(griddedAxisOrientedBoundingBox)
                 
                 NSLog("hgtAreaOfInterest: " + hgtAreaOfInterest.description)
                 
                 // we need to read data from the upper left of the intersection to the lower right of the intersection
-                var upperLeftIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())
-                var lowerRightIndex:(Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
+                var upperLeftIndex: (Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getUpperLeft())
+                var lowerRightIndex: (Int, Int) = hgtFileOfInterest.latLonToIndex(hgtAreaOfInterest.getLowerRight())
                 
                 // bound the indicies to the boundary of the gridded space
                 upperLeftIndex.1 = min(upperLeftIndex.1, lowerRightIndex.1 + elevationDataHeight - 1)
@@ -285,60 +286,60 @@ public class HGTManager {
 //                NSLog("upperLeftIndex \(upperLeftIndex.0) \(upperLeftIndex.1)")
 //                NSLog("lowerRightIndex \(lowerRightIndex.0) \(lowerRightIndex.1)")
                 
-                let hgtAreaOfInterestHeight:Int = lowerRightIndex.1 - upperLeftIndex.1 + 1
-                let hgtAreaOfInterestWidth:Int = lowerRightIndex.0 - upperLeftIndex.0 + 1
+                let hgtAreaOfInterestHeight: Int = lowerRightIndex.1 - upperLeftIndex.1 + 1
+                let hgtAreaOfInterestWidth: Int = lowerRightIndex.0 - upperLeftIndex.0 + 1
 //                NSLog("hgtAreaOfInterestHeight \(hgtAreaOfInterestHeight)")
 //                NSLog("hgtAreaOfInterestWidth \(hgtAreaOfInterestWidth)")
                 
                 // data row length, 2 bytes for every index
-                let dataRowLengthInBytes:Int = 2*(hgtAreaOfInterestWidth)
+                let dataRowLengthInBytes: Int = 2 * (hgtAreaOfInterestWidth)
 //                NSLog("dataRowLengthInBytes \(dataRowLengthInBytes)")
                 
                 // always skip the first row of data + plus the extra cell in the last column that we don't care about
-                var numberOfBytesToStartReadingAt:UInt64 = UInt64((hgtFileOfInterest.getResolution() + 1) * 2)
+                var numberOfBytesToStartReadingAt: UInt64 = UInt64((hgtFileOfInterest.getResolution() + 1) * 2)
 //                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
                 
                 // then skip the data until the exact of offset we want to read at
                 // account for each row and the last column, AND the offset in the current row
-                numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64(((upperLeftIndex.1 * (hgtFileOfInterest.getResolution() + 1)) + upperLeftIndex.0)*2)
+                numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64(((upperLeftIndex.1 * (hgtFileOfInterest.getResolution() + 1)) + upperLeftIndex.0) * 2)
 //                NSLog("numberOfBytesToStartReadingAt \(numberOfBytesToStartReadingAt)")
                 
                 // the last bytes are the start byte plus the number of columns minus one * the size of each row, plus the length of the last row
-                let numberOfBytesUntilLastByteToRead:UInt64 = numberOfBytesToStartReadingAt + UInt64(2*((hgtAreaOfInterestHeight - 1)*(hgtFileOfInterest.getResolution() + 1)) + dataRowLengthInBytes)
+                let numberOfBytesUntilLastByteToRead: UInt64 = numberOfBytesToStartReadingAt + UInt64(2 * ((hgtAreaOfInterestHeight - 1) * (hgtFileOfInterest.getResolution() + 1)) + dataRowLengthInBytes)
 //                NSLog("numberOfBytesUntilLastByteToRead \(numberOfBytesUntilLastByteToRead)")
                 
                 do {
-                    let handle:NSFileHandle = try NSFileHandle(forReadingFromURL: hgtFileOfInterest.path)
+                    let handle: FileHandle = try FileHandle(forReadingFrom: hgtFileOfInterest.path as URL)
                     
-                    // TODO : TBD, it may be faster to read an entire block of data, and then parse the information out of the file.
+                    // TODO: TBD, it may be faster to read an entire block of data, and then parse the information out of the file.
                     
-                    var rowNumber:Int = 0
-                    let elevationDataIndex:(Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
+                    var rowNumber: Int = 0
+                    let elevationDataIndex: (Int, Int) = HGTManager.latLonToIndex(hgtAreaOfInterest.getLowerLeft(), boundingBox: griddedAxisOrientedBoundingBox, resolution: resolutioni)
                     
 //                    NSLog("elevationDataIndex.0 \(elevationDataIndex.0)")
 //                    NSLog("elevationDataIndex.1 \(elevationDataIndex.1)")
                     
                     // while there are more rows to read
                     while(numberOfBytesToStartReadingAt <= numberOfBytesUntilLastByteToRead) {
-                        handle.seekToFileOffset(numberOfBytesToStartReadingAt)
-                        let data:NSData = handle.readDataOfLength(dataRowLengthInBytes)
-                        var oneRowOfElevation = [Int16](count: data.length, repeatedValue: Int16(Srtm.NO_DATA))
-                        let dataRange = NSRange(location: 0, length: data.length)
+                        handle.seek(toFileOffset: numberOfBytesToStartReadingAt)
+                        let data: Data = handle.readData(ofLength: dataRowLengthInBytes)
+                        var oneRowOfElevation = [Int16](repeating: Int16(Srtm.NO_DATA), count: data.count)
+                        let dataRange = NSRange(location: 0, length: data.count)
                         // read the row into the temp structure
-                        data.getBytes(&oneRowOfElevation, range: dataRange)
+                        (data as NSData).getBytes(&oneRowOfElevation, range: dataRange)
                         
                         // the byte order is backwards, so flip it.  Don't think there's a faster way to do this
-                        for cell in 0 ..< (data.length/2) {
+                        for cell in 0 ..< (data.count/2) {
                             // find the index where this row should be indexed into the large elevationData structure
-                            let column:Int = elevationDataIndex.1 + hgtAreaOfInterestHeight - 1 - rowNumber;
-                            let row:Int = elevationDataIndex.0 + cell
+                            let column: Int = elevationDataIndex.1 + hgtAreaOfInterestHeight - 1 - rowNumber
+                            let row: Int = elevationDataIndex.0 + cell
                             if(row < elevationDataWidth && row >= 0 && column < elevationDataHeight && column >= 0) {
                                 elevationData[column][row] = Int(oneRowOfElevation[cell].bigEndian)
                             }
                         }
                         
                         // seek to the next row
-                        numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64((hgtFileOfInterest.getResolution() + 1)*2)
+                        numberOfBytesToStartReadingAt = numberOfBytesToStartReadingAt + UInt64((hgtFileOfInterest.getResolution() + 1) * 2)
                         rowNumber += 1
                     }
                 } catch let error as NSError {

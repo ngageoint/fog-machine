@@ -9,22 +9,22 @@ import MapKit
  */
 class HGTFile: NSObject {
     
-    let path:NSURL
+    let path: URL
     // File names refer to the latitude and longitude of the lower left corner of
     // the tile - e.g. N37W105 has its lower left corner at 37 degrees north
     // latitude and 105 degrees west longitude
-    var filename:String {
-        return path.lastPathComponent!
+    var filename: String {
+        return path.lastPathComponent
     }
     
-    init(path: NSURL) {
+    init(path: URL) {
         self.path = path
         super.init()
     }
     
-    static func coordinateToFilename(coordinate:CLLocationCoordinate2D, resolution:Int) -> String {
+    static func coordinateToFilename(_ coordinate: CLLocationCoordinate2D, resolution: Int) -> String {
         // adjust the boundary.  Don't run this near the poles...
-        let correctedCoordinate:CLLocationCoordinate2D = CLLocationCoordinate2DMake(floor(coordinate.latitude + (1.0/Double(resolution))*0.5), floor(coordinate.longitude + (1.0/Double(resolution))*0.5))
+        let correctedCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2DMake(floor(coordinate.latitude + (1.0 / Double(resolution)) * 0.5), floor(coordinate.longitude + (1.0 / Double(resolution)) * 0.5))
         
         var filename = ""
         if (correctedCoordinate.latitude < 0.0) {
@@ -46,11 +46,11 @@ class HGTFile: NSObject {
     }
     
     func getFileSizeInBytes() -> UInt64 {
-        var fileSize : UInt64 = 0
+        var fileSize: UInt64 = 0
         do {
-            let attr : NSDictionary? = try NSFileManager.defaultManager().attributesOfItemAtPath(path.path!)
+            let attr: NSDictionary? = try FileManager.default.attributesOfItem(atPath: path.path) as NSDictionary
             if let _attr = attr {
-                fileSize = _attr.fileSize();
+                fileSize = _attr.fileSize()
             }
         } catch {
             print("Error: \(error)")
@@ -60,42 +60,42 @@ class HGTFile: NSObject {
     
     // Get adjusted resolution of the file.  Files contain signed two byte integers
     func getResolution() -> Int {
-        return Int(sqrt(Double(getFileSizeInBytes()/2))) - 1
+        return Int(sqrt(Double(getFileSizeInBytes() / 2))) - 1
     }
     
-    private func getLowerLeftCoordinate() -> CLLocationCoordinate2D {
-        let nOrS:String = filename.substringWithRange(filename.startIndex ..< filename.startIndex.advancedBy(1))
-        var lat:Double = Double(filename.substringWithRange(filename.startIndex.advancedBy(1) ..< filename.startIndex.advancedBy(3)))!
+    fileprivate func getLowerLeftCoordinate() -> CLLocationCoordinate2D {
+        let nOrS: String = filename.substring(with: filename.startIndex ..< filename.characters.index(filename.startIndex, offsetBy: 1))
+        var lat: Double = Double(filename.substring(with: filename.characters.index(filename.startIndex, offsetBy: 1) ..< filename.characters.index(filename.startIndex, offsetBy: 3)))!
         
-        if (nOrS.uppercaseString == "S") {
+        if (nOrS.uppercased() == "S") {
             lat *= -1.0
         }
         
-        lat = lat - (1.0/Double(getResolution()))*0.5
+        lat = lat - (1.0 / Double(getResolution())) * 0.5
         
-        let wOrE:String = filename.substringWithRange(filename.startIndex.advancedBy(3) ..< filename.startIndex.advancedBy(4))
-        var lon:Double = Double(filename.substringWithRange(filename.startIndex.advancedBy(4) ..< filename.startIndex.advancedBy(7)))!
+        let wOrE:String = filename.substring(with: filename.characters.index(filename.startIndex, offsetBy: 3) ..< filename.characters.index(filename.startIndex, offsetBy: 4))
+        var lon:Double = Double(filename.substring(with: filename.characters.index(filename.startIndex, offsetBy: 4) ..< filename.characters.index(filename.startIndex, offsetBy: 7)))!
         
-        if (wOrE.uppercaseString == "W") {
+        if (wOrE.uppercased() == "W") {
             lon *= -1.0
         }
         
-        lon = lon - (1.0/Double(getResolution()))*0.5
+        lon = lon - (1.0 / Double(getResolution())) * 0.5
         
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
     
     func getBoundingBox() -> AxisOrientedBoundingBox {
-        let llCoordinate:CLLocationCoordinate2D = getLowerLeftCoordinate()
+        let llCoordinate: CLLocationCoordinate2D = getLowerLeftCoordinate()
         
-        return AxisOrientedBoundingBox(lowerLeft: llCoordinate, upperRight: CLLocationCoordinate2DMake(llCoordinate.latitude+1.0, llCoordinate.longitude+1.0))
+        return AxisOrientedBoundingBox(lowerLeft: llCoordinate, upperRight: CLLocationCoordinate2DMake(llCoordinate.latitude + 1.0, llCoordinate.longitude + 1.0))
     }
     
-    func latLonToIndex(latLon:CLLocationCoordinate2D) -> (Int, Int) {
+    func latLonToIndex(_ latLon: CLLocationCoordinate2D) -> (Int, Int) {
         return HGTManager.latLonToIndex(latLon, boundingBox: getBoundingBox(), resolution: getResolution())
     }
     
-    override func isEqual(object: AnyObject?) -> Bool {
+    override func isEqual(_ object: Any?) -> Bool {
         if let object = object as? HGTFile {
             return self.filename == object.filename
         } else {

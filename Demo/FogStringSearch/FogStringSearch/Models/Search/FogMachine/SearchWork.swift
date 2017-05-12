@@ -1,7 +1,7 @@
 import Foundation
 import FogMachine
 
-public class SearchWork: FMWork {
+open class SearchWork: FMWork {
 
     let peerCount: Int
     let peerNumber: Int
@@ -15,17 +15,17 @@ public class SearchWork: FMWork {
     }
 
     required public init(coder decoder: NSCoder) {
-        self.peerCount = decoder.decodeIntegerForKey("peerCount")
-        self.peerNumber = decoder.decodeIntegerForKey("peerNumber")
-        self.searchTerm = decoder.decodeObjectForKey("searchTerm") as! String
+        self.peerCount = decoder.decodeInteger(forKey: "peerCount")
+        self.peerNumber = decoder.decodeInteger(forKey: "peerNumber")
+        self.searchTerm = decoder.decodeObject(forKey: "searchTerm") as! String
 
         super.init(coder: decoder)
     }
 
-    public override func encodeWithCoder(coder: NSCoder) {
-        super.encodeWithCoder(coder);
-        coder.encodeInteger(peerCount, forKey: "peerCount")
-        coder.encodeInteger(peerNumber, forKey: "peerNumber")
-        coder.encodeObject(searchTerm, forKey: "searchTerm")
+    open override func encode(with coder: NSCoder) {
+        super.encode(with: coder)
+        coder.encode(peerCount, forKey: "peerCount")
+        coder.encode(peerNumber, forKey: "peerNumber")
+        coder.encode(searchTerm, forKey: "searchTerm")
     }
 }

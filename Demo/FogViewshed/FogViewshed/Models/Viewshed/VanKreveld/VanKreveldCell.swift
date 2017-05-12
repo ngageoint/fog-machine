@@ -1,6 +1,6 @@
 import Foundation
 
-public class VanKreveldCell {
+open class VanKreveldCell {
     
     var x: Int
     var y: Int

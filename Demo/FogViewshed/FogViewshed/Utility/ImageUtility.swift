@@ -5,26 +5,26 @@ import FogMachine
 
 class ImageUtility: NSObject {
 
-    static func generateElevationOverlay(elevationDataGrid: DataGrid) -> GridOverlay {
+    static func generateElevationOverlay(_ elevationDataGrid: DataGrid) -> GridOverlay {
         return GridOverlay(midCoordinate: elevationDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: elevationDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: elevationToUIImage(elevationDataGrid.data))
     }
     
-    static func generateViewshedOverlay(viewshedDataGrid: DataGrid) -> GridOverlay {
+    static func generateViewshedOverlay(_ viewshedDataGrid: DataGrid) -> GridOverlay {
         return GridOverlay(midCoordinate: viewshedDataGrid.boundingBoxAreaExtent.getCentroid(), overlayBoundingMapRect: viewshedDataGrid.boundingBoxAreaExtent.asMKMapRect(), viewshedImage: viewshedToUIImage(viewshedDataGrid.data))
     }
 
-    static func elevationToUIImage(elevationGrid: [[Int]]) -> UIImage {
+    static func elevationToUIImage(_ elevationGrid: [[Int]]) -> UIImage {
 
         let height = elevationGrid.count
         let width = elevationGrid[0].count
 
         var maxElevation = Elevation.MIN_BOUND
         // high stuff is red
-        let maxElevationColor = Pixel(alpha:50, red: 255, green: 0, blue: 0)
+        let maxElevationColor = Pixel(alpha: 50, red: 255, green: 0, blue: 0)
 
         var minElevation = Elevation.MAX_BOUND
         // low stuff is green
-        let minElevationColor = Pixel(alpha:50, red: 0, green: 255, blue: 0)
+        let minElevationColor = Pixel(alpha: 50, red: 0, green: 255, blue: 0)
 
         // find min and max for this grid
         for x in 0 ..< height {
@@ -70,7 +70,7 @@ class ImageUtility: NSObject {
                     let colorB = UInt8((percent_elevation_at_xy * Double(maxElevationColor.blue)) + ((1.0 - percent_elevation_at_xy) * Double(minElevationColor.blue)))
 
                     // color encoding elevation
-                    p = Pixel(alpha:100, red: colorR, green: colorG, blue: colorB)
+                    p = Pixel(alpha: 100, red: colorR, green: colorG, blue: colorB)
                 }
 
                 elevationImage.append(p)
@@ -79,15 +79,15 @@ class ImageUtility: NSObject {
         return imageFromArgb32Bitmap(elevationImage, width: width, height: height)
     }
     
-    static func viewshedToUIImage(viewshed: [[Int]]) -> UIImage {
+    static func viewshedToUIImage(_ viewshed: [[Int]]) -> UIImage {
         let height = viewshed.count
         let width = viewshed[0].count
         var data: [Pixel] = []
         
         for x in 0 ..< height {
             for y in 0 ..< width {
-                let vxy:Int = viewshed[(height - 1) - x][y]
-                var p:Pixel
+                let vxy: Int = viewshed[(height - 1) - x][y]
+                var p: Pixel
                 if(vxy == Viewshed.NOT_VISIBLE) {
                     p = Pixel(alpha: 50, red: 100, green: 0, blue: 0)
                 } else if(vxy == Viewshed.VISIBLE) {
@@ -99,7 +99,7 @@ class ImageUtility: NSObject {
                 } else {
                     p = Pixel(alpha: 50, red: 255, green: 255, blue: 0)
                 }
-                data.append(p);
+                data.append(p)
             }
         }
         
@@ -107,34 +107,46 @@ class ImageUtility: NSObject {
         return image
     }
 
-    // TODO : see if this can be sped up
-    private static func imageFromArgb32Bitmap(pixels:[Pixel], width: Int, height: Int)-> UIImage {
+    // TODO: see if this can be sped up
+    fileprivate static func imageFromArgb32Bitmap(_ pixels: [Pixel], width: Int, height: Int) -> UIImage {
 
         let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo:CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-        let bitsPerComponent:Int = 8
-        let bitsPerPixel:Int = 32
-        let bytesPerRow = width * Int(sizeof(Pixel))
+        let bitmapInfo: CGBitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        let bitsPerComponent: Int = 8
+        let bitsPerPixel: Int = 32
+        let bytesPerRow = width * Int(MemoryLayout<Pixel>.size)
 
         // assert(pixels.count == Int(width * height))
 
-        var data = pixels // Copy to mutable []
-        let length = data.count * sizeof(Pixel)
-        let providerRef = CGDataProviderCreateWithCFData(NSData(bytes: &data, length: length))
+        let data = pixels // Copy to mutable []
+        //let length = data.count * MemoryLayout<Pixel>.size
+        
+        let unsafeData: Data = data.withUnsafeBufferPointer {
+            return Data(buffer: $0)
+        }
+        
+        let cfdata = NSData(data: unsafeData) as CFData
+        let provider: CGDataProvider? = CGDataProvider(data: cfdata)
 
-        let cgImage = CGImageCreate(
-            width,
-            height,
-            bitsPerComponent,
-            bitsPerPixel,
-            bytesPerRow,
-            rgbColorSpace,
-            bitmapInfo,
-            providerRef,
-            nil,
-            true,
-            CGColorRenderingIntent.RenderingIntentDefault
+        guard let providerRef = provider else {
+            return UIImage()
+        }
+        
+        let cgImage = CGImage(
+            width: width,
+            height: height,
+            bitsPerComponent: bitsPerComponent,
+            bitsPerPixel: bitsPerPixel,
+            bytesPerRow: bytesPerRow,
+            space: rgbColorSpace,
+            bitmapInfo: bitmapInfo,
+            provider: providerRef,
+            decode: nil,
+            shouldInterpolate: true,
+            intent: CGColorRenderingIntent.defaultIntent
         )
-        return UIImage(CGImage: cgImage!)
+
+        
+        return UIImage(cgImage: cgImage!)
     }
 }

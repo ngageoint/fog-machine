@@ -6,16 +6,16 @@ import MultipeerConnectivity
  Node represents a device in the network.  You can retrive the nodes in your network using methods from the `FogMachine` instance
  
  */
-public class FMNode : CustomStringConvertible, Hashable, Equatable {
+open class FMNode: CustomStringConvertible, Hashable, Equatable {
     
     // MARK: Properties
 
-    /// The node id. Ex: 0BD4B032-9A5E-4F1A-90F9-EAAC50175CAC
-    public private(set) var uniqueId: String
-    /// Name of the node.  Usually the device name.  Ex: Alan Turing's iPhone
-    public private(set) var name: String
-    /// The id used for multipeer connectivity.
-    public private(set) var mcPeerID: MCPeerID
+    // The node id. Ex: 0BD4B032-9A5E-4F1A-90F9-EAAC50175CAC
+    open fileprivate(set) var uniqueId: String
+    // Name of the node.  Usually the device name.  Ex: Alan Turing's iPhone
+    open fileprivate(set) var name: String
+    // The id used for multipeer connectivity.
+    open fileprivate(set) var mcPeerID: MCPeerID
     
     /**
      
@@ -28,22 +28,22 @@ public class FMNode : CustomStringConvertible, Hashable, Equatable {
      - returns: A new FMNode
      
      */
-    public init(uniqueId:String, name:String, mcPeerID:MCPeerID) {
+    public init(uniqueId: String, name: String, mcPeerID: MCPeerID) {
         self.name = name
         self.uniqueId = uniqueId
-        self.mcPeerID = mcPeerID;
+        self.mcPeerID = mcPeerID
         self.hashValue = uniqueId.hash
     }
     
     // MARK: CustomStringConvertible
     
-    /// name and id of this node
-    public var description: String {
+    // name and id of this node
+    open var description: String {
         return name + " " + uniqueId
     }
     
     // MARK: Hashable
-    public var hashValue: Int
+    open var hashValue: Int
 }
 
 /**

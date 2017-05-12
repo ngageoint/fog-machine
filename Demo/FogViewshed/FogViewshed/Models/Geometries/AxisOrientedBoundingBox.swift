@@ -8,12 +8,12 @@ import MapKit
  FIXME: I would hate to see what some of these methods do when the box spans the 180th meridian....
  
 */
-public class AxisOrientedBoundingBox : NSObject, NSCoding {
+open class AxisOrientedBoundingBox: NSObject, NSCoding {
     
-    private var lowerLeft: CLLocationCoordinate2D
-    private var upperRight: CLLocationCoordinate2D
+    fileprivate var lowerLeft: CLLocationCoordinate2D
+    fileprivate var upperRight: CLLocationCoordinate2D
     
-    override public var description: String{
+    override open var description: String{
         return "(\(getLowerLeft().latitude), \(getLowerLeft().longitude)), (\(getUpperRight().latitude), \(getUpperRight().longitude))"
     }
     
@@ -39,12 +39,12 @@ public class AxisOrientedBoundingBox : NSObject, NSCoding {
     }
     
     func getCentroid() -> CLLocationCoordinate2D {
-        let centroidLat:Double = (getLowerLeft().latitude + getUpperRight().latitude)/2
-        let centroidLon:Double = (getLowerLeft().longitude + getUpperRight().longitude)/2
+        let centroidLat: Double = (getLowerLeft().latitude + getUpperRight().latitude) / 2
+        let centroidLon: Double = (getLowerLeft().longitude + getUpperRight().longitude) / 2
         return CLLocationCoordinate2DMake(centroidLat, centroidLon)
     }
     
-    func intersectionExists(with:AxisOrientedBoundingBox) -> Bool {
+    func intersectionExists(_ with: AxisOrientedBoundingBox) -> Bool {
         let aURLat = getUpperRight().latitude
         let aURLon = getUpperRight().longitude
         
@@ -64,52 +64,50 @@ public class AxisOrientedBoundingBox : NSObject, NSCoding {
     }
     
     // you should check if there is an intersection with isIntersection before calling this function!
-    func intersection(with:AxisOrientedBoundingBox) -> AxisOrientedBoundingBox {
-        let llLat:Double = max(getLowerLeft().latitude, with.getLowerLeft().latitude);
-        let llLon:Double = max(getLowerLeft().longitude, with.getLowerLeft().longitude);
+    func intersection(_ with: AxisOrientedBoundingBox) -> AxisOrientedBoundingBox {
+        let llLat: Double = max(getLowerLeft().latitude, with.getLowerLeft().latitude)
+        let llLon: Double = max(getLowerLeft().longitude, with.getLowerLeft().longitude)
         
-        let urLat:Double = min(getUpperRight().latitude, with.getUpperRight().latitude);
-        let urLon:Double = min(getUpperRight().longitude, with.getUpperRight().longitude);
+        let urLat: Double = min(getUpperRight().latitude, with.getUpperRight().latitude)
+        let urLon: Double = min(getUpperRight().longitude, with.getUpperRight().longitude)
         
         return AxisOrientedBoundingBox(lowerLeft: CLLocationCoordinate2DMake(llLat, llLon), upperRight: CLLocationCoordinate2DMake(urLat, urLon))
     }
     
     func asMKPolygon() -> MKPolygon {
-        var points = [
-            getLowerLeft(),
-            getUpperLeft(),
-            getUpperRight(),
-            getLowerRight()
-        ]
-        let polygonOverlay:MKPolygon = MKPolygon(coordinates: &points, count: points.count)
+        var points = [getLowerLeft(),
+                      getUpperLeft(),
+                      getUpperRight(),
+                      getLowerRight()]
+        let polygonOverlay: MKPolygon = MKPolygon(coordinates: &points, count: points.count)
         
         return polygonOverlay
     }
     
     func asMKMapRect() -> MKMapRect {
         // convert them to MKMapPoint
-        let p1:MKMapPoint = MKMapPointForCoordinate (getLowerLeft())
-        let p2:MKMapPoint = MKMapPointForCoordinate (getUpperRight())
+        let p1: MKMapPoint = MKMapPointForCoordinate (getLowerLeft())
+        let p2: MKMapPoint = MKMapPointForCoordinate (getUpperRight())
         
         // and make a MKMapRect using mins and spans
-        return MKMapRectMake(fmin(p1.x,p2.x), fmin(p1.y,p2.y), fabs(p1.x-p2.x), fabs(p1.y-p2.y))
+        return MKMapRectMake(fmin(p1.x, p2.x), fmin(p1.y, p2.y), fabs(p1.x - p2.x), fabs(p1.y - p2.y))
     }
     
     
     required public init(coder decoder: NSCoder) {
-        let lowerLeftLat:Double = decoder.decodeObjectForKey("lowerLeftLat") as! Double
-        let lowerLeftLon:Double = decoder.decodeObjectForKey("lowerLeftLon") as! Double
-        let upperRightLat:Double = decoder.decodeObjectForKey("upperRightLat") as! Double
-        let upperRightLon:Double = decoder.decodeObjectForKey("upperRightLon") as! Double
+        let lowerLeftLat: Double = decoder.decodeObject(forKey: "lowerLeftLat") as! Double
+        let lowerLeftLon: Double = decoder.decodeObject(forKey: "lowerLeftLon") as! Double
+        let upperRightLat: Double = decoder.decodeObject(forKey: "upperRightLat") as! Double
+        let upperRightLon: Double = decoder.decodeObject(forKey: "upperRightLon") as! Double
         
-        self.lowerLeft = CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon)
-        self.upperRight = CLLocationCoordinate2DMake(upperRightLat, upperRightLon)
+        lowerLeft = CLLocationCoordinate2DMake(lowerLeftLat, lowerLeftLon)
+        upperRight = CLLocationCoordinate2DMake(upperRightLat, upperRightLon)
     }
     
-    public func encodeWithCoder(coder: NSCoder) {
-        coder.encodeObject(self.lowerLeft.latitude, forKey: "lowerLeftLat")
-        coder.encodeObject(self.lowerLeft.longitude, forKey: "lowerLeftLon")
-        coder.encodeObject(self.upperRight.latitude, forKey: "upperRightLat")
-        coder.encodeObject(self.upperRight.longitude, forKey: "upperRightLon")
+    open func encode(with coder: NSCoder) {
+        coder.encode(lowerLeft.latitude, forKey: "lowerLeftLat")
+        coder.encode(lowerLeft.longitude, forKey: "lowerLeftLon")
+        coder.encode(upperRight.latitude, forKey: "upperRightLat")
+        coder.encode(upperRight.longitude, forKey: "upperRightLon")
     }
 }

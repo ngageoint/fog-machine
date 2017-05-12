@@ -10,7 +10,7 @@ project 'Demo/FogStringSearch/FogStringSearch.xcodeproj'
 target 'FogMachine' do
     platform :ios, '9.0'
     project 'FogMachine/FogMachine.xcodeproj'
-    pod 'SwiftEventBus', '~> 1.1.0'
+    pod 'SwiftEventBus', '~> 2.1'
 end
 
 target 'FogStringSearch' do
@@ -29,12 +29,15 @@ target 'FogViewshed' do
     project 'Demo/FogViewshed/FogViewshed.xcodeproj'
     pod 'FogMachine', :path => '.'
     pod 'SSZipArchive', '~> 1.1'
-    pod 'Buckets', :git => 'https://github.com/mauriciosantos/Buckets-Swift.git', :tag => '1.2.1'
-    pod 'Toast-Swift', '~> 1.3.0'
-    pod 'EZLoadingActivity', '~> 0.8'
+#pod 'Buckets', '~> 2.0'
+#Buckets version 2.0.1 isn't in Cocoapods, so pull from github
+    pod 'Buckets', :git => 'https://github.com/mauriciosantos/Buckets-Swift.git'
+    pod 'Toast-Swift', '~> 2.0.0'
+    pod 'EZLoadingActivity', '~> 1.0'
 end
 
 target 'FogViewshedTests' do
     platform :ios, '9.0'
     project 'Demo/FogViewshed/FogViewshed.xcodeproj'
 end
+

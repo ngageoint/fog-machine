@@ -11,13 +11,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     // MARK: IBActions
     
     
-    @IBAction func hideKeyboard(sender: AnyObject) {
+    @IBAction func hideKeyboard(_ sender: AnyObject) {
         scrollView.endEditing(true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapLogSwitch.setOn(NSUserDefaults.standardUserDefaults().boolForKey("isLogShown"), animated: false)
+        mapLogSwitch.setOn(UserDefaults.standard.bool(forKey: "isLogShown"), animated: false)
     }
     
     
@@ -26,8 +26,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func onDisplayMapLog(sender: AnyObject) {
-        NSUserDefaults.standardUserDefaults().setValue(mapLogSwitch.on, forKey: "isLogShown")
+    @IBAction func onDisplayMapLog(_ sender: AnyObject) {
+        UserDefaults.standard.setValue(mapLogSwitch.isOn, forKey: "isLogShown")
     }
 }
 

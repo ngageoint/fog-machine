@@ -12,7 +12,7 @@ class ObserverEntity: NSManagedObject {
     @NSManaged var longitude: Double
     
     func asObserver() -> Observer {
-        let observer:Observer = Observer(elevationInMeters: elevationInMeters, radiusInMeters: radiusInMeters, position: CLLocationCoordinate2DMake(latitude, longitude))
+        let observer: Observer = Observer(elevationInMeters: elevationInMeters, radiusInMeters: radiusInMeters, position: CLLocationCoordinate2DMake(latitude, longitude))
         observer.uniqueId = uniqueId
         return observer
     }

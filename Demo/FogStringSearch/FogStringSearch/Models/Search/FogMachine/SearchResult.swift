@@ -1,9 +1,9 @@
 import Foundation
 import FogMachine
 
-public class SearchResult: FMResult {
+open class SearchResult: FMResult {
 
-    let numberOfOccurrences:Int
+    let numberOfOccurrences: Int
 
     init (numberOfOccurrences: Int) {
         self.numberOfOccurrences = numberOfOccurrences
@@ -11,12 +11,12 @@ public class SearchResult: FMResult {
     }
 
     required public init(coder decoder: NSCoder) {
-        self.numberOfOccurrences = decoder.decodeIntegerForKey("numberOfOccurrences")
+        self.numberOfOccurrences = decoder.decodeInteger(forKey: "numberOfOccurrences")
         super.init(coder: decoder)
     }
 
-    public override func encodeWithCoder(coder: NSCoder) {
-        super.encodeWithCoder(coder);
-        coder.encodeInteger(numberOfOccurrences, forKey: "numberOfOccurrences")
+    open override func encode(with coder: NSCoder) {
+        super.encode(with: coder)
+        coder.encode(numberOfOccurrences, forKey: "numberOfOccurrences")
     }
 }

@@ -17,7 +17,6 @@
 		F903AFC71D11D74100F90D9E /* MobyDick.txt in Resources */ = {isa = PBXBuildFile; fileRef = F903AFC61D11D74100F90D9E /* MobyDick.txt */; };
 		F903AFCA1D11DB6200F90D9E /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFC91D11DB6200F90D9E /* StreamReader.swift */; };
 		F979A1A51D10C34700C0981E /* FogMachine.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F979A1A21D10C34700C0981E /* FogMachine.storyboard */; };
-		F979A1A61D10C34700C0981E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F979A1A41D10C34700C0981E /* Images.xcassets */; };
 		F9D40BE11D1089B60099B550 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D40BE01D1089B60099B550 /* AppDelegate.swift */; };
 		F9D40BE81D1089B60099B550 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D40BE61D1089B60099B550 /* Main.storyboard */; };
 		F9D40BEA1D1089B60099B550 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9D40BE91D1089B60099B550 /* Assets.xcassets */; };
@@ -50,7 +49,7 @@
 		8B8B793145E70697C25A0B5B /* Pods-FogStringSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.release.xcconfig"; sourceTree = "<group>"; };
 		954DA0ABC11F813C39DA8A42 /* Pods_FogStringSearchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogStringSearchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE34769722CEC5D67589ED94 /* Pods-FogStringSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.debug.xcconfig"; sourceTree = "<group>"; };
-		F903AFB71D11CE0B00F90D9E /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F903AFB71D11CE0B00F90D9E /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../Constants.swift; sourceTree = "<group>"; };
 		F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F903AFBE1D11CE6300F90D9E /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		F903AFBF1D11CE6300F90D9E /* SearchTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTool.swift; sourceTree = "<group>"; };
@@ -58,9 +57,8 @@
 		F903AFC61D11D74100F90D9E /* MobyDick.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MobyDick.txt; sourceTree = "<group>"; };
 		F903AFC91D11DB6200F90D9E /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F979A1A31D10C34700C0981E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = ../../FogMachine/FogMachine/en.lproj/FogMachine.storyboard; sourceTree = "<group>"; };
-		F979A1A41D10C34700C0981E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../FogMachine/FogMachine/Images.xcassets; sourceTree = "<group>"; };
 		F9D40BDD1D1089B60099B550 /* FogStringSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FogStringSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9D40BE01D1089B60099B550 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F9D40BE01D1089B60099B550 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../AppDelegate.swift; sourceTree = "<group>"; };
 		F9D40BE71D1089B60099B550 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F9D40BE91D1089B60099B550 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9D40BEC1D1089B60099B550 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -109,6 +107,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		755AF76F1EC5FEA7007C20EF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F979A1A21D10C34700C0981E /* FogMachine.storyboard */,
+				F9D40BEB1D1089B60099B550 /* LaunchScreen.storyboard */,
+				F9D40BE61D1089B60099B550 /* Main.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		D037217D1207090243A044C1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +131,7 @@
 		F903AFB91D11CE6300F90D9E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F9D40BE01D1089B60099B550 /* AppDelegate.swift */,
 				F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */,
 			);
 			path = Controllers;
@@ -165,6 +174,7 @@
 		F903AFC81D11DB6200F90D9E /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				F903AFB71D11CE0B00F90D9E /* Constants.swift */,
 				F903AFC91D11DB6200F90D9E /* StreamReader.swift */,
 			);
 			path = Utility;
@@ -173,8 +183,6 @@
 		F9D40BD41D1089B60099B550 = {
 			isa = PBXGroup;
 			children = (
-				F979A1A21D10C34700C0981E /* FogMachine.storyboard */,
-				F979A1A41D10C34700C0981E /* Images.xcassets */,
 				F9D40BDF1D1089B60099B550 /* FogStringSearch */,
 				F9D40BF61D1089B60099B550 /* FogStringSearchTests */,
 				F9D40C011D1089B60099B550 /* FogStringSearchUITests */,
@@ -197,16 +205,13 @@
 		F9D40BDF1D1089B60099B550 /* FogStringSearch */ = {
 			isa = PBXGroup;
 			children = (
-				F903AFB91D11CE6300F90D9E /* Controllers */,
 				F903AFC51D11D74100F90D9E /* Data */,
 				F903AFBB1D11CE6300F90D9E /* Models */,
+				755AF76F1EC5FEA7007C20EF /* View */,
+				F903AFB91D11CE6300F90D9E /* Controllers */,
 				F903AFC81D11DB6200F90D9E /* Utility */,
-				F9D40BE01D1089B60099B550 /* AppDelegate.swift */,
-				F9D40BE61D1089B60099B550 /* Main.storyboard */,
 				F9D40BE91D1089B60099B550 /* Assets.xcassets */,
-				F9D40BEB1D1089B60099B550 /* LaunchScreen.storyboard */,
 				F9D40BEE1D1089B60099B550 /* Info.plist */,
-				F903AFB71D11CE0B00F90D9E /* Constants.swift */,
 			);
 			path = FogStringSearch;
 			sourceTree = "<group>";
@@ -303,13 +308,16 @@
 				TargetAttributes = {
 					F9D40BDC1D1089B60099B550 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0830;
 					};
 					F9D40BF21D1089B60099B550 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0830;
 						TestTargetID = F9D40BDC1D1089B60099B550;
 					};
 					F9D40BFD1D1089B60099B550 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0830;
 						TestTargetID = F9D40BDC1D1089B60099B550;
 					};
 				};
@@ -341,7 +349,6 @@
 			files = (
 				F903AFC71D11D74100F90D9E /* MobyDick.txt in Resources */,
 				F979A1A51D10C34700C0981E /* FogMachine.storyboard in Resources */,
-				F979A1A61D10C34700C0981E /* Images.xcassets in Resources */,
 				F9D40BED1D1089B60099B550 /* LaunchScreen.storyboard in Resources */,
 				F9D40BEA1D1089B60099B550 /* Assets.xcassets in Resources */,
 				F9D40BE81D1089B60099B550 /* Main.storyboard in Resources */,
@@ -377,7 +384,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		47A405FF3A87E655EE7836F6 /* [CP] Embed Pods Frameworks */ = {
@@ -452,7 +459,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -510,6 +517,7 @@
 				F979A1A31D10C34700C0981E /* en */,
 			);
 			name = FogMachine.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		F9D40BE61D1089B60099B550 /* Main.storyboard */ = {
@@ -626,6 +634,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -639,6 +648,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -651,6 +661,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearchTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FogStringSearch.app/FogStringSearch";
 			};
 			name = Debug;
@@ -664,6 +675,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearchTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FogStringSearch.app/FogStringSearch";
 			};
 			name = Release;
@@ -675,6 +687,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearchUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = FogStringSearch;
 			};
 			name = Debug;
@@ -686,6 +699,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearchUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = FogStringSearch;
 			};
 			name = Release;

@@ -5,7 +5,7 @@ import Foundation
  This class provides the a simple lifecycle that your applicaiton can utilize.  Extend this class and provide implementations for createWork, processWork and mergeResults, in order to make your custom tool.  See the example projects and the README for more information.
  
  */
-public class FMTool {
+open class FMTool {
     
     public init() {
         
@@ -18,7 +18,7 @@ public class FMTool {
      - returns: unique identified for this tool
      
      */
-    public func id() -> UInt32 {
+    open func id() -> UInt32 {
         return 4229232399
     }
     
@@ -29,7 +29,7 @@ public class FMTool {
      - returns: tool description.  Ex: My Hello world tool
      
      */
-    public func name() -> String {
+    open func name() -> String {
         return "BASE FOGTOOL"
     }
     
@@ -44,8 +44,8 @@ public class FMTool {
      - returns: FMWork that contians the information that needs to get send to the node to run process work.
      
      */
-    public func createWork(node:FMNode, nodeNumber:UInt, numberOfNodes:UInt) -> FMWork {
-        return FMWork();
+    open func createWork(_ node: FMNode, nodeNumber: UInt, numberOfNodes: UInt) -> FMWork {
+        return FMWork()
     }
     
     /**
@@ -59,8 +59,8 @@ public class FMTool {
      - returns: FMResult The information that needs to be returned to the initiator.
      
      */
-    public func processWork(node:FMNode, fromNode:FMNode, work: FMWork) -> FMResult {
-        return FMResult();
+    open func processWork(_ node: FMNode, fromNode: FMNode, work: FMWork) -> FMResult {
+        return FMResult()
     }
     
     /**
@@ -71,10 +71,9 @@ public class FMTool {
      - parameter nodeToResult: All of the results matched to the node that create each result.
      
      */
-    public func mergeResults(node:FMNode, nodeToResult :[FMNode:FMResult]) -> Void {
+    open func mergeResults(_ node: FMNode, nodeToResult: [FMNode: FMResult]) -> Void {
         
     }
-    
     
     /**
      
@@ -84,7 +83,7 @@ public class FMTool {
      - parameter connectedNode: The FMNode that connected
      
      */
-    public func onPeerConnect(myNode:FMNode, connectedNode:FMNode) {
+    open func onPeerConnect(_ myNode: FMNode, connectedNode: FMNode) {
         
     }
     
@@ -96,7 +95,7 @@ public class FMTool {
      - parameter disconnectedNode: The FMNode that disconnected
      
      */
-    public func onPeerDisconnect(myNode:FMNode, disconnectedNode:FMNode) {
+    open func onPeerDisconnect(_ myNode: FMNode, disconnectedNode: FMNode) {
         
     }
     
@@ -107,7 +106,7 @@ public class FMTool {
      - parameter format: Stirng you want to log.
      
      */
-    public func onLog(format:String) {
+    open func onLog(_ format: String) {
         
     }
 }

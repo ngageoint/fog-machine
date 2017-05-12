@@ -9,15 +9,16 @@ import Foundation
 import MultipeerConnectivity
 
 class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
+
     let displayName: String
-    private var advertiser: MCNearbyServiceAdvertiser?
+    fileprivate var advertiser: MCNearbyServiceAdvertiser?
 
     init(displayName: String) {
         self.displayName = displayName
         super.init()
     }
 
-    func startAdvertising(serviceType serviceType: String, discoveryInfo: [String: String]? = nil) {
+    func startAdvertising(_ serviceType: String, discoveryInfo: [String: String]? = nil) {
         advertiser = MCNearbyServiceAdvertiser(peer: PeerPack.masterSession.getPeerId(), discoveryInfo: discoveryInfo, serviceType: serviceType)
         advertiser?.delegate = self
         advertiser?.startAdvertisingPeer()
@@ -28,20 +29,20 @@ class Advertiser: NSObject, MCNearbyServiceAdvertiserDelegate {
         advertiser?.stopAdvertisingPeer()
     }
 
-    func advertiser(advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: NSData?, invitationHandler: ((Bool, MCSession) -> Void)) {
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         guard displayName != peerID.displayName else {
             return
         }
-
+        
         let aSession = PeerPack.masterSession.availableSession(displayName, peerName: peerID.displayName)
         invitationHandler(true, aSession)
-
+        
         advertiser.stopAdvertisingPeer()
-
+        
         debugPrint("Advertiser \(advertiser.myPeerID.displayName) accepting \(peerID.displayName)")
     }
-
-    func advertiser(advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: NSError) {
+    
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         debugPrint("Advertiser didNotStartAdvertisingPeer: \(error.localizedDescription)")
     }
 }

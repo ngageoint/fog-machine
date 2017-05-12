@@ -1,7 +1,7 @@
 import Foundation
 import FogMachine
 
-public class ViewshedWork: FMWork {
+open class ViewshedWork: FMWork {
     
     let sectorCount: Int
     let sectorNumber: Int
@@ -18,20 +18,20 @@ public class ViewshedWork: FMWork {
     }
     
     required public init(coder decoder: NSCoder) {
-        self.sectorCount = decoder.decodeIntegerForKey("sectorCount")
-        self.sectorNumber = decoder.decodeIntegerForKey("sectorNumber")
-        self.observer = decoder.decodeObjectForKey("observer") as! Observer
-        self.viewshedAlgorithmName = ViewshedAlgorithmName(rawValue: decoder.decodeObjectForKey("viewshedAlgorithmName") as! String)!
+        sectorCount = decoder.decodeInteger(forKey: "sectorCount")
+        sectorNumber = decoder.decodeInteger(forKey: "sectorNumber")
+        observer = decoder.decodeObject(forKey: "observer") as! Observer
+        viewshedAlgorithmName = ViewshedAlgorithmName(rawValue: decoder.decodeObject(forKey: "viewshedAlgorithmName") as! String)!
         
         super.init(coder: decoder)
     }
     
-    public override func encodeWithCoder(coder: NSCoder) {
-        super.encodeWithCoder(coder);
-        coder.encodeInteger(sectorCount, forKey: "sectorCount")
-        coder.encodeInteger(sectorNumber, forKey: "sectorNumber")
-        coder.encodeObject(observer, forKey: "observer")
-        coder.encodeObject(viewshedAlgorithmName.rawValue, forKey: "viewshedAlgorithmName")
+    open override func encode(with coder: NSCoder) {
+        super.encode(with: coder)
+        coder.encode(sectorCount, forKey: "sectorCount")
+        coder.encode(sectorNumber, forKey: "sectorNumber")
+        coder.encode(observer, forKey: "observer")
+        coder.encode(viewshedAlgorithmName.rawValue, forKey: "viewshedAlgorithmName")
     }
 }
 

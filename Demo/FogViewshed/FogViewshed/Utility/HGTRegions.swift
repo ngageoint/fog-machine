@@ -9,20 +9,20 @@ class HGTRegions {
 	let REGION_NORTH_AMERICA = "North_America"
 	let REGION_SOUTH_AMERICA = "South_America"
 
-	var filePrefixToRegion:[String:String] = [String:String]()
+	var filePrefixToRegion: [String: String] = [String: String]()
 
     init() {
-        var resourceURL:NSURL = NSURL(string: NSBundle.mainBundle().resourcePath!)!
+        var resourceURL: URL = URL(string: Bundle.main.resourcePath!)!
         
         do {
-            let hgtRegionsFile:NSURL = try (NSFileManager.defaultManager().contentsOfDirectoryAtURL(resourceURL, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions()).filter{ $0.lastPathComponent == "HGTRegions.txt" }).first!
+            let hgtRegionsFile: URL = try (FileManager.default.contentsOfDirectory(at: resourceURL, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions()).filter{ $0.lastPathComponent == "HGTRegions.txt" }).first!
             
-            if let aStreamReader = StreamReader(path: hgtRegionsFile.path!) {
+            if let aStreamReader = StreamReader(path: hgtRegionsFile.path) {
                 defer {
                     aStreamReader.close()
                 }
                 while let line = aStreamReader.nextLine() {
-                    let prefixAndRegion:[String] = line.componentsSeparatedByString(",")
+                    let prefixAndRegion: [String] = line.components(separatedBy: ",")
                     filePrefixToRegion[prefixAndRegion[0]] = prefixAndRegion[1]
                 }
             }
@@ -32,17 +32,18 @@ class HGTRegions {
 
     }
 
-    func getRegion(filename:String) -> String {
-        let dot:Character = "."
-        if let idx = filename.characters.indexOf(dot) {
-            let pos = filename.startIndex.distanceTo(idx)
-            let prefix:String = filename.substringWithRange(filename.startIndex ..< filename.startIndex.advancedBy(pos))
-            if let region:String = filePrefixToRegion[prefix] {
-                return region
+    func getRegion(_ filename: String) -> String {
+        let dot: Character = "."
+        var region = ""
+        if let idx = filename.characters.index(of: dot) {
+            let pos = filename.characters.distance(from: filename.startIndex, to: idx)
+            let prefix: String = filename.substring(with: filename.startIndex ..< filename.characters.index(filename.startIndex, offsetBy: pos))
+            if let regionValue: String = filePrefixToRegion[prefix] {
+                region = regionValue
             }
         } else {
             NSLog("Bad filename")
         }
-        return ""
+        return region
     }
 }

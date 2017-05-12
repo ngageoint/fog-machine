@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name             = 'FogMachine'
-	s.version          = '4.0.4'
+	s.version          = '4.0.5'
 	s.summary          = 'iOS Framework for parallel processing'
 	s.homepage         = 'https://github.com/ngageoint/fog-machine'
 	s.license          = {:type => 'MIT', :file => 'LICENSE' }
@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
 	s.resource_bundle = { 'FogMachine' => ['FogMachine/**/*.plist'] }
 	s.frameworks = 'Foundation'
 
-	s.dependency 'SwiftEventBus', '~> 1.1.0'
+	s.dependency 'SwiftEventBus', '~> 2.1'
 end

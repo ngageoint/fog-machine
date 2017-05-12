@@ -2,21 +2,22 @@ import UIKit
 import MapKit
 
 class GridOverlayView: MKOverlayRenderer {
+    
     var overlayImage: UIImage
     
-    init(overlay:MKOverlay, overlayImage:UIImage) {
+    init(overlay: MKOverlay, overlayImage: UIImage) {
         self.overlayImage = overlayImage
         super.init(overlay: overlay)
     }
     
-    override func drawMapRect(mapRect: MKMapRect, zoomScale: MKZoomScale, inContext context: CGContext) {
-        let imageReference = overlayImage.CGImage
+    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
+        let imageReference = overlayImage.cgImage
         
         let theMapRect = overlay.boundingMapRect
-        let theRect = rectForMapRect(theMapRect)
+        let theRect = rect(for: theMapRect)
         
-        CGContextScaleCTM(context, 1.0, -1.0)
-        CGContextTranslateCTM(context, 0.0, -theRect.size.height)
-        CGContextDrawImage(context, theRect, imageReference)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.translateBy(x: 0.0, y: -theRect.size.height)
+        context.draw(imageReference!, in: theRect)
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 import FogMachine
 
-public class ViewshedResult: FMResult {
+open class ViewshedResult: FMResult {
 
     let dataGrid:DataGrid
     
@@ -11,13 +11,13 @@ public class ViewshedResult: FMResult {
     }
     
     required public init(coder decoder: NSCoder) {
-        self.dataGrid = decoder.decodeObjectForKey("dataGrid") as! DataGrid
+        dataGrid = decoder.decodeObject(forKey: "dataGrid") as! DataGrid
         super.init(coder: decoder)
     }
     
-    public override func encodeWithCoder(coder: NSCoder) {
-        super.encodeWithCoder(coder);
-        coder.encodeObject(dataGrid, forKey: "dataGrid")
+    open override func encode(with coder: NSCoder) {
+        super.encode(with: coder)
+        coder.encode(dataGrid, forKey: "dataGrid")
     }
 }
 

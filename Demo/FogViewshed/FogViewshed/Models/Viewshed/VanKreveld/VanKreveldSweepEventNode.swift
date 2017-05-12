@@ -1,6 +1,7 @@
 import Foundation
 
 class VanKreveldSweepEventNode {
+    
     let eventType: VanKreveldEventType
     let cell: VanKreveldCell
     
