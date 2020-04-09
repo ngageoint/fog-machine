@@ -19,11 +19,13 @@ There are two demo apps provided to showcase the Fog Machine framework:
 
 Fog Machine was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with BIT Systems. The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the MIT license.
 
+Updated on 09/26/2018
+
 ## Installation with CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C and Swift. You can install CocoaPods with the following command:
 
-```bash
+```console
 $ gem install cocoapods
 ```
 
@@ -33,35 +35,35 @@ To integrate Fog Machine into your Xcode project using CocoaPods, specify it in 
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
+platform :ios, '11.4'
 
 target 'TargetName' do
-pod 'FogMachine', '~> 4.0.4'
+pod 'FogMachine', '~> 4.1.0'
 end
 ```
 
 Then, run the following command:
 
-```bash
+```console
 $ pod install
 ```
 
 ## Build from source
 
 Pull down the latest source:
-```bash
+```console
 $ git clone git@github.com:ngageoint/fog-machine.git
 ```
 
 Clean the pod cache and download the dependencies that Fog Machine needs from [CocoaPods](https://cocoapods.org/):   
 
-```bash
+```console
 $ pod cache clean --all
 $ pod install
 ```
 
 Launch xcode and smile, you're all done:
-```bash
+```console
 $ open FogMachine.xcworkspace
 ```
 
@@ -165,12 +167,6 @@ Software source code previously released under an open source license and then m
 ## Acknowledgements
 
 Fog Machine makes use of the following open source projects:
-- **Buckets**  
-*https://github.com/mauriciosantos/Buckets-Swift*  
-This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
-- **EZLoadingActivity**  
-*https://github.com/goktugyil/EZLoadingActivity*  
-This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php
 - **PeerKit**  
 *https://github.com/jpsim/PeerKit*  
 This product includes software licensed under the MIT License http://opensource.org/licenses/mit-license.php

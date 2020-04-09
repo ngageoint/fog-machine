@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A9EF919AE587405155A5845B /* Pods_FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */; };
+		C111933E6C48E13F441FD5F2 /* Pods_FogMachine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C3EFFFE3E953C6B273B93E /* Pods_FogMachine.framework */; };
 		F9628E901D19DA89003A5D7B /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E871D19DA89003A5D7B /* Advertiser.swift */; };
 		F9628E911D19DA89003A5D7B /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9628E881D19DA89003A5D7B /* Browser.swift */; };
 		F9628E931D19DA89003A5D7B /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F9628E8A1D19DA89003A5D7B /* LICENSE */; };
@@ -30,10 +30,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		530BA8BD3DE8123611E7C50C /* Pods-FogMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig"; sourceTree = "<group>"; };
 		75802C7E1C7F37AE00DAE8BD /* FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
-		86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.debug.xcconfig"; sourceTree = "<group>"; };
-		BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9C3EFFFE3E953C6B273B93E /* Pods_FogMachine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogMachine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E36C56175D4B4DA45B3612AE /* Pods-FogMachine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogMachine.release.xcconfig"; path = "../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine.release.xcconfig"; sourceTree = "<group>"; };
 		F9628E871D19DA89003A5D7B /* Advertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		F9628E881D19DA89003A5D7B /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		F9628E8A1D19DA89003A5D7B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -61,19 +61,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9EF919AE587405155A5845B /* Pods_FogMachine.framework in Frameworks */,
+				C111933E6C48E13F441FD5F2 /* Pods_FogMachine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		26D88A5F15EF414BB954D885 /* Frameworks */ = {
+		6AC306808F96B97EEE99D886 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BA374DC8D07A0F8837AF6494 /* Pods_FogMachine.framework */,
+				530BA8BD3DE8123611E7C50C /* Pods-FogMachine.debug.xcconfig */,
+				E36C56175D4B4DA45B3612AE /* Pods-FogMachine.release.xcconfig */,
 			);
-			name = Frameworks;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		75802C741C7F37AE00DAE8BD = {
@@ -81,8 +82,8 @@
 			children = (
 				F9647BE21CC850920070893F /* FogMachine */,
 				75802C7F1C7F37AE00DAE8BD /* Products */,
-				A3F6200A0272446E4CEF7C25 /* Pods */,
-				26D88A5F15EF414BB954D885 /* Frameworks */,
+				6AC306808F96B97EEE99D886 /* Pods */,
+				87033F01FD14184F1D93F495 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,13 +95,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A3F6200A0272446E4CEF7C25 /* Pods */ = {
+		87033F01FD14184F1D93F495 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */,
-				81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */,
+				C9C3EFFFE3E953C6B273B93E /* Pods_FogMachine.framework */,
 			);
-			name = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		F9628E861D19DA89003A5D7B /* PeerPack */ = {
@@ -180,12 +180,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75802C861C7F37AE00DAE8BD /* Build configuration list for PBXNativeTarget "FogMachine" */;
 			buildPhases = (
-				CD618FA772D6703F501A4481 /* [CP] Check Pods Manifest.lock */,
+				64FF7D20DFBA9857CC9220B7 /* [CP] Check Pods Manifest.lock */,
 				75802C791C7F37AE00DAE8BD /* Sources */,
 				75802C7A1C7F37AE00DAE8BD /* Frameworks */,
 				75802C7B1C7F37AE00DAE8BD /* Headers */,
 				75802C7C1C7F37AE00DAE8BD /* Resources */,
-				6186874FDBA0FFC00D1AB459 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -202,7 +201,7 @@
 		75802C751C7F37AE00DAE8BD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = NGA;
 				TargetAttributes = {
 					75802C7D1C7F37AE00DAE8BD = {
@@ -241,34 +240,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6186874FDBA0FFC00D1AB459 /* [CP] Copy Pods Resources */ = {
+		64FF7D20DFBA9857CC9220B7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-FogMachine/Pods-FogMachine-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CD618FA772D6703F501A4481 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FogMachine-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -318,13 +305,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -347,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -366,13 +363,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -389,9 +396,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -401,8 +409,9 @@
 		};
 		75802C871C7F37AE00DAE8BD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 86383F881C47A7398869A903 /* Pods-FogMachine.debug.xcconfig */;
+			baseConfigurationReference = 530BA8BD3DE8123611E7C50C /* Pods-FogMachine.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -414,13 +423,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogMachine;
 				PRODUCT_NAME = FogMachine;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		75802C881C7F37AE00DAE8BD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 81F2288AB8123FE4D35AE6C7 /* Pods-FogMachine.release.xcconfig */;
+			baseConfigurationReference = E36C56175D4B4DA45B3612AE /* Pods-FogMachine.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -432,6 +443,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogMachine;
 				PRODUCT_NAME = FogMachine;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

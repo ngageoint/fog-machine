@@ -21,10 +21,10 @@ public class PeerPack {
 
     // MARK: Type Aliases
 
-    public typealias PeerBlock = ((myPeerID: MCPeerID, peerID: MCPeerID) -> Void)
-    public typealias EventBlock = ((peerID: MCPeerID, event: String, object: AnyObject?) -> Void)
-    public typealias ObjectBlock = ((peerID: MCPeerID, object: AnyObject?) -> Void)
-    public typealias ResourceBlock = ((myPeerID: MCPeerID, resourceName: String, peer: MCPeerID, localURL: NSURL) -> Void)
+    public typealias PeerBlock = ((_ myPeerID: MCPeerID, _ peerID: MCPeerID) -> Void)
+    public typealias EventBlock = ((_ peerID: MCPeerID, _ event: String, _ object: AnyObject?) -> Void)
+    public typealias ObjectBlock = ((_ peerID: MCPeerID, _ object: AnyObject?) -> Void)
+    public typealias ResourceBlock = ((_ myPeerID: MCPeerID, _ resourceName: String, _ peer: MCPeerID, _ localURL: URL) -> Void)
 
     // MARK: Event Blocks
 
@@ -43,8 +43,8 @@ public class PeerPack {
 
     #if os(iOS)
         // Use the device name, along with the UUID for the device separated by a tab character
-        static let name = UIDevice.currentDevice().name
-        static let id = UIDevice.currentDevice().identifierForVendor!.UUIDString
+        static let name = UIDevice.current.name
+        static let id = UIDevice.current.identifierForVendor!.uuidString
         static public let myName = String(name + ID_DELIMITER + id)
     #else
         public let myName = NSHost.currentHost().localizedName ?? ""
@@ -61,19 +61,19 @@ public class PeerPack {
     // MARK: Events
 
 
-    static public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [MCPeerID]? = masterSession.allConnectedPeers()) {
-        guard let peers = peers where !peers.isEmpty else {
+    static public func sendEvent(event: String, object: Any? = nil, toPeers peers: [MCPeerID]? = masterSession.allConnectedPeers()) {
+        guard let peers = peers, !peers.isEmpty else {
             return
         }
 
-        var rootObject: [String: AnyObject] = ["event": event]
+        var rootObject: [String: Any] = ["event": event as Any]
 
-        if let object: AnyObject = object {
+        if let object: Any = object {
             rootObject["object"] = object
         }
 
-        let data = NSKeyedArchiver.archivedDataWithRootObject(rootObject)
+        let data = NSKeyedArchiver.archivedData(withRootObject: rootObject)
 
-        masterSession.sendData(data, toPeers: peers, withMode: .Reliable)
+        masterSession.sendData(data: data, toPeers: peers, withMode: .reliable)
     }
 }

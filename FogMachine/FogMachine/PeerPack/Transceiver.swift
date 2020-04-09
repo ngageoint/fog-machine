@@ -26,31 +26,31 @@ public class Transceiver: SessionDelegate {
         PeerPack.masterSession.delegate = self
     }
 
-    public func startTransceiving(serviceType serviceType: String, discoveryInfo: [String: String]? = nil) {
+    func startTransceiving(serviceType: String, discoveryInfo: [String: String]? = nil) {
         advertiser.startAdvertising(serviceType: serviceType, discoveryInfo: discoveryInfo)
-        browser.startBrowsing(serviceType)
+        browser.startBrowsing(serviceType: serviceType)
     }
 
     func stopTransceiving() {
         advertiser.stopAdvertising()
         browser.stopBrowsing()
-        PeerPack.masterSession.disconnect(displayName)
+        PeerPack.masterSession.disconnect(displayName: displayName)
         NSLog("Disconnecting from transceiver.")
     }
 
-    func startAdvertising(serviceType serviceType: String, discoveryInfo: [String: String]? = nil) {
+    func startAdvertising(serviceType: String, discoveryInfo: [String: String]? = nil) {
         advertiser.startAdvertising(serviceType: serviceType, discoveryInfo: discoveryInfo)
     }
 
 
-    func startBrowsing(serviceType serviceType: String) {
-        browser.startBrowsing(serviceType)
+    func startBrowsing(serviceType: String) {
+        browser.startBrowsing(serviceType: serviceType)
     }
 
     public func connecting(myPeerID: MCPeerID, toPeer peer: MCPeerID) {
         if let onConnecting = PeerPack.onConnecting {
-            dispatch_async(dispatch_get_main_queue()) {
-                onConnecting(myPeerID: myPeerID, peerID: peer)
+            DispatchQueue.main.async {
+                onConnecting(myPeerID, peer)
             }
         }
     }
@@ -58,32 +58,31 @@ public class Transceiver: SessionDelegate {
 
     public func connected(myPeerID: MCPeerID, toPeer peer: MCPeerID) {
         if let onConnect = PeerPack.onConnect {
-            dispatch_async(dispatch_get_main_queue()) {
-                onConnect(myPeerID: myPeerID, peerID: peer)
+            DispatchQueue.main.async {
+                onConnect(myPeerID, peer)
             }
         }
     }
 
     public func disconnected(myPeerID: MCPeerID, fromPeer peer: MCPeerID) {
         if let onDisconnect = PeerPack.onDisconnect {
-            dispatch_async(dispatch_get_main_queue()) {
-                onDisconnect(myPeerID: myPeerID, peerID: peer)
+            DispatchQueue.main.async {
+                onDisconnect(myPeerID, peer)
             }
-
         }
     }
 
-    public func receivedData(myPeerID: MCPeerID, data: NSData, fromPeer peer: MCPeerID) {
+    public func receivedData(myPeerID: MCPeerID, data: Data, fromPeer peer: MCPeerID) {
         debugPrint("receivedData from \(peer.displayName) (on \(myPeerID.displayName))")
-        if let dict = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [String: AnyObject] {
+        if let dict = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String: AnyObject] {
             if let event = dict["event"] as? String {
                 if let object: AnyObject? = dict["object"] {
-                    dispatch_async(dispatch_get_main_queue()) {
+                    DispatchQueue.main.async {
                         if let onEvent = PeerPack.onEvent {
-                            onEvent(peerID: peer, event: event, object: object)
+                            onEvent(peer, event, object)
                         }
                         if let eventBlock = PeerPack.eventBlocks[event] {
-                            eventBlock(peerID: peer, object: object)
+                            eventBlock(peer, object)
                         }
                     }
                 }
@@ -91,10 +90,10 @@ public class Transceiver: SessionDelegate {
         }
     }
 
-    public func finishReceivingResource(myPeerID: MCPeerID, resourceName: String, fromPeer peer: MCPeerID, atURL localURL: NSURL) {
+    public func finishReceivingResource(myPeerID: MCPeerID, resourceName: String, fromPeer peer: MCPeerID, atURL localURL: URL) {
         if let onFinishReceivingResource = PeerPack.onFinishReceivingResource {
-            dispatch_async(dispatch_get_main_queue()) {
-                onFinishReceivingResource(myPeerID: myPeerID, resourceName: resourceName, peer: peer, localURL: localURL)
+            DispatchQueue.main.async {
+                onFinishReceivingResource(myPeerID, resourceName, peer, localURL)
             }
         }
     }

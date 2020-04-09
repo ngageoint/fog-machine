@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5972C51E65C54F303573B334 /* Pods_FogStringSearchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 954DA0ABC11F813C39DA8A42 /* Pods_FogStringSearchTests.framework */; };
-		C37596602A06DA83EEB0EB56 /* Pods_FogStringSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1572E132A4F6B64F536DB250 /* Pods_FogStringSearch.framework */; };
+		01F836EAA920638A83D0D027 /* Pods_FogStringSearchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B28A23F576EFB69B075D7CCA /* Pods_FogStringSearchTests.framework */; };
+		4CB46002025D20348A7D603C /* Pods_FogStringSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB9C58A18FB28DD046A3DF1 /* Pods_FogStringSearch.framework */; };
 		F903AFB81D11CE0B00F90D9E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFB71D11CE0B00F90D9E /* Constants.swift */; };
 		F903AFC11D11CE6300F90D9E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */; };
 		F903AFC21D11CE6300F90D9E /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F903AFBE1D11CE6300F90D9E /* SearchResult.swift */; };
@@ -44,12 +44,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0D1E5482097F0107CA54BB49 /* Pods-FogStringSearchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearchTests.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearchTests/Pods-FogStringSearchTests.debug.xcconfig"; sourceTree = "<group>"; };
-		1572E132A4F6B64F536DB250 /* Pods_FogStringSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogStringSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5124A1EE3F0FD9A42F2CF2AE /* Pods-FogStringSearchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearchTests.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearchTests/Pods-FogStringSearchTests.release.xcconfig"; sourceTree = "<group>"; };
-		8B8B793145E70697C25A0B5B /* Pods-FogStringSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.release.xcconfig"; sourceTree = "<group>"; };
-		954DA0ABC11F813C39DA8A42 /* Pods_FogStringSearchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogStringSearchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE34769722CEC5D67589ED94 /* Pods-FogStringSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		1F90FC3C65119A57CA04B2DA /* Pods-FogStringSearchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearchTests.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearchTests/Pods-FogStringSearchTests.release.xcconfig"; sourceTree = "<group>"; };
+		6A1861E3F1EAD2977BAD7CDB /* Pods-FogStringSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		77CB33FABEC90B83E5B34136 /* Pods-FogStringSearchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearchTests.debug.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearchTests/Pods-FogStringSearchTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B28A23F576EFB69B075D7CCA /* Pods_FogStringSearchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogStringSearchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBB9C58A18FB28DD046A3DF1 /* Pods_FogStringSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FogStringSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECD7C9ECAFA100345E50FCBC /* Pods-FogStringSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FogStringSearch.release.xcconfig"; path = "../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch.release.xcconfig"; sourceTree = "<group>"; };
 		F903AFB71D11CE0B00F90D9E /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F903AFBA1D11CE6300F90D9E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F903AFBE1D11CE6300F90D9E /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C37596602A06DA83EEB0EB56 /* Pods_FogStringSearch.framework in Frameworks */,
+				4CB46002025D20348A7D603C /* Pods_FogStringSearch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5972C51E65C54F303573B334 /* Pods_FogStringSearchTests.framework in Frameworks */,
+				01F836EAA920638A83D0D027 /* Pods_FogStringSearchTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,24 +100,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		15F8AB52AA39B78BA4C20ADC /* Frameworks */ = {
+		EA6BE9714B1F36681FEB077C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1572E132A4F6B64F536DB250 /* Pods_FogStringSearch.framework */,
-				954DA0ABC11F813C39DA8A42 /* Pods_FogStringSearchTests.framework */,
+				BBB9C58A18FB28DD046A3DF1 /* Pods_FogStringSearch.framework */,
+				B28A23F576EFB69B075D7CCA /* Pods_FogStringSearchTests.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D037217D1207090243A044C1 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				AE34769722CEC5D67589ED94 /* Pods-FogStringSearch.debug.xcconfig */,
-				8B8B793145E70697C25A0B5B /* Pods-FogStringSearch.release.xcconfig */,
-				0D1E5482097F0107CA54BB49 /* Pods-FogStringSearchTests.debug.xcconfig */,
-				5124A1EE3F0FD9A42F2CF2AE /* Pods-FogStringSearchTests.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		F903AFB91D11CE6300F90D9E /* Controllers */ = {
@@ -179,8 +168,8 @@
 				F9D40BF61D1089B60099B550 /* FogStringSearchTests */,
 				F9D40C011D1089B60099B550 /* FogStringSearchUITests */,
 				F9D40BDE1D1089B60099B550 /* Products */,
-				D037217D1207090243A044C1 /* Pods */,
-				15F8AB52AA39B78BA4C20ADC /* Frameworks */,
+				FC9187A69DFA09CE9A28D21E /* Pods */,
+				EA6BE9714B1F36681FEB077C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -229,6 +218,17 @@
 			path = FogStringSearchUITests;
 			sourceTree = "<group>";
 		};
+		FC9187A69DFA09CE9A28D21E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6A1861E3F1EAD2977BAD7CDB /* Pods-FogStringSearch.debug.xcconfig */,
+				ECD7C9ECAFA100345E50FCBC /* Pods-FogStringSearch.release.xcconfig */,
+				77CB33FABEC90B83E5B34136 /* Pods-FogStringSearchTests.debug.xcconfig */,
+				1F90FC3C65119A57CA04B2DA /* Pods-FogStringSearchTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -236,12 +236,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9D40C071D1089B60099B550 /* Build configuration list for PBXNativeTarget "FogStringSearch" */;
 			buildPhases = (
-				EB682C72FC82F757CCA8FFA5 /* [CP] Check Pods Manifest.lock */,
+				7C9995D6242806F889710A79 /* [CP] Check Pods Manifest.lock */,
 				F9D40BD91D1089B60099B550 /* Sources */,
 				F9D40BDA1D1089B60099B550 /* Frameworks */,
 				F9D40BDB1D1089B60099B550 /* Resources */,
-				9BEF2D738CF4E7EC50D1BF92 /* [CP] Embed Pods Frameworks */,
-				BD1D540CB3ED2446F2AAE281 /* [CP] Copy Pods Resources */,
+				0AF3DAE4203F95B913D9D9BC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -256,12 +255,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9D40C0A1D1089B60099B550 /* Build configuration list for PBXNativeTarget "FogStringSearchTests" */;
 			buildPhases = (
-				32C22556BDEB2BEF339A2FDD /* [CP] Check Pods Manifest.lock */,
+				07464FF51BD23F2C18E660E9 /* [CP] Check Pods Manifest.lock */,
 				F9D40BEF1D1089B60099B550 /* Sources */,
 				F9D40BF01D1089B60099B550 /* Frameworks */,
 				F9D40BF11D1089B60099B550 /* Resources */,
-				47A405FF3A87E655EE7836F6 /* [CP] Embed Pods Frameworks */,
-				93CCCBB9C3DC685C52401D10 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -298,7 +295,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = NGA;
 				TargetAttributes = {
 					F9D40BDC1D1089B60099B550 = {
@@ -365,94 +362,60 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		32C22556BDEB2BEF339A2FDD /* [CP] Check Pods Manifest.lock */ = {
+		07464FF51BD23F2C18E660E9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FogStringSearchTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		47A405FF3A87E655EE7836F6 /* [CP] Embed Pods Frameworks */ = {
+		0AF3DAE4203F95B913D9D9BC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftEventBus/SwiftEventBus.framework",
+				"${BUILT_PRODUCTS_DIR}/FogMachine/FogMachine.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogStringSearchTests/Pods-FogStringSearchTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		93CCCBB9C3DC685C52401D10 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogStringSearchTests/Pods-FogStringSearchTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9BEF2D738CF4E7EC50D1BF92 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftEventBus.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FogMachine.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BD1D540CB3ED2446F2AAE281 /* [CP] Copy Pods Resources */ = {
+		7C9995D6242806F889710A79 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../../Pods/Target Support Files/Pods-FogStringSearch/Pods-FogStringSearch-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EB682C72FC82F757CCA8FFA5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FogStringSearch-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -540,13 +503,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -568,7 +541,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -586,13 +559,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -608,9 +591,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -618,33 +602,37 @@
 		};
 		F9D40C081D1089B60099B550 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AE34769722CEC5D67589ED94 /* Pods-FogStringSearch.debug.xcconfig */;
+			baseConfigurationReference = 6A1861E3F1EAD2977BAD7CDB /* Pods-FogStringSearch.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FogStringSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		F9D40C091D1089B60099B550 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B8B793145E70697C25A0B5B /* Pods-FogStringSearch.release.xcconfig */;
+			baseConfigurationReference = ECD7C9ECAFA100345E50FCBC /* Pods-FogStringSearch.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FogStringSearch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mil.nga.giat.FogStringSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
 		F9D40C0B1D1089B60099B550 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D1E5482097F0107CA54BB49 /* Pods-FogStringSearchTests.debug.xcconfig */;
+			baseConfigurationReference = 77CB33FABEC90B83E5B34136 /* Pods-FogStringSearchTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = FogStringSearchTests/Info.plist;
@@ -657,7 +645,7 @@
 		};
 		F9D40C0C1D1089B60099B550 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5124A1EE3F0FD9A42F2CF2AE /* Pods-FogStringSearchTests.release.xcconfig */;
+			baseConfigurationReference = 1F90FC3C65119A57CA04B2DA /* Pods-FogStringSearchTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = FogStringSearchTests/Info.plist;

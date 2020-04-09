@@ -1,40 +1,39 @@
 PODS:
-  - Buckets (1.2.1)
-  - EZLoadingActivity (0.8)
-  - FogMachine (4.0.4):
-    - SwiftEventBus (~> 1.1.0)
-  - SSZipArchive (1.2)
-  - SwiftEventBus (1.1.0)
-  - Toast-Swift (1.3.0)
+  - FogMachine (4.1.0):
+    - SwiftEventBus (~> 2.2.0)
+  - SSZipArchive (2.1.4)
+  - SwiftEventBus (2.2.0)
+  - Toast-Swift (4.0.0)
 
 DEPENDENCIES:
-  - Buckets (from `https://github.com/mauriciosantos/Buckets-Swift.git`, tag `1.2.1`)
-  - EZLoadingActivity (~> 0.8)
   - FogMachine (from `.`)
-  - SSZipArchive (~> 1.1)
-  - SwiftEventBus (~> 1.1.0)
-  - Toast-Swift (~> 1.3.0)
+  - SSZipArchive (~> 2.1.4)
+  - SwiftEventBus (from `https://github.com/cesarferreira/SwiftEventBus.git`, tag `3.0.0`)
+  - Toast-Swift (~> 4.0.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SSZipArchive
+    - Toast-Swift
 
 EXTERNAL SOURCES:
-  Buckets:
-    :git: https://github.com/mauriciosantos/Buckets-Swift.git
-    :tag: 1.2.1
   FogMachine:
-    :path: .
+    :path: "."
+  SwiftEventBus:
+    :git: https://github.com/cesarferreira/SwiftEventBus.git
+    :tag: 3.0.0
 
 CHECKOUT OPTIONS:
-  Buckets:
-    :git: https://github.com/mauriciosantos/Buckets-Swift.git
-    :tag: 1.2.1
+  SwiftEventBus:
+    :git: https://github.com/cesarferreira/SwiftEventBus.git
+    :tag: 3.0.0
 
 SPEC CHECKSUMS:
-  Buckets: 92a8850454575d86d0de268b8ee08c5fd9821598
-  EZLoadingActivity: 6fd75a05765a4085f4b6fef6f62edf9f144b3139
-  FogMachine: 0d6e7ff81c8c72014f44d68033f6162a0f9b87d4
-  SSZipArchive: 251093c65f98d6ea282c50bc404bfa631d9fd721
-  SwiftEventBus: d33b51752d4e3e994f0ea7b31873f0beca7eada0
-  Toast-Swift: 25c3d98db42dc70d9a77b5006ee000e0becb458e
+  FogMachine: 5819d4263e883a6497830edde3ff6ba97583f09d
+  SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
+  SwiftEventBus: 667baca2f107fa0c9c2068950298dbfd6a4111cc
+  Toast-Swift: 594b5c5e5129f15438e410207e43287f027b3c00
 
-PODFILE CHECKSUM: bccf9768c91fb330eaf4c5b4c7f2f6fbd94911fe
+PODFILE CHECKSUM: 515f30726bf7d1c45b479134152d5b5a78130086
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.5.3

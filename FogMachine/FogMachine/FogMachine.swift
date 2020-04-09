@@ -83,67 +83,67 @@ public class FogMachine {
         // When a peer connects, log the connection and delegate to the tool
         PeerPack.onConnect = { (myPeerID: MCPeerID, peerID: MCPeerID) -> Void in
             let selfNode:FMNode = self.getSelfNode()
-            let peerNode:FMNode = FMNode(uniqueId: peerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[0], mcPeerID: peerID)
+            let peerNode:FMNode = FMNode(uniqueId: peerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[1], name: peerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[0], mcPeerID: peerID)
 
             // make sure this is you!
             //guard myPeerID == selfNode.mcPeerID else { throw FogMachineError.PeerIDError }
             if(myPeerID != selfNode.mcPeerID) {
-                self.FMLog("ERROR: Node id: " + selfNode.mcPeerID.displayName + " does not match peerID: " + myPeerID.displayName + ".")
+                self.FMLog(format: "ERROR: Node id: " + selfNode.mcPeerID.displayName + " does not match peerID: " + myPeerID.displayName + ".")
             }
 
-            self.FMLog(selfNode.description + " connected to " + peerNode.description)
-            fmTool.onPeerConnect(selfNode, connectedNode: peerNode)
+            self.FMLog(format: selfNode.description + " connected to " + peerNode.description)
+            fmTool.onPeerConnect(myNode: selfNode, connectedNode: peerNode)
         }
 
         // When a peer disconnects, log the disconnection and delegate to the tool
         PeerPack.onDisconnect = { (myPeerID: MCPeerID, peerID: MCPeerID) -> Void in
             let selfNode:FMNode = self.getSelfNode()
-            let peerNode:FMNode = FMNode(uniqueId: peerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[0], mcPeerID: peerID)
+            let peerNode:FMNode = FMNode(uniqueId: peerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[1], name: peerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[0], mcPeerID: peerID)
 
             // make sure this is you!
             //guard myPeerID == selfNode.mcPeerID else { throw FogMachineError.PeerIDError }
             if(myPeerID != selfNode.mcPeerID) {
-                self.FMLog("ERROR: Node id: " + selfNode.mcPeerID.displayName + " does not match peerID: " + myPeerID.displayName + ".")
+                self.FMLog(format: "ERROR: Node id: " + selfNode.mcPeerID.displayName + " does not match peerID: " + myPeerID.displayName + ".")
             }
 
-            self.FMLog(peerNode.description + " disconnected from " + selfNode.description)
-            fmTool.onPeerDisconnect(selfNode, disconnectedNode: peerNode)
+            self.FMLog(format: peerNode.description + " disconnected from " + selfNode.description)
+            fmTool.onPeerDisconnect(myNode: selfNode, disconnectedNode: peerNode)
         }
 
         // when a work request comes over the air, have the tool process the work
         PeerPack.eventBlocks[self.sendWorkEvent + String(fmTool.id())] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
             // run on background thread
-            dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+            DispatchQueue.global(qos: .utility).async {
                 let selfNode:FMNode = self.getSelfNode()
-                let fromNode:FMNode = FMNode(uniqueId: fromPeerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[1], name: fromPeerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[0], mcPeerID: fromPeerID)
+                let fromNode:FMNode = FMNode(uniqueId: fromPeerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[1], name: fromPeerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[0], mcPeerID: fromPeerID)
 
                 // deserialize the work
-                let dataReceived = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
+                let dataReceived = NSKeyedUnarchiver.unarchiveObject(with: object as! Data) as! [String: Any]
                 let sessionUUID:String = dataReceived["SessionID"] as! String
-                let peerWork:FMWork =  NSKeyedUnarchiver.unarchiveObjectWithData(dataReceived["FogToolWork"] as! NSData) as! FMWork
+                let peerWork:FMWork =  NSKeyedUnarchiver.unarchiveObject(with: dataReceived["FogToolWork"] as! Data) as! FMWork
 
                 let workMirror = Mirror(reflecting: peerWork)
 
-                self.FMLog(selfNode.description + " received \(workMirror.subjectType) to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
+                self.FMLog(format: selfNode.description + " received \(workMirror.subjectType) to process from " + fromNode.description + " for session " + sessionUUID + ".  Starting to process work.")
 
                 // process the work, and get a result
                 let processWorkTimer:FMTimer = FMTimer()
                 processWorkTimer.start()
-                let peerResult:FMResult = self.fmTool.processWork(selfNode, fromNode: fromNode, work: peerWork)
+                let peerResult:FMResult = self.fmTool.processWork(node: selfNode, fromNode: fromNode, work: peerWork)
                 processWorkTimer.stop()
 
-                let dataToSend:[String:NSObject] =
-                    ["FogToolResult": NSKeyedArchiver.archivedDataWithRootObject(peerResult),
+                let dataToSend:[String:Any] =
+                    ["FogToolResult": NSKeyedArchiver.archivedData(withRootObject: peerResult),
                      "ProcessWorkTime": processWorkTimer.getElapsedTimeInSeconds(),
                      "SessionID": sessionUUID]
 
                 let peerResultMirror = Mirror(reflecting: peerResult)
 
-                self.FMLog(selfNode.description + " done processing work.  Sending \(peerResultMirror.subjectType) back.")
+                self.FMLog(format: selfNode.description + " done processing work.  Sending \(peerResultMirror.subjectType) back.")
 
                 // send the result back to the session
-                PeerPack.sendEvent(self.sendResultEvent + sessionUUID, object: NSKeyedArchiver.archivedDataWithRootObject(dataToSend), toPeers: [fromPeerID])
-                self.FMLog("Sent result.")
+                PeerPack.sendEvent(event: self.sendResultEvent + sessionUUID, object: NSKeyedArchiver.archivedData(withRootObject: dataToSend), toPeers: [fromPeerID])
+                self.FMLog(format: "Sent result.")
             }
         }
     }
@@ -156,7 +156,7 @@ public class FogMachine {
      
      */
     public func getSelfNode() -> FMNode {
-        return FMNode(uniqueId: PeerPack.myName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[1], name: PeerPack.myName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[0], mcPeerID: PeerPack.masterSession.myPeerId)
+        return FMNode(uniqueId: PeerPack.myName.components(separatedBy: PeerPack.ID_DELIMITER)[1], name: PeerPack.myName.components(separatedBy: PeerPack.ID_DELIMITER)[0], mcPeerID: PeerPack.masterSession.myPeerId)
     }
 
     /**
@@ -171,9 +171,9 @@ public class FogMachine {
 
         let mcPeerIDs: [MCPeerID] = PeerPack.masterSession.allConnectedPeers() ?? []
         for peerID in mcPeerIDs {
-            nodes.append(FMNode(uniqueId: peerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[1], name: peerID.displayName.componentsSeparatedByString(PeerPack.ID_DELIMITER)[0], mcPeerID: peerID))
+            nodes.append(FMNode(uniqueId: peerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[1], name: peerID.displayName.components(separatedBy: PeerPack.ID_DELIMITER)[0], mcPeerID: peerID))
         }
-        nodes.sortInPlace { (obj1, obj2) -> Bool in
+        nodes.sort { (obj1, obj2) -> Bool in
             return obj1.uniqueId < obj2.uniqueId
         }
         return nodes
@@ -190,7 +190,7 @@ public class FogMachine {
         var nodes: [FMNode] = []
         nodes.append(getSelfNode())
         nodes += getPeerNodes()
-        nodes.sortInPlace { (obj1, obj2) -> Bool in
+        nodes.sort { (obj1, obj2) -> Bool in
             return obj1.uniqueId < obj2.uniqueId
         }
         return nodes
@@ -206,7 +206,7 @@ public class FogMachine {
         // It must be a unique string, at most 15 characters long
         // Note: Devices will only connect to other devices with the same serviceType value.
         let SERVICE_TYPE = "FM" + String(fmTool.id())
-        self.FMLog("Searching for peers with service type " + SERVICE_TYPE)
+        self.FMLog(format: "Searching for peers with service type " + SERVICE_TYPE)
         PeerPack.transceiver.startTransceiving(serviceType: SERVICE_TYPE)
     }
 
@@ -235,7 +235,7 @@ public class FogMachine {
 
     // all the data structures below are session dependant!
     // used to control concurrency.  It synchronizes many of the data structures below
-    private let lock = dispatch_queue_create("mil.nga.giat.fogmachine", nil)
+    private let lock = DispatchQueue(label: "mil.nga.giat.fogmachine")
 
     // keep a map of the session to the MCPeerIDs to the nodes for this session
     private var mcPeerIDToNode:[String:[MCPeerID:FMNode]] = [String:[MCPeerID:FMNode]]()
@@ -257,8 +257,8 @@ public class FogMachine {
      */
     public func execute() -> Void {
         // run on background thread
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-            self.executeOnThread(self.getAllNodes())
+        DispatchQueue.global(qos: .utility).async {
+            self.executeOnThread(onNodes: self.getAllNodes())
         }
     }
     
@@ -275,13 +275,13 @@ public class FogMachine {
             if(self.getAllNodes().contains(n)) {
                 nodesInNetwork.append(n)
             } else {
-                FMLog("Network does not contain node \(n.description).  Excluding this node from execution.")
+                FMLog(format: "Network does not contain node \(n.description).  Excluding this node from execution.")
             }
         }
         
         // run on background thread
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
-            self.executeOnThread(nodesInNetwork)
+        DispatchQueue.global(qos: .utility).async {
+            self.executeOnThread(onNodes: nodesInNetwork)
         }
     }
 
@@ -295,7 +295,7 @@ public class FogMachine {
         executionTimer.start()
 
         // this is a uuid to keep track on this session (a round of execution).  It's mostly used to make sure requests and responses happen correctly for a single session.
-        let sessionUUID:String = NSUUID().UUIDString
+        let sessionUUID:String = UUID().uuidString
 
         // create new data structures for this session
         mcPeerIDToNode[sessionUUID] = [MCPeerID:FMNode]()
@@ -308,37 +308,37 @@ public class FogMachine {
         }
 
         let numberOfNodes:UInt = UInt(mcPeerIDToNode[sessionUUID]!.count)
-        self.FMLog("Executing " + fmTool.name() + " in session " + sessionUUID + " on \(numberOfNodes) nodes (including myself).")
+        self.FMLog(format: "Executing " + fmTool.name() + " in session " + sessionUUID + " on \(numberOfNodes) nodes (including myself).")
 
         // when a result comes back over the air for this session
         PeerPack.eventBlocks[self.sendResultEvent + sessionUUID] = { (fromPeerID: MCPeerID, object: AnyObject?) -> Void in
             let selfNode:FMNode = self.getSelfNode()
 
             // deserialize the result!
-            let dataReceived:[String: NSObject] = NSKeyedUnarchiver.unarchiveObjectWithData(object as! NSData) as! [String: NSObject]
+            let dataReceived:[String: NSObject] = NSKeyedUnarchiver.unarchiveObject(with: object as! Data) as! [String: NSObject]
             let receivedSessionUUID:String = dataReceived["SessionID"] as! String
             let processWorkTime:Double = dataReceived["ProcessWorkTime"] as! Double
 
             // make sure this is the same session!
             if(self.mcPeerIDToNode.keys.contains(receivedSessionUUID)) {
                 // store the result and merge results if needed
-                dispatch_sync(self.lock) {
+                self.lock.sync {
                     let fromNode:FMNode = self.mcPeerIDToNode[receivedSessionUUID]![fromPeerID]!
-                    let peerResult:FMResult = NSKeyedUnarchiver.unarchiveObjectWithData(dataReceived["FogToolResult"] as! NSData) as! FMResult
+                    let peerResult:FMResult = NSKeyedUnarchiver.unarchiveObject(with: dataReceived["FogToolResult"] as! Data) as! FMResult
                     let peerResultMirror = Mirror(reflecting: peerResult)
 
                     let roundTripTime:CFAbsoluteTime = (self.nodeToRoundTripTimer[receivedSessionUUID]![fromNode]?.stop())!
-                    self.FMLog(selfNode.description + " received \(peerResultMirror.subjectType) in session " + receivedSessionUUID + " from " + fromNode.description + ", storing result.")
-                    self.FMLog(fromNode.description + " round trip time: " + String(format: "%.3f", roundTripTime) + " seconds.")
-                    self.FMLog(fromNode.description + " process work time: " + String(format: "%.3f", processWorkTime) + " seconds.")
-                    self.FMLog(fromNode.description + " network/data transfer and overhead time: " + String(format: "%.3f", roundTripTime - processWorkTime) + " seconds.")
+                    self.FMLog(format: selfNode.description + " received \(peerResultMirror.subjectType) in session " + receivedSessionUUID + " from " + fromNode.description + ", storing result.")
+                    self.FMLog(format: fromNode.description + " round trip time: " + String(format: "%.3f", roundTripTime) + " seconds.")
+                    self.FMLog(format: fromNode.description + " process work time: " + String(format: "%.3f", processWorkTime) + " seconds.")
+                    self.FMLog(format: fromNode.description + " network/data transfer and overhead time: " + String(format: "%.3f", roundTripTime - processWorkTime) + " seconds.")
 
                     self.nodeToResult[receivedSessionUUID]![fromNode] = peerResult
-                    self.finishAndMerge(fromNode, sessionUUID: receivedSessionUUID)
+                    self.finishAndMerge(callerNode: fromNode, sessionUUID: receivedSessionUUID)
                 }
             } else {
                 // the likelyhood of this occuring is small.
-                self.FMLog(selfNode.description + " received result for session " + receivedSessionUUID + ", but that session no longer exists.  Discarding work.")
+                self.FMLog(format: selfNode.description + " received result for session " + receivedSessionUUID + ", but that session no longer exists.  Discarding work.")
             }
         }
 
@@ -348,11 +348,11 @@ public class FogMachine {
         var nodeCount:UInt = 0
         for (_, node) in mcPeerIDToNode[sessionUUID]! {
             if(node == getSelfNode()) {
-                self.FMLog("Creating self work.")
+                self.FMLog(format: "Creating self work.")
             } else {
-                self.FMLog("Creating work for " + node.description)
+                self.FMLog(format: "Creating work for " + node.description)
             }
-            let work:FMWork = self.fmTool.createWork(node, nodeNumber: nodeCount, numberOfNodes: numberOfNodes)
+            let work:FMWork = self.fmTool.createWork(node: node, nodeNumber: nodeCount, numberOfNodes: numberOfNodes)
             if(node == getSelfNode()) {
                 selfWork = work
             }
@@ -364,45 +364,45 @@ public class FogMachine {
         // send out all the work
         for (node, work) in nodeToWork[sessionUUID]! {
             if(node != getSelfNode()) {
-                self.FMLog("Sending work to " + node.description)
+                self.FMLog(format: "Sending work to " + node.description)
 
-                let data:[String:NSObject] =
-                    ["FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
+                let data:[String:Any] =
+                    ["FogToolWork": NSKeyedArchiver.archivedData(withRootObject: work),
                      "SessionID": sessionUUID]
-                dispatch_sync(self.lock) {
+                self.lock.sync {
                     self.nodeToRoundTripTimer[sessionUUID]![node]?.start()
                 }
-                PeerPack.sendEvent(self.sendWorkEvent + String(fmTool.id()), object: NSKeyedArchiver.archivedDataWithRootObject(data), toPeers: [node.mcPeerID])
+                PeerPack.sendEvent(event: self.sendWorkEvent + String(fmTool.id()), object: NSKeyedArchiver.archivedData(withRootObject: data), toPeers: [node.mcPeerID])
             }
         }
 
         var selfResult:FMResult?
         if(selfWork != nil) {
             // process your own work
-            self.FMLog("Processing self work.")
-            dispatch_sync(self.lock) {
+            self.FMLog(format: "Processing self work.")
+            self.lock.sync {
                 self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.start()
             }
         
-            selfResult = self.fmTool.processWork(getSelfNode(), fromNode: getSelfNode(), work: selfWork!)
+            selfResult = self.fmTool.processWork(node: getSelfNode(), fromNode: getSelfNode(), work: selfWork!)
         }
 
         // store the result and merge results if needed
-        dispatch_sync(self.lock) {
+        self.lock.sync {
             var selfTimeToFinish:Double = 0
             if(selfResult != nil) {
                 selfTimeToFinish = (self.nodeToRoundTripTimer[sessionUUID]![self.getSelfNode()]?.stop())!
-                self.FMLog(self.getSelfNode().description + " process work time: " + String(format: "%.3f", selfTimeToFinish) + " seconds.")
-                self.FMLog("Storing self work result.")
+                self.FMLog(format: self.getSelfNode().description + " process work time: " + String(format: "%.3f", selfTimeToFinish) + " seconds.")
+                self.FMLog(format: "Storing self work result.")
                 self.nodeToResult[sessionUUID]![self.getSelfNode()] = selfResult!
             }
-            let status = self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
+            let status = self.finishAndMerge(callerNode: self.getSelfNode(), sessionUUID: sessionUUID)
             // schedule the reprocessing stuff
             if(status == false) {
-                let data:[String:NSObject] = ["SessionID": sessionUUID, "SelfTimeToFinish":selfTimeToFinish]
-                dispatch_async(dispatch_get_main_queue()) {
+                let data:[String:Any] = ["SessionID": sessionUUID, "SelfTimeToFinish":selfTimeToFinish]
+                DispatchQueue.main.async {
                     // wait the minTime before startinf to reprocess
-                    NSTimer.scheduledTimerWithTimeInterval(self.minWaitTimeToStartReprocessingWorkInSeconds, target: self, selector: #selector(FogMachine.scheduleReprocessWork(_:)), userInfo: data, repeats: false)
+                    Timer.scheduledTimer(timeInterval: self.minWaitTimeToStartReprocessingWorkInSeconds, target: self, selector: #selector(FogMachine.scheduleReprocessWork(_:)), userInfo: data, repeats: false)
                 }
             }
         }
@@ -423,22 +423,22 @@ public class FogMachine {
         // did we get all the results, yet?
         if(nodeToWork[sessionUUID]!.count == nodeToResult[sessionUUID]!.count) {
             // remove sendResultEvent from peerpack for this session so we don't get future extraneous messages that we don't know what do to with
-            PeerPack.eventBlocks.removeValueForKey(self.sendResultEvent + sessionUUID)
+            PeerPack.eventBlocks.removeValue(forKey: self.sendResultEvent + sessionUUID)
 
-            self.FMLog(getSelfNode().description + " received all \(nodeToResult[sessionUUID]!.count) results for session " + sessionUUID + ".  Merging results.")
+            self.FMLog(format: getSelfNode().description + " received all \(nodeToResult[sessionUUID]!.count) results for session " + sessionUUID + ".  Merging results.")
             let mergeResultsTimer:FMTimer = FMTimer()
             mergeResultsTimer.start()
-            self.fmTool.mergeResults(getSelfNode(), nodeToResult: self.nodeToResult[sessionUUID]!)
+            self.fmTool.mergeResults(node: getSelfNode(), nodeToResult: self.nodeToResult[sessionUUID]!)
             mergeResultsTimer.stop()
-            self.FMLog("Merge results time for " + fmTool.name() + ": " + String(format: "%.3f", mergeResultsTimer.getElapsedTimeInSeconds()) + " seconds.")
+            self.FMLog(format: "Merge results time for " + fmTool.name() + ": " + String(format: "%.3f", mergeResultsTimer.getElapsedTimeInSeconds()) + " seconds.")
             executionTimer.stop()
 
             // remove session information from data structures
-            mcPeerIDToNode.removeValueForKey(sessionUUID)
-            nodeToWork.removeValueForKey(sessionUUID)
-            nodeToResult.removeValueForKey(sessionUUID)
-            nodeToRoundTripTimer.removeValueForKey(sessionUUID)
-            self.FMLog("Total execution time for " + fmTool.name() + ": " + String(format: "%.3f", executionTimer.getElapsedTimeInSeconds()) + " seconds.")
+            mcPeerIDToNode.removeValue(forKey: sessionUUID)
+            nodeToWork.removeValue(forKey: sessionUUID)
+            nodeToResult.removeValue(forKey: sessionUUID)
+            nodeToRoundTripTimer.removeValue(forKey: sessionUUID)
+            self.FMLog(format: "Total execution time for " + fmTool.name() + ": " + String(format: "%.3f", executionTimer.getElapsedTimeInSeconds()) + " seconds.")
             status = true
         }
         return status
@@ -451,14 +451,14 @@ public class FogMachine {
      - parameter timer: <#timer description#>
      
      */
-    @objc private func scheduleReprocessWork(timer: NSTimer) {
-        dispatch_sync(self.lock) {
+    @objc private func scheduleReprocessWork(_ timer: Timer) {
+        self.lock.sync {
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
             let selfTimeToFinish:Double = dataReceived["SelfTimeToFinish"] as! Double
             // does the session still exist?
             if(self.mcPeerIDToNode.keys.contains(sessionUUID)) {
-                self.FMLog("Setting up reprocessing tasks.")
+                self.FMLog(format: "Setting up reprocessing tasks.")
                 var totalTimeToFinish:Double = 0
                 totalTimeToFinish += selfTimeToFinish
                 var pendingNodes:[FMNode] = []
@@ -485,15 +485,15 @@ public class FogMachine {
                 for node in pendingNodes {
                     let work:FMWork = self.nodeToWork[sessionUUID]![node]!
 
-                    let data:[String:NSObject] =
+                    let data:[String:Any] =
                         ["FailedPeerID": node.mcPeerID,
-                         "FogToolWork": NSKeyedArchiver.archivedDataWithRootObject(work),
+                         "FogToolWork": NSKeyedArchiver.archivedData(withRootObject: work),
                          "SessionID": sessionUUID]
 
                     let retryTime:Double = waitTime + (selfTimeToFinish*Double(i))
-                    self.FMLog("Scheduling reprocess work for node " + node.description + " in: " + String(format: "%.3f", retryTime) + " seconds.")
-                    dispatch_async(dispatch_get_main_queue()) {
-                        NSTimer.scheduledTimerWithTimeInterval(retryTime, target: self, selector: #selector(FogMachine.reprocessWork(_:)), userInfo: data, repeats: false)
+                    self.FMLog(format: "Scheduling reprocess work for node " + node.description + " in: " + String(format: "%.3f", retryTime) + " seconds.")
+                    DispatchQueue.main.async {
+                        Timer.scheduledTimer(timeInterval: retryTime, target: self, selector: #selector(FogMachine.reprocessWork(_:)), userInfo: data, repeats: false)
                     }
                     i += 1
                 }
@@ -508,8 +508,8 @@ public class FogMachine {
      - parameter timer: <#timer description#>
      
      */
-    @objc private func reprocessWork(timer: NSTimer) {
-        dispatch_sync(self.lock) {
+    @objc private func reprocessWork(_ timer: Timer) {
+        self.lock.sync {
             let dataReceived:[String:NSObject] = timer.userInfo as! [String:NSObject]
             let sessionUUID:String = dataReceived["SessionID"] as! String
             if(self.mcPeerIDToNode.keys.contains(sessionUUID)) {
@@ -517,21 +517,21 @@ public class FogMachine {
 
                 // make sure this thing is still in a failed state!
                 if(self.nodeToResult[sessionUUID]!.keys.contains(failedPeerNode) == false) {
-                    let work:FMWork = NSKeyedUnarchiver.unarchiveObjectWithData(dataReceived["FogToolWork"] as! NSData) as! FMWork
+                    let work:FMWork = NSKeyedUnarchiver.unarchiveObject(with: dataReceived["FogToolWork"] as! Data) as! FMWork
 
-                    self.FMLog("Processing missing work for node " + failedPeerNode.description)
+                    self.FMLog(format: "Processing missing work for node " + failedPeerNode.description)
 
-                    let peerResult:FMResult = self.fmTool.processWork(self.getSelfNode(), fromNode: self.getSelfNode(), work: work)
+                    let peerResult:FMResult = self.fmTool.processWork(node: self.getSelfNode(), fromNode: self.getSelfNode(), work: work)
 
                     // store the result and merge results if needed
-                    self.FMLog("Storing re-processed result.")
+                    self.FMLog(format: "Storing re-processed result.")
                     self.nodeToResult[sessionUUID]![failedPeerNode] = peerResult
-                    self.finishAndMerge(self.getSelfNode(), sessionUUID: sessionUUID)
+                    self.finishAndMerge(callerNode: self.getSelfNode(), sessionUUID: sessionUUID)
                 } else {
-                    self.FMLog("No need to re-processed " + failedPeerNode.description + " work.  Work was returned.")
+                    self.FMLog(format: "No need to re-processed " + failedPeerNode.description + " work.  Work was returned.")
                 }
             } else {
-                self.FMLog("No need to re-processed work, work came back and session completed.")
+                self.FMLog(format: "No need to re-processed work, work came back and session completed.")
             }
         }
 
@@ -547,6 +547,6 @@ public class FogMachine {
      */
     private func FMLog(format:String) {
         NSLog(format)
-        fmTool.onLog(format)
+        fmTool.onLog(format: format)
     }
 }

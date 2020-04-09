@@ -13,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
      */
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // init fog machine
-        FogMachine.fogMachineInstance.setTool(SearchTool())
+        FogMachine.fogMachineInstance.setTool(fmTool: SearchTool())
         FogMachine.fogMachineInstance.startSearchForPeers()
         
         return true

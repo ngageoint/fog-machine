@@ -23,36 +23,30 @@ public class SearchTool : FMTool {
     }
     
     private func getTextToSearch(peerCount:Int, peerNumber:Int) -> String {
-        var resourceURL:NSURL = NSURL(string: NSBundle.mainBundle().resourcePath!)!
-        
         var textToSearch:String = ""
-        do {
-        let textToSearchFile:NSURL = try (NSFileManager.defaultManager().contentsOfDirectoryAtURL(resourceURL, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions()).filter{ $0.lastPathComponent == "MobyDick.txt" }).first!
-        
-            if let aStreamReader = StreamReader(path: textToSearchFile.path!) {
-                defer {
-                    aStreamReader.close()
-                }
-                while let line = aStreamReader.nextLine() {
-                    textToSearch += line
-                    textToSearch += "\n"
-                }
+        let textToSearchFile:URL = Bundle.main.url(forResource: "MobyDick", withExtension: "txt")!
+    
+        if let aStreamReader = StreamReader(path: textToSearchFile.path) {
+            defer {
+                aStreamReader.close()
             }
-        } catch let error as NSError {
-            searchLog("Error reading file: \(error.localizedDescription)")
+            while let line = aStreamReader.nextLine() {
+                textToSearch += line
+                textToSearch += "\n"
+            }
         }
         
         let peerCountD:Double = Double(peerCount)
         let peerNumberD:Double = Double(peerNumber)
         
         let newline:Character = "\n"
-        let numberOfCharacters:Int = textToSearch.characters.count
+        let numberOfCharacters:Int = textToSearch.count
         var startIndex:String.CharacterView.Index
         var endIndex:String.CharacterView.Index
         if(peerNumber == 0) {
             startIndex = textToSearch.startIndex
         } else {
-            startIndex = textToSearch.startIndex.advancedBy(Int(floor((peerNumberD/peerCountD)*Double(numberOfCharacters))))
+            startIndex = textToSearch.index(textToSearch.startIndex, offsetBy: Int(floor((peerNumberD/peerCountD)*Double(numberOfCharacters)))
             while(startIndex > textToSearch.startIndex && (textToSearch[startIndex] != newline)) {
                 startIndex = startIndex.advancedBy(-1)
             }
@@ -67,7 +61,7 @@ public class SearchTool : FMTool {
             }
         }
         
-        searchLog("startIndex \(startIndex), endIndex \(endIndex)")
+        searchLog(format: "startIndex \(startIndex), endIndex \(endIndex)")
         
         return textToSearch[startIndex..<endIndex]
     }
@@ -75,7 +69,7 @@ public class SearchTool : FMTool {
     // used for KMP, Build pi function of prefixes
     private func build_pi(str: String) -> [Int] {
         let n = str.characters.count
-        var pi = Array(count: n + 1, repeatedValue: 0)
+        var pi = Array(repeatedValue: 0, count: n + 1)
         var k:Int = -1
         pi[0] = -1
         
@@ -98,11 +92,11 @@ public class SearchTool : FMTool {
         var S = Array(text.characters)
         
         var matches = [Int]()
-        let n = text.characters.count
+        let n = text.count
         
-        let m = pattern.characters.count
+        let m = pattern.count
         var k = 0
-        var pi = build_pi(pattern)
+        var pi = build_pi(str: pattern)
         
         for i in 0..<n {
             while (k >= 0 && (k == m || patt[k] != S[i])) {
@@ -131,7 +125,7 @@ public class SearchTool : FMTool {
             NSLog("Received result from node " + n.description)
             totalNumberOfOccurrences += searchResult.numberOfOccurrences
         }
-                searchLog("The word '\(self.searchTerm!)' was found in \(totalNumberOfOccurrences) times in the text.\n")
+        searchLog(format: "The word '\(self.searchTerm!)' was found in \(totalNumberOfOccurrences) times in the text.\n")
         SwiftEventBus.post(SearchEventBusEvents.searchComplete)
     }
 
@@ -145,10 +139,10 @@ public class SearchTool : FMTool {
 
     public func searchLog(format:String) {
         NSLog(format)
-        self.onLog(format)
+        self.onLog(format: format)
     }
 
-    public override func onLog(format:String) {
+    public override func onLog(format: String) {
         SwiftEventBus.post(SearchEventBusEvents.onLog, sender:format)
     }
 }
